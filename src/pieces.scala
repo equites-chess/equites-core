@@ -1,4 +1,4 @@
-package chess
+package equites
 
 abstract class Piece
 // def possibleMoves
