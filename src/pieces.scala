@@ -1,5 +1,6 @@
 package equites
 
+/*
 abstract class Piece
 // def possibleMoves
 
@@ -22,3 +23,4 @@ class Knight extends Piece
 // for (x <- t; y <- t; if x.abs != y.abs) yield (x, y)
 
 class Pawn   extends Piece
+*/

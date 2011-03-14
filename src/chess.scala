@@ -36,5 +36,5 @@ class Move
 class Board
 
 
-val k = new King
-println(k)
+//val k = new King
+//println(k)
