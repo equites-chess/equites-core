@@ -16,8 +16,14 @@
 
 package equites
 
-object Equites {
-  def main(args: Array[String]): Unit = {
-    println("Hello World")
-  }
+abstract class Color {
+  def oppositeColor(): Color
+}
+
+case object White extends Color {
+  override def oppositeColor(): Color = Black
+}
+
+case object Black extends Color {
+  override def oppositeColor(): Color = White
 }

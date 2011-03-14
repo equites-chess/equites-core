@@ -16,8 +16,26 @@
 
 package equites
 
-object Equites {
-  def main(args: Array[String]): Unit = {
-    println("Hello World")
+import org.specs2.mutable._
+
+class ColorSpec extends Specification {
+  "Color White" should {
+    "return Black as opposite Color" in {
+      White.oppositeColor must_== Black
+    }
+
+    "return White as opposite opposite Color" in {
+      White.oppositeColor.oppositeColor must_== White
+    }
+  }
+
+  "Color Black" should {
+    "return White as opposite Color" in {
+      Black.oppositeColor must_== White
+    }
+
+    "return Black as opposite opposite Color" in {
+      Black.oppositeColor.oppositeColor must_== Black
+    }
   }
 }
