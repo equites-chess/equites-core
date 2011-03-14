@@ -16,8 +16,16 @@
 
 package equites
 
-object Equites {
-  def main(args: Array[String]): Unit = {
-    println("Hello World")
-  }
-}
+abstract class Piece(val color: Color)
+
+class King(color: Color) extends Piece(color)
+
+class Queen(color: Color) extends Piece(color)
+
+class Rook(color: Color) extends Piece(color)
+
+class Bishop(color: Color) extends Piece(color)
+
+class Knight(color: Color) extends Piece(color)
+
+class Pawn(color: Color) extends Piece(color)

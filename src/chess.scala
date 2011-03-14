@@ -1,3 +1,4 @@
+/*
 package equites
 
 abstract class Piece
@@ -34,3 +35,4 @@ class Board
 
 //val k = new King
 //println(k)
+*/
