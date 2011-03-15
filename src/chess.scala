@@ -1,6 +1,4 @@
 /*
-package equites
-
 abstract class Piece
 // def possibleMoves
 
@@ -24,15 +22,5 @@ class Knight extends Piece
 
 class Pawn   extends Piece
 
-//class Position {
-//  self: Pair[Int, Int]
-//}
-
-class Move
-
 class Board
-
-
-//val k = new King
-//println(k)
 */
