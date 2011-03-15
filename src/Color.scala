@@ -20,10 +20,10 @@ abstract class Color {
   def oppositeColor(): Color
 }
 
-case object White extends Color {
+object White extends Color {
   override def oppositeColor(): Color = Black
 }
 
-case object Black extends Color {
+object Black extends Color {
   override def oppositeColor(): Color = White
 }
