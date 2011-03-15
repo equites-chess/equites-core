@@ -1,6 +1,17 @@
 Equites, a simple chess interface
 =================================
 
+Download
+--------
+
+The version control system used for development of Equites is Git. The
+`Git repository`_ can be inspected and browsed online at GitHub and it
+can be cloned by running::
+
+  git clone git://github.com/fthomas/equites.git
+
+.. _Git repository: http://github.com/fthomas/equites
+
 License
 -------
 
