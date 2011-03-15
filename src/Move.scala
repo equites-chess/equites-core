@@ -18,6 +18,7 @@ package equites
 
 object Move {
   def apply(str: String): Move = fromAlgebraicNotation(str)
+  def apply(start: Field, vec: Vector): Move = Move(start, start + vec)
 
   def fromAlgebraicNotation(str: String): Move = {
     require(str.length == 5)
@@ -25,17 +26,12 @@ object Move {
 
     val start = Field(str.substring(0, 2))
     val end   = Field(str.substring(3, 5))
-    new Move(start, end)
+    Move(start, end)
   }
 }
 
 case class Move(val start: Field, val end: Field) {
   def toAlgebraicNotation(): String = {
     start.toAlgebraicNotation + "-" + end.toAlgebraicNotation
-  }
-
-  override def equals(that: Any): Boolean = that match {
-    case Move(that_start, that_end) => that_start == start && that_end == end
-    case _ => false
   }
 }

@@ -20,15 +20,27 @@ import org.specs2.mutable._
 
 class MoveSpec extends Specification {
   "Move" should {
+    "be constructable from Field and Vector" in {
+      Move(Field(0, 0), Vector( 1,  1)) must_== Move(Field(0, 0), Field(1, 1))
+      Move(Field(1, 1), Vector(-1, -1)) must_== Move(Field(1, 1), Field(0, 0))
+    }
+
+    "fail on invalid arguments" in {
+      Move(Field(1, 1), Vector(-2, -2)) must throwAn[IllegalArgumentException]
+      Move(Field(7, 7), Vector( 1,  1)) must throwAn[IllegalArgumentException]
+    }
+
     "correctly convert to algebraic notation" in {
       Move(Field(0, 0), Field(7, 7)).toAlgebraicNotation must_== "a1-h8"
+      Move(Field(3, 3), Field(4, 4)).toAlgebraicNotation must_== "d4-e5"
     }
 
     "be constructable from algebraic notation" in {
       Move("a1-h8") must_== Move(Field(0, 0), Field(7, 7))
+      Move("d4-e5") must_== Move(Field(3, 3), Field(4, 4))
     }
 
-   "fail on invalid algebraic notation" in {
+    "fail on invalid algebraic notation" in {
       Move("a1-h8a") must throwAn[IllegalArgumentException]
       Move("a1-h")   must throwAn[IllegalArgumentException]
       Move("a1+h8")  must throwAn[IllegalArgumentException]
