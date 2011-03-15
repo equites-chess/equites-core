@@ -17,8 +17,6 @@
 package equites
 
 object Field {
-  def apply(file: Int, rank: Int): Field = new Field(file, rank)
-
   def apply(str: String): Field = fromAlgebraicNotation(str)
 
   def fromAlgebraicNotation(str: String): Field = {
@@ -28,21 +26,20 @@ object Field {
 
     val file: Int = str(0) - 'a'
     val rank: Int = str(1) - '1'
-    new Field(file, rank)
+    Field(file, rank)
   }
 
   private def isValidCoordinate(i: Int): Boolean = i >= 0 && i <= 7
-
   private def isValidFile(c: Char): Boolean = c >= 'a' && c <= 'h'
-
   private def isValidRank(c: Char): Boolean = c >= '1' && c <= '8'
 }
 
-class Field(val file: Int, val rank: Int)
-  extends Pair[Int, Int](file, rank) {
-
+case class Field(val file: Int, val rank: Int) {
   require(Field.isValidCoordinate(file))
   require(Field.isValidCoordinate(rank))
+
+  def +(vec: Vector): Field = Field(file + vec.file, rank + vec.rank)
+  def -(vec: Vector): Field = Field(file - vec.file, rank - vec.rank)
 
   def toAlgebraicNotation(): String = {
     ('a' + file).toChar.toString + (1 + rank).toString
