@@ -20,10 +20,13 @@ import org.specs2.mutable._
 
 class FieldSpec extends Specification {
   "Field" should {
-    "throw an exception on negative values" in {
+    "throw an exception on invalid values" in {
       Field(-1,  0) must throwAn[IllegalArgumentException]
       Field( 0, -1) must throwAn[IllegalArgumentException]
       Field(-1, -1) must throwAn[IllegalArgumentException]
+      Field( 8,  0) must throwAn[IllegalArgumentException]
+      Field( 0,  8) must throwAn[IllegalArgumentException]
+      Field( 8,  8) must throwAn[IllegalArgumentException]
     }
 
     "correctly convert to algebraic notation" in {
@@ -41,9 +44,9 @@ class FieldSpec extends Specification {
     }
 
     "fail on invalid algebraic notation" in {
-      Field("11") must throwAn[IllegalArgumentException]
-      Field("a9") must throwAn[IllegalArgumentException]
-      Field("i1") must throwAn[IllegalArgumentException]
+      Field("11")  must throwAn[IllegalArgumentException]
+      Field("a9")  must throwAn[IllegalArgumentException]
+      Field("i1")  must throwAn[IllegalArgumentException]
       Field("a10") must throwAn[IllegalArgumentException]
     }
   }

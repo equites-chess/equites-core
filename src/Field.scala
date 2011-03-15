@@ -22,41 +22,29 @@ object Field {
   def apply(str: String): Field = fromAlgebraicNotation(str)
 
   def fromAlgebraicNotation(str: String): Field = {
-    AlgebraicField(str).toField
+    require(str.length == 2)
+    require(isValidFile(str(0)))
+    require(isValidRank(str(1)))
+
+    val file: Int = str(0) - 'a'
+    val rank: Int = str(1) - '1'
+    new Field(file, rank)
   }
+
+  private def isValidCoordinate(i: Int): Boolean = i >= 0 && i <= 7
+
+  private def isValidFile(c: Char): Boolean = c >= 'a' && c <= 'h'
+
+  private def isValidRank(c: Char): Boolean = c >= '1' && c <= '8'
 }
 
 class Field(val file: Int, val rank: Int)
   extends Pair[Int, Int](file, rank) {
 
-  require(file >= 0 && rank >= 0)
+  require(Field.isValidCoordinate(file))
+  require(Field.isValidCoordinate(rank))
 
-  def toAlgebraicNotation(): String = AlgebraicField(this).toString
-}
-
-object AlgebraicField {
-  def apply(str: String): AlgebraicField = new AlgebraicField(str)
-
-  def apply(field: Field): AlgebraicField = fromField(field)
-
-  def fromField(field: Field): AlgebraicField = {
-    require(field.file < 8 && field.rank < 8)
-
-    val str = ('a' + field.file).toChar.toString + (1 + field.rank).toString
-    AlgebraicField(str)
+  def toAlgebraicNotation(): String = {
+    ('a' + file).toChar.toString + (1 + rank).toString
   }
-}
-
-class AlgebraicField(str: String) {
-  require(str.length == 2)
-  require('a' to 'h' contains str(0))
-  require('1' to '8' contains str(1))
-
-  private val file: Int = str(0) - 'a'
-  private val rank: Int = str(1) - '1'
-  private val field = Field(file, rank)
-
-  def toField(): Field = field
-
-  override def toString(): String = str
 }
