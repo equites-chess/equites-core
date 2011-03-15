@@ -16,26 +16,23 @@
 
 package equites
 
-object Move {
-  def apply(str: String): Move = fromAlgebraicNotation(str)
+import org.specs2.mutable._
 
-  def fromAlgebraicNotation(str: String): Move = {
-    require(str.length == 5)
-    require(List('-', 'x') contains str(2))
+class MoveSpec extends Specification {
+  "Move" should {
+    "correctly convert to algebraic notation" in {
+      Move(Field(0, 0), Field(7, 7)).toAlgebraicNotation must_== "a1-h8"
+    }
 
-    val start = Field(str.substring(0, 2))
-    val end   = Field(str.substring(3, 5))
-    new Move(start, end)
-  }
-}
+    "be constructable from algebraic notation" in {
+      Move("a1-h8") must_== Move(Field(0, 0), Field(7, 7))
+    }
 
-case class Move(val start: Field, val end: Field) {
-  def toAlgebraicNotation(): String = {
-    start.toAlgebraicNotation + "-" + end.toAlgebraicNotation
-  }
-
-  override def equals(that: Any): Boolean = that match {
-    case Move(that_start, that_end) => that_start == start && that_end == end
-    case _ => false
+   "fail on invalid algebraic notation" in {
+      Move("a1-h8a") must throwAn[IllegalArgumentException]
+      Move("a1-h")   must throwAn[IllegalArgumentException]
+      Move("a1+h8")  must throwAn[IllegalArgumentException]
+      Move("a1-h9")  must throwAn[IllegalArgumentException]
+    }
   }
 }
