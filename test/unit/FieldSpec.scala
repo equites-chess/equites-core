@@ -49,5 +49,15 @@ class FieldSpec extends Specification {
       Field("i1")  must throwAn[IllegalArgumentException]
       Field("a10") must throwAn[IllegalArgumentException]
     }
+
+    "correctly perform +(Vector) and -(Vector)" in {
+      Field(1, 1) + Vector( 1,  1) must_== Field(2, 2)
+      Field(1, 1) - Vector(-1, -1) must_== Field(2, 2)
+      Field(1, 1) - Vector( 1,  1) must_== Field(0, 0)
+      Field(1, 1) + Vector(-1, -1) must_== Field(0, 0)
+
+      Field(0, 0) - Vector(1, 1) must throwAn[IllegalArgumentException]
+      Field(7, 7) + Vector(1, 1) must throwAn[IllegalArgumentException]
+    }
   }
 }

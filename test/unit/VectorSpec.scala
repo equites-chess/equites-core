@@ -20,7 +20,7 @@ import org.specs2.mutable._
 
 class VectorSpec extends Specification {
   "Vector" should {
-    "be correctly added and subtracted" in {
+    "correctly perform +(Vector) and -(Vector)" in {
       Vector(1, 1) + Vector( 2,  2) must_== Vector( 3,  3)
       Vector(1, 1) + Vector(-2, -2) must_== Vector(-1, -1)
 
