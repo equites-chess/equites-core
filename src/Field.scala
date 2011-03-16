@@ -21,7 +21,8 @@ object Field {
 
   def fromAlgebraicNotation(str: String): Field = {
     require(str.length == 2)
-    require(isValidFile(str(0)) && isValidRank(str(1)))
+    require(isValidFile(str(0)) &&
+            isValidRank(str(1)))
 
     val file: Int = str(0) - 'a'
     val rank: Int = str(1) - '1'
@@ -34,8 +35,8 @@ object Field {
 }
 
 case class Field(file: Int, rank: Int) {
-  require(Field.isValidCoordinate(file))
-  require(Field.isValidCoordinate(rank))
+  require(Field.isValidCoordinate(file) &&
+          Field.isValidCoordinate(rank))
 
   def +(vec: Vector): Field = Field(file + vec.file, rank + vec.rank)
   def -(vec: Vector): Field = Field(file - vec.file, rank - vec.rank)
