@@ -18,20 +18,6 @@ package equites
 
 object Move {
   def apply(from: Field, vec: Vector): Move = Move(from, from + vec)
-  def apply(str: String): Move = fromAlgebraicNotation(str)
-
-  def fromAlgebraicNotation(str: String): Move = {
-    require(str.length == 5)
-    require(List('-', 'x') contains str(2))
-
-    val from = Field(str.substring(0, 2))
-    val to   = Field(str.substring(3, 5))
-    Move(from, to)
-  }
 }
 
-case class Move(from: Field, to: Field) {
-  def toAlgebraicNotation(): String = {
-    from.toAlgebraicNotation + "-" + to.toAlgebraicNotation
-  }
-}
+case class Move(from: Field, to: Field)

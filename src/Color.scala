@@ -16,6 +16,13 @@
 
 package equites
 
+object Color {
+  def selectBy[T](color: Color, ifWhite: T, ifBlack: T): T = color match {
+    case White => ifWhite
+    case Black => ifBlack
+  }
+}
+
 abstract class Color {
   def oppositeColor(): Color
 }

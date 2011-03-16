@@ -16,43 +16,13 @@
 
 package equites
 
-abstract class PieceCompanion(val algebraicNotation: String)
-
-object King   extends PieceCompanion(algebraicNotation = "K")
-object Queen  extends PieceCompanion(algebraicNotation = "Q")
-object Rook   extends PieceCompanion(algebraicNotation = "R")
-object Bishop extends PieceCompanion(algebraicNotation = "B")
-object Knight extends PieceCompanion(algebraicNotation = "N")
-object Pawn   extends PieceCompanion(algebraicNotation = "P")
-
-
-object Piece {
-  def apply(str: String, color: Color): Piece = {
-    fromAlgebraicNotation(str, color)
-  }
-
-  def fromAlgebraicNotation(str: String, color: Color): Piece = {
-    str.toUpperCase match {
-      case King.algebraicNotation   => new King(color)
-      case Queen.algebraicNotation  => new Queen(color)
-      case Rook.algebraicNotation   => new Rook(color)
-      case Bishop.algebraicNotation => new Bishop(color)
-      case Knight.algebraicNotation => new Knight(color)
-      case Pawn.algebraicNotation   => new Pawn(color)
-      case _ => throw new IllegalArgumentException
-    }
-  }
+abstract class Piece {
+  def color: Color
 }
 
-abstract case class Piece(val color: Color,
-  private val companion: PieceCompanion) {
-
-  def toAlgebraicNotation(): String = companion.algebraicNotation
-}
-
-class King(color: Color)   extends Piece(color, King)
-class Queen(color: Color)  extends Piece(color, Queen)
-class Rook(color: Color)   extends Piece(color, Rook)
-class Bishop(color: Color) extends Piece(color, Bishop)
-class Knight(color: Color) extends Piece(color, Knight)
-class Pawn(color: Color)   extends Piece(color, Pawn)
+case class King(color: Color) extends Piece
+case class Queen(color: Color) extends Piece
+case class Rook(color: Color) extends Piece
+case class Bishop(color: Color) extends Piece
+case class Knight(color: Color) extends Piece
+case class Pawn(color: Color) extends Piece
