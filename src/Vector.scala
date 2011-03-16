@@ -16,7 +16,7 @@
 
 package equites
 
-case class Vector(val file: Int, val rank: Int) {
+case class Vector(file: Int, rank: Int) {
   def +(that: Vector): Vector = Vector(file + that.file, rank + that.rank)
   def -(that: Vector): Vector = Vector(file - that.file, rank - that.rank)
 }

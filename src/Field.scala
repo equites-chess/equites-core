@@ -21,8 +21,7 @@ object Field {
 
   def fromAlgebraicNotation(str: String): Field = {
     require(str.length == 2)
-    require(isValidFile(str(0)))
-    require(isValidRank(str(1)))
+    require(isValidFile(str(0)) && isValidRank(str(1)))
 
     val file: Int = str(0) - 'a'
     val rank: Int = str(1) - '1'
@@ -34,7 +33,7 @@ object Field {
   private def isValidRank(c: Char): Boolean = c >= '1' && c <= '8'
 }
 
-case class Field(val file: Int, val rank: Int) {
+case class Field(file: Int, rank: Int) {
   require(Field.isValidCoordinate(file))
   require(Field.isValidCoordinate(rank))
 

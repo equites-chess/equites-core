@@ -17,8 +17,8 @@
 package equites
 
 object Move {
-  def apply(str: String): Move = fromAlgebraicNotation(str)
   def apply(start: Field, vec: Vector): Move = Move(start, start + vec)
+  def apply(str: String): Move = fromAlgebraicNotation(str)
 
   def fromAlgebraicNotation(str: String): Move = {
     require(str.length == 5)
@@ -30,7 +30,7 @@ object Move {
   }
 }
 
-case class Move(val start: Field, val end: Field) {
+case class Move(start: Field, end: Field) {
   def toAlgebraicNotation(): String = {
     start.toAlgebraicNotation + "-" + end.toAlgebraicNotation
   }
