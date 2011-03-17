@@ -29,27 +29,30 @@ class FieldSpec extends Specification {
       Field( 8,  8) must throwAn[IllegalArgumentException]
     }
 
+/*
     "correctly convert to algebraic notation" in {
       Field(0, 0).toAlgebraicNotation must_== "a1"
       Field(0, 7).toAlgebraicNotation must_== "a8"
       Field(7, 7).toAlgebraicNotation must_== "h8"
       Field(7, 0).toAlgebraicNotation must_== "h1"
     }
-
+*/
+/*
     "be constructable from algebraic notation" in {
       Field("a1") must_== Field(0, 0)
       Field("a8") must_== Field(0, 7)
       Field("h8") must_== Field(7, 7)
       Field("h1") must_== Field(7, 0)
     }
-
+*/
+/*
     "fail on invalid algebraic notation" in {
       Field("11")  must throwAn[IllegalArgumentException]
       Field("a9")  must throwAn[IllegalArgumentException]
       Field("i1")  must throwAn[IllegalArgumentException]
       Field("a10") must throwAn[IllegalArgumentException]
     }
-
+*/
     "correctly perform +(Vector) and -(Vector)" in {
       Field(1, 1) + Vector( 1,  1) must_== Field(2, 2)
       Field(1, 1) - Vector(-1, -1) must_== Field(2, 2)

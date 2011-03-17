@@ -30,6 +30,7 @@ class MoveSpec extends Specification {
       Move(Field(7, 7), Vector( 1,  1)) must throwAn[IllegalArgumentException]
     }
 
+/*
     "correctly convert to algebraic notation" in {
       Move(Field(0, 0), Field(7, 7)).toAlgebraicNotation must_== "a1-h8"
       Move(Field(3, 3), Field(4, 4)).toAlgebraicNotation must_== "d4-e5"
@@ -46,5 +47,6 @@ class MoveSpec extends Specification {
       Move("a1+h8")  must throwAn[IllegalArgumentException]
       Move("a1-h9")  must throwAn[IllegalArgumentException]
     }
+*/
   }
 }
