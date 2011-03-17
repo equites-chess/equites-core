@@ -16,10 +16,4 @@
 
 package equites
 
-case class Vector(file: Int, rank: Int) {
-  def +(that: Vector): Vector = Vector(file + that.file, rank + that.rank)
-  def -(that: Vector): Vector = Vector(file - that.file, rank - that.rank)
-
-  def *(n: Int): Vector = Vector(file * n, rank * n)
-  def /(n: Int): Vector = Vector(file / n, rank / n)
-}
+class Rules

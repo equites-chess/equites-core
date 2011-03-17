@@ -17,20 +17,20 @@
 package equites
 
 object Color {
-  def selectBy[T](color: Color, ifWhite: T, ifBlack: T): T = color match {
+  def selectBy[A](color: Color, ifWhite: A, ifBlack: A): A = color match {
     case White => ifWhite
     case Black => ifBlack
   }
 }
 
 abstract class Color {
-  def oppositeColor(): Color
+  def oppositeColor: Color
 }
 
 object White extends Color {
-  override def oppositeColor(): Color = Black
+  override def oppositeColor: Color = Black
 }
 
 object Black extends Color {
-  override def oppositeColor(): Color = White
+  override def oppositeColor: Color = White
 }

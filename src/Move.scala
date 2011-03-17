@@ -20,4 +20,6 @@ object Move {
   def apply(from: Field, vec: Vector): Move = Move(from, from + vec)
 }
 
-case class Move(from: Field, to: Field)
+case class Move(from: Field, to: Field) {
+  def diff: Vector = to - from
+}
