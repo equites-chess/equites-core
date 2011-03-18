@@ -4,6 +4,11 @@ Equites, a simple chess interface
 Download
 --------
 
+You can download Equites in either `tar.gz`_ or `zip`_ formats.
+
+.. _tar.gz: https://github.com/fthomas/equites/tarball/master
+.. _zip:    https://github.com/fthomas/equites/zipball/master
+
 The version control system used for development of Equites is Git. The
 `Git repository`_ can be inspected and browsed online at GitHub and it
 can be cloned by running::
