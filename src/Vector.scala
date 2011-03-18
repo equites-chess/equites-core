@@ -22,4 +22,7 @@ case class Vector(file: Int, rank: Int) {
 
   def *(n: Int): Vector = Vector(file * n, rank * n)
   def /(n: Int): Vector = Vector(file / n, rank / n)
+
+  def map(f: Int => Int): Vector = Vector(f(file), f(rank))
+  def max: Int = if (file > rank) file else rank
 }

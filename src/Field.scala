@@ -23,6 +23,7 @@ case class Field(file: Int, rank: Int) {
   def +(vec: Vector): Field = Field(file + vec.file, rank + vec.rank)
   def -(vec: Vector): Field = Field(file - vec.file, rank - vec.rank)
   def -(that: Field): Vector = Vector(file - that.file, rank - that.rank)
+  def distTo(that: Field): Int = (that - this).map(_.abs).max
 
   private def isValidCoordinate(i: Int): Boolean = i >= 0 && i <= 7
 }
