@@ -1,6 +1,11 @@
 Equites, a simple chess interface
 =================================
 
+Introduction
+------------
+
+Equites is a simple chess interface written in Scala.
+
 Download
 --------
 

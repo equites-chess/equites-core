@@ -16,4 +16,24 @@
 
 package equites
 
+object Rules {
+  def startingPositions(color: Color): Map[Field, Piece] = {
+    val backRank = Color.selectBy(color, 0, 7)
+    val pawnRank = Color.selectBy(color, 1, 6)
+
+    val royals = List(Field(4, backRank) -> King(color),
+                      Field(3, backRank) -> Queen(color))
+    val rooks   = List(0, 7).map(Field(_, backRank) -> Rook(color))
+    val knights = List(1, 6).map(Field(_, backRank) -> Knight(color))
+    val bishops = List(2, 5).map(Field(_, backRank) -> Bishop(color))
+    val pawns = (0 to 7).map(Field(_, pawnRank) -> Pawn(color))
+
+    Map[Field, Piece]() ++ royals ++ rooks ++ knights ++ bishops ++ pawns
+  }
+
+  def startingPositions: Map[Field, Piece] = {
+     startingPositions(White) ++ startingPositions(Black)
+  }
+}
+
 class Rules
