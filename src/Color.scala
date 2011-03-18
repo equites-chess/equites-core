@@ -23,7 +23,7 @@ object Color {
   }
 }
 
-abstract class Color {
+sealed abstract class Color {
   def oppositeColor: Color
 }
 
