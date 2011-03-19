@@ -4,7 +4,8 @@ Equites, a simple chess interface
 Introduction
 ------------
 
-Equites is a simple chess interface written in Scala.
+Equites is a simple chess interface written in Scala. It is work in
+progress and currently not playable.
 
 Download
 --------
