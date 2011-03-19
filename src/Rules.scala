@@ -31,7 +31,7 @@ object Rules {
     Map[Field, Piece]() ++ royals ++ rooks ++ knights ++ bishops ++ pawns
   }
 
-  val startingPositions: Map[Field, Piece] = {
+  def startingPositions: Map[Field, Piece] = {
      startingPositions(White) ++ startingPositions(Black)
   }
 }
