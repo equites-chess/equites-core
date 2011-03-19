@@ -16,7 +16,7 @@
 
 package equites
 
-abstract class Piece {
+sealed abstract class Piece {
   def color: Color
 }
 
