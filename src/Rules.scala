@@ -18,8 +18,8 @@ package equites
 
 object Rules {
   def startingPositions(color: Color): Map[Field, Piece] = {
-    val backRank = Color.selectBy(color, 0, 7)
-    val pawnRank = Color.selectBy(color, 1, 6)
+    val backRank = if (color == White) 0 else 7
+    val pawnRank = if (color == White) 1 else 6
 
     val royals = List(Field(4, backRank) -> King(color),
                       Field(3, backRank) -> Queen(color))

@@ -71,6 +71,7 @@ class LongAlgebraicNotation extends Notation {
 }
 */
 
+/*
 trait LetterPieces {
   def serialize(piece: Piece): String = {
     piece match {
@@ -82,6 +83,7 @@ trait LetterPieces {
       case Pawn(_)   => ""
     }
   }
+*/
 /*
   def unserializePiece(str: String): Piece = {
     str match {
@@ -96,6 +98,7 @@ trait LetterPieces {
 */
 }
 
+/*
 trait FigurinePieces {
   def serialize(piece: Piece): String = {
     import Color._
@@ -109,3 +112,4 @@ trait FigurinePieces {
     }
   }
 }
+*/
