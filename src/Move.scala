@@ -22,5 +22,5 @@ object Move {
 
 case class Move(from: Field, to: Field) {
   def diff: Vector = to - from
-  def dist: Int = from.distTo(to)
+  //def dist: Int = from.distTo(to)
 }

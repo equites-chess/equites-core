@@ -25,4 +25,5 @@ case class Vector(file: Int, rank: Int) {
 
   def map(f: Int => Int): Vector = Vector(f(file), f(rank))
   def max: Int = if (file > rank) file else rank
+  def sum: Int = file + rank
 }
