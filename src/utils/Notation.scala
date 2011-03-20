@@ -95,8 +95,8 @@ trait LetterPieces {
       case ""  => new Pawn(color)
     }
   }
-*/
 }
+*/
 
 /*
 trait FigurinePieces {
