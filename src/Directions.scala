@@ -61,6 +61,11 @@ class Directions(vectors: List[Vector]) extends LinearSeq[Vector] {
     if (color == Black) inverse else this
   }
 
+  override def equals(that: Any): Boolean = that match {
+    case other: Directions => vectors.filterNot(other.contains).isEmpty
+    case _ => false
+  }
+
   // required for LinearSeq[Vector]:
   def apply(idx: Int): Vector = vectors(idx)
   def length: Int = vectors.length
