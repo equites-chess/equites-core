@@ -26,5 +26,6 @@ case class Vector(file: Int, rank: Int) {
   def /(n: Int): Vector = map(_ / n)
 
   def max: Int = if (file > rank) file else rank
+  def min: Int = if (file < rank) file else rank
   def sum: Int = file + rank
 }
