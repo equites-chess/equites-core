@@ -19,6 +19,8 @@ package equites
 import scala.collection.mutable.Map
 
 class Board {
+  // applyAction
+  // unapplyAction
   def getPiece(field: Field): Option[Piece] = grid.get(field)
   def takePiece(field: Field): Option[Piece] = grid.remove(field)
 
@@ -31,4 +33,5 @@ class Board {
   }
 
   private var grid = Map[Field, Piece]()
+  private var moveCount = Map[Piece, Int]()
 }
