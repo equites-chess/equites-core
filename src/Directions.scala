@@ -43,6 +43,7 @@ object Directions {
 
   val diagonal   = Directions(diagonalFront ++ diagonalBack)
   val orthogonal = Directions(front ++ right ++ back ++ left)
+  val anywhere   = Directions(orthogonal ++ diagonal)
 
   val knightLike = Directions({
     val steps = List(-2, -1, 1, 2)
