@@ -27,5 +27,29 @@ class VectorSpec extends Specification {
       Vector(1, 1) - Vector( 2,  2) must_== Vector(-1, -1)
       Vector(1, 1) - Vector(-2, -2) must_== Vector( 3,  3) 
     }
+
+    "correctly perform *(Int) and /(Int)" in {
+      Vector(1, 2) * -1 must_== Vector(-1, -2)
+      Vector(1, 2) *  0 must_== Vector( 0,  0)
+      Vector(1, 2) *  2 must_== Vector( 2,  4)
+
+      Vector(1, 2) / -1 must_== Vector(-1, -2)
+      Vector(1, 2) /  2 must_== Vector( 0,  1)
+      Vector(1, 2) /  3 must_== Vector( 0,  0)
+      Vector(4, 6) /  2 must_== Vector( 2,  3)
+    }
+
+    "correctly perform map" in {
+      Vector( 0,  0).map(_ + 1) must_== Vector(1, 1)
+      Vector(-1, -1).map(_.abs) must_== Vector(1, 1)
+    }
+
+    "correctly perform max and sum" in {
+      Vector(1,  2).max must_== 2
+      Vector(1, -2).max must_== 1
+
+      Vector(1,  2).sum must_==  3
+      Vector(1, -2).sum must_== -1
+    }
   }
 }

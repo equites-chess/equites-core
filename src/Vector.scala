@@ -17,13 +17,14 @@
 package equites
 
 case class Vector(file: Int, rank: Int) {
+  def map(f: Int => Int): Vector = Vector(f(file), f(rank))
+
   def +(that: Vector): Vector = Vector(file + that.file, rank + that.rank)
   def -(that: Vector): Vector = Vector(file - that.file, rank - that.rank)
 
-  def *(n: Int): Vector = Vector(file * n, rank * n)
-  def /(n: Int): Vector = Vector(file / n, rank / n)
+  def *(n: Int): Vector = map(_ * n)
+  def /(n: Int): Vector = map(_ / n)
 
-  def map(f: Int => Int): Vector = Vector(f(file), f(rank))
   def max: Int = if (file > rank) file else rank
   def sum: Int = file + rank
 }

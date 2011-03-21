@@ -17,37 +17,5 @@
 package equites
 
 import org.specs2.mutable._
-/*
-class PieceSpec extends Specification {
-  "Piece" should {
-    "be constructable from algebraic notation" in {
-      Piece("K", White) must_== new King(White)
-      Piece("Q", White) must_== new Queen(White)
-      Piece("R", White) must_== new Rook(White)
-      Piece("B", White) must_== new Bishop(White)
-      Piece("N", White) must_== new Knight(White)
-      Piece("P", White) must_== new Pawn(White)
 
-      Piece("K", Black) must_== new King(Black)
-      Piece("Q", Black) must_== new Queen(Black)
-      Piece("R", Black) must_== new Rook(Black)
-      Piece("B", Black) must_== new Bishop(Black)
-      Piece("N", Black) must_== new Knight(Black)
-      Piece("P", Black) must_== new Pawn(Black)
-   }
-
-    "fail on invalid algebraic notation" in {
-      Piece("",   White) must throwAn[IllegalArgumentException]
-      Piece("A",  White) must throwAn[IllegalArgumentException]
-      Piece("QQ", White) must throwAn[IllegalArgumentException]
-
-      Piece("k", Black) must throwAn[IllegalArgumentException]
-      Piece("q", Black) must throwAn[IllegalArgumentException]
-      Piece("r", Black) must throwAn[IllegalArgumentException]
-      Piece("b", Black) must throwAn[IllegalArgumentException]
-      Piece("n", Black) must throwAn[IllegalArgumentException]
-      Piece("p", Black) must throwAn[IllegalArgumentException]
-    }
-  }
-}
-*/
+class PieceSpec extends Specification

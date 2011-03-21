@@ -29,30 +29,6 @@ class FieldSpec extends Specification {
       Field( 8,  8) must throwAn[IllegalArgumentException]
     }
 
-/*
-    "correctly convert to algebraic notation" in {
-      Field(0, 0).toAlgebraicNotation must_== "a1"
-      Field(0, 7).toAlgebraicNotation must_== "a8"
-      Field(7, 7).toAlgebraicNotation must_== "h8"
-      Field(7, 0).toAlgebraicNotation must_== "h1"
-    }
-*/
-/*
-    "be constructable from algebraic notation" in {
-      Field("a1") must_== Field(0, 0)
-      Field("a8") must_== Field(0, 7)
-      Field("h8") must_== Field(7, 7)
-      Field("h1") must_== Field(7, 0)
-    }
-*/
-/*
-    "fail on invalid algebraic notation" in {
-      Field("11")  must throwAn[IllegalArgumentException]
-      Field("a9")  must throwAn[IllegalArgumentException]
-      Field("i1")  must throwAn[IllegalArgumentException]
-      Field("a10") must throwAn[IllegalArgumentException]
-    }
-*/
     "correctly perform +(Vector) and -(Vector)" in {
       Field(1, 1) + Vector( 1,  1) must_== Field(2, 2)
       Field(1, 1) - Vector(-1, -1) must_== Field(2, 2)
@@ -61,6 +37,27 @@ class FieldSpec extends Specification {
 
       Field(0, 0) - Vector(1, 1) must throwAn[IllegalArgumentException]
       Field(7, 7) + Vector(1, 1) must throwAn[IllegalArgumentException]
+    }
+
+    "correctly perform -(Field)" in {
+      Field(1, 1) - Field(1, 1) must_== Vector(0, 0)
+      Field(2, 2) - Field(1, 1) must_== Vector(1, 1)
+      Field(2, 1) - Field(0, 0) must_== Vector(2, 1)
+      Field(0, 0) - Field(3, 4) must_== Vector(-3, -4)
+    }
+
+    "correctly calculate l1Dist and lInfDist" in {
+      var p1 = Field(1, 2)
+      var p2 = Field(4, 3)
+
+      Field.l1Dist(p1, p2)   must_== 4
+      Field.lInfDist(p1, p2) must_== 3
+
+      p1 = Field(0, 0)
+      p2 = Field(1, 1)
+
+      Field.l1Dist(p1, p2)   must_== 2
+      Field.lInfDist(p1, p2) must_== 1
     }
   }
 }
