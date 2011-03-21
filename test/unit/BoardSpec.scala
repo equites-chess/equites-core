@@ -16,19 +16,6 @@
 
 package equites
 
-import scala.collection.mutable.Map
+import org.specs2.mutable._
 
-class Board {
-  def getPiece(field: Field): Option[Piece] = grid.get(field)
-  def takePiece(field: Field): Option[Piece] = grid.remove(field)
-
-  def putPiece(field: Field, piece: Piece): Option[Piece] = {
-    grid.put(field, piece)
-  }
-
-  def putPieces(pieces: Map[Field, Piece]) {
-    pieces.foreach { case (f, p) => putPiece(f, p) }
-  }
-
-  private var grid = Map[Field, Piece]()
-}
+class BoardSpec extends Specification
