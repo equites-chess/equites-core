@@ -19,8 +19,10 @@ package equites
 import scala.collection.mutable.Map
 
 class Board {
-  // applyAction
-  // unapplyAction
+//  def executeAction(action: Action)
+//  def revertAction(action: Action)
+
+/*
   def getPiece(field: Field): Option[Piece] = grid.get(field)
   def takePiece(field: Field): Option[Piece] = grid.remove(field)
 
@@ -31,6 +33,7 @@ class Board {
   def putPieces(pieces: Map[Field, Piece]) {
     pieces.foreach { case (f, p) => putPiece(f, p) }
   }
+*/
 
   private var grid = Map[Field, Piece]()
   private var moveCount = Map[Piece, Int]()

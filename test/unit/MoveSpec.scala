@@ -19,6 +19,7 @@ package equites
 import org.specs2.mutable._
 
 class MoveSpec extends Specification {
+/*
   "Move" should {
     "be constructable from Field and Vector" in {
       Move(Field(0, 0), Vector( 1,  1)) must_== Move(Field(0, 0), Field(1, 1))
@@ -30,4 +31,5 @@ class MoveSpec extends Specification {
       Move(Field(7, 7), Vector( 1,  1)) must throwAn[IllegalArgumentException]
     }
   }
+*/
 }
