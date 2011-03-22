@@ -7,6 +7,13 @@ Introduction
 Equites is a simple chess interface written in Scala. It is work in
 progress and currently not playable.
 
+Building
+--------
+
+The build tool `sbt`_ is used to build Equites.
+
+.. _sbt: http://code.google.com/p/simple-build-tool/
+
 Download
 --------
 
