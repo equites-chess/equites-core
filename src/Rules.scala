@@ -17,16 +17,29 @@
 package equites
 
 object Rules {
-  def startingPositions(color: Color): Map[Field, Piece] = {
-    val backRank = if (color == White) 0 else 7
-    val pawnRank = if (color == White) 1 else 6
+  val maxFile = 7
+  val maxRank = 7
 
-    val royals = List(Field(4, backRank) -> King(color),
-                      Field(3, backRank) -> Queen(color))
-    val rooks   = List(0, 7).map(Field(_, backRank) -> Rook(color))
-    val knights = List(1, 6).map(Field(_, backRank) -> Knight(color))
-    val bishops = List(2, 5).map(Field(_, backRank) -> Bishop(color))
-    val pawns = (0 to 7).map(Field(_, pawnRank) -> Pawn(color))
+  val kingFile  = 4
+  val queenFile = 3
+
+  val rookFiles   = List(0, 7)
+  val knightFiles = List(1, 6)
+  val bishopFiles = List(2, 5)
+
+  def backRankBy(color: Color): Int = if (color == White) 0 else maxRank
+  def pawnRankBy(color: Color): Int = if (color == White) 1 else maxRank - 1
+
+  def startingPositions(color: Color): Map[Field, Piece] = {
+    val backRank = backRankBy(color)
+    val pawnRank = pawnRankBy(color)
+
+    val royals = List(Field(kingFile,  backRank) -> King(color),
+                      Field(queenFile, backRank) -> Queen(color))
+    val rooks   =      rookFiles.map(Field(_, backRank) -> Rook(color))
+    val knights =    knightFiles.map(Field(_, backRank) -> Knight(color))
+    val bishops =    bishopFiles.map(Field(_, backRank) -> Bishop(color))
+    val pawns   = (0 to maxFile).map(Field(_, pawnRank) -> Pawn(color))
 
     Map[Field, Piece]() ++ royals ++ rooks ++ knights ++ bishops ++ pawns
   }

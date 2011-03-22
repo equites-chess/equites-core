@@ -22,12 +22,12 @@ object Field {
 }
 
 case class Field(file: Int, rank: Int) {
-  require(isValidCoordinate(file) &&
-          isValidCoordinate(rank))
+  require(isValidFile(file) && isValidRank(rank))
 
   def +(vec: Vector): Field = Field(file + vec.file, rank + vec.rank)
   def -(vec: Vector): Field = Field(file - vec.file, rank - vec.rank)
   def -(that: Field): Vector = Vector(file - that.file, rank - that.rank)
 
-  private def isValidCoordinate(i: Int): Boolean = i >= 0 && i <= 7
+  private def isValidFile(i: Int): Boolean = i >= 0 && i <= Rules.maxFile
+  private def isValidRank(i: Int): Boolean = i >= 0 && i <= Rules.maxRank
 }
