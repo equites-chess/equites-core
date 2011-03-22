@@ -27,6 +27,9 @@ object Rules {
   val knightFiles = List(1, 6)
   val bishopFiles = List(2, 5)
 
+  val castlingShortFile = 6
+  val castlingLongFile  = 3
+
   def backRankBy(color: Color): Int = if (color == White) 0 else maxRank
   def pawnRankBy(color: Color): Int = if (color == White) 1 else maxRank - 1
 
