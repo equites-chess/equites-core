@@ -16,6 +16,10 @@
 
 package equites
 
+object Piece {
+  def areOpponents(p1: Piece, p2: Piece): Boolean = p1.color != p2.color
+}
+
 sealed abstract class Piece(val color: Color) {
   override def toString: String = this.getClass.getName + "(" + color + ")"
 }

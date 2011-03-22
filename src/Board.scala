@@ -27,18 +27,15 @@ class Board {
   def totalMoves(piece: Piece): Int = counter.totalMoves(piece)
 
   def occupied(field: Field): Boolean = grid.contains(field)
-
   def occupiedBy(field: Field, piece: Piece): Boolean = {
-    getPiece(field) match {
-      case None => false
-      case Some(other_piece) => other_piece == piece
-    }
+    occupied(field) && grid(field) == piece
   }
 
   def getPiece(field: Field): Option[Piece] = grid.get(field)
 
   def putPiece(field: Field, piece: Piece) {
     require(!occupied(field) && !contains(piece))
+
     counter.register(piece)
     grid.put(field, piece)
   }
@@ -78,7 +75,7 @@ class Board {
   def executeAction(capture: Capture) {
     require(occupiedBy(capture.from, capture.piece) &&
             occupiedBy(capture.to, capture.captured) &&
-            capture.piece.color != capture.captured.color &&
+            Piece.areOpponents(capture.piece, capture.captured) &&
             !taken.contains(capture.captured))
 
     taken.add(capture.captured)
@@ -89,7 +86,7 @@ class Board {
   def revertAction(capture: Capture) {
     require(!occupied(capture.from) &&
             occupiedBy(capture.to, capture.piece) &&
-            capture.piece.color != capture.captured.color &&
+            Piece.areOpponents(capture.piece, capture.captured) &&
             taken.contains(capture.captured))
 
     movePiece(capture.to, capture.from)
@@ -105,7 +102,6 @@ class Board {
   private val grid = mutable.Map[Field, Piece]()
   private val taken = mutable.Set[Piece]()
   private val counter = new MoveCounter
-
 }
 
 class MoveCounter {
