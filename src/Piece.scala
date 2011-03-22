@@ -16,13 +16,24 @@
 
 package equites
 
-sealed abstract class Piece {
-  def color: Color
+sealed abstract class Piece(val color: Color) {
+  override def toString: String = this.getClass.getName + "(" + color + ")"
 }
 
-case class King(color: Color) extends Piece
-case class Queen(color: Color) extends Piece
-case class Rook(color: Color) extends Piece
-case class Bishop(color: Color) extends Piece
-case class Knight(color: Color) extends Piece
-case class Pawn(color: Color) extends Piece
+class King(color: Color) extends Piece(color)
+class Queen(color: Color) extends Piece(color)
+class Rook(color: Color) extends Piece(color)
+class Bishop(color: Color) extends Piece(color)
+class Knight(color: Color) extends Piece(color)
+class Pawn(color: Color) extends Piece(color)
+
+trait PieceCompanion {
+  def unapply(piece: Piece): Option[Color] = Some(piece.color)
+}
+
+object King extends PieceCompanion
+object Queen extends PieceCompanion
+object Rook extends PieceCompanion
+object Bishop extends PieceCompanion
+object Knight extends PieceCompanion
+object Pawn extends PieceCompanion

@@ -37,12 +37,12 @@ object Rules {
     val backRank = backRankBy(color)
     val pawnRank = pawnRankBy(color)
 
-    val royals = List(Field(kingFile,  backRank) -> King(color),
-                      Field(queenFile, backRank) -> Queen(color))
-    val rooks   =      rookFiles.map(Field(_, backRank) -> Rook(color))
-    val knights =    knightFiles.map(Field(_, backRank) -> Knight(color))
-    val bishops =    bishopFiles.map(Field(_, backRank) -> Bishop(color))
-    val pawns   = (0 to maxFile).map(Field(_, pawnRank) -> Pawn(color))
+    val royals = List(Field(kingFile,  backRank) -> new King(color),
+                      Field(queenFile, backRank) -> new Queen(color))
+    val rooks   =      rookFiles.map(Field(_, backRank) -> new Rook(color))
+    val knights =    knightFiles.map(Field(_, backRank) -> new Knight(color))
+    val bishops =    bishopFiles.map(Field(_, backRank) -> new Bishop(color))
+    val pawns   = (0 to maxFile).map(Field(_, pawnRank) -> new Pawn(color))
 
     Map[Field, Piece]() ++ royals ++ rooks ++ knights ++ bishops ++ pawns
   }
