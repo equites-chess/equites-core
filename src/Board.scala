@@ -16,25 +16,113 @@
 
 package equites
 
-import scala.collection.mutable.Map
+import scala.collection._
 
 class Board {
-//  def executeAction(action: Action)
-//  def revertAction(action: Action)
+  def contains(piece: Piece): Boolean = {
+    grid.values.exists(_ == piece) || taken.contains(piece)
+  }
 
-/*
+  def hasMoved(piece: Piece): Boolean = counter.hasMoved(piece)
+  def totalMoves(piece: Piece): Int = counter.totalMoves(piece)
+
+  def occupied(field: Field): Boolean = grid.contains(field)
+
+  def occupiedBy(field: Field, piece: Piece): Boolean = {
+    getPiece(field) match {
+      case None => false
+      case Some(other_piece) => other_piece == piece
+    }
+  }
+
   def getPiece(field: Field): Option[Piece] = grid.get(field)
-  def takePiece(field: Field): Option[Piece] = grid.remove(field)
 
-  def putPiece(field: Field, piece: Piece): Option[Piece] = {
+  def putPiece(field: Field, piece: Piece) {
+    require(!occupied(field) && !contains(piece))
+    counter.register(piece)
     grid.put(field, piece)
   }
 
   def putPieces(pieces: Map[Field, Piece]) {
-    pieces.foreach { case (f, p) => putPiece(f, p) }
+    pieces.foreach { case (field, piece) => putPiece(field, piece) }
   }
-*/
 
-  private var grid = Map[Field, Piece]()
-  private var moveCount = Map[Piece, Int]()
+  def removePiece(field: Field): Option[Piece] = grid.remove(field) match {
+    case None => None
+    case Some(piece) => {
+      counter.unregister(piece)
+      Some(piece)
+    }
+  }
+
+  def clear() {
+    grid.clear()
+    taken.clear()
+    counter.unregisterAll()
+  }
+
+  def executeAction(move: Move) {
+    require(occupiedBy(move.from, move.piece) && !occupied(move.to))
+
+    movePiece(move.from, move.to)
+    counter.increment(move.piece)
+  }
+
+  def revertAction(move: Move) {
+    require(!occupied(move.from) && occupiedBy(move.to, move.piece))
+
+    movePiece(move.to, move.from)
+    counter.decrement(move.piece)
+  }
+
+  def executeAction(capture: Capture) {
+    require(occupiedBy(capture.from, capture.piece) &&
+            occupiedBy(capture.to, capture.captured) &&
+            capture.piece.color != capture.captured.color &&
+            !taken.contains(capture.captured))
+
+    taken.add(capture.captured)
+    movePiece(capture.from, capture.to)
+    counter.increment(capture.piece)
+  }
+
+  def revertAction(capture: Capture) {
+    require(!occupied(capture.from) &&
+            occupiedBy(capture.to, capture.piece) &&
+            capture.piece.color != capture.captured.color &&
+            taken.contains(capture.captured))
+
+    movePiece(capture.to, capture.from)
+    counter.decrement(capture.piece)
+    taken.remove(capture.captured)
+    grid.put(capture.to, capture.captured)
+  }
+
+  private def movePiece(from: Field, to: Field) {
+    grid.put(to, grid.remove(from).get)
+  }
+
+  private val grid = mutable.Map[Field, Piece]()
+  private val taken = mutable.Set[Piece]()
+  private val counter = new MoveCounter
+
+}
+
+class MoveCounter {
+  def hasMoved(piece: Piece): Boolean = count(piece) > 0
+  def totalMoves(piece: Piece): Int = count(piece)
+
+  def register(piece: Piece) { count.put(piece, 0) }
+  def unregister(piece: Piece) { count.remove(piece) }
+  def unregisterAll() { count.clear() }
+
+  def increment(piece: Piece): Int = addTo(piece)(+1)
+  def decrement(piece: Piece): Int = addTo(piece)(-1)
+
+  private def addTo(piece: Piece)(i: Int): Int = {
+    count(piece) = count(piece) + i
+    count(piece)
+  }
+
+  private val count = mutable.Map[Piece, Int]()
 }
