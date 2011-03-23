@@ -30,10 +30,13 @@ trait MoveLike {
 case class Move(piece: Piece, from: Field, to: Field)
   extends Action with MoveLike
 
-case class Capture(piece: Piece, from: Field, to: Field, captured: Piece)
-  extends Action with MoveLike
+case class Promotion(pawn: Pawn, from: Field, to: Field)
+  extends Action with MoveLike {
 
-case class Promotion(pawn: Pawn, from: Field, to: Field, newPiece: Piece)
+  var newPiece: Piece = new Queen(pawn.color)
+}
+
+case class Capture(piece: Piece, from: Field, to: Field, captured: Piece)
   extends Action with MoveLike
 
 case class EnPassant(pawn: Pawn, from: Field, to: Field,
