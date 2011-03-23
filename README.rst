@@ -17,7 +17,8 @@ The build tool `sbt`_ is used to build Equites.
 Download
 --------
 
-You can download Equites in either `tar.gz`_ or `zip`_ formats.
+You can download the Equites sources in either `tar.gz`_ or `zip`_
+formats.
 
 .. _tar.gz: https://github.com/fthomas/equites/tarball/master
 .. _zip:    https://github.com/fthomas/equites/zipball/master
