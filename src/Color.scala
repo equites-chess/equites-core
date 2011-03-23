@@ -17,13 +17,13 @@
 package equites
 
 sealed abstract class Color {
-  def oppositeColor: Color
+  def opposite: Color
 }
 
 case object White extends Color {
-  override def oppositeColor: Color = Black
+  override def opposite: Color = Black
 }
 
 case object Black extends Color {
-  override def oppositeColor: Color = White
+  override def opposite: Color = White
 }

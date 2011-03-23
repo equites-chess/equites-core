@@ -21,21 +21,21 @@ import org.specs2.mutable._
 class ColorSpec extends Specification {
   "Color White" should {
     "return Black as opposite Color" in {
-      White.oppositeColor must_== Black
+      White.opposite must_== Black
     }
 
     "return White as opposite opposite Color" in {
-      White.oppositeColor.oppositeColor must_== White
+      White.opposite.opposite must_== White
     }
   }
 
   "Color Black" should {
     "return White as opposite Color" in {
-      Black.oppositeColor must_== White
+      Black.opposite must_== White
     }
 
     "return Black as opposite opposite Color" in {
-      Black.oppositeColor.oppositeColor must_== Black
+      Black.opposite.opposite must_== Black
     }
   }
 }
