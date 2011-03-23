@@ -75,7 +75,7 @@ class Board {
   def executeAction(capture: Capture) {
     require(occupiedBy(capture.from, capture.piece) &&
             occupiedBy(capture.to, capture.captured) &&
-            Piece.areOpponents(capture.piece, capture.captured) &&
+            Piece.opposing(capture.piece, capture.captured) &&
             !taken.contains(capture.captured))
 
     taken.add(capture.captured)
@@ -86,13 +86,18 @@ class Board {
   def revertAction(capture: Capture) {
     require(!occupied(capture.from) &&
             occupiedBy(capture.to, capture.piece) &&
-            Piece.areOpponents(capture.piece, capture.captured) &&
+            Piece.opposing(capture.piece, capture.captured) &&
             taken.contains(capture.captured))
 
     movePiece(capture.to, capture.from)
     counter.decrement(capture.piece)
     taken.remove(capture.captured)
     grid.put(capture.to, capture.captured)
+  }
+
+  def executeAction(promo: Promotion) {
+    //require(occupiedBy(promo.from) &&
+    //        !occupied(promo.to))
   }
 
   private def movePiece(from: Field, to: Field) {

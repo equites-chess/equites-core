@@ -17,19 +17,21 @@
 package equites
 
 object Piece {
-  def areOpponents(p1: Piece, p2: Piece): Boolean = p1.color != p2.color
+  def opposing(piece1: Piece, piece2: Piece): Boolean = {
+    piece1.color != piece2.color
+  }
 }
 
-sealed abstract class Piece(val color: Color) {
-  override def toString: String = this.getClass.getName + "(" + color + ")"
+sealed abstract class Piece {
+  def color: Color
 }
 
-class King(color: Color) extends Piece(color)
-class Queen(color: Color) extends Piece(color)
-class Rook(color: Color) extends Piece(color)
-class Bishop(color: Color) extends Piece(color)
-class Knight(color: Color) extends Piece(color)
-class Pawn(color: Color) extends Piece(color)
+class King(val color: Color) extends Piece
+class Queen(val color: Color) extends Piece
+class Rook(val color: Color) extends Piece
+class Bishop(val color: Color) extends Piece
+class Knight(val color: Color) extends Piece
+class Pawn(val color: Color) extends Piece
 
 trait PieceCompanion {
   def unapply(piece: Piece): Option[Color] = Some(piece.color)
