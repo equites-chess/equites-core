@@ -22,8 +22,8 @@ object Field {
 }
 
 case class Field(file: Int, rank: Int) {
-  require(0 to Rules.maxFile contains file)
-  require(0 to Rules.maxRank contains rank)
+  require(Rules.fileRange contains file)
+  require(Rules.rankRange contains rank)
 
   def +(vec: Vector): Field = Field(file + vec.file, rank + vec.rank)
   def -(vec: Vector): Field = Field(file - vec.file, rank - vec.rank)

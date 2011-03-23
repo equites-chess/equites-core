@@ -43,38 +43,19 @@ case class EnPassant(pawn: Pawn, from: Field, to: Field,
   captured: Pawn, capturedOn: Field)
   extends Action with MoveLike
 
-sealed abstract class Castling extends Action {
-  val king: King
-  val rook: Rook
+sealed abstract class Castling(side: Symbol) extends Action {
+  def king: King
+  def rook: Rook
 
-  val kingMove = Move(king, kingFrom, kingTo)
-  val rookMove = Move(rook, rookFrom, rookTo)
+  val kingMove: Move = Rules.castlingFields(king, side) match {
+    case (from, to) => Move(king, from, to)
+  }
 
-  protected val kingFrom: Field
-  protected val kingTo: Field
-
-  protected val rookFrom: Field
-  protected val rookTo: Field
+  val rookMove: Move = Rules.castlingFields(rook, side) match {
+    case (from, to) => Move(rook, from, to)
+  }
 }
 
-case class CastlingShort(king: King, rook: Rook) extends Castling {
-  import Rules._
-  private val backRank = backRankBy(king.color)
+case class CastlingShort(king: King, rook: Rook) extends Castling('kingside)
 
-  protected val kingFrom = Field(kingFile, backRank)
-  protected val kingTo   = Field(castlingShortFile, backRank)
-
-  protected val rookFrom = Field(rookFiles(1), backRank)
-  protected val rookTo   = Field(castlingShortFile - 1, backRank)
-}
-
-case class CastlingLong(king: King, rook: Rook) extends Castling {
-  import Rules._
-  private val backRank = backRankBy(king.color)
-
-  protected val kingFrom = Field(kingFile, backRank)
-  protected val kingTo   = Field(castlingLongFile, backRank)
-
-  protected val rookFrom = Field(rookFiles(0), backRank)
-  protected val rookTo   = Field(castlingLongFile + 1, backRank)
-}
+case class CastlingLong(king: King, rook: Rook) extends Castling('queenside)

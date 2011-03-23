@@ -17,38 +17,55 @@
 package equites
 
 object Rules {
-  val maxFile = 7
-  val maxRank = 7
+  val fileRange = 0 to 7
+  val rankRange = 0 to 7
 
   val kingFile  = 4
   val queenFile = 3
-
   val rookFiles   = List(0, 7)
   val knightFiles = List(1, 6)
   val bishopFiles = List(2, 5)
 
-  val castlingShortFile = 6
-  val castlingLongFile  = 3
+  def backRankBy(color: Color): Int = {
+    if (color == White) rankRange.start else rankRange.end
+  }
 
-  def backRankBy(color: Color): Int = if (color == White) 0 else maxRank
-  def pawnRankBy(color: Color): Int = if (color == White) 1 else maxRank - 1
+  def pawnRankBy(color: Color): Int = {
+    if (color == White) rankRange.start + 1 else rankRange.start - 1
+  }
 
   def startingPositions(color: Color): Map[Field, Piece] = {
     val backRank = backRankBy(color)
     val pawnRank = pawnRankBy(color)
 
-    val royals = List(Field(kingFile,  backRank) -> new King(color),
-                      Field(queenFile, backRank) -> new Queen(color))
-    val rooks   =      rookFiles.map(Field(_, backRank) -> new Rook(color))
-    val knights =    knightFiles.map(Field(_, backRank) -> new Knight(color))
-    val bishops =    bishopFiles.map(Field(_, backRank) -> new Bishop(color))
-    val pawns   = (0 to maxFile).map(Field(_, pawnRank) -> new Pawn(color))
+    val royals  = List(Field(kingFile,  backRank) -> new King(color),
+                       Field(queenFile, backRank) -> new Queen(color))
+    val rooks   =   rookFiles.map(Field(_, backRank) -> new Rook(color))
+    val knights = knightFiles.map(Field(_, backRank) -> new Knight(color))
+    val bishops = bishopFiles.map(Field(_, backRank) -> new Bishop(color))
+    val pawns   =   fileRange.map(Field(_, pawnRank) -> new Pawn(color))
 
     Map[Field, Piece]() ++ royals ++ rooks ++ knights ++ bishops ++ pawns
   }
 
   def startingPositions: Map[Field, Piece] = {
      startingPositions(White) ++ startingPositions(Black)
+  }
+
+  def castlingFields(piece: Piece, side: Symbol): Pair[Field, Field] = {
+    val rank = backRankBy(piece.color)
+
+    piece match {
+      case King(_) if side == 'kingside
+        => (Field(kingFile, rank), Field(kingFile + 2, rank))
+      case King(_) if side == 'queenside
+        => (Field(kingFile, rank), Field(kingFile - 2, rank))
+      case Rook(_) if side == 'kingside
+        => (Field(rookFiles(1), rank), Field(kingFile + 1, rank))
+      case Rook(_) if side == 'queenside
+        => (Field(rookFiles(0), rank), Field(kingFile - 1, rank))
+      case _ => throw new IllegalArgumentException
+    }
   }
 }
 
