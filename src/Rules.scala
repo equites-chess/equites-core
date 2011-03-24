@@ -69,6 +69,17 @@ object Rules {
   def startingPositions: Map[Field, Piece] = {
      startingPositions(White) ++ startingPositions(Black)
   }
+
+  private def fieldsInDirection(from: Field, direction: Vector,
+    maxDist: Int = maxLength): Stream[Field] = {
+
+    if (maxDist < 1 || !Field.validSum(from, direction))
+      Stream.empty
+    else {
+      val next: Field = from + direction
+      Stream.cons(next, fieldsInDirection(next, direction, maxDist - 1))
+    }
+  }
 }
 
 class Rules
