@@ -17,13 +17,17 @@
 package equites
 
 object Field {
+  def validCoordinates(file: Int, rank: Int): Boolean = {
+    Rules.fileRange.contains(file) &&
+    Rules.rankRange.contains(rank)
+  }
+
   def l1Dist(p: Field, q: Field): Int = (p - q).map(_.abs).sum
   def lInfDist(p: Field, q: Field): Int = (p - q).map(_.abs).max
 }
 
 case class Field(file: Int, rank: Int) {
-  require(Rules.fileRange contains file)
-  require(Rules.rankRange contains rank)
+  require(Field.validCoordinates(file, rank))
 
   def +(vec: Vector): Field = Field(file + vec.file, rank + vec.rank)
   def -(vec: Vector): Field = Field(file - vec.file, rank - vec.rank)
