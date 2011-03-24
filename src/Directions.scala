@@ -46,11 +46,10 @@ object Directions {
   val anywhere   = Directions(orthogonal ++ diagonal)
 
   val knightLike = Directions({
-    val steps = List(-2, -1, 1, 2)
     for {
-      file <- steps
-      rank <- steps
-      if file.abs != rank.abs
+      file <- -2 to 2
+      rank <- -2 to 2
+      if file.abs + rank.abs == 3
     } yield Vector(file, rank)
   })
 }
