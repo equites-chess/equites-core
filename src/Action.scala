@@ -44,6 +44,8 @@ case class EnPassant(pawn: Pawn, from: Field, to: Field,
   extends Action with MoveLike
 
 sealed abstract class Castling(side: Symbol) extends Action {
+  require(side == 'kingside || side == 'queenside)
+
   def king: King
   def rook: Rook
 

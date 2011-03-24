@@ -34,6 +34,23 @@ object Rules {
     if (color == White) rankRange.start + 1 else rankRange.start - 1
   }
 
+  def castlingFields(piece: Piece, side: Symbol): Pair[Field, Field] = {
+    val rank = backRankBy(piece.color)
+    val rookFile = if (side == 'kingside) rookFiles(1) else rookFiles(0)
+
+    val shiftBy: (Int, Int) => Int = (file, offset) => {
+      file + (if (side == 'kingside) offset else -offset)
+    }
+
+    piece match {
+      case King(_) =>
+        (Field(kingFile, rank), Field(shiftBy(kingFile, 2), rank))
+      case Rook(_) =>
+        (Field(rookFile, rank), Field(shiftBy(kingFile, 1), rank))
+      case _ => throw new IllegalArgumentException
+    }
+  }
+
   def startingPositions(color: Color): Map[Field, Piece] = {
     val backRank = backRankBy(color)
     val pawnRank = pawnRankBy(color)
@@ -50,22 +67,6 @@ object Rules {
 
   def startingPositions: Map[Field, Piece] = {
      startingPositions(White) ++ startingPositions(Black)
-  }
-
-  def castlingFields(piece: Piece, side: Symbol): Pair[Field, Field] = {
-    val rank = backRankBy(piece.color)
-
-    piece match {
-      case King(_) if side == 'kingside
-        => (Field(kingFile, rank), Field(kingFile + 2, rank))
-      case King(_) if side == 'queenside
-        => (Field(kingFile, rank), Field(kingFile - 2, rank))
-      case Rook(_) if side == 'kingside
-        => (Field(rookFiles(1), rank), Field(kingFile + 1, rank))
-      case Rook(_) if side == 'queenside
-        => (Field(rookFiles(0), rank), Field(kingFile - 1, rank))
-      case _ => throw new IllegalArgumentException
-    }
   }
 }
 
