@@ -19,6 +19,7 @@ package equites
 object Rules {
   val fileRange = 0 to 7
   val rankRange = 0 to 7
+  val maxLength = math.max(fileRange.length, rankRange.length) - 1
 
   val kingFile  = 4
   val queenFile = 3
