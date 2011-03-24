@@ -47,12 +47,12 @@ sealed abstract class Castling(side: Symbol) extends Action {
   def king: King
   def rook: Rook
 
-  val kingMove: Move = Rules.castlingFields(king, side) match {
-    case (from, to) => Move(king, from, to)
-  }
+  val kingMove: Move = constructMove(king)
+  val rookMove: Move = constructMove(rook)
 
-  val rookMove: Move = Rules.castlingFields(rook, side) match {
-    case (from, to) => Move(rook, from, to)
+  private def constructMove(piece: Piece): Move = {
+    val (from, to) = Rules.castlingFields(piece, side)
+    Move(piece, from, to)
   }
 }
 
