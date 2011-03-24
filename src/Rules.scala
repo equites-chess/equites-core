@@ -32,7 +32,7 @@ object Rules {
   }
 
   def pawnRankBy(color: Color): Int = {
-    if (color == White) rankRange.start + 1 else rankRange.start - 1
+    if (color == White) rankRange.start + 1 else rankRange.end - 1
   }
 
   def castlingFields(piece: Piece, side: Symbol): Pair[Field, Field] = {
