@@ -67,7 +67,7 @@ object Rules {
   }
 
   def startingPositions: Map[Field, Piece] = {
-     startingPositions(White) ++ startingPositions(Black)
+    startingPositions(White) ++ startingPositions(Black)
   }
 
   def fieldsInDirection(from: Field, direction: Vector,
