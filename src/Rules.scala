@@ -44,19 +44,16 @@ object Rules {
     if (color == White) rankRange.start + 1 else rankRange.end - 1
   }
 
-  def castlingFields(piece: Piece, side: Symbol): Pair[Field, Field] = {
+  def castlingFields(piece: Piece, side: Side): Pair[Field, Field] = {
     val rank = backRankBy(piece.color)
-    val rookFile = if (side == 'kingside) rookFiles(1) else rookFiles(0)
-
-    val shiftBy: (Int, Int) => Int = {
-      (file, offset) => file + (if (side == 'kingside) offset else -offset)
+    val rookFile = if (side == Kingside) rookFiles(1) else rookFiles(0)
+    val shift: (Int, Int) => Int = {
+      (file, offset) => file + (if (side == Kingside) offset else -offset)
     }
 
-    piece match {
-      case King(_) =>
-        (Field(kingFile, rank), Field(shiftBy(kingFile, 2), rank))
-      case Rook(_) =>
-        (Field(rookFile, rank), Field(shiftBy(kingFile, 1), rank))
+    piece.pieceType match {
+      case King => (Field(kingFile, rank), Field(shift(kingFile, 2), rank))
+      case Rook => (Field(rookFile, rank), Field(shift(kingFile, 1), rank))
       case _ => throw new IllegalArgumentException
     }
   }

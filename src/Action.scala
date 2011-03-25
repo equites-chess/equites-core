@@ -43,9 +43,12 @@ case class EnPassant(pawn: Pawn, from: Field, to: Field,
   captured: Pawn, capturedOn: Field)
   extends Action with MoveLike
 
-sealed abstract class Castling(side: Symbol) extends Action {
-  require(side == 'kingside || side == 'queenside)
 
+sealed abstract class Side
+object Kingside  extends Side
+object Queenside extends Side
+
+sealed abstract class Castling(side: Side) extends Action {
   def king: King
   def rook: Rook
 
@@ -58,6 +61,5 @@ sealed abstract class Castling(side: Symbol) extends Action {
   }
 }
 
-case class CastlingShort(king: King, rook: Rook) extends Castling('kingside)
-
-case class CastlingLong(king: King, rook: Rook) extends Castling('queenside)
+case class CastlingShort(king: King, rook: Rook) extends Castling(Kingside)
+case class CastlingLong (king: King, rook: Rook) extends Castling(Queenside)
