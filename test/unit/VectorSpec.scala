@@ -19,7 +19,7 @@ package equites
 import org.specs2.mutable._
 
 class VectorSpec extends Specification {
-  "Vector" should {
+  "class Vector" should {
     "correctly perform map" in {
       Vector( 0,  0).map(_ + 1) must_== Vector(1, 1)
       Vector(-1, -1).map(_.abs) must_== Vector(1, 1)

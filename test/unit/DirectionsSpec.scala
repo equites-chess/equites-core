@@ -17,28 +17,20 @@
 package equites
 
 import org.specs2.mutable._
-import Piece._
+import Directions._
 
-class PieceSpec extends Specification {
-  "class Piece" should {
-    "correctly perform opposing" in {
-      val king1 = new King(White)
-      val king2 = new King(White)
-      val queen = new Queen(Black)
-
-      opposing(king1, king1) must_== false
-      opposing(king1, king2) must_== false
-      opposing(king1, queen) must_== true
+class DirectionsSpec extends Specification {
+  "class Directions" should {
+    "correctly perform inverse" in {
+      Directions.front.inverse must_== Directions.back
+      Directions.right.inverse must_== Directions.left
+      diagonalFront.inverse must_== diagonalBack
+      knightLike.inverse    must_== knightLike
     }
-  }
 
-  "object PieceCompanion" should {
-    "correctly perform unapply" in {
-      val King(c1) = new King(White)
-      val King(c2) = new King(Black)
-
-      c1 must_== White
-      c2 must_== Black
+    "correctly perform inverseIfBlack" in {
+      front.inverseIfBlack(White) must_== front
+      front.inverseIfBlack(Black) must_== back
     }
   }
 }

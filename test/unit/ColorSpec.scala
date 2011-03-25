@@ -19,7 +19,7 @@ package equites
 import org.specs2.mutable._
 
 class ColorSpec extends Specification {
-  "Color White" should {
+  "object White" should {
     "return Black as opposite Color" in {
       White.opposite must_== Black
     }
@@ -29,7 +29,7 @@ class ColorSpec extends Specification {
     }
   }
 
-  "Color Black" should {
+  "object Black" should {
     "return White as opposite Color" in {
       Black.opposite must_== White
     }

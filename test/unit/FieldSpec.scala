@@ -17,9 +17,43 @@
 package equites
 
 import org.specs2.mutable._
+import Field._
 
 class FieldSpec extends Specification {
-  "Field" should {
+  "object Field" should {
+    "correctly perform validCoordinates" in {
+      validCoordinates( 4,  4) must_== true
+      validCoordinates( 0,  0) must_== true
+      validCoordinates( 7,  7) must_== true
+      validCoordinates(-1,  4) must_== false
+      validCoordinates( 1,  8) must_== false
+      validCoordinates( 1, -2) must_== false
+    }
+
+    "correctly perform validSum" in {
+      validSum(Field(0, 0), Vector( 1,  1)) must_== true
+      validSum(Field(1, 1), Vector(-1, -1)) must_== true
+      validSum(Field(0, 0), Vector(-1, -1)) must_== false
+      validSum(Field(7, 7), Vector( 1,  1)) must_== false
+      validSum(Field(7, 7), Vector( 1,  1)) must_== false
+    }
+
+    "correctly calculate l1Dist and lInfDist" in {
+      var p1 = Field(1, 2)
+      var p2 = Field(4, 3)
+
+      l1Dist(p1, p2)   must_== 4
+      lInfDist(p1, p2) must_== 3
+
+      p1 = Field(0, 0)
+      p2 = Field(1, 1)
+
+      l1Dist(p1, p2)   must_== 2
+      lInfDist(p1, p2) must_== 1
+    }
+  }
+
+  "class Field" should {
     "throw an exception on invalid values" in {
       Field(-1,  0) must throwAn[IllegalArgumentException]
       Field( 0, -1) must throwAn[IllegalArgumentException]
@@ -44,20 +78,6 @@ class FieldSpec extends Specification {
       Field(2, 2) - Field(1, 1) must_== Vector(1, 1)
       Field(2, 1) - Field(0, 0) must_== Vector(2, 1)
       Field(0, 0) - Field(3, 4) must_== Vector(-3, -4)
-    }
-
-    "correctly calculate l1Dist and lInfDist" in {
-      var p1 = Field(1, 2)
-      var p2 = Field(4, 3)
-
-      Field.l1Dist(p1, p2)   must_== 4
-      Field.lInfDist(p1, p2) must_== 3
-
-      p1 = Field(0, 0)
-      p2 = Field(1, 1)
-
-      Field.l1Dist(p1, p2)   must_== 2
-      Field.lInfDist(p1, p2) must_== 1
     }
   }
 }
