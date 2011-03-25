@@ -83,13 +83,13 @@ object Rules {
 }
 
 class Rules(board: Board) {
-  def filterUnreachable(fields: Stream[Field], color: Color): List[Field] = {
-    val i = fields.findIndexOf(board.occupied)
-    if (i == -1)
+  def takeUntilOccupied(fields: Stream[Field], color: Color): List[Field] = {
+    val occupied = fields.findIndexOf(board.occupied)
+    if (occupied == -1)
       fields.toList
     else {
-      val offset = if (board.opponentAt(fields(i), color)) 1 else 0
-      fields.take(i + offset).toList
+      val offset = if (board.opponentAt(fields(occupied), color)) 1 else 0
+      fields.take(occupied + offset).toList
     }
   }
 }
