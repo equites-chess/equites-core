@@ -28,18 +28,18 @@ object Directions {
     new Directions(vectors.toList)
   }
 
-  val front = Directions(Vector( 0,  1))
-  val right = Directions(Vector( 1,  0))
-  val back  = Directions(Vector( 0, -1))
-  val left  = Directions(Vector(-1,  0))
+  val front = Directions(Vector( 0,  1)) // ↑
+  val right = Directions(Vector( 1,  0)) // →
+  val back  = Directions(Vector( 0, -1)) // ↓
+  val left  = Directions(Vector(-1,  0)) // ←
 
-  val frontRight = Directions(front(0) + right(0))
-  val backRight  = Directions(back(0)  + right(0))
-  val backLeft   = Directions(back(0)  + left(0))
-  val frontLeft  = Directions(front(0) + left(0))
+  val frontRight = Directions(front(0) + right(0)) // ↗
+  val backRight  = Directions(back(0)  + right(0)) // ↘
+  val backLeft   = Directions(back(0)  + left(0))  // ↙
+  val frontLeft  = Directions(front(0) + left(0))  // ↖
 
-  val diagonalFront = Directions(frontRight ++ frontLeft)
-  val diagonalBack  = Directions(backRight ++ backLeft)
+  val diagonalFront = Directions(frontLeft ++ frontRight) // ↖↗
+  val diagonalBack  = Directions( backLeft ++  backRight) // ↙↘
 
   val diagonal   = Directions(diagonalFront ++ diagonalBack)
   val orthogonal = Directions(front ++ right ++ back ++ left)
