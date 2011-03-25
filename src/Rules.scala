@@ -39,8 +39,8 @@ object Rules {
     val rank = backRankBy(piece.color)
     val rookFile = if (side == 'kingside) rookFiles(1) else rookFiles(0)
 
-    val shiftBy: (Int, Int) => Int = (file, offset) => {
-      file + (if (side == 'kingside) offset else -offset)
+    val shiftBy: (Int, Int) => Int = {
+      (file, offset) => file + (if (side == 'kingside) offset else -offset)
     }
 
     piece match {
