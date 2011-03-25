@@ -27,8 +27,13 @@ class Board {
   def totalMoves(piece: Piece): Int = counter.totalMoves(piece)
 
   def occupied(field: Field): Boolean = grid.contains(field)
+
   def occupiedBy(field: Field, piece: Piece): Boolean = {
     occupied(field) && grid(field) == piece
+  }
+
+  def opponentAt(field: Field, color: Color): Boolean = {
+    occupied(field) && grid(field).color != color
   }
 
   def getPiece(field: Field): Option[Piece] = grid.get(field)

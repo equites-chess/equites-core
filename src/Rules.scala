@@ -70,7 +70,7 @@ object Rules {
      startingPositions(White) ++ startingPositions(Black)
   }
 
-  private def fieldsInDirection(from: Field, direction: Vector,
+  def fieldsInDirection(from: Field, direction: Vector,
     maxDist: Int = maxLength): Stream[Field] = {
 
     if (maxDist < 1 || !Field.validSum(from, direction))
@@ -82,4 +82,14 @@ object Rules {
   }
 }
 
-class Rules
+class Rules(board: Board) {
+  def filterUnreachable(fields: Stream[Field], color: Color): List[Field] = {
+    val i = fields.findIndexOf(board.occupied)
+    if (i == -1)
+      fields.toList
+    else {
+      val offset = if (board.opponentAt(fields(i), color)) 1 else 0
+      fields.take(i + offset).toList
+    }
+  }
+}
