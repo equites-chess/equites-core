@@ -27,6 +27,15 @@ object Rules {
   val knightFiles = List(1, 6)
   val bishopFiles = List(2, 5)
 
+  val movementType: Map[PieceType, Pair[Directions, Int]] = {
+    import Directions._
+    Map(King   -> (anywhere,   1),
+        Queen  -> (anywhere,   maxLength),
+        Rook   -> (orthogonal, maxLength),
+        Bishop -> (diagonal,   maxLength),
+        Knight -> (knightLike, 1))
+  }
+
   def backRankBy(color: Color): Int = {
     if (color == White) rankRange.start else rankRange.end
   }
