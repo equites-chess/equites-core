@@ -22,24 +22,26 @@ object Piece {
   }
 }
 
-sealed abstract class Piece {
+sealed abstract class Piece(val pieceType: PieceType) {
   def color: Color
 }
 
-class King(val color: Color) extends Piece
-class Queen(val color: Color) extends Piece
-class Rook(val color: Color) extends Piece
-class Bishop(val color: Color) extends Piece
-class Knight(val color: Color) extends Piece
-class Pawn(val color: Color) extends Piece
+class King  (val color: Color) extends Piece(King)   // ♔ ♚
+class Queen (val color: Color) extends Piece(Queen)  // ♕ ♛
+class Rook  (val color: Color) extends Piece(Rook)   // ♖ ♜
+class Bishop(val color: Color) extends Piece(Bishop) // ♗ ♝
+class Knight(val color: Color) extends Piece(Knight) // ♘ ♞
+class Pawn  (val color: Color) extends Piece(Pawn)   // ♙ ♟
+
+sealed abstract class PieceType
 
 trait PieceCompanion {
   def unapply(piece: Piece): Option[Color] = Some(piece.color)
 }
 
-object King extends PieceCompanion
-object Queen extends PieceCompanion
-object Rook extends PieceCompanion
-object Bishop extends PieceCompanion
-object Knight extends PieceCompanion
-object Pawn extends PieceCompanion
+object King   extends PieceType with PieceCompanion
+object Queen  extends PieceType with PieceCompanion
+object Rook   extends PieceType with PieceCompanion
+object Bishop extends PieceType with PieceCompanion
+object Knight extends PieceType with PieceCompanion
+object Pawn   extends PieceType with PieceCompanion
