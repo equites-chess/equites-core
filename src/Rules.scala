@@ -56,9 +56,9 @@ object Rules {
   }
 
   val castlingFields:
-    Map[Triple[Color, Side, PieceType], Pair[Field, Field]] = {
+    Map[Triple[Side, Color, PieceType], Pair[Field, Field]] = {
 
-    def castlingFieldsFor(color: Color, side: Side, pieceType: PieceType):
+    def castlingFieldsFor(side: Side, color: Color, pieceType: PieceType):
       Pair[Field, Field] = {
 
       val rank = backRankBy(color)
@@ -75,11 +75,11 @@ object Rules {
     }
 
     val mappings = for {
-      color <- List(White, Black)
       side  <- List(Kingside, Queenside)
+      color <- List(White, Black)
       piece <- List(King, Rook)
-    } yield (color, side, piece) -> castlingFieldsFor(color, side, piece)
-    Map[Triple[Color, Side, PieceType], Pair[Field, Field]]() ++ mappings
+    } yield (side, color, piece) -> castlingFieldsFor(side, color, piece)
+    Map[Triple[Side, Color, PieceType], Pair[Field, Field]]() ++ mappings
   }
 
   def startingPositions(color: Color): Map[Field, Piece] = {
