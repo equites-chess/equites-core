@@ -36,12 +36,23 @@ object Rules {
         Knight -> (knightLike, 1))
   }
 
-  def backRankBy(color: Color): Int = {
-    if (color == White) rankRange.start else rankRange.end
-  }
+  val startingFields: Map[Color, Map[PieceType, List[Field]]] = {
+    def startingFieldsFor(color: Color): Map[PieceType, List[Field]] = {
+      val backRank = backRankBy(color)
+      val pawnRank = pawnRankBy(color)
 
-  def pawnRankBy(color: Color): Int = {
-    if (color == White) rankRange.start + 1 else rankRange.end - 1
+      Map[PieceType, List[Field]](
+        King   -> List(Field(kingFile,  backRank)),
+        Queen  -> List(Field(queenFile, backRank)),
+        Rook   ->   rookFiles.map(Field(_, backRank)),
+        Bishop -> bishopFiles.map(Field(_, backRank)),
+        Knight -> knightFiles.map(Field(_, backRank)),
+        Pawn   ->   fileRange.map(Field(_, pawnRank)).toList)
+    }
+
+    Map[Color, Map[PieceType, List[Field]]](
+      White -> startingFieldsFor(White),
+      Black -> startingFieldsFor(Black))
   }
 
   def castlingFields(piece: Piece, side: Side): Pair[Field, Field] = {
@@ -59,21 +70,30 @@ object Rules {
   }
 
   def startingPositions(color: Color): Map[Field, Piece] = {
-    val backRank = backRankBy(color)
-    val pawnRank = pawnRankBy(color)
+    def embattlePieces(pieceType: PieceType, newPiece: => Piece):
+      List[Pair[Field, Piece]] = {
+      startingFields(color)(pieceType).map(_ -> newPiece)
+    }
 
-    val royals  = List(Field(kingFile,  backRank) -> new King(color),
-                       Field(queenFile, backRank) -> new Queen(color))
-    val rooks   =   rookFiles.map(Field(_, backRank) -> new Rook(color))
-    val knights = knightFiles.map(Field(_, backRank) -> new Knight(color))
-    val bishops = bishopFiles.map(Field(_, backRank) -> new Bishop(color))
-    val pawns   =   fileRange.map(Field(_, pawnRank) -> new Pawn(color))
-
-    Map[Field, Piece]() ++ royals ++ rooks ++ knights ++ bishops ++ pawns
+    Map[Field, Piece]() ++
+      embattlePieces(King,   new King(color))   ++
+      embattlePieces(Queen,  new Queen(color))  ++
+      embattlePieces(Rook,   new Rook(color))   ++
+      embattlePieces(Bishop, new Bishop(color)) ++
+      embattlePieces(Knight, new Knight(color)) ++
+      embattlePieces(Pawn,   new Pawn(color))
   }
 
   def startingPositions: Map[Field, Piece] = {
     startingPositions(White) ++ startingPositions(Black)
+  }
+
+  def backRankBy(color: Color): Int = {
+    if (color == White) rankRange.start else rankRange.end
+  }
+
+  def pawnRankBy(color: Color): Int = {
+    if (color == White) rankRange.start + 1 else rankRange.end - 1
   }
 
   def fieldsInDirection(from: Field, direction: Vector,
