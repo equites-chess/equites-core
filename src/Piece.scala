@@ -22,16 +22,14 @@ object Piece {
   }
 }
 
-sealed abstract class Piece(val pieceType: PieceType) {
-  def color: Color
-}
+sealed abstract class Piece(val pieceType: PieceType, val color: Color)
 
-class King  (val color: Color) extends Piece(King)   // ♔ ♚
-class Queen (val color: Color) extends Piece(Queen)  // ♕ ♛
-class Rook  (val color: Color) extends Piece(Rook)   // ♖ ♜
-class Bishop(val color: Color) extends Piece(Bishop) // ♗ ♝
-class Knight(val color: Color) extends Piece(Knight) // ♘ ♞
-class Pawn  (val color: Color) extends Piece(Pawn)   // ♙ ♟
+class King  (color: Color) extends Piece(King,   color) // ♔ ♚
+class Queen (color: Color) extends Piece(Queen,  color) // ♕ ♛
+class Rook  (color: Color) extends Piece(Rook,   color) // ♖ ♜
+class Bishop(color: Color) extends Piece(Bishop, color) // ♗ ♝
+class Knight(color: Color) extends Piece(Knight, color) // ♘ ♞
+class Pawn  (color: Color) extends Piece(Pawn,   color) // ♙ ♟
 
 sealed abstract class PieceType
 
