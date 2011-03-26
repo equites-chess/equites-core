@@ -55,23 +55,37 @@ object Rules {
       Black -> startingFieldsFor(Black))
   }
 
-  def castlingFields(piece: Piece, side: Side): Pair[Field, Field] = {
-    val rank = backRankBy(piece.color)
-    val rookFile = if (side == Kingside) rookFiles(1) else rookFiles(0)
-    val shift: (Int, Int) => Int = {
-      (file, offset) => file + (if (side == Kingside) offset else -offset)
+  val castlingFields:
+    Map[Triple[Color, Side, PieceType], Pair[Field, Field]] = {
+
+    def castlingFieldsFor(color: Color, side: Side, pieceType: PieceType):
+      Pair[Field, Field] = {
+
+      val rank = backRankBy(color)
+      val rookFile    = if (side == Kingside) rookFiles(1) else rookFiles(0)
+      val leftOrRight = if (side == Kingside) 1 else -1
+
+      pieceType match {
+        case King =>
+          (Field(kingFile, rank), Field(kingFile + 2 * leftOrRight, rank))
+        case Rook =>
+          (Field(rookFile, rank), Field(kingFile + 1 * leftOrRight, rank))
+        case _ => throw new IllegalArgumentException
+      }
     }
 
-    piece.pieceType match {
-      case King => (Field(kingFile, rank), Field(shift(kingFile, 2), rank))
-      case Rook => (Field(rookFile, rank), Field(shift(kingFile, 1), rank))
-      case _ => throw new IllegalArgumentException
-    }
+    val mappings = for {
+      color <- List(White, Black)
+      side  <- List(Kingside, Queenside)
+      piece <- List(King, Rook)
+    } yield (color, side, piece) -> castlingFieldsFor(color, side, piece)
+    Map[Triple[Color, Side, PieceType], Pair[Field, Field]]() ++ mappings
   }
 
   def startingPositions(color: Color): Map[Field, Piece] = {
     def embattlePieces(pieceType: PieceType, newPiece: => Piece):
       List[Pair[Field, Piece]] = {
+
       startingFields(color)(pieceType).map(_ -> newPiece)
     }
 

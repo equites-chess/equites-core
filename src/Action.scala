@@ -56,7 +56,8 @@ sealed abstract class Castling(side: Side) extends Action {
   val rookMove: Move = constructMove(rook)
 
   private def constructMove(piece: Piece): Move = {
-    val (from, to) = Rules.castlingFields(piece, side)
+    val (from, to) =
+      Rules.castlingFields((piece.color, side, piece.pieceType))
     Move(piece, from, to)
   }
 }
