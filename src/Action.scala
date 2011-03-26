@@ -45,8 +45,8 @@ case class EnPassant(pawn: Pawn, from: Field, to: Field,
 
 
 sealed abstract class Side
-object Kingside  extends Side
-object Queenside extends Side
+case object Kingside  extends Side
+case object Queenside extends Side
 
 sealed abstract class Castling(side: Side) extends Action {
   def king: King
