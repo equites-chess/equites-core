@@ -27,21 +27,32 @@ trait MoveLike {
   def lInfDist: Int = Field.lInfDist(from, to)
 }
 
+trait CaptureLike extends MoveLike {
+  def captured: Piece
+  def capturedOn: Field = to
+}
+
+trait PromotionLike {
+  def pawn: Pawn
+  var newPiece: Piece = new Queen(pawn.color)
+}
+
 case class Move(piece: Piece, from: Field, to: Field)
   extends Action with MoveLike
 
 case class Promotion(pawn: Pawn, from: Field, to: Field)
-  extends Action with MoveLike {
-
-  var newPiece: Piece = new Queen(pawn.color)
-}
+  extends Action with MoveLike with PromotionLike
 
 case class Capture(piece: Piece, from: Field, to: Field, captured: Piece)
-  extends Action with MoveLike
+  extends Action with CaptureLike
+
+case class CaptureAndPromotion(pawn: Pawn, from: Field, to: Field,
+  captured: Piece)
+  extends Action with CaptureLike with PromotionLike
 
 case class EnPassant(pawn: Pawn, from: Field, to: Field,
-  captured: Pawn, capturedOn: Field)
-  extends Action with MoveLike
+  captured: Pawn, override val capturedOn: Field)
+  extends Action with CaptureLike
 
 
 sealed abstract class Side
