@@ -1,8 +1,11 @@
 Arial.svg:
-  This theme was inspired by the gray theme from the KDE chess game Knights.
+  This theme was inspired by the gray theme from the KDE chess game
+  Knights[1], which is licensed under GPL 2 or any later versions.
+
+  [1] http://noughmad.eu/knights
 
 Wikipedia.svg:
-  The pieces of this theme were taken from Wikipedia[1]. They are all licensed
+  The pieces of this theme were taken from Wikipedia[2]. They are all licensed
   under the GFDL 1.2 or any later versions.
 
-  [1] http://en.wikipedia.org/wiki/Chess_pieces
+  [2] http://en.wikipedia.org/wiki/Chess_pieces
