@@ -111,10 +111,10 @@ class Board {
 
   private val grid = mutable.Map[Field, Piece]()
   private val taken = mutable.Set[Piece]()
-  private val counter = new MoveCounter
+  private val counter = new MoveCounterOld
 }
 
-class MoveCounter {
+class MoveCounterOld {
   def hasMoved(piece: Piece): Boolean = count(piece) > 0
   def totalMoves(piece: Piece): Int = count(piece)
 
