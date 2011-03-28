@@ -18,7 +18,8 @@ package equites
 
 sealed abstract class Action
 
-trait MoveLike {
+trait MoveLike extends Action {
+  def piece: Piece
   def from: Field
   def to: Field
 
@@ -32,27 +33,26 @@ trait CaptureLike extends MoveLike {
   def capturedOn: Field = to
 }
 
-trait PromotionLike {
-  def pawn: Pawn
-  var newPiece: Piece = new Queen(pawn.color)
+trait PromotionLike extends MoveLike {
+  var newPiece: Piece = new Queen(piece.color)
 }
 
 case class Move(piece: Piece, from: Field, to: Field)
-  extends Action with MoveLike
+  extends MoveLike
 
-case class Promotion(pawn: Pawn, from: Field, to: Field)
-  extends Action with MoveLike with PromotionLike
+case class Promotion(piece: Pawn, from: Field, to: Field)
+  extends PromotionLike
 
 case class Capture(piece: Piece, from: Field, to: Field, captured: Piece)
-  extends Action with CaptureLike
+  extends CaptureLike
 
-case class CaptureAndPromotion(pawn: Pawn, from: Field, to: Field,
+case class CaptureAndPromotion(piece: Pawn, from: Field, to: Field,
   captured: Piece)
-  extends Action with CaptureLike with PromotionLike
+  extends CaptureLike with PromotionLike
 
-case class EnPassant(pawn: Pawn, from: Field, to: Field,
+case class EnPassant(piece: Pawn, from: Field, to: Field,
   captured: Pawn, override val capturedOn: Field)
-  extends Action with CaptureLike
+  extends CaptureLike
 
 
 sealed abstract class Side
