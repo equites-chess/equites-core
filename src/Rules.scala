@@ -136,39 +136,4 @@ class Rules(board: Board) {
       fields.take(occupied + offset).toList
     }
   }
-
-  def possibleEnPassants(pawn: Pawn, at: Field): List[EnPassant] = {
-    //if (rankBy(at.rank, pawn.color) != 4) Nil
-
-    // schaue auf file +- 1 ob dort ein bauer steht,
-    // wenn nein -> Nil
-    // wenn ja ..
-   // schaue in die history ob der pawn der letzte bewegte stein ist!!!
-    Nil
-  }
-
-/*
-  def possibleCastlings(king: King, at: Field): List[Action] = {
-    if (board.hasMoved(king)) Nil
-  
-    List()
-  }
-
-Rules sollte davon ausgehen, dass alle informationen über das board korrekt
-sind. d.h. es sollten keine sanity checks auf dieser ebene durchgeführt werden
-*/
-
-  //def possibleActions(piece: Piece, at: Field)
-/*
-    case King => possible King actions + normal actions
-    case Pawn => possible pawn actions
-    case _ =>  possible normal actions
-*/
-  //def possibleActions(pawn: Pawn, at: Field)
-  //def possibleActions(king: King, at: Field)
-
-//def possibleCastlings
-// def possiblePromotions
-// de possibleEnPassants
-// achte auf züge, die den könig matt setzen
 }
