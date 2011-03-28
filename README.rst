@@ -4,8 +4,8 @@ Equites, a simple chess interface
 Introduction
 ------------
 
-Equites is a simple chess interface written in Scala. It is work in
-progress and currently not playable.
+Equites is a simple chess interface written in Scala. It is work in progress
+and currently not playable.
 
 Building
 --------
@@ -17,15 +17,14 @@ The build tool `sbt`_ is used to build Equites.
 Download
 --------
 
-You can download the Equites sources in either `tar.gz`_ or `zip`_
-formats.
+You can download the Equites sources in either `tar.gz`_ or `zip`_ formats.
 
 .. _tar.gz: https://github.com/fthomas/equites/tarball/master
 .. _zip:    https://github.com/fthomas/equites/zipball/master
 
-The version control system used for development of Equites is Git. The
-`Git repository`_ can be inspected and browsed online at GitHub and it
-can be cloned by running::
+The version control system used for development of Equites is Git. The `Git
+repository`_ can be inspected and browsed online at GitHub and it can be
+cloned by running::
 
   git clone git://github.com/fthomas/equites.git
 
@@ -34,9 +33,8 @@ can be cloned by running::
 License
 -------
 
-Equites is `free software`_ and licensed under the `GPLv3`_. The full
-text of the license can be found in the file ``COPYING`` in Equites'
-source tree.
+Equites is `free software`_ and licensed under the `GPLv3`_. The full text of
+the license can be found in the file ``COPYING`` in Equites' source tree.
 
 .. _free software: http://www.gnu.org/philosophy/free-sw.html
 .. _GPLv3: http://www.gnu.org/licenses/gpl-3.0.html

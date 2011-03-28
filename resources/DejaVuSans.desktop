@@ -1,0 +1,9 @@
+[KGameTheme]
+Name=DejaVuSans
+Description=Simple gray theme using the DejaVu Sans chess symbols
+VersionFormat=1
+Author=Frank S. Thomas
+AuthorEmail=f.thomas@gmx.de
+Type=SVG
+FileName=DejaVuSans.svg
+Preview=DejaVuSans.png
