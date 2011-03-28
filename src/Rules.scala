@@ -110,6 +110,10 @@ object Rules {
     if (color == White) rankRange.start + 1 else rankRange.end - 1
   }
 
+  def rankBy(rank: Int, color: Color): Int = {
+    if (color == White) rank else rankRange.end - rank
+  }
+
   def fieldsInDirection(from: Field, direction: Vector,
     maxDist: Int = maxLength): Stream[Field] = {
 
