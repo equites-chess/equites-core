@@ -14,9 +14,6 @@
    id="svg2">
   <defs
      id="defs4">
-    <inkscape:path-effect
-       effect="vonkoch"
-       id="path-effect4582" />
   </defs>
   <metadata
      id="metadata7">
@@ -39,7 +36,7 @@
        x="15.175783"
        y="83.046875"
        id="tspan3424"
-       style="font-size:100px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial">♔</tspan></text>
+       style="font-size:100px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans">♔</tspan></text>
   <text
      x="130.1758"
      y="83.046875"
@@ -49,7 +46,7 @@
        x="130.1758"
        y="83.046875"
        id="tspan3428"
-       style="font-size:100px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial">♕</tspan></text>
+       style="font-size:100px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans">♕</tspan></text>
   <text
      x="245.20021"
      y="82.949219"
@@ -59,7 +56,7 @@
        x="245.20021"
        y="82.949219"
        id="tspan3432"
-       style="font-size:100px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial">♖</tspan></text>
+       style="font-size:100px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans">♖</tspan></text>
   <text
      x="360.17581"
      y="83.046875"
@@ -69,7 +66,7 @@
        x="360.17581"
        y="83.046875"
        id="tspan3436"
-       style="font-size:100px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial">♗</tspan></text>
+       style="font-size:100px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans">♗</tspan></text>
   <text
      x="475.17584"
      y="83.046875"
@@ -79,7 +76,7 @@
        x="475.17584"
        y="83.046875"
        id="tspan3440"
-       style="font-size:100px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial">♘</tspan></text>
+       style="font-size:100px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans">♘</tspan></text>
   <text
      x="590.20026"
      y="82.998047"
@@ -89,7 +86,7 @@
        x="590.20026"
        y="82.998047"
        id="tspan3444"
-       style="font-size:100px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial">♙</tspan></text>
+       style="font-size:100px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans">♙</tspan></text>
   <text
      x="15.175783"
      y="198.04688"
@@ -99,7 +96,7 @@
        x="15.175783"
        y="198.04688"
        id="tspan3448"
-       style="font-size:100px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial">♚</tspan></text>
+       style="font-size:100px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans">♚</tspan></text>
   <text
      x="130.1758"
      y="198.04688"
@@ -109,7 +106,7 @@
        x="130.1758"
        y="198.04688"
        id="tspan3452"
-       style="font-size:100px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial">♛</tspan></text>
+       style="font-size:100px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans">♛</tspan></text>
   <text
      x="245.20021"
      y="197.94922"
@@ -119,7 +116,7 @@
        x="245.20021"
        y="197.94922"
        id="tspan3456"
-       style="font-size:100px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial">♜</tspan></text>
+       style="font-size:100px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans">♜</tspan></text>
   <text
      x="360.17581"
      y="198.04688"
@@ -129,7 +126,7 @@
        x="360.17581"
        y="198.04688"
        id="tspan3460"
-       style="font-size:100px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial">♝</tspan></text>
+       style="font-size:100px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans">♝</tspan></text>
   <text
      x="475.17584"
      y="198.04688"
@@ -139,7 +136,7 @@
        x="475.17584"
        y="198.04688"
        id="tspan3464"
-       style="font-size:100px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial">♞</tspan></text>
+       style="font-size:100px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans">♞</tspan></text>
   <text
      x="590.20026"
      y="197.99805"
@@ -149,7 +146,7 @@
        x="590.20026"
        y="197.99805"
        id="tspan3468"
-       style="font-size:100px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial">♟</tspan></text>
+       style="font-size:100px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans">♟</tspan></text>
   <g
      transform="translate(415.69514,-1.7021625)"
      id="WhitePawn">
