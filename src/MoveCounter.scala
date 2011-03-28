@@ -18,18 +18,60 @@ package equites
 
 import scala.collection._
 
-class MoveCounter() {
-  def totalMoves(piece: Piece): Int = count(piece)
-  def hasMoved(piece: Piece): Boolean = count(piece) > 0
+class MoveCounter extends ActionListener {
+  def totalMoves(piece: Piece): Int = {
+    require(count contains piece)
+    count(piece)
+  }
+
+  def hasMoved(piece: Piece): Boolean = {
+    require(count contains piece)
+    count(piece) > 0
+  }
 
   def addPiece(piece: Piece): Option[Int] = count.put(piece, 0)
   def removePiece(piece: Piece): Option[Int] = count.remove(piece)
 
-  def addPieces(pieces: Traversable[Piece]) { pieces.foreach(addPiece(_)) }
-  def removePieces() { count.clear() }
+  def addPieces(pieces: Traversable[Piece]) {
+    pieces.foreach(addPiece(_))
+  }
+
+  def removePieces() {
+    count.clear()
+  }
+
+  def processAction(move: MoveLike) {
+    incr(move.piece)
+  }
+
+  def reverseAction(move: MoveLike) {
+    decr(move.piece)
+  }
+
+  def processAction(promo: PromotionLike) {
+    incr(promo.piece)
+    addPiece(promo.newPiece)
+  }
+
+  def reverseAction(promo: PromotionLike) {
+    removePiece(promo.newPiece)
+    decr(promo.piece)
+  }
+
+  def processAction(castling: Castling) {
+    processAction(castling.kingMove)
+  }
+
+  def reverseAction(castling: Castling) {
+    reverseAction(castling.kingMove)
+  }
 
   private def changeCount(piece: Piece, by: Int): Int = {
+    require(count contains piece)
+
     val result = count(piece) + by
+    assert(result >= 0)
+
     count(piece) = result
     result
   }
