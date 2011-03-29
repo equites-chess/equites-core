@@ -1,0 +1,9 @@
+[KGameTheme]
+Name=FreeSerif
+Description=Simple gray theme using the FreeSerif chess symbols
+VersionFormat=1
+Author=Frank S. Thomas
+AuthorEmail=f.thomas@gmx.de
+Type=SVG
+FileName=FreeSerif.svg
+Preview=FreeSerif.png
