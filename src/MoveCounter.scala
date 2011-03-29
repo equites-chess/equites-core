@@ -36,6 +36,10 @@ class MoveCounter extends ActionListener {
     pieces.foreach(addPiece(_))
   }
 
+  def removePieces(pieces: Traversable[Piece]) {
+    pieces.foreach(removePiece(_))
+  }
+
   def removePieces() {
     count.clear()
   }
@@ -68,9 +72,8 @@ class MoveCounter extends ActionListener {
 
   private def changeCount(piece: Piece, by: Int): Int = {
     require(count contains piece)
-
     val result = count(piece) + by
-    assert(result >= 0)
+    require(result >= 0)
 
     count(piece) = result
     result

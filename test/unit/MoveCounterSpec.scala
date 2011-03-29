@@ -26,6 +26,9 @@ class MoveCounterSpec extends Specification {
       val move2 = Move(piece1, Field(1, 1), Field(2, 2))
       val mc = new MoveCounter
 
+      mc.totalMoves(piece1) must throwAn[IllegalArgumentException]
+      mc.hasMoved(piece1)   must throwAn[IllegalArgumentException]
+
       mc.addPiece(piece1)
       mc.totalMoves(piece1) must_== 0
       mc.hasMoved(piece1)   must_== false
@@ -45,6 +48,45 @@ class MoveCounterSpec extends Specification {
       mc.reverseAction(move1)
       mc.totalMoves(piece1) must_== 0
       mc.hasMoved(piece1)   must_== false
+
+      mc.removePiece(piece1)
+      mc.totalMoves(piece1) must throwAn[IllegalArgumentException]
+      mc.hasMoved(piece1)   must throwAn[IllegalArgumentException]
+    }
+
+    "correctly add and remove pieces" in {
+      val mc = new MoveCounter
+      val piece1 = new King(White)
+      val piece2 = new Rook(White)
+      val piece3 = new Rook(White)
+
+      mc.hasMoved(piece1) must throwAn[IllegalArgumentException]
+      mc.hasMoved(piece2) must throwAn[IllegalArgumentException]
+      mc.hasMoved(piece3) must throwAn[IllegalArgumentException]
+
+      mc.addPiece(piece1)
+      mc.addPieces(Seq(piece2, piece3))
+
+      mc.hasMoved(piece1) must_== false
+      mc.hasMoved(piece2) must_== false
+      mc.hasMoved(piece3) must_== false
+
+      mc.removePiece(piece3)
+      mc.removePieces(List(piece2, piece1))
+
+      mc.hasMoved(piece1) must throwAn[IllegalArgumentException]
+      mc.hasMoved(piece2) must throwAn[IllegalArgumentException]
+      mc.hasMoved(piece3) must throwAn[IllegalArgumentException]
+    }
+
+    "fail on negative move counts" in {
+      val mc = new MoveCounter
+      val piece1 = new King(White)
+      val move1 = Move(piece1, Field(0, 0), Field(1, 1))
+
+      mc.addPiece(piece1)
+      mc.totalMoves(piece1)   must_== 0
+      mc.reverseAction(move1) must throwAn[IllegalArgumentException]
     }
   }
 }
