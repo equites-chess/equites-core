@@ -30,6 +30,11 @@ class History {
     future.clear()
   }
 
+  def clear() {
+    past.clear()
+    future.clear()
+  }
+
   def backward(): Option[Action] = move(past, future)
   def forward():  Option[Action] = move(future, past)
 
