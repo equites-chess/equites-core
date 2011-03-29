@@ -54,6 +54,55 @@ class MoveCounterSpec extends Specification {
       mc.hasMoved(piece1)   must throwAn[IllegalArgumentException]
     }
 
+    "correctly count promotions" in {
+      val piece1 = new Pawn(White)
+      val promo1 = Promotion(piece1, Field(0, 6), Field(0, 7))
+      val move1 = Move(promo1.newPiece, Field(0, 7), Field(0, 0))
+      val mc = new MoveCounter
+
+      mc.addPiece(piece1)
+      mc.totalMoves(piece1)          must_== 0
+      mc.totalMoves(promo1.newPiece) must throwAn[IllegalArgumentException]
+
+      mc.processAction(promo1)
+      mc.totalMoves(piece1)          must_== 1
+      mc.totalMoves(promo1.newPiece) must_== 0
+
+      mc.processAction(move1)
+      mc.totalMoves(piece1)          must_== 1
+      mc.totalMoves(promo1.newPiece) must_== 1
+
+      mc.reverseAction(move1)
+      mc.totalMoves(piece1)          must_== 1
+      mc.totalMoves(promo1.newPiece) must_== 0
+
+      mc.reverseAction(promo1)
+      mc.totalMoves(piece1)          must_== 0
+      mc.totalMoves(promo1.newPiece) must throwAn[IllegalArgumentException]
+    }
+
+    "correctly count castlings" in {
+      val king = new King(White)
+      val rook = new Rook(White)
+      val castling = CastlingLong(king, rook)
+      val mc = new MoveCounter
+
+      mc.hasMoved(king) must throwAn[IllegalArgumentException]
+      mc.hasMoved(rook) must throwAn[IllegalArgumentException]
+
+      mc.addPieces(Seq(king, rook))
+      mc.hasMoved(king) must_== false
+      mc.hasMoved(rook) must_== false
+
+      mc.processAction(castling)
+      mc.totalMoves(king) must_== 1
+      mc.totalMoves(rook) must_== 0
+
+      mc.reverseAction(castling)
+      mc.hasMoved(king) must_== false
+      mc.hasMoved(rook) must_== false
+    }
+
     "correctly add and remove pieces" in {
       val mc = new MoveCounter
       val piece1 = new King(White)
