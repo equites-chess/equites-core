@@ -15,3 +15,31 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package equites
+
+import scala.collection.mutable.Stack
+
+class History {
+  def hasLast: Boolean = past.nonEmpty
+  def hasNext: Boolean = future.nonEmpty
+
+  def last: Option[Action] = past.headOption
+  def next: Option[Action] = future.headOption
+
+  def record(action: Action) {
+    past.push(action)
+    future.clear()
+  }
+
+  def backward(): Option[Action] = move(past, future)
+  def forward():  Option[Action] = move(future, past)
+
+  private def move(from: Stack[Action], to: Stack[Action]): Option[Action] = {
+    if (from.isEmpty) None
+    val action = from.pop()
+    to.push(action)
+    Some(action)
+  }
+
+  private val past:   Stack[Action] = Stack()
+  private val future: Stack[Action] = Stack()
+}
