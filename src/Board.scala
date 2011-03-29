@@ -23,9 +23,6 @@ class Board {
     grid.values.exists(_ == piece) || taken.contains(piece)
   }
 
-  def hasMoved(piece: Piece): Boolean = counter.hasMoved(piece)
-  def totalMoves(piece: Piece): Int = counter.totalMoves(piece)
-
   def occupied(field: Field): Boolean = grid.contains(field)
 
   def occupiedBy(field: Field, piece: Piece): Boolean = {
@@ -41,7 +38,6 @@ class Board {
   def putPiece(field: Field, piece: Piece) {
     require(!occupied(field) && !contains(piece))
 
-    counter.register(piece)
     grid.put(field, piece)
   }
 
@@ -52,7 +48,6 @@ class Board {
   def removePiece(field: Field): Option[Piece] = grid.remove(field) match {
     case None => None
     case Some(piece) => {
-      counter.unregister(piece)
       Some(piece)
     }
   }
@@ -60,21 +55,18 @@ class Board {
   def clear() {
     grid.clear()
     taken.clear()
-    counter.unregisterAll()
   }
 
   def executeAction(move: Move) {
     require(occupiedBy(move.from, move.piece) && !occupied(move.to))
 
     movePiece(move.from, move.to)
-    counter.increment(move.piece)
   }
 
   def revertAction(move: Move) {
     require(!occupied(move.from) && occupiedBy(move.to, move.piece))
 
     movePiece(move.to, move.from)
-    counter.decrement(move.piece)
   }
 
   def executeAction(capture: Capture) {
@@ -85,7 +77,6 @@ class Board {
 
     taken.add(capture.captured)
     movePiece(capture.from, capture.to)
-    counter.increment(capture.piece)
   }
 
   def revertAction(capture: Capture) {
@@ -95,7 +86,6 @@ class Board {
             taken.contains(capture.captured))
 
     movePiece(capture.to, capture.from)
-    counter.decrement(capture.piece)
     taken.remove(capture.captured)
     grid.put(capture.to, capture.captured)
   }
@@ -111,24 +101,4 @@ class Board {
 
   private val grid = mutable.Map[Field, Piece]()
   private val taken = mutable.Set[Piece]()
-  private val counter = new MoveCounterOld
-}
-
-class MoveCounterOld {
-  def hasMoved(piece: Piece): Boolean = count(piece) > 0
-  def totalMoves(piece: Piece): Int = count(piece)
-
-  def register(piece: Piece) { count.put(piece, 0) }
-  def unregister(piece: Piece) { count.remove(piece) }
-  def unregisterAll() { count.clear() }
-
-  def increment(piece: Piece): Int = addTo(piece)(+1)
-  def decrement(piece: Piece): Int = addTo(piece)(-1)
-
-  private def addTo(piece: Piece)(i: Int): Int = {
-    count(piece) = count(piece) + i
-    count(piece)
-  }
-
-  private val count = mutable.Map[Piece, Int]()
 }
