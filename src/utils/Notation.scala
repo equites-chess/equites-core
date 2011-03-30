@@ -18,6 +18,14 @@ package equites
 package utils
 
 object Notation {
+  val algebraicFileRange =
+    (Rules.fileRange.start + 'a').toChar to
+    (Rules.fileRange.end   + 'a').toChar
+
+  val algebraicRankRange =
+    (Rules.rankRange.start + 1) to
+    (Rules.rankRange.end   + 1)
+
   def toAlgebraic(piece: Piece): String = piece.pieceType match {
     case King   => "K"
     case Queen  => "Q"
