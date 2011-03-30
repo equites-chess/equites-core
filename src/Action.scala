@@ -36,6 +36,7 @@ trait CaptureLike extends MoveLike {
 }
 
 trait PromotionLike extends MoveLike {
+  def piece: Pawn
   var newPiece: Piece = new Queen(piece.color)
 }
 
