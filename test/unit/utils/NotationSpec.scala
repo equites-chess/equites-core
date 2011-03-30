@@ -53,18 +53,18 @@ class NotationSpec extends Specification {
     }
 
     "correctly convert pieces to symbols" in {
-      toSymbol(new King(White))   must_== "♔"
-      toSymbol(new King(Black))   must_== "♚"
-      toSymbol(new Queen(White))  must_== "♕"
-      toSymbol(new Queen(Black))  must_== "♛"
-      toSymbol(new Rook(White))   must_== "♖"
-      toSymbol(new Rook(Black))   must_== "♜"
-      toSymbol(new Bishop(White)) must_== "♗"
-      toSymbol(new Bishop(Black)) must_== "♝"
-      toSymbol(new Knight(White)) must_== "♘"
-      toSymbol(new Knight(Black)) must_== "♞"
-      toSymbol(new Pawn(White))   must_== "♙"
-      toSymbol(new Pawn(Black))   must_== "♟"
+      toFigurine(new King(White))   must_== "♔"
+      toFigurine(new King(Black))   must_== "♚"
+      toFigurine(new Queen(White))  must_== "♕"
+      toFigurine(new Queen(Black))  must_== "♛"
+      toFigurine(new Rook(White))   must_== "♖"
+      toFigurine(new Rook(Black))   must_== "♜"
+      toFigurine(new Bishop(White)) must_== "♗"
+      toFigurine(new Bishop(Black)) must_== "♝"
+      toFigurine(new Knight(White)) must_== "♘"
+      toFigurine(new Knight(Black)) must_== "♞"
+      toFigurine(new Pawn(White))   must_== "♙"
+      toFigurine(new Pawn(Black))   must_== "♟"
     }
   }
 }

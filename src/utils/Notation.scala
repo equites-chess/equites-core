@@ -40,8 +40,8 @@ object Notation {
     if (piece.color == White) letter else letter.toLowerCase
   }
 
-  def toSymbol(piece: Piece): String = {
-    val symbols = piece.pieceType match {
+  def toFigurine(piece: Piece): String = {
+    val figurine = piece.pieceType match {
       case King   => ("\u2654", "\u265A") // ♔ ♚
       case Queen  => ("\u2655", "\u265B") // ♕ ♛
       case Rook   => ("\u2656", "\u265C") // ♖ ♜
@@ -49,6 +49,6 @@ object Notation {
       case Knight => ("\u2658", "\u265E") // ♘ ♞
       case Pawn   => ("\u2659", "\u265F") // ♙ ♟
     }
-    if (piece.color == White) symbols._1 else symbols._2
+    if (piece.color == White) figurine._1 else figurine._2
   }
 }
