@@ -40,7 +40,7 @@ class MoveCounter extends ActionListener {
     pieces.foreach(removePiece(_))
   }
 
-  def removePieces() {
+  def clear() {
     count.clear()
   }
 

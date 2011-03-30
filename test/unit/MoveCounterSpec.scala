@@ -121,8 +121,13 @@ class MoveCounterSpec extends Specification {
       mc.hasMoved(piece3) must_== false
 
       mc.removePiece(piece3)
-      mc.removePieces(List(piece2, piece1))
+      mc.removePieces(List(piece2))
 
+      mc.hasMoved(piece1) must_== false
+      mc.hasMoved(piece2) must throwAn[IllegalArgumentException]
+      mc.hasMoved(piece3) must throwAn[IllegalArgumentException]
+
+      mc.clear()
       mc.hasMoved(piece1) must throwAn[IllegalArgumentException]
       mc.hasMoved(piece2) must throwAn[IllegalArgumentException]
       mc.hasMoved(piece3) must throwAn[IllegalArgumentException]
