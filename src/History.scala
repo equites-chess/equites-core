@@ -35,10 +35,12 @@ class History {
     future.clear()
   }
 
-  def backward(): Option[Action] = move(past, future)
-  def forward():  Option[Action] = move(future, past)
+  def backward(): Option[Action] = shift(past, future)
+  def forward():  Option[Action] = shift(future, past)
 
-  private def move(from: Stack[Action], to: Stack[Action]): Option[Action] = {
+  private def shift(from: Stack[Action], to: Stack[Action]):
+    Option[Action] = {
+
     if (from.isEmpty) None
     val action = from.pop()
     to.push(action)
