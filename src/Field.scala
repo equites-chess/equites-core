@@ -22,9 +22,8 @@ object Field {
     Rules.rankRange.contains(rank)
   }
 
-  def validSum(that: Field, vec: Vector): Boolean = {
+  def validSum(that: Field, vec: Vector): Boolean =
     validCoordinates(that.file + vec.file, that.rank + vec.rank)
-  }
 
   def l1Dist(p: Field, q: Field): Int = (p - q).map(_.abs).sum
   def lInfDist(p: Field, q: Field): Int = (p - q).map(_.abs).max

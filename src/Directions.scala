@@ -20,13 +20,11 @@ import scala.collection.Traversable
 import scala.collection.immutable.LinearSeq
 
 object Directions {
-  def apply(vectors: Vector*): Directions = {
+  def apply(vectors: Vector*): Directions =
     new Directions(vectors.toList)
-  }
 
-  def apply[A <: Traversable[Vector]](vectors: A): Directions = {
+  def apply[A <: Traversable[Vector]](vectors: A): Directions =
     new Directions(vectors.toList)
-  }
 
   val front = Directions(Vector( 0,  1)) // ↑
   val right = Directions(Vector( 1,  0)) // →
@@ -57,9 +55,8 @@ object Directions {
 class Directions(vectors: List[Vector]) extends LinearSeq[Vector] {
   def inverse: Directions = Directions(vectors.map(_ * -1))
 
-  def inverseIfBlack(color: Color): Directions = {
+  def inverseIfBlack(color: Color): Directions =
     if (color == Black) inverse else this
-  }
 
   override def equals(that: Any): Boolean = that match {
     case other: Directions => vectors.filterNot(other.contains).isEmpty

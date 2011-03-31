@@ -17,9 +17,8 @@
 package equites
 
 object Piece {
-  def opposing(piece1: Piece, piece2: Piece): Boolean = {
+  def opposing(piece1: Piece, piece2: Piece): Boolean =
     piece1.color != piece2.color
-  }
 }
 
 sealed abstract class Piece(val pieceType: PieceType, val color: Color)

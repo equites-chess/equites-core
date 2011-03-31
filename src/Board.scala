@@ -19,19 +19,16 @@ package equites
 import scala.collection._
 
 class Board extends ActionListener with Iterable[(Field, Piece)] {
-  def contains(piece: Piece): Boolean = {
+  def contains(piece: Piece): Boolean =
     fieldsMap.contains(piece) || taken.contains(piece)
-  }
 
   def occupied(field: Field): Boolean = piecesMap.contains(field)
 
-  def occupiedBy(field: Field, piece: Piece): Boolean = {
+  def occupiedBy(field: Field, piece: Piece): Boolean =
     occupied(field) && piecesMap(field) == piece
-  }
 
-  def opponentAt(field: Field, color: Color): Boolean = {
+  def opponentAt(field: Field, color: Color): Boolean =
     occupied(field) && piecesMap(field).color != color
-  }
 
   def getPiece(field: Field): Option[Piece] = piecesMap.get(field)
   def getField(piece: Piece): Option[Field] = fieldsMap.get(piece)
@@ -46,9 +43,8 @@ class Board extends ActionListener with Iterable[(Field, Piece)] {
     pieces.foreach { case (field, piece) => putPiece(field, piece) }
   }
 
-  def removePiece(field: Field): Option[Piece] = {
+  def removePiece(field: Field): Option[Piece] =
     removeFromBoth(field, piecesMap, fieldsMap)
-  }
 
   def removePiece(piece: Piece): Option[Field] = {
     taken.remove(piece)

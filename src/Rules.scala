@@ -98,21 +98,17 @@ object Rules {
       embattlePieces(Pawn,   new Pawn(color))
   }
 
-  def startingPositions: Map[Field, Piece] = {
+  def startingPositions: Map[Field, Piece] =
     startingPositions(White) ++ startingPositions(Black)
-  }
 
-  def backRankBy(color: Color): Int = {
+  def backRankBy(color: Color): Int =
     if (color == White) rankRange.start else rankRange.end
-  }
 
-  def pawnRankBy(color: Color): Int = {
+  def pawnRankBy(color: Color): Int =
     if (color == White) rankRange.start + 1 else rankRange.end - 1
-  }
 
-  def rankBy(rank: Int, color: Color): Int = {
+  def rankBy(rank: Int, color: Color): Int =
     if (color == White) rank else rankRange.end - rank
-  }
 
   def fieldsInDirection(from: Field, direction: Vector,
     maxDist: Int = maxLength): Stream[Field] = {
