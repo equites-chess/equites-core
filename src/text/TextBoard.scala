@@ -38,39 +38,39 @@ trait Figurine {
 
 abstract class TextBoard(board: Board) {
   def unlabeledBoard(): String = {
-    val sb = new StringBuilder
-    for (rank <- Rules.rankRange.reverse) {
-      for (file <- Rules.fileRange) {
-        sb append (fieldToString(Field(file, rank)) + " ")
+    def fieldToString(field: Field): String = {
+      board.getPiece(field) match {
+        case Some(piece) => pieceToString(piece)
+        case None => tile
       }
-      sb append '\n'
     }
-    sb.toString
+
+    def mkRow(rank: Int): String = {
+      val fields = Rules.fileRange.map(x => fieldToString(Field(x, rank)))
+      fields.mkString("", " ", " \n")
+    }
+
+    Rules.rankRange.reverse.map(mkRow).mkString
   }
 
   def labeledBoard(): String = {
-    val boardLines = unlabeledBoard.split(" \n")
-    val rankLabels =
-      Notation.algebraicRankRange.reverse.map(vBar + " " + _ + "\n")
+    def boardWithRankLabels: String = {
+      val boardLines = unlabeledBoard.split(" \n")
+      val rankLabels =
+        Notation.algebraicRankRange.reverse.map(vBar + " " + _ + "\n")
 
-    boardLines.zip(rankLabels).map(x => x._1 + x._2).mkString +
-      bottomBorder + fileLabels
-  }
-
-  private def fieldToString(field: Field): String = {
-    board.getPiece(field) match {
-      case Some(piece) => pieceToString(piece)
-      case None => tile
+      boardLines.zip(rankLabels).map(x => x._1 + x._2).mkString
     }
-  }
 
-  private def bottomBorder: String = {
-    val barLength = Rules.fileRange.length * 2 - 1
-    (hBar * barLength) + edge + "\n"
-  }
+    def bottomBorder: String = {
+      val barLength = Rules.fileRange.length * 2 - 1
+      (hBar * barLength) + edge + "\n"
+    }
 
-  private def fileLabels: String = {
-    Notation.algebraicFileRange.foldLeft("")((x, y) => x + y + " ") + "\n"
+    def fileLabels: String =
+      Notation.algebraicFileRange.mkString("", " ", " \n")
+
+    boardWithRankLabels + bottomBorder + fileLabels
   }
 
   protected def pieceToString(piece: Piece): String
