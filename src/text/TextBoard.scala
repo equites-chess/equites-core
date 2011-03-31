@@ -54,11 +54,11 @@ abstract class TextBoard(board: Board) {
   }
 
   def labeledBoard(): String = {
+    import Notation._
+
     def boardWithRankLabels: String = {
       val boardLines = unlabeledBoard.split(" \n")
-      val rankLabels =
-        Notation.algebraicRankRange.reverse.map(vBar + " " + _ + "\n")
-
+      val rankLabels = algebraicRankRange.reverse.map(vBar + " " + _ + "\n")
       boardLines.zip(rankLabels).map(x => x._1 + x._2).mkString
     }
 
@@ -67,8 +67,7 @@ abstract class TextBoard(board: Board) {
       (hBar * barLength) + edge + "\n"
     }
 
-    def fileLabels: String =
-      Notation.algebraicFileRange.mkString("", " ", " \n")
+    def fileLabels: String = algebraicFileRange.mkString("", " ", " \n")
 
     boardWithRankLabels + bottomBorder + fileLabels
   }
