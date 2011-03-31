@@ -40,8 +40,7 @@ abstract class TextBoard(board: Board) {
     val sb = new StringBuilder
     for (rank <- Rules.rankRange.reverse) {
       for (file <- Rules.fileRange) {
-        sb append fieldToString(Field(file, rank))
-        sb append ' '
+        sb append (fieldToString(Field(file, rank)) + " ")
       }
       sb append '\n'
     }
