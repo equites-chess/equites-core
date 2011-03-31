@@ -25,30 +25,4 @@ object Notation {
   val algebraicRankRange =
     (Rules.rankRange.start + 1) to
     (Rules.rankRange.end   + 1)
-
-  def toAlgebraic(piece: Piece): String = piece.pieceType match {
-    case King   => "K"
-    case Queen  => "Q"
-    case Rook   => "R"
-    case Bishop => "B"
-    case Knight => "N"
-    case Pawn   => ""
-  }
-
-  def toLetter(piece: Piece): String = {
-    val letter = if (piece.pieceType == Pawn) "P" else toAlgebraic(piece)
-    if (piece.color == White) letter else letter.toLowerCase
-  }
-
-  def toFigurine(piece: Piece): String = {
-    val figurine = piece.pieceType match {
-      case King   => ("\u2654", "\u265A") // ♔ ♚
-      case Queen  => ("\u2655", "\u265B") // ♕ ♛
-      case Rook   => ("\u2656", "\u265C") // ♖ ♜
-      case Bishop => ("\u2657", "\u265D") // ♗ ♝
-      case Knight => ("\u2658", "\u265E") // ♘ ♞
-      case Pawn   => ("\u2659", "\u265F") // ♙ ♟
-    }
-    if (piece.color == White) figurine._1 else figurine._2
-  }
 }

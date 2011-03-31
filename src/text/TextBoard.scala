@@ -17,10 +17,11 @@
 package equites
 package text
 
+import implicits.RichPieceImplicit._
 import utils.Notation
 
 trait Letters {
-  def pieceToString(piece: Piece): String = Notation.toLetter(piece)
+  def pieceToString(piece: Piece): String = piece.toLetter
   val tile: String = "."
   val hBar: String = ""
   val vBar: String = " "
@@ -28,7 +29,7 @@ trait Letters {
 }
 
 trait Figurine {
-  def pieceToString(piece: Piece): String = Notation.toFigurine(piece)
+  def pieceToString(piece: Piece): String = piece.toFigurine
   val tile: String = "\u00B7" // ·
   val hBar: String = "\u2500" // ─
   val vBar: String = "\u2502" // │
