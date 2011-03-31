@@ -49,15 +49,12 @@ abstract class TextBoard(board: Board) {
   }
 
   def labeledBoard(): String = {
-    val sb = new StringBuilder(unlabeledBoard)
-    var idx = 0
+    val sb = new StringBuilder
+    var rank = Notation.algebraicRankRange.end
 
-    for (rank <- Notation.algebraicRankRange.reverse) {
-      val replacement = vBar + " " + rank + "\n"
-
-      idx += (Rules.fileRange.length * 2 - 1)
-      sb.replace(idx, idx + 2, replacement)
-      idx += replacement.length
+    for (line <- unlabeledBoard.split(" \n")) {
+      sb append (line + vBar + " " + rank + "\n")
+      rank -= 1
     }
     sb.toString + bottomBorder + fileLabels
   }
