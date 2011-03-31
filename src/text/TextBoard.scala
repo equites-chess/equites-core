@@ -49,14 +49,12 @@ abstract class TextBoard(board: Board) {
   }
 
   def labeledBoard(): String = {
-    val sb = new StringBuilder
-    var rank = Notation.algebraicRankRange.end
+    val boardLines = unlabeledBoard.split(" \n")
+    val rankLabels =
+      Notation.algebraicRankRange.reverse.map(vBar + " " + _ + "\n")
 
-    for (line <- unlabeledBoard.split(" \n")) {
-      sb append (line + vBar + " " + rank + "\n")
-      rank -= 1
-    }
-    sb.toString + bottomBorder + fileLabels
+    boardLines.zip(rankLabels).map(x => x._1 + x._2).mkString +
+      bottomBorder + fileLabels
   }
 
   private def fieldToString(field: Field): String = {
