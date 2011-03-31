@@ -47,4 +47,9 @@ final class RichPiece(val piece: Piece) {
     }
     if (piece.color == White) figurine._1 else figurine._2
   }
+
+  def toWikiLetters: String = {
+    val color = if (piece.color == White) "l" else "d"
+    toLetter.toLowerCase + color
+  }
 }

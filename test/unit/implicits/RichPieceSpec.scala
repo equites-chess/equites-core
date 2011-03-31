@@ -66,5 +66,20 @@ class RichPieceSpec extends Specification {
       (new Pawn(White)).toFigurine   must_== "♙"
       (new Pawn(Black)).toFigurine   must_== "♟"
     }
+
+    "correctly perform toWikiLetters" in {
+      (new King(White)).toWikiLetters   must_== "kl"
+      (new King(Black)).toWikiLetters   must_== "kd"
+      (new Queen(White)).toWikiLetters  must_== "ql"
+      (new Queen(Black)).toWikiLetters  must_== "qd"
+      (new Rook(White)).toWikiLetters   must_== "rl"
+      (new Rook(Black)).toWikiLetters   must_== "rd"
+      (new Bishop(White)).toWikiLetters must_== "bl"
+      (new Bishop(Black)).toWikiLetters must_== "bd"
+      (new Knight(White)).toWikiLetters must_== "nl"
+      (new Knight(Black)).toWikiLetters must_== "nd"
+      (new Pawn(White)).toWikiLetters   must_== "pl"
+      (new Pawn(Black)).toWikiLetters   must_== "pd"
+    }
   }
 }
