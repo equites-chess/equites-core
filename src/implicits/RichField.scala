@@ -28,4 +28,9 @@ final class RichField(val field: Field) {
     Notation.algebraicFileRange(field.file).toString +
     Notation.algebraicRankRange(field.rank).toString
   }
+
+  def toNumeric: String = {
+    Notation.numericFileRange(field.file).toString +
+    Notation.numericRankRange(field.rank).toString
+  }
 }

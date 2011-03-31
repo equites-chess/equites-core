@@ -30,5 +30,14 @@ class RichFieldSpec extends Specification {
       Field(7, 7).toAlgebraic must_== "h8"
       Field(3, 3).toAlgebraic must_== "d4"
     }
+
+    "correctly perform toNumeric" in {
+      Field(0, 0).toNumeric must_== "11"
+      Field(1, 1).toNumeric must_== "22"
+      Field(0, 7).toNumeric must_== "18"
+      Field(7, 0).toNumeric must_== "81"
+      Field(7, 7).toNumeric must_== "88"
+      Field(3, 3).toNumeric must_== "44"
+    }
   }
 }

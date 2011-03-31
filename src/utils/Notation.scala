@@ -25,4 +25,12 @@ object Notation {
   val algebraicRankRange =
     (Rules.rankRange.start + 1) to
     (Rules.rankRange.end   + 1)
+
+  val numericFileRange =
+    (Rules.fileRange.start + 1) to
+    (Rules.fileRange.end   + 1)
+
+  val numericRankRange =
+    (Rules.rankRange.start + 1) to
+    (Rules.rankRange.end   + 1)
 }
