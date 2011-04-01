@@ -20,7 +20,7 @@ import scala.collection._
 
 class Board extends ActionListener with Iterable[(Field, Piece)] {
   def contains(piece: Piece): Boolean =
-    fieldsMap.contains(piece) || taken.contains(piece)
+    fieldsMap.contains(piece) || takenSet.contains(piece)
 
   def occupied(field: Field): Boolean = piecesMap.contains(field)
 
@@ -35,8 +35,7 @@ class Board extends ActionListener with Iterable[(Field, Piece)] {
 
   def putPiece(field: Field, piece: Piece) {
     require(!occupied(field) && !contains(piece))
-
-    updateBoth(field, piece)
+    update(field, piece)
   }
 
   def putPieces(pieces: Traversable[(Field, Piece)]) {
@@ -47,7 +46,7 @@ class Board extends ActionListener with Iterable[(Field, Piece)] {
     removeFromBoth(field, piecesMap, fieldsMap)
 
   def removePiece(piece: Piece): Option[Field] = {
-    taken.remove(piece)
+    takenSet.remove(piece)
     removeFromBoth(piece, fieldsMap, piecesMap)
   }
 
@@ -58,127 +57,118 @@ class Board extends ActionListener with Iterable[(Field, Piece)] {
   def clear() {
     piecesMap.clear()
     fieldsMap.clear()
-    taken.clear()
+    takenSet.clear()
   }
 
-  override def isEmpty: Boolean = piecesMap.isEmpty && taken.isEmpty
+  override def isEmpty: Boolean = piecesMap.isEmpty && takenSet.isEmpty
 
   def iterator: Iterator[(Field, Piece)] = piecesMap.iterator
 
   def processAction(move: MoveLike) {
-    require(validMove(move))
-
-    movePiece(move.piece, move.from, move.to)
+    doMove(move.piece, move.from, move.to)
   }
 
   def reverseAction(move: MoveLike) {
-    require(validMove(move, true))
-
-    movePiece(move.piece, move.to, move.from)
+    undoMove(move.piece, move.from, move.to)
   }
 
   def processAction(promo: PromotionLike) {
-    require(validMove(promo))
-
-    movePiece(promo.piece, promo.from, promo.to)
-    promotePiece(promo.to, promo.piece, promo.newPiece)
+    doMove(promo.piece, promo.from, promo.to)
+    doPromotion(promo.to, promo.piece, promo.newPiece)
   }
 
   def reverseAction(promo: PromotionLike) {
-    require(validMove(promo, true))
-
-    revPromotePiece(promo.to, promo.piece, promo.newPiece)
-    movePiece(promo.piece, promo.to, promo.from)
+    undoPromotion(promo.to, promo.piece, promo.newPiece)
+    undoMove(promo.piece, promo.from, promo.to)
   }
 
   def processAction(capt: CaptureLike) {
-    require(validCapture(capt))
-
-    capturePiece(capt.captured, capt.capturedOn)
-    movePiece(capt.piece, capt.from, capt.to)
+    doCapture(capt.captured, capt.capturedOn)
+    doMove(capt.piece, capt.from, capt.to)
   }
 
   def reverseAction(capt: CaptureLike) {
-    require(validCapture(capt, true))
-
-    movePiece(capt.piece, capt.to, capt.from)
-    revCapturePiece(capt.captured, capt.capturedOn)
+    undoMove(capt.piece, capt.from, capt.to)
+    undoCapture(capt.captured, capt.capturedOn)
   }
 
-  private def validMove(move: MoveLike, reverse: Boolean = false):
-    Boolean = {
-
-    val (from, to) =
-      if (reverse) (move.to, move.from) else (move.from, move.to)
-    occupiedBy(from, move.piece) && !occupied(to)
+  def processAction(capt: CaptureAndPromotion) {
+    doCapture(capt.captured, capt.capturedOn)
+    doMove(capt.piece, capt.from, capt.to)
+    doPromotion(capt.to, capt.piece, capt.newPiece)
   }
 
-  private def validCapture(capt: CaptureLike, reverse: Boolean = false):
-    Boolean = {
-
-    if (reverse) {
-      !occupied(capt.from) &&
-      occupiedBy(capt.to, capt.piece) &&
-      taken.contains(capt.captured)
-    }
-    else {
-      occupiedBy(capt.from, capt.piece) &&
-      occupiedBy(capt.to, capt.captured) &&
-      !taken.contains(capt.captured)
-    }
+  def reverseAction(capt: CaptureAndPromotion) {
+    undoPromotion(capt.to, capt.piece, capt.newPiece)
+    undoMove(capt.piece, capt.from, capt.to)
+    undoCapture(capt.captured, capt.capturedOn)
   }
 
-  private def validCastling(castling: Castling, reverse: Boolean = false):
-    Boolean = {
-
-    validMove(castling.kingMove, reverse) &&
-    validMove(castling.rookMove, reverse)
+  def processAction(castling: Castling) {
+    processAction(castling.kingMove)
+    processAction(castling.rookMove)
   }
 
-  private def movePiece(piece: Piece, from: Field, to: Field) {
+  def reverseAction(castling: Castling) {
+    reverseAction(castling.rookMove)
+    reverseAction(castling.kingMove)
+  }
+
+  private def doMove(piece: Piece, from: Field, to: Field) {
+    require(occupiedBy(from, piece) &&
+            !occupied(to))
+
     piecesMap.remove(from)
-    updateBoth(to, piece)
+    update(to, piece)
   }
 
-  private def promotePiece(at: Field, oldPiece: Pawn, newPiece: Piece) {
+  private def undoMove(piece: Piece, from: Field, to: Field) {
+    doMove(piece, to, from)
+  }
+
+  private def doPromotion(on: Field, oldPiece: Piece, newPiece: Piece) {
+    require(occupiedBy(on, oldPiece) &&
+            !contains(newPiece))
+
     fieldsMap.remove(oldPiece)
-    updateBoth(at, newPiece)
+    update(on, newPiece)
   }
 
-  private def revPromotePiece(at: Field, oldPiece: Pawn, newPiece: Piece) {
-    fieldsMap.remove(newPiece)
-    updateBoth(at, oldPiece)
+  private def undoPromotion(on: Field, oldPiece: Piece, newPiece: Piece) {
+    doPromotion(on, newPiece, oldPiece)
   }
 
-  private def capturePiece(captured: Piece, capturedOn: Field) {
+  private def doCapture(captured: Piece, capturedOn: Field) {
+    require(occupiedBy(capturedOn, captured) &&
+            !takenSet.contains(captured))
+
     piecesMap.remove(capturedOn)
     fieldsMap.remove(captured)
-    taken.add(captured)
+    takenSet.add(captured)
   }
 
-  private def revCapturePiece(captured: Piece, capturedOn: Field) {
-    taken.remove(captured)
-    updateBoth(capturedOn, captured)
+  private def undoCapture(captured: Piece, capturedOn: Field) {
+    require(takenSet.contains(captured) &&
+            !occupied(capturedOn))
+
+    takenSet.remove(captured)
+    update(capturedOn, captured)
   }
 
-  private def updateBoth(field: Field, piece: Piece) {
+  private def update(field: Field, piece: Piece) {
     piecesMap(field) = piece
     fieldsMap(piece) = field
   }
 
-  private def removeFromBoth[A, B](key1: A, map1: mutable.Map[A, B],
-    map2: mutable.Map[B, A]): Option[B] = {
+  private def removeFromBoth[A, B](key1: A,
+    map1: mutable.Map[A, B], map2: mutable.Map[B, A]): Option[B] = {
 
-    map1.remove(key1) match {
-      case None => None
-      case Some(value) => {
-        map2.remove(value)
-        Some(value)
-      }
-    }
+    val result = map1.remove(key1)
+    if (result != None) map2.remove(result.get)
+    result
   }
 
   private val piecesMap: mutable.Map[Field, Piece] = mutable.Map()
   private val fieldsMap: mutable.Map[Piece, Field] = mutable.Map()
-  private val taken: mutable.Set[Piece] = mutable.Set()
+  private val takenSet: mutable.Set[Piece] = mutable.Set()
 }
