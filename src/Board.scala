@@ -127,8 +127,7 @@ class Board extends ActionListener with Iterable[(Field, Piece)] {
   }
 
   private def doPromotion(on: Field, oldPiece: Piece, newPiece: Piece) {
-    require(occupiedBy(on, oldPiece) &&
-            !contains(newPiece))
+    require(occupiedBy(on, oldPiece) && !contains(newPiece))
 
     fieldsMap.remove(oldPiece)
     update(on, newPiece)
@@ -139,8 +138,7 @@ class Board extends ActionListener with Iterable[(Field, Piece)] {
   }
 
   private def doCapture(captured: Piece, capturedOn: Field) {
-    require(occupiedBy(capturedOn, captured) &&
-            !takenSet.contains(captured))
+    require(occupiedBy(capturedOn, captured) && !takenSet.contains(captured))
 
     piecesMap.remove(capturedOn)
     fieldsMap.remove(captured)
@@ -148,8 +146,7 @@ class Board extends ActionListener with Iterable[(Field, Piece)] {
   }
 
   private def undoCapture(captured: Piece, capturedOn: Field) {
-    require(takenSet.contains(captured) &&
-            !occupied(capturedOn))
+    require(takenSet.contains(captured) && !occupied(capturedOn))
 
     takenSet.remove(captured)
     update(capturedOn, captured)
