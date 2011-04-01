@@ -81,5 +81,20 @@ class RichPieceSpec extends Specification {
       (new Pawn(White)).toWikiLetters   must_== "pl"
       (new Pawn(Black)).toWikiLetters   must_== "pd"
     }
+
+    "correctly perform toNumeric" in {
+      (new King(White)).toNumeric   must_== ""
+      (new King(Black)).toNumeric   must_== ""
+      (new Queen(White)).toNumeric  must_== "1"
+      (new Queen(Black)).toNumeric  must_== "1"
+      (new Rook(White)).toNumeric   must_== "2"
+      (new Rook(Black)).toNumeric   must_== "2"
+      (new Bishop(White)).toNumeric must_== "3"
+      (new Bishop(Black)).toNumeric must_== "3"
+      (new Knight(White)).toNumeric must_== "4"
+      (new Knight(Black)).toNumeric must_== "4"
+      (new Pawn(White)).toNumeric   must_== ""
+      (new Pawn(Black)).toNumeric   must_== ""
+    }
   }
 }

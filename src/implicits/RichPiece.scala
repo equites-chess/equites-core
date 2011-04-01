@@ -52,4 +52,12 @@ final class RichPiece(val piece: Piece) {
     val color = if (piece.color == White) "l" else "d"
     toLetter.toLowerCase + color
   }
+
+  def toNumeric: String = piece.pieceType match {
+    case Queen  => "1"
+    case Rook   => "2"
+    case Bishop => "3"
+    case Knight => "4"
+    case _ => ""
+  }
 }
