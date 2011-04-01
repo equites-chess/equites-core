@@ -17,22 +17,25 @@
 package equites
 
 import org.specs2.mutable._
-import Piece._
 
 class PieceSpec extends Specification {
   "class Piece" should {
-    "correctly perform opposing" in {
+    "correctly perform isFriendOf, isOpponentOf" in {
       val king1 = new King(White)
       val king2 = new King(White)
       val queen = new Queen(Black)
 
-      opposing(king1, king1) must_== false
-      opposing(king1, king2) must_== false
-      opposing(king1, queen) must_== true
+      king1 isFriendOf king1 must_== true
+      king1 isFriendOf king2 must_== true
+      king1 isFriendOf queen must_== false
+
+      king1 isOpponentOf king1 must_== false
+      king1 isOpponentOf king2 must_== false
+      king1 isOpponentOf queen must_== true
     }
   }
 
-  "object PieceCompanion" should {
+  "objects with PieceCompanion" should {
     "correctly perform unapply" in {
       val King(c1) = new King(White)
       val King(c2) = new King(Black)

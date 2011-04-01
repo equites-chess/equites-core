@@ -29,7 +29,7 @@ trait MoveLike extends Action {
 }
 
 trait CaptureLike extends MoveLike {
-  require(Piece.opposing(piece, captured))
+  require(piece isOpponentOf captured)
 
   def captured: Piece
   def capturedOn: Field = to
@@ -63,7 +63,7 @@ case object Kingside  extends Side
 case object Queenside extends Side
 
 sealed abstract class Castling(side: Side) extends Action {
-  require(!Piece.opposing(king, rook))
+  require(king isFriendOf rook)
 
   def king: King
   def rook: Rook

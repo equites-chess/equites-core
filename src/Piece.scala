@@ -16,12 +16,10 @@
 
 package equites
 
-object Piece {
-  def opposing(piece1: Piece, piece2: Piece): Boolean =
-    piece1.color != piece2.color
+sealed abstract class Piece(val pieceType: PieceType, val color: Color) {
+  def isFriendOf(other: Piece): Boolean = color == other.color
+  def isOpponentOf(other: Piece): Boolean = color != other.color
 }
-
-sealed abstract class Piece(val pieceType: PieceType, val color: Color)
 
 class King  (color: Color) extends Piece(King,   color) // ♔ ♚
 class Queen (color: Color) extends Piece(Queen,  color) // ♕ ♛
