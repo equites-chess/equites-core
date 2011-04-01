@@ -16,7 +16,10 @@
 
 package equites
 
-sealed abstract class Action
+sealed abstract class Action {
+  var isChecking = false
+  var isCheckmating = false
+}
 
 trait MoveLike extends Action {
   def piece: Piece
