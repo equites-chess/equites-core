@@ -26,49 +26,49 @@ class HistorySpec extends Specification {
       val move2 = Move(new Pawn(White), Field(1, 0), Field(1, 1))
       val move3 = Move(new Pawn(White), Field(2, 0), Field(2, 1))
 
-      hist.hasLast must_== false
-      hist.hasNext must_== false
+      hist.hasPrev  must_== false
+      hist.hasNext  must_== false
 
       hist.record(move1)
-      hist.hasLast  must_== true
+      hist.hasPrev  must_== true
       hist.hasNext  must_== false
-      hist.last.get must_== move1
+      hist.prev.get must_== move1
 
       hist.record(move2)
-      hist.hasLast  must_== true
+      hist.hasPrev  must_== true
       hist.hasNext  must_== false
-      hist.last.get must_== move2
+      hist.prev.get must_== move2
 
       hist.backward().get must_== move2
-      hist.hasLast  must_== true
+      hist.hasPrev  must_== true
       hist.hasNext  must_== true
-      hist.last.get must_== move1
+      hist.prev.get must_== move1
       hist.next.get must_== move2
 
       hist.backward().get must_== move1
-      hist.hasLast  must_== false
+      hist.hasPrev  must_== false
       hist.hasNext  must_== true
       hist.next.get must_== move1
 
-      hist.forward().get must_== move1
-      hist.hasLast  must_== true
+      hist.forward().get  must_== move1
+      hist.hasPrev  must_== true
       hist.hasNext  must_== true
-      hist.last.get must_== move1
+      hist.prev.get must_== move1
       hist.next.get must_== move2
 
       hist.record(move3)
-      hist.hasLast  must_== true
+      hist.hasPrev  must_== true
       hist.hasNext  must_== false
-      hist.last.get must_== move3
+      hist.prev.get must_== move3
 
       hist.backward()
-      hist.hasLast  must_== true
+      hist.hasPrev  must_== true
       hist.hasNext  must_== true
-      hist.last.get must_== move1
+      hist.prev.get must_== move1
       hist.next.get must_== move3
 
       hist.clear()
-      hist.hasLast  must_== false
+      hist.hasPrev  must_== false
       hist.hasNext  must_== false
     }
   }

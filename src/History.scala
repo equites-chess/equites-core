@@ -16,37 +16,44 @@
 
 package equites
 
-import scala.collection.mutable.Stack
+import scala.collection.mutable.ArrayBuffer
 
-class History {
-  def hasLast: Boolean = past.nonEmpty
-  def hasNext: Boolean = future.nonEmpty
+class History extends Iterable[Action] {
+  def hasPrev: Boolean = present >= 0
+  def hasNext: Boolean = timeline.isDefinedAt(present + 1)
 
-  def last: Option[Action] = past.headOption
-  def next: Option[Action] = future.headOption
+  def prev: Option[Action] = get(present)
+  def next: Option[Action] = get(present + 1)
+
+  def backward(): Option[Action] = {
+    val action = prev
+    if (hasPrev) present -= 1
+    action
+  }
+
+  def forward(): Option[Action] = {
+    val action = next
+    if (hasNext) present += 1
+    action
+  }
 
   def record(action: Action) {
-    past.push(action)
-    future.clear()
+    present += 1
+    timeline reduceToSize present
+    timeline append action
   }
 
   def clear() {
-    past.clear()
-    future.clear()
+    present = -1
+    timeline.clear()
   }
 
-  def backward(): Option[Action] = shift(past, future)
-  def forward():  Option[Action] = shift(future, past)
+  def iterator: Iterator[Action] = timeline.iterator
+  def reverseIterator: Iterator[Action] = timeline.reverseIterator
 
-  private def shift(from: Stack[Action], to: Stack[Action]):
-    Option[Action] = {
+  private def get(idx: Int): Option[Action] =
+    if (timeline isDefinedAt idx) Some(timeline(idx)) else None
 
-    if (from.isEmpty) None
-    val action = from.pop()
-    to.push(action)
-    Some(action)
-  }
-
-  private val past:   Stack[Action] = Stack()
-  private val future: Stack[Action] = Stack()
+  private var present: Int = -1
+  private val timeline: ArrayBuffer[Action] = ArrayBuffer()
 }
