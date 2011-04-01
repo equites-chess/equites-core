@@ -20,17 +20,17 @@ import scala.collection._
 
 class MoveCounter extends ActionListener {
   def totalMoves(piece: Piece): Int = {
-    require(count contains piece)
-    count(piece)
+    require(counter contains piece)
+    counter(piece)
   }
 
   def hasMoved(piece: Piece): Boolean = {
-    require(count contains piece)
-    count(piece) > 0
+    require(counter contains piece)
+    counter(piece) > 0
   }
 
-  def addPiece(piece: Piece): Option[Int] = count.put(piece, 0)
-  def removePiece(piece: Piece): Option[Int] = count.remove(piece)
+  def addPiece(piece: Piece): Option[Int] = counter.put(piece, 0)
+  def removePiece(piece: Piece): Option[Int] = counter.remove(piece)
 
   def addPieces(pieces: Traversable[Piece]) {
     pieces.foreach(addPiece(_))
@@ -41,7 +41,7 @@ class MoveCounter extends ActionListener {
   }
 
   def clear() {
-    count.clear()
+    counter.clear()
   }
 
   def processAction(move: MoveLike) {
@@ -71,16 +71,16 @@ class MoveCounter extends ActionListener {
   }
 
   private def changeCount(piece: Piece, by: Int): Int = {
-    require(count contains piece)
-    val result = count(piece) + by
+    require(counter contains piece)
+    val result = counter(piece) + by
     require(result >= 0)
 
-    count(piece) = result
+    counter(piece) = result
     result
   }
 
   private def incr(piece: Piece): Int = changeCount(piece,  1)
   private def decr(piece: Piece): Int = changeCount(piece, -1)
 
-  private val count: mutable.Map[Piece, Int] = mutable.Map()
+  private val counter: mutable.Map[Piece, Int] = mutable.Map()
 }
