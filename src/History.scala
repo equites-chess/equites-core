@@ -19,32 +19,32 @@ package equites
 import scala.collection.mutable.ArrayBuffer
 
 class History extends Iterable[Action] {
-  def hasPrev: Boolean = present >= 0
-  def hasNext: Boolean = timeline.isDefinedAt(present + 1)
+  def hasPrev: Boolean = current >= 0
+  def hasNext: Boolean = timeline.isDefinedAt(current + 1)
 
-  def prev: Option[Action] = get(present)
-  def next: Option[Action] = get(present + 1)
+  def prev: Option[Action] = get(current)
+  def next: Option[Action] = get(current + 1)
 
   def backward(): Option[Action] = {
     val action = prev
-    if (hasPrev) present -= 1
+    if (action != None) current -= 1
     action
   }
 
   def forward(): Option[Action] = {
     val action = next
-    if (hasNext) present += 1
+    if (action != None) current += 1
     action
   }
 
   def record(action: Action) {
-    present += 1
-    timeline reduceToSize present
+    current += 1
+    timeline reduceToSize current
     timeline append action
   }
 
   def clear() {
-    present = -1
+    current = -1
     timeline.clear()
   }
 
@@ -54,6 +54,6 @@ class History extends Iterable[Action] {
   private def get(idx: Int): Option[Action] =
     if (timeline isDefinedAt idx) Some(timeline(idx)) else None
 
-  private var present: Int = -1
+  private var current: Int = -1
   private val timeline: ArrayBuffer[Action] = ArrayBuffer()
 }

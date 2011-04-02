@@ -115,8 +115,7 @@ class Board extends ActionListener with Iterable[(Field, Piece)] {
   }
 
   private def doMove(piece: Piece, from: Field, to: Field) {
-    require(occupiedBy(from, piece) &&
-            !occupied(to))
+    require(occupiedBy(from, piece) && !occupied(to))
 
     piecesMap.remove(from)
     update(to, piece)
