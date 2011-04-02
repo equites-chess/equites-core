@@ -19,6 +19,7 @@ package equites
 sealed abstract class Action {
   var isChecking = false
   var isCheckmating = false
+  var isStalemating = false
 }
 
 trait MoveLike extends Action {
