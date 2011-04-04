@@ -31,7 +31,7 @@ object Rules {
     import Directions._
     Map(King   -> (anywhere,   1),
         Queen  -> (anywhere,   maxLength),
-        Rook   -> (orthogonal, maxLength),
+        Rook   -> (straight,   maxLength),
         Bishop -> (diagonal,   maxLength),
         Knight -> (knightLike, 1))
   }
