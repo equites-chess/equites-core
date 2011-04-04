@@ -40,8 +40,8 @@ object Directions {
   val diagonalFront = Directions(frontLeft ++ frontRight) // ↖↗
   val diagonalBack  = Directions( backLeft ++  backRight) // ↙↘
 
-  val diagonal = Directions(diagonalFront ++ diagonalBack)
   val straight = Directions(front ++ right ++ back ++ left)
+  val diagonal = Directions(diagonalFront ++ diagonalBack)
   val anywhere = Directions(straight ++ diagonal)
 
   val knightLike = Directions({

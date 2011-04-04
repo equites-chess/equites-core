@@ -25,17 +25,8 @@ class History extends Iterable[Action] {
   def prev: Option[Action] = get(current)
   def next: Option[Action] = get(current + 1)
 
-  def backward(): Option[Action] = {
-    val action = prev
-    if (action != None) current -= 1
-    action
-  }
-
-  def forward(): Option[Action] = {
-    val action = next
-    if (action != None) current += 1
-    action
-  }
+  def backward(): Option[Action] = shift(prev, -1)
+  def forward():  Option[Action] = shift(next, +1)
 
   def record(action: Action) {
     current += 1
@@ -53,6 +44,11 @@ class History extends Iterable[Action] {
 
   private def get(idx: Int): Option[Action] =
     if (timeline isDefinedAt idx) Some(timeline(idx)) else None
+
+  private def shift(retval: Option[Action], by: Int): Option[Action] = {
+    if (retval != None) current += by
+    retval
+  }
 
   private var current: Int = -1
   private val timeline: ArrayBuffer[Action] = ArrayBuffer()
