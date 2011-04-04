@@ -27,6 +27,37 @@ object RichActionImplicit {
 }
 
 final class RichAction(val action: Action) {
+  def toLongAlgebraic: String = toLongAlgebraic(piece => piece.toAlgebraic)
+  def toLongFigurine: String = toLongAlgebraic(piece => piece.toFigurine)
+
+  private def toLongAlgebraic(stringOf: Piece => String): String = {
+    (action match {
+      case p: PromotionLike
+        => stringOf(p.piece) + moveToLongAlgebraic + stringOf(p.newPiece)
+      case m: MoveLike
+        => stringOf(m.piece) + moveToLongAlgebraic
+      case _ => moveToLongAlgebraic
+    }) + flagsToAlgebraic
+  }
+
+  private def moveToLongAlgebraic: String = action match {
+    case e: EnPassant
+      => e.from.toAlgebraic + "x" + e.to.toAlgebraic + "e.p."
+    case c: CaptureLike
+      => c.from.toAlgebraic + "x" + c.to.toAlgebraic
+    case m: MoveLike
+      => m.from.toAlgebraic + "-" + m.to.toAlgebraic
+    case c: CastlingShort => "0-0"
+    case c: CastlingLong  => "0-0-0"
+  }
+
+  private def flagsToAlgebraic: String = {
+    if (action.isChecking) "+"
+    else if (action.isCheckmating) "#"
+    else if (action.isStalemating) ""
+    else ""
+  }
+
   def toNumeric: String = action match {
     case p: PromotionLike
       => p.from.toNumeric + p.to.toNumeric + p.newPiece.toNumeric
