@@ -16,8 +16,9 @@
 
 package equites
 
-import scala.collection.Traversable
+import scala.collection.generic.SeqForwarder
 import scala.collection.immutable.LinearSeq
+import scala.collection.Traversable
 
 object Directions {
   def apply(vectors: Vector*): Directions =
@@ -52,21 +53,18 @@ object Directions {
   })
 }
 
-class Directions(vectors: List[Vector]) extends LinearSeq[Vector] {
-  def inverse: Directions = Directions(vectors.map(_ * -1))
+class Directions(vectors: List[Vector])
+  extends LinearSeq[Vector] with SeqForwarder[Vector] {
+
+  def inverse: Directions = Directions(map(_ * -1))
 
   def inverseIfBlack(color: Color): Directions =
     if (color == Black) inverse else this
 
   override def equals(that: Any): Boolean = that match {
-    case other: Directions => vectors.filterNot(other.contains).isEmpty
+    case other: Directions => filterNot(other.contains).isEmpty
     case _ => false
   }
 
-  // required for LinearSeq[Vector]:
-  def apply(idx: Int): Vector = vectors(idx)
-  def length: Int = vectors.length
-
-  override def isEmpty: Boolean = vectors.isEmpty
-  override def iterator: Iterator[Vector] = vectors.iterator
+  protected override def underlying: List[Vector] = vectors
 }
