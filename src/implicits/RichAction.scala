@@ -28,7 +28,7 @@ object RichActionImplicit {
 
 final class RichAction(val action: Action) {
   def toLongAlgebraic: String = toLongAlgebraic(piece => piece.toAlgebraic)
-  def toLongFigurine: String = toLongAlgebraic(piece => piece.toFigurine)
+  def toLongFigurine:  String = toLongAlgebraic(piece => piece.toFigurine)
 
   private def toLongAlgebraic(stringOf: Piece => String): String = {
     (action match {

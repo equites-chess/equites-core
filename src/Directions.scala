@@ -16,9 +16,7 @@
 
 package equites
 
-import scala.collection.generic.SeqForwarder
-import scala.collection.immutable.LinearSeq
-import scala.collection.Traversable
+import scala.collection._
 
 object Directions {
   def apply(vectors: Vector*): Directions =
@@ -40,6 +38,9 @@ object Directions {
   val diagonalFront = Directions(frontLeft ++ frontRight) // ↖↗
   val diagonalBack  = Directions( backLeft ++  backRight) // ↙↘
 
+  val forward  = Directions(diagonalFront ++ front) // ↖↑↗
+  val backward = Directions(diagonalBack  ++ back)  // ↙↓↘
+
   val straight = Directions(front ++ right ++ back ++ left)
   val diagonal = Directions(diagonalFront ++ diagonalBack)
   val anywhere = Directions(straight ++ diagonal)
@@ -54,7 +55,7 @@ object Directions {
 }
 
 class Directions(vectors: List[Vector])
-  extends LinearSeq[Vector] with SeqForwarder[Vector] {
+  extends immutable.LinearSeq[Vector] with generic.SeqForwarder[Vector] {
 
   def inverse: Directions = Directions(map(_ * -1))
 
