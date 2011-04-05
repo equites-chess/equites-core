@@ -24,8 +24,17 @@ class DirectionsSpec extends Specification {
     "correctly perform inverse" in {
       Directions.front.inverse must_== Directions.back
       Directions.right.inverse must_== Directions.left
+
+      frontRight.inverse must_== backLeft
+      frontLeft.inverse  must_== backRight
+
       diagonalFront.inverse must_== diagonalBack
-      knightLike.inverse    must_== knightLike
+      forward.inverse       must_== backward
+
+      straight.inverse   must_== straight
+      diagonal.inverse   must_== diagonal
+      anywhere.inverse   must_== anywhere
+      knightLike.inverse must_== knightLike
     }
 
     "correctly perform inverseIfBlack" in {
