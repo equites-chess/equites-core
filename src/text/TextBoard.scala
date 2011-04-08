@@ -38,16 +38,16 @@ trait Figurine {
 
 abstract class TextBoard(board: Board) {
   def unlabeledBoard(): String = {
-    def fieldToString(field: Field): String = {
-      board.getPiece(field) match {
+    def squareToString(square: Square): String = {
+      board.getPiece(square) match {
         case Some(piece) => pieceToString(piece)
         case None => tile
       }
     }
 
     def mkRow(rank: Int): String = {
-      val fields = Rules.fileRange.map(x => fieldToString(Field(x, rank)))
-      fields.mkString("", " ", " \n")
+      val squares = Rules.fileRange.map(x => squareToString(Square(x, rank)))
+      squares.mkString("", " ", " \n")
     }
 
     Rules.rankRange.reverse.map(mkRow).mkString

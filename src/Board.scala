@@ -18,36 +18,36 @@ package equites
 
 import scala.collection._
 
-class Board extends ActionListener with Iterable[(Field, Piece)] {
+class Board extends ActionListener with Iterable[(Square, Piece)] {
   def contains(piece: Piece): Boolean =
-    fieldsMap.contains(piece) || takenSet.contains(piece)
+    squaresMap.contains(piece) || takenSet.contains(piece)
 
-  def occupied(field: Field): Boolean = piecesMap.contains(field)
+  def occupied(square: Square): Boolean = piecesMap.contains(square)
 
-  def occupiedBy(field: Field, piece: Piece): Boolean =
-    occupied(field) && piecesMap(field) == piece
+  def occupiedBy(square: Square, piece: Piece): Boolean =
+    occupied(square) && piecesMap(square) == piece
 
-  def opponentAt(field: Field, color: Color): Boolean =
-    occupied(field) && piecesMap(field).color != color
+  def opponentAt(square: Square, color: Color): Boolean =
+    occupied(square) && piecesMap(square).color != color
 
-  def getPiece(field: Field): Option[Piece] = piecesMap.get(field)
-  def getField(piece: Piece): Option[Field] = fieldsMap.get(piece)
+  def getPiece(square: Square): Option[Piece] = piecesMap.get(square)
+  def getSquare(piece: Piece): Option[Square] = squaresMap.get(piece)
 
-  def putPiece(field: Field, piece: Piece) {
-    require(!occupied(field) && !contains(piece))
-    update(field, piece)
+  def putPiece(square: Square, piece: Piece) {
+    require(!occupied(square) && !contains(piece))
+    update(square, piece)
   }
 
-  def putPieces(pieces: Traversable[(Field, Piece)]) {
-    pieces.foreach { case (field, piece) => putPiece(field, piece) }
+  def putPieces(pieces: Traversable[(Square, Piece)]) {
+    pieces.foreach { case (square, piece) => putPiece(square, piece) }
   }
 
-  def removePiece(field: Field): Option[Piece] =
-    removeFromBoth(field, piecesMap, fieldsMap)
+  def removePiece(square: Square): Option[Piece] =
+    removeFromBoth(square, piecesMap, squaresMap)
 
-  def removePiece(piece: Piece): Option[Field] = {
+  def removePiece(piece: Piece): Option[Square] = {
     takenSet.remove(piece)
-    removeFromBoth(piece, fieldsMap, piecesMap)
+    removeFromBoth(piece, squaresMap, piecesMap)
   }
 
   def removePieces(pieces: Traversable[Piece]) {
@@ -56,13 +56,13 @@ class Board extends ActionListener with Iterable[(Field, Piece)] {
 
   def clear() {
     piecesMap.clear()
-    fieldsMap.clear()
+    squaresMap.clear()
     takenSet.clear()
   }
 
   override def isEmpty: Boolean = piecesMap.isEmpty && takenSet.isEmpty
 
-  def iterator: Iterator[(Field, Piece)] = piecesMap.iterator
+  def iterator: Iterator[(Square, Piece)] = piecesMap.iterator
 
   def processAction(move: MoveLike) {
     doMove(move.piece, move.from, move.to)
@@ -114,46 +114,46 @@ class Board extends ActionListener with Iterable[(Field, Piece)] {
     reverseAction(castling.kingMove)
   }
 
-  private def doMove(piece: Piece, from: Field, to: Field) {
+  private def doMove(piece: Piece, from: Square, to: Square) {
     require(occupiedBy(from, piece) && !occupied(to))
 
     piecesMap.remove(from)
     update(to, piece)
   }
 
-  private def undoMove(piece: Piece, from: Field, to: Field) {
+  private def undoMove(piece: Piece, from: Square, to: Square) {
     doMove(piece, to, from)
   }
 
-  private def doPromotion(on: Field, oldPiece: Piece, newPiece: Piece) {
+  private def doPromotion(on: Square, oldPiece: Piece, newPiece: Piece) {
     require(occupiedBy(on, oldPiece) && !contains(newPiece))
 
-    fieldsMap.remove(oldPiece)
+    squaresMap.remove(oldPiece)
     update(on, newPiece)
   }
 
-  private def undoPromotion(on: Field, oldPiece: Piece, newPiece: Piece) {
+  private def undoPromotion(on: Square, oldPiece: Piece, newPiece: Piece) {
     doPromotion(on, newPiece, oldPiece)
   }
 
-  private def doCapture(captured: Piece, capturedOn: Field) {
+  private def doCapture(captured: Piece, capturedOn: Square) {
     require(occupiedBy(capturedOn, captured) && !takenSet.contains(captured))
 
     piecesMap.remove(capturedOn)
-    fieldsMap.remove(captured)
+    squaresMap.remove(captured)
     takenSet.add(captured)
   }
 
-  private def undoCapture(captured: Piece, capturedOn: Field) {
+  private def undoCapture(captured: Piece, capturedOn: Square) {
     require(takenSet.contains(captured) && !occupied(capturedOn))
 
     takenSet.remove(captured)
     update(capturedOn, captured)
   }
 
-  private def update(field: Field, piece: Piece) {
-    piecesMap(field) = piece
-    fieldsMap(piece) = field
+  private def update(square: Square, piece: Piece) {
+    piecesMap(square) = piece
+    squaresMap(piece) = square
   }
 
   private def removeFromBoth[A, B](key1: A,
@@ -164,7 +164,7 @@ class Board extends ActionListener with Iterable[(Field, Piece)] {
     result
   }
 
-  private val piecesMap: mutable.Map[Field, Piece] = mutable.Map()
-  private val fieldsMap: mutable.Map[Piece, Field] = mutable.Map()
+  private val piecesMap: mutable.Map[Square, Piece] = mutable.Map()
+  private val squaresMap: mutable.Map[Piece, Square] = mutable.Map()
   private val takenSet: mutable.Set[Piece] = mutable.Set()
 }

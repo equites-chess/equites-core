@@ -36,30 +36,30 @@ object Rules {
         Knight -> (knightLike, 1))
   }
 
-  val startingFields: Map[Color, Map[PieceType, List[Field]]] = {
-    def startingFieldsFor(color: Color): Map[PieceType, List[Field]] = {
+  val startingSquares: Map[Color, Map[PieceType, List[Square]]] = {
+    def startingSquaresFor(color: Color): Map[PieceType, List[Square]] = {
       val backRank = backRankBy(color)
       val pawnRank = pawnRankBy(color)
 
-      Map[PieceType, List[Field]](
-        King   -> List(Field(kingFile,  backRank)),
-        Queen  -> List(Field(queenFile, backRank)),
-        Rook   ->   rookFiles.map(Field(_, backRank)),
-        Bishop -> bishopFiles.map(Field(_, backRank)),
-        Knight -> knightFiles.map(Field(_, backRank)),
-        Pawn   ->   fileRange.map(Field(_, pawnRank)).toList)
+      Map[PieceType, List[Square]](
+        King   -> List(Square(kingFile,  backRank)),
+        Queen  -> List(Square(queenFile, backRank)),
+        Rook   ->   rookFiles.map(Square(_, backRank)),
+        Bishop -> bishopFiles.map(Square(_, backRank)),
+        Knight -> knightFiles.map(Square(_, backRank)),
+        Pawn   ->   fileRange.map(Square(_, pawnRank)).toList)
     }
 
-    Map[Color, Map[PieceType, List[Field]]](
-      White -> startingFieldsFor(White),
-      Black -> startingFieldsFor(Black))
+    Map[Color, Map[PieceType, List[Square]]](
+      White -> startingSquaresFor(White),
+      Black -> startingSquaresFor(Black))
   }
 
-  val castlingFields:
-    Map[Triple[Side, Color, PieceType], Pair[Field, Field]] = {
+  val castlingSquares:
+    Map[Triple[Side, Color, PieceType], Pair[Square, Square]] = {
 
-    def castlingFieldsFor(side: Side, color: Color, pieceType: PieceType):
-      Pair[Field, Field] = {
+    def castlingSquaresFor(side: Side, color: Color, pieceType: PieceType):
+      Pair[Square, Square] = {
 
       val rank = backRankBy(color)
       val rookFile    = if (side == Kingside) rookFiles(1) else rookFiles(0)
@@ -67,9 +67,9 @@ object Rules {
 
       pieceType match {
         case King =>
-          (Field(kingFile, rank), Field(kingFile + 2 * leftOrRight, rank))
+          (Square(kingFile, rank), Square(kingFile + 2 * leftOrRight, rank))
         case Rook =>
-          (Field(rookFile, rank), Field(kingFile + 1 * leftOrRight, rank))
+          (Square(rookFile, rank), Square(kingFile + 1 * leftOrRight, rank))
         case _ => throw new IllegalArgumentException
       }
     }
@@ -78,18 +78,18 @@ object Rules {
       side  <- List(Kingside, Queenside)
       color <- List(White, Black)
       piece <- List(King, Rook)
-    } yield (side, color, piece) -> castlingFieldsFor(side, color, piece)
-    Map[Triple[Side, Color, PieceType], Pair[Field, Field]]() ++ mappings
+    } yield (side, color, piece) -> castlingSquaresFor(side, color, piece)
+    Map[Triple[Side, Color, PieceType], Pair[Square, Square]]() ++ mappings
   }
 
-  def startingPositions(color: Color): Map[Field, Piece] = {
+  def startingPositions(color: Color): Map[Square, Piece] = {
     def embattlePieces(pieceType: PieceType, newPiece: => Piece):
-      List[Pair[Field, Piece]] = {
+      List[Pair[Square, Piece]] = {
 
-      startingFields(color)(pieceType).map(_ -> newPiece)
+      startingSquares(color)(pieceType).map(_ -> newPiece)
     }
 
-    Map[Field, Piece]() ++
+    Map[Square, Piece]() ++
       embattlePieces(King,   new King(color))   ++
       embattlePieces(Queen,  new Queen(color))  ++
       embattlePieces(Rook,   new Rook(color))   ++
@@ -98,7 +98,7 @@ object Rules {
       embattlePieces(Pawn,   new Pawn(color))
   }
 
-  def startingPositions: Map[Field, Piece] =
+  def startingPositions: Map[Square, Piece] =
     startingPositions(White) ++ startingPositions(Black)
 
   def backRankBy(color: Color): Int =
@@ -110,14 +110,14 @@ object Rules {
   def rankBy(rank: Int, color: Color): Int =
     if (color == White) rank else rankRange.end - rank
 
-  def fieldsInDirection(from: Field, direction: Vector,
-    maxDist: Int = maxLength): Stream[Field] = {
+  def squaresInDirection(from: Square, direction: Vector,
+    maxDist: Int = maxLength): Stream[Square] = {
 
-    if (maxDist < 1 || !Field.validSum(from, direction))
+    if (maxDist < 1 || !Square.validSum(from, direction))
       Stream.empty
     else {
-      val next: Field = from + direction
-      Stream.cons(next, fieldsInDirection(next, direction, maxDist - 1))
+      val next: Square = from + direction
+      Stream.cons(next, squaresInDirection(next, direction, maxDist - 1))
     }
   }
 }

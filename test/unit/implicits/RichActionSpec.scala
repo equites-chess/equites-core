@@ -22,36 +22,38 @@ import RichActionImplicit._
 
 class RichActionSpec extends Specification {
   "class RichAction" should {
-    val moveWhite = Move(new Queen(White), Field(0, 0), Field(7, 7))
-    val moveBlack = Move(new Queen(Black), Field(0, 0), Field(7, 7))
+    val moveWhite = Move(new Queen(White), Square(0, 0), Square(7, 7))
+    val moveBlack = Move(new Queen(Black), Square(0, 0), Square(7, 7))
 
-    val checkingWhite = Move(new Rook(White), Field(2, 3), Field(2, 6))
-    val checkingBlack = Move(new Rook(Black), Field(2, 3), Field(2, 6))
+    val checkingWhite = Move(new Rook(White), Square(2, 3), Square(2, 6))
+    val checkingBlack = Move(new Rook(Black), Square(2, 3), Square(2, 6))
     checkingWhite.isChecking = true
     checkingBlack.isChecking = true
 
-    val checkmatingWhite = Move(new Rook(White), Field(2, 3), Field(2, 6))
-    val checkmatingBlack = Move(new Rook(Black), Field(2, 3), Field(2, 6))
+    val checkmatingWhite = Move(new Rook(White), Square(2, 3), Square(2, 6))
+    val checkmatingBlack = Move(new Rook(Black), Square(2, 3), Square(2, 6))
     checkmatingWhite.isCheckmating = true
     checkmatingBlack.isCheckmating = true
 
-    val promotionWhite = Promotion(new Pawn(White), Field(3, 6), Field(3, 7))
-    val promotionBlack = Promotion(new Pawn(Black), Field(3, 1), Field(3, 0))
+    val promotionWhite =
+      Promotion(new Pawn(White), Square(3, 6), Square(3, 7))
+    val promotionBlack =
+      Promotion(new Pawn(Black), Square(3, 1), Square(3, 0))
 
     val captureWhite =
-      Capture(new Knight(White), Field(0, 0), Field(2, 1), new Pawn(Black))
+      Capture(new Knight(White), Square(0, 0), Square(2, 1), new Pawn(Black))
     val captureBlack =
-      Capture(new Knight(Black), Field(0, 0), Field(2, 1), new Pawn(White))
+      Capture(new Knight(Black), Square(0, 0), Square(2, 1), new Pawn(White))
 
-    val captPromoWhite = CaptureAndPromotion(new Pawn(White), Field(0, 6),
-      Field(1, 7), new Knight(Black))
-    val captPromoBlack = CaptureAndPromotion(new Pawn(Black), Field(0, 1),
-      Field(1, 0), new Knight(White))
+    val captPromoWhite = CaptureAndPromotion(new Pawn(White), Square(0, 6),
+      Square(1, 7), new Knight(Black))
+    val captPromoBlack = CaptureAndPromotion(new Pawn(Black), Square(0, 1),
+      Square(1, 0), new Knight(White))
 
-    val enPassantWhite = EnPassant(new Pawn(White), Field(4, 4), Field(5, 5),
-      new Pawn(Black), Field(5, 4))
-    val enPassantBlack = EnPassant(new Pawn(Black), Field(1, 3), Field(0, 2),
-      new Pawn(White), Field(0, 3))
+    val enPassantWhite = EnPassant(new Pawn(White), Square(4, 4),
+      Square(5, 5), new Pawn(Black), Square(5, 4))
+    val enPassantBlack = EnPassant(new Pawn(Black), Square(1, 3),
+      Square(0, 2), new Pawn(White), Square(0, 3))
 
     val castlingShortWhite = CastlingShort(new King(White), new Rook(White))
     val castlingShortBlack = CastlingShort(new King(Black), new Rook(Black))

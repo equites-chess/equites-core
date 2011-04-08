@@ -22,9 +22,9 @@ class HistorySpec extends Specification {
   "class History" should {
     "correctly record actions" in {
       val hist = new History
-      val move1 = Move(new Pawn(White), Field(0, 0), Field(0, 1))
-      val move2 = Move(new Pawn(White), Field(1, 0), Field(1, 1))
-      val move3 = Move(new Pawn(White), Field(2, 0), Field(2, 1))
+      val move1 = Move(new Pawn(White), Square(0, 0), Square(0, 1))
+      val move2 = Move(new Pawn(White), Square(1, 0), Square(1, 1))
+      val move3 = Move(new Pawn(White), Square(2, 0), Square(2, 1))
 
       hist.hasPrev must_== false
       hist.hasNext must_== false

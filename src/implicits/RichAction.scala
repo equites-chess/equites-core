@@ -18,7 +18,7 @@ package equites
 package implicits
 
 import RichActionImplicit._
-import RichFieldImplicit._
+import RichSquareImplicit._
 import RichPieceImplicit._
 import utils.Notation
 

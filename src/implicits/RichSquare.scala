@@ -17,27 +17,20 @@
 package equites
 package implicits
 
-import org.specs2.mutable._
-import RichFieldImplicit._
+import utils.Notation
 
-class RichFieldSpec extends Specification {
-  "class RichField" should {
-    "correctly perform toAlgebraic" in {
-      Field(0, 0).toAlgebraic must_== "a1"
-      Field(1, 1).toAlgebraic must_== "b2"
-      Field(0, 7).toAlgebraic must_== "a8"
-      Field(7, 0).toAlgebraic must_== "h1"
-      Field(7, 7).toAlgebraic must_== "h8"
-      Field(3, 3).toAlgebraic must_== "d4"
-    }
+object RichSquareImplicit {
+  implicit def squareWrapper(square: Square) = new RichSquare(square)
+}
 
-    "correctly perform toNumeric" in {
-      Field(0, 0).toNumeric must_== "11"
-      Field(1, 1).toNumeric must_== "22"
-      Field(0, 7).toNumeric must_== "18"
-      Field(7, 0).toNumeric must_== "81"
-      Field(7, 7).toNumeric must_== "88"
-      Field(3, 3).toNumeric must_== "44"
-    }
+final class RichSquare(val square: Square) {
+  def toAlgebraic: String = {
+    Notation.algebraicFileRange(square.file).toString +
+    Notation.algebraicRankRange(square.rank).toString
+  }
+
+  def toNumeric: String = {
+    Notation.numericFileRange(square.file).toString +
+    Notation.numericRankRange(square.rank).toString
   }
 }

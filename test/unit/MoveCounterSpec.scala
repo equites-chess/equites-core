@@ -22,8 +22,8 @@ class MoveCounterSpec extends Specification {
   "class MoveCounter" should {
     "correctly count normal moves" in {
       val piece1 = new King(White)
-      val move1 = Move(piece1, Field(0, 0), Field(1, 1))
-      val move2 = Move(piece1, Field(1, 1), Field(2, 2))
+      val move1 = Move(piece1, Square(0, 0), Square(1, 1))
+      val move2 = Move(piece1, Square(1, 1), Square(2, 2))
       val mc = new MoveCounter
 
       mc.totalMoves(piece1) must throwAn[IllegalArgumentException]
@@ -56,8 +56,8 @@ class MoveCounterSpec extends Specification {
 
     "correctly count promotions" in {
       val piece1 = new Pawn(White)
-      val promo1 = Promotion(piece1, Field(0, 6), Field(0, 7))
-      val move1 = Move(promo1.newPiece, Field(0, 7), Field(0, 0))
+      val promo1 = Promotion(piece1, Square(0, 6), Square(0, 7))
+      val move1 = Move(promo1.newPiece, Square(0, 7), Square(0, 0))
       val mc = new MoveCounter
 
       mc.addPiece(piece1)
@@ -136,7 +136,7 @@ class MoveCounterSpec extends Specification {
     "fail on negative move counts" in {
       val mc = new MoveCounter
       val piece1 = new King(White)
-      val move1 = Move(piece1, Field(0, 0), Field(1, 1))
+      val move1 = Move(piece1, Square(0, 0), Square(1, 1))
 
       mc.addPiece(piece1)
       mc.totalMoves(piece1)   must_== 0

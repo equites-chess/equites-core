@@ -24,19 +24,19 @@ sealed abstract class Action {
 
 trait MoveLike extends Action {
   def piece: Piece
-  def from: Field
-  def to: Field
+  def from: Square
+  def to: Square
 
   def diff: Vector = to - from
-  def l1Dist: Int = Field.l1Dist(from, to)
-  def lInfDist: Int = Field.lInfDist(from, to)
+  def l1Dist: Int = Square.l1Dist(from, to)
+  def lInfDist: Int = Square.lInfDist(from, to)
 }
 
 trait CaptureLike extends MoveLike {
   require(piece isOpponentOf captured)
 
   def captured: Piece
-  def capturedOn: Field = to
+  def capturedOn: Square = to
 }
 
 trait PromotionLike extends MoveLike {
@@ -44,21 +44,21 @@ trait PromotionLike extends MoveLike {
   var newPiece: Piece = new Queen(piece.color)
 }
 
-case class Move(piece: Piece, from: Field, to: Field)
+case class Move(piece: Piece, from: Square, to: Square)
   extends MoveLike
 
-case class Promotion(piece: Pawn, from: Field, to: Field)
+case class Promotion(piece: Pawn, from: Square, to: Square)
   extends PromotionLike
 
-case class Capture(piece: Piece, from: Field, to: Field, captured: Piece)
+case class Capture(piece: Piece, from: Square, to: Square, captured: Piece)
   extends CaptureLike
 
-case class CaptureAndPromotion(piece: Pawn, from: Field, to: Field,
+case class CaptureAndPromotion(piece: Pawn, from: Square, to: Square,
   captured: Piece)
   extends CaptureLike with PromotionLike
 
-case class EnPassant(piece: Pawn, from: Field, to: Field,
-  captured: Pawn, override val capturedOn: Field)
+case class EnPassant(piece: Pawn, from: Square, to: Square,
+  captured: Pawn, override val capturedOn: Square)
   extends CaptureLike
 
 
@@ -77,7 +77,7 @@ sealed abstract class Castling(side: Side) extends Action {
 
   private def constructMove(piece: Piece): Move = {
     val (from, to) =
-      Rules.castlingFields((side, piece.color, piece.pieceType))
+      Rules.castlingSquares((side, piece.color, piece.pieceType))
     Move(piece, from, to)
   }
 }

@@ -16,23 +16,23 @@
 
 package equites
 
-object Field {
+object Square {
   def validCoordinates(file: Int, rank: Int): Boolean = {
     Rules.fileRange.contains(file) &&
     Rules.rankRange.contains(rank)
   }
 
-  def validSum(that: Field, vec: Vector): Boolean =
+  def validSum(that: Square, vec: Vector): Boolean =
     validCoordinates(that.file + vec.file, that.rank + vec.rank)
 
-  def l1Dist(p: Field, q: Field): Int = (p - q).map(_.abs).sum
-  def lInfDist(p: Field, q: Field): Int = (p - q).map(_.abs).max
+  def l1Dist(p: Square, q: Square): Int = (p - q).map(_.abs).sum
+  def lInfDist(p: Square, q: Square): Int = (p - q).map(_.abs).max
 }
 
-case class Field(file: Int, rank: Int) {
-  require(Field.validCoordinates(file, rank))
+case class Square(file: Int, rank: Int) {
+  require(Square.validCoordinates(file, rank))
 
-  def +(vec: Vector): Field = Field(file + vec.file, rank + vec.rank)
-  def -(vec: Vector): Field = Field(file - vec.file, rank - vec.rank)
-  def -(that: Field): Vector = Vector(file - that.file, rank - that.rank)
+  def +(vec: Vector): Square = Square(file + vec.file, rank + vec.rank)
+  def -(vec: Vector): Square = Square(file - vec.file, rank - vec.rank)
+  def -(that: Square): Vector = Vector(file - that.file, rank - that.rank)
 }
