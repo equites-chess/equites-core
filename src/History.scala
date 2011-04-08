@@ -46,7 +46,7 @@ class History extends Iterable[Action] {
     if (timeline isDefinedAt idx) Some(timeline(idx)) else None
 
   private def shift(retval: Option[Action], by: Int): Option[Action] = {
-    if (retval != None) current += by
+    if (retval isDefined) current += by
     retval
   }
 
