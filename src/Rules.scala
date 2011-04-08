@@ -27,7 +27,7 @@ object Rules {
   val knightFiles = List(1, 6)
   val bishopFiles = List(2, 5)
 
-  val movementType: Map[PieceType, Pair[Directions, Int]] = {
+  val movementType: Map[PieceType, (Directions, Int)] = {
     import Directions._
     Map(King   -> (anywhere,   1),
         Queen  -> (anywhere,   maxLength),
@@ -55,11 +55,9 @@ object Rules {
       Black -> startingSquaresFor(Black))
   }
 
-  val castlingSquares:
-    Map[Triple[Side, Color, PieceType], Pair[Square, Square]] = {
-
+  val castlingSquares: Map[(Side, Color, PieceType), (Square, Square)] = {
     def castlingSquaresFor(side: Side, color: Color, pieceType: PieceType):
-      Pair[Square, Square] = {
+      (Square, Square) = {
 
       val rank = backRankBy(color)
       val rookFile    = if (side == Kingside) rookFiles(1) else rookFiles(0)
@@ -79,12 +77,12 @@ object Rules {
       color <- List(White, Black)
       piece <- List(King, Rook)
     } yield (side, color, piece) -> castlingSquaresFor(side, color, piece)
-    Map[Triple[Side, Color, PieceType], Pair[Square, Square]]() ++ mappings
+    Map[(Side, Color, PieceType), (Square, Square)]() ++ mappings
   }
 
   def startingPositions(color: Color): Map[Square, Piece] = {
     def embattlePieces(pieceType: PieceType, newPiece: => Piece):
-      List[Pair[Square, Piece]] = {
+      List[(Square, Piece)] = {
 
       startingSquares(color)(pieceType).map(_ -> newPiece)
     }
@@ -113,12 +111,11 @@ object Rules {
   def squaresInDirection(from: Square, direction: Vector,
     maxDist: Int = maxLength): Stream[Square] = {
 
-    if (maxDist < 1 || !Square.validSum(from, direction))
-      Stream.empty
-    else {
+    if (maxDist > 0 && Square.validSum(from, direction)) {
       val next: Square = from + direction
       Stream.cons(next, squaresInDirection(next, direction, maxDist - 1))
     }
+    else Stream.empty
   }
 }
 
