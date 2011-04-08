@@ -52,10 +52,10 @@ final class RichAction(val action: Action) {
   }
 
   private def flagsToAlgebraic: String = {
-    if (action.isChecking) "+"
-    else if (action.isCheckmating) "#"
-    else if (action.isStalemating) ""
-    else ""
+    if (action.isChecking)    return "+"
+    if (action.isCheckmating) return "#"
+    if (action.isStalemating) return ""
+    ""
   }
 
   def toNumeric: String = action match {
