@@ -79,5 +79,17 @@ class SquareSpec extends Specification {
       Square(2, 1) - Square(0, 0) must_== Vector(2, 1)
       Square(0, 0) - Square(3, 4) must_== Vector(-3, -4)
     }
+
+    "correctly perform isLight and isDark" in {
+      Square(0, 0).isDark must_== true
+      Square(7, 7).isDark must_== true
+      Square(0, 2).isDark must_== true
+      Square(2, 0).isDark must_== true
+
+      Square(0, 1).isLight must_== true
+      Square(0, 3).isLight must_== true
+      Square(1, 0).isLight must_== true
+      Square(3, 0).isLight must_== true
+    }
   }
 }

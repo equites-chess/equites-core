@@ -35,4 +35,7 @@ case class Square(file: Int, rank: Int) {
   def +(vec: Vector): Square = Square(file + vec.file, rank + vec.rank)
   def -(vec: Vector): Square = Square(file - vec.file, rank - vec.rank)
   def -(that: Square): Vector = Vector(file - that.file, rank - that.rank)
+
+  def isLight: Boolean = (file + rank) % 2 == 1
+  def isDark:  Boolean = !isLight
 }
