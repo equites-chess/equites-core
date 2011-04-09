@@ -16,6 +16,8 @@
 
 package equites
 
+import utils.Math._
+
 object Square {
   def validCoordinates(file: Int, rank: Int): Boolean = {
     Rules.fileRange.contains(file) &&
@@ -36,6 +38,6 @@ case class Square(file: Int, rank: Int) {
   def -(vec: Vector): Square = Square(file - vec.file, rank - vec.rank)
   def -(that: Square): Vector = Vector(file - that.file, rank - that.rank)
 
-  def isLight: Boolean = (file + rank) % 2 == 1
-  def isDark:  Boolean = !isLight
+  def isLight: Boolean = isOdd(file + rank)
+  def isDark:  Boolean = isEven(file + rank)
 }
