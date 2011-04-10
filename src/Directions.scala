@@ -22,7 +22,7 @@ object Directions {
   def apply(vectors: Vector*): Directions =
     new Directions(vectors.toList)
 
-  def apply[A <: Traversable[Vector]](vectors: A): Directions =
+  def apply(vectors: TraversableOnce[Vector]): Directions =
     new Directions(vectors.toList)
 
   val front = Directions(Vector( 0,  1)) // ↑
