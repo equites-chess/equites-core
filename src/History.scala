@@ -16,40 +16,34 @@
 
 package equites
 
-import scala.collection.mutable.ArrayBuffer
+import scala.collection._
 
-class History extends Iterable[Action] {
-  def hasPrev: Boolean = current >= 0
-  def hasNext: Boolean = timeline.isDefinedAt(current + 1)
+class History private (val past: List[Action], val future: List[Action])
+  extends Iterable[Action] {
 
-  def prev: Option[Action] = get(current)
-  def next: Option[Action] = get(current + 1)
+  def this() = this(Nil, Nil)
 
-  def backward(): Option[Action] = shift(prev, -1)
-  def forward():  Option[Action] = shift(next, +1)
+  def hasPrev: Boolean = past   nonEmpty
+  def hasNext: Boolean = future nonEmpty
 
-  def record(action: Action) {
-    current += 1
-    timeline reduceToSize current
-    timeline append action
+  def prev: Option[Action] = past   headOption
+  def next: Option[Action] = future headOption
+
+  def backward: History = {
+    if (past isEmpty) this
+    else new History(past.tail, past.head :: future)
   }
 
-  def clear() {
-    current = -1
-    timeline.clear()
+  def forward: History = {
+    if (future isEmpty) this
+    else new History(future.head :: past, future.tail)
   }
 
-  def iterator: Iterator[Action] = timeline.iterator
-  def reverseIterator: Iterator[Action] = timeline.reverseIterator
+  def record(action: Action): History = new History(action :: past, Nil)
 
-  private def get(idx: Int): Option[Action] =
-    if (timeline isDefinedAt idx) Some(timeline(idx)) else None
+  def iterator: Iterator[Action] =
+    past.reverseIterator ++ future.iterator
 
-  private def shift(retval: Option[Action], by: Int): Option[Action] = {
-    if (retval isDefined) current += by
-    retval
-  }
-
-  private var current: Int = -1
-  private val timeline: ArrayBuffer[Action] = ArrayBuffer()
+  def reverseIterator: Iterator[Action] =
+    future.reverseIterator ++ past.iterator
 }

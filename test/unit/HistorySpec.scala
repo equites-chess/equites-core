@@ -21,7 +21,7 @@ import org.specs2.mutable._
 class HistorySpec extends Specification {
   "class History" should {
     "correctly record actions" in {
-      val hist = new History
+      var hist = new History
       val move1 = Move(new Pawn(White), Square(0, 0), Square(0, 1))
       val move2 = Move(new Pawn(White), Square(1, 0), Square(1, 1))
       val move3 = Move(new Pawn(White), Square(2, 0), Square(2, 1))
@@ -30,63 +30,77 @@ class HistorySpec extends Specification {
       hist.hasNext must_== false
       hist.prev    must_== None
       hist.next    must_== None
+      hist.past    must_== List()
+      hist.future  must_== List()
 
-      hist.record(move1)
+      hist = hist.record(move1)
       hist.hasPrev must_== true
       hist.hasNext must_== false
       hist.prev    must_== Some(move1)
       hist.next    must_== None
+      hist.past    must_== List(move1)
+      hist.future  must_== List()
 
-      hist.record(move2)
+      hist = hist.record(move2)
       hist.hasPrev must_== true
       hist.hasNext must_== false
       hist.prev    must_== Some(move2)
       hist.next    must_== None
+      hist.past    must_== List(move2, move1)
+      hist.future  must_== List()
 
-      hist.backward() must_== Some(move2)
-      hist.hasPrev    must_== true
-      hist.hasNext    must_== true
-      hist.prev       must_== Some(move1)
-      hist.next       must_== Some(move2)
+      hist = hist.backward
+      hist.hasPrev must_== true
+      hist.hasNext must_== true
+      hist.prev    must_== Some(move1)
+      hist.next    must_== Some(move2)
+      hist.past    must_== List(move1)
+      hist.future  must_== List(move2)
 
-      hist.backward() must_== Some(move1)
-      hist.hasPrev    must_== false
-      hist.hasNext    must_== true
-      hist.prev       must_== None
-      hist.next       must_== Some(move1)
+      hist = hist.backward
+      hist.hasPrev must_== false
+      hist.hasNext must_== true
+      hist.prev    must_== None
+      hist.next    must_== Some(move1)
+      hist.past    must_== List()
+      hist.future  must_== List(move1, move2)
 
-      hist.forward() must_== Some(move1)
-      hist.hasPrev   must_== true
-      hist.hasNext   must_== true
-      hist.prev      must_== Some(move1)
-      hist.next      must_== Some(move2)
+      hist = hist.forward
+      hist.hasPrev must_== true
+      hist.hasNext must_== true
+      hist.prev    must_== Some(move1)
+      hist.next    must_== Some(move2)
+      hist.past    must_== List(move1)
+      hist.future  must_== List(move2)
 
-      hist.record(move3)
+      hist = hist.record(move3)
       hist.hasPrev must_== true
       hist.hasNext must_== false
       hist.prev    must_== Some(move3)
       hist.next    must_== None
+      hist.past    must_== List(move3, move1)
+      hist.future  must_== List()
 
-      hist.backward() must_== Some(move3)
-      hist.hasPrev    must_== true
-      hist.hasNext    must_== true
-      hist.prev       must_== Some(move1)
-      hist.next       must_== Some(move3)
+      hist = hist.backward
+      hist.hasPrev must_== true
+      hist.hasNext must_== true
+      hist.prev    must_== Some(move1)
+      hist.next    must_== Some(move3)
+      hist.past    must_== List(move1)
+      hist.future  must_== List(move3)
 
-      hist.backward() must_== Some(move1)
-      hist.backward() must_== None
-      hist.backward() must_== None
-
-      hist.forward() must_== Some(move1)
-      hist.forward() must_== Some(move3)
-      hist.forward() must_== None
-      hist.forward() must_== None
-
-      hist.clear()
-      hist.hasPrev must_== false
-      hist.hasNext must_== false
+      hist = hist.backward
+      hist = hist.backward
       hist.prev    must_== None
+      hist.past    must_== List()
+      hist.future  must_== List(move1, move3)
+
+      hist = hist.forward
+      hist = hist.forward
+      hist = hist.forward
       hist.next    must_== None
+      hist.past    must_== List(move3, move1)
+      hist.future  must_== List()
     }
   }
 }
