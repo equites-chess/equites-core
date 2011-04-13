@@ -17,14 +17,28 @@
 package equites
 
 import scala.collection._
+import scala.collection.generic.{CanBuildFrom, SeqForwarder}
+import scala.collection.mutable.{Builder, ListBuffer}
 
-object Directions {
+trait DirectionsFactory {
   def apply(vectors: Vector*): Directions =
     new Directions(vectors.toList)
 
   def apply(vectors: TraversableOnce[Vector]): Directions =
     new Directions(vectors.toList)
 
+  def newBuilder: Builder[Vector, Directions] =
+    new ListBuffer[Vector].mapResult(new Directions(_))
+
+  implicit def canBuildFrom: CanBuildFrom[Directions, Vector, Directions] = {
+    new CanBuildFrom[Directions, Vector, Directions] {
+      def apply(from: Directions) = newBuilder
+      def apply() = newBuilder
+    }
+  }
+}
+
+object Directions extends DirectionsFactory {
   val front = Directions(Vector( 0,  1)) // ↑
   val right = Directions(Vector( 1,  0)) // →
   val back  = Directions(Vector( 0, -1)) // ↓
@@ -55,9 +69,11 @@ object Directions {
 }
 
 class Directions(vectors: List[Vector])
-  extends immutable.LinearSeq[Vector] with generic.SeqForwarder[Vector] {
+  extends immutable.LinearSeq[Vector]
+     with LinearSeqLike[Vector, Directions]
+     with SeqForwarder[Vector] {
 
-  def inverse: Directions = Directions(map(_ * -1))
+  def inverse: Directions = map(_ * -1)
 
   def inverseIfBlack(color: Color): Directions =
     if (color == Black) inverse else this
@@ -67,5 +83,6 @@ class Directions(vectors: List[Vector])
     case _ => false
   }
 
-  protected override def underlying: List[Vector] = vectors
+  override def newBuilder = Directions.newBuilder
+  protected override def underlying = vectors
 }
