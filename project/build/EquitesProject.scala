@@ -13,7 +13,7 @@ class EquitesProject(info: ProjectInfo) extends DefaultProject(info) {
   val scalazCore = "com.googlecode.scalaz" %% "scalaz-core" % "5.1-SNAPSHOT"
 
   // specs2
-  val specs2 = "org.specs2" %% "specs2" % "1.0.1+"
+  val specs2 = "org.specs2" %% "specs2" % "1.1+"
 
   def specs2Framework = new TestFramework("org.specs2.runner.SpecsFramework")
   override def testFrameworks: Seq[TestFramework]
