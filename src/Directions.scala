@@ -20,7 +20,7 @@ import scala.collection._
 import scala.collection.generic.{CanBuildFrom, SeqForwarder}
 import scala.collection.mutable.{Builder, ListBuffer}
 
-trait DirectionsFactory {
+object Directions {
   def apply(vectors: Vector*): Directions =
     new Directions(vectors.toList)
 
@@ -36,9 +36,7 @@ trait DirectionsFactory {
       def apply() = newBuilder
     }
   }
-}
 
-object Directions extends DirectionsFactory {
   val front = Directions(Vector( 0,  1)) // ↑
   val right = Directions(Vector( 1,  0)) // →
   val back  = Directions(Vector( 0, -1)) // ↓
@@ -68,10 +66,12 @@ object Directions extends DirectionsFactory {
   })
 }
 
-class Directions(vectors: List[Vector])
+class Directions(protected val underlying: List[Vector])
   extends immutable.LinearSeq[Vector]
      with LinearSeqLike[Vector, Directions]
      with SeqForwarder[Vector] {
+
+  override def newBuilder = Directions.newBuilder
 
   def inverse: Directions = map(_ * -1)
 
@@ -82,7 +82,4 @@ class Directions(vectors: List[Vector])
     case other: Directions => filterNot(other.contains).isEmpty
     case _ => false
   }
-
-  override def newBuilder = Directions.newBuilder
-  protected override def underlying = vectors
 }
