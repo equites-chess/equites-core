@@ -26,8 +26,11 @@ class History private (val past: List[Action], val future: List[Action])
   def hasPrev: Boolean = past   nonEmpty
   def hasNext: Boolean = future nonEmpty
 
-  def prev: Option[Action] = past   headOption
-  def next: Option[Action] = future headOption
+  def prev: Action = past   head
+  def next: Action = future head
+
+  def prevOption: Option[Action] = past   headOption
+  def nextOption: Option[Action] = future headOption
 
   def backward: History = {
     if (past isEmpty) this

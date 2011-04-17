@@ -20,87 +20,84 @@ import org.specs2.mutable._
 
 class HistorySpec extends Specification {
   "class History" should {
+    val pawn = new Pawn(White)
+    val move1 = Move(pawn, Square(0, 0), Square(0, 1))
+    val move2 = Move(pawn, Square(0, 1), Square(0, 2))
+    val move3 = Move(pawn, Square(0, 2), Square(0, 3))
+
     "correctly record actions" in {
       var hist = new History
-      val move1 = Move(new Pawn(White), Square(0, 0), Square(0, 1))
-      val move2 = Move(new Pawn(White), Square(1, 0), Square(1, 1))
-      val move3 = Move(new Pawn(White), Square(2, 0), Square(2, 1))
-
-      hist.hasPrev must_== false
-      hist.hasNext must_== false
-      hist.prev    must_== None
-      hist.next    must_== None
-      hist.past    must_== List()
-      hist.future  must_== List()
+      hist.prevOption must_== None
+      hist.nextOption must_== None
 
       hist = hist.record(move1)
-      hist.hasPrev must_== true
-      hist.hasNext must_== false
-      hist.prev    must_== Some(move1)
-      hist.next    must_== None
-      hist.past    must_== List(move1)
-      hist.future  must_== List()
+      hist.prevOption must_== Some(move1)
+      hist.nextOption must_== None
 
       hist = hist.record(move2)
-      hist.hasPrev must_== true
-      hist.hasNext must_== false
-      hist.prev    must_== Some(move2)
-      hist.next    must_== None
-      hist.past    must_== List(move2, move1)
-      hist.future  must_== List()
-
-      hist = hist.backward
-      hist.hasPrev must_== true
-      hist.hasNext must_== true
-      hist.prev    must_== Some(move1)
-      hist.next    must_== Some(move2)
-      hist.past    must_== List(move1)
-      hist.future  must_== List(move2)
-
-      hist = hist.backward
-      hist.hasPrev must_== false
-      hist.hasNext must_== true
-      hist.prev    must_== None
-      hist.next    must_== Some(move1)
-      hist.past    must_== List()
-      hist.future  must_== List(move1, move2)
-
-      hist = hist.forward
-      hist.hasPrev must_== true
-      hist.hasNext must_== true
-      hist.prev    must_== Some(move1)
-      hist.next    must_== Some(move2)
-      hist.past    must_== List(move1)
-      hist.future  must_== List(move2)
+      hist.prevOption must_== Some(move2)
+      hist.nextOption must_== None
 
       hist = hist.record(move3)
-      hist.hasPrev must_== true
-      hist.hasNext must_== false
-      hist.prev    must_== Some(move3)
-      hist.next    must_== None
-      hist.past    must_== List(move3, move1)
-      hist.future  must_== List()
+      hist.prevOption must_== Some(move3)
+      hist.nextOption must_== None
+    }
+
+    "correctly move backward" in {
+      var hist = (new History).record(move1).record(move2).record(move3)
+      hist.prevOption must_== Some(move3)
+      hist.nextOption must_== None
 
       hist = hist.backward
-      hist.hasPrev must_== true
-      hist.hasNext must_== true
-      hist.prev    must_== Some(move1)
-      hist.next    must_== Some(move3)
-      hist.past    must_== List(move1)
-      hist.future  must_== List(move3)
+      hist.prevOption must_== Some(move2)
+      hist.nextOption must_== Some(move3)
 
       hist = hist.backward
+      hist.prevOption must_== Some(move1)
+      hist.nextOption must_== Some(move2)
+
       hist = hist.backward
-      hist.prev    must_== None
-      hist.past    must_== List()
-      hist.future  must_== List(move1, move3)
+      hist.prevOption must_== None
+      hist.nextOption must_== Some(move1)
+
+      hist = hist.backward
+      hist.prevOption must_== None
+      hist.nextOption must_== Some(move1)
+    }
+
+    "correctly move forward" in {
+      var hist = (new History).record(move1).record(move2).record(move3)
+        .backward.backward.backward
+      hist.prevOption must_== None
+      hist.nextOption must_== Some(move1)
 
       hist = hist.forward
+      hist.prevOption must_== Some(move1)
+      hist.nextOption must_== Some(move2)
+
       hist = hist.forward
+      hist.prevOption must_== Some(move2)
+      hist.nextOption must_== Some(move3)
+
       hist = hist.forward
-      hist.next    must_== None
-      hist.past    must_== List(move3, move1)
-      hist.future  must_== List()
+      hist.prevOption must_== Some(move3)
+      hist.nextOption must_== None
+
+      hist = hist.forward
+      hist.prevOption must_== Some(move3)
+      hist.nextOption must_== None
+    }
+
+    "correctly record actions in the past" in {
+      var hist = (new History).record(move1).record(move2).record(move3)
+        .backward.backward
+      hist.prevOption must_== Some(move1)
+      hist.nextOption must_== Some(move2)
+
+      hist = hist.record(move3)
+      hist.past       must_== List(move3, move1)
+      hist.prevOption must_== Some(move3)
+      hist.nextOption must_== None
     }
   }
 }
