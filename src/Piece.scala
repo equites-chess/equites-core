@@ -16,17 +16,19 @@
 
 package equites
 
-sealed abstract class Piece(val pieceType: PieceType, val color: Color) {
+sealed abstract class Piece(val color: Color) {
+  def pieceType: PieceType
+
   def isFriendOf  (other: Piece): Boolean = color == other.color
   def isOpponentOf(other: Piece): Boolean = color != other.color
 }
 
-class King  (color: Color) extends Piece(King,   color) // ♔ ♚
-class Queen (color: Color) extends Piece(Queen,  color) // ♕ ♛
-class Rook  (color: Color) extends Piece(Rook,   color) // ♖ ♜
-class Bishop(color: Color) extends Piece(Bishop, color) // ♗ ♝
-class Knight(color: Color) extends Piece(Knight, color) // ♘ ♞
-class Pawn  (color: Color) extends Piece(Pawn,   color) // ♙ ♟
+class King  (color: Color) extends Piece(color) { def pieceType = King   }
+class Queen (color: Color) extends Piece(color) { def pieceType = Queen  }
+class Rook  (color: Color) extends Piece(color) { def pieceType = Rook   }
+class Bishop(color: Color) extends Piece(color) { def pieceType = Bishop }
+class Knight(color: Color) extends Piece(color) { def pieceType = Knight }
+class Pawn  (color: Color) extends Piece(color) { def pieceType = Pawn   }
 
 sealed abstract class PieceType
 
