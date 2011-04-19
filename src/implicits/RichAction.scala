@@ -26,12 +26,12 @@ object RichActionImplicit {
   implicit def actionWrapper(action: Action) = new RichAction(action)
 }
 
-final class RichAction(val action: Action) {
+final class RichAction(val self: Action) extends Proxy {
   def toLongAlgebraic: String = toLongAlgebraic(piece => piece.toAlgebraic)
   def toLongFigurine:  String = toLongAlgebraic(piece => piece.toFigurine)
 
   private def toLongAlgebraic(stringOf: Piece => String): String = {
-    (action match {
+    (self match {
       case p: PromotionLike
         => stringOf(p.piece) + moveToLongAlgebraic + stringOf(p.newPiece)
       case m: MoveLike
@@ -40,7 +40,7 @@ final class RichAction(val action: Action) {
     }) + flagsToAlgebraic
   }
 
-  private def moveToLongAlgebraic: String = action match {
+  private def moveToLongAlgebraic: String = self match {
     case e: EnPassant
       => e.from.toAlgebraic + "x" + e.to.toAlgebraic + "e.p."
     case c: CaptureLike
@@ -52,13 +52,13 @@ final class RichAction(val action: Action) {
   }
 
   private def flagsToAlgebraic: String = {
-    if (action.isChecking)    return "+"
-    if (action.isCheckmating) return "#"
-    if (action.isStalemating) return ""
+    if (self.isChecking)    return "+"
+    if (self.isCheckmating) return "#"
+    if (self.isStalemating) return ""
     ""
   }
 
-  def toNumeric: String = action match {
+  def toNumeric: String = self match {
     case p: PromotionLike
       => p.from.toNumeric + p.to.toNumeric + p.newPiece.toNumeric
     case m: MoveLike

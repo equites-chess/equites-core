@@ -21,8 +21,8 @@ object RichPieceImplicit {
   implicit def pieceWrapper(piece: Piece) = new RichPiece(piece)
 }
 
-final class RichPiece(val piece: Piece) {
-  def toAlgebraic: String = piece.pieceType match {
+final class RichPiece(val self: Piece) extends Proxy {
+  def toAlgebraic: String = self.pieceType match {
     case King   => "K"
     case Queen  => "Q"
     case Rook   => "R"
@@ -32,12 +32,12 @@ final class RichPiece(val piece: Piece) {
   }
 
   def toLetter: String = {
-    val letter = if (piece.pieceType == Pawn) "P" else toAlgebraic
-    if (piece.color == White) letter else letter.toLowerCase
+    val letter = if (self.pieceType == Pawn) "P" else toAlgebraic
+    if (self.color == White) letter else letter.toLowerCase
   }
 
   def toFigurine: String = {
-    val figurine = piece.pieceType match {
+    val figurine = self.pieceType match {
       case King   => ("\u2654", "\u265A") // ♔ ♚
       case Queen  => ("\u2655", "\u265B") // ♕ ♛
       case Rook   => ("\u2656", "\u265C") // ♖ ♜
@@ -45,15 +45,15 @@ final class RichPiece(val piece: Piece) {
       case Knight => ("\u2658", "\u265E") // ♘ ♞
       case Pawn   => ("\u2659", "\u265F") // ♙ ♟
     }
-    if (piece.color == White) figurine._1 else figurine._2
+    if (self.color == White) figurine._1 else figurine._2
   }
 
   def toWikiLetters: String = {
-    val color = if (piece.color == White) "l" else "d"
+    val color = if (self.color == White) "l" else "d"
     toLetter.toLowerCase + color
   }
 
-  def toNumeric: String = piece.pieceType match {
+  def toNumeric: String = self.pieceType match {
     case Queen  => "1"
     case Rook   => "2"
     case Bishop => "3"
