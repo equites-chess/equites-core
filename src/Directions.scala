@@ -17,35 +17,23 @@
 package equites
 
 import scala.collection._
-import scala.collection.generic.{CanBuildFrom, SeqForwarder}
-import scala.collection.mutable.{Builder, ListBuffer}
 
 object Directions {
   def apply(vectors: Vector*): Directions =
-    new Directions(vectors.toList)
+    new Directions(vectors.toSet)
 
   def apply(vectors: TraversableOnce[Vector]): Directions =
-    new Directions(vectors.toList)
-
-  def newBuilder: Builder[Vector, Directions] =
-    new ListBuffer[Vector].mapResult(new Directions(_))
-
-  implicit def canBuildFrom: CanBuildFrom[Directions, Vector, Directions] = {
-    new CanBuildFrom[Directions, Vector, Directions] {
-      def apply(from: Directions) = newBuilder
-      def apply() = newBuilder
-    }
-  }
+    new Directions(vectors.toSet)
 
   val front = Directions(Vector( 0,  1)) // ↑
   val right = Directions(Vector( 1,  0)) // →
   val back  = Directions(Vector( 0, -1)) // ↓
   val left  = Directions(Vector(-1,  0)) // ←
 
-  val frontRight = Directions(front(0) + right(0)) // ↗
-  val backRight  = Directions(back(0)  + right(0)) // ↘
-  val backLeft   = Directions(back(0)  + left(0))  // ↙
-  val frontLeft  = Directions(front(0) + left(0))  // ↖
+  val frontRight = Directions(Vector( 1,  1)) // ↗
+  val backRight  = Directions(Vector( 1, -1)) // ↘
+  val backLeft   = Directions(Vector(-1, -1)) // ↙
+  val frontLeft  = Directions(Vector(-1,  1)) // ↖
 
   val diagonalFront = Directions(frontLeft ++ frontRight) // ↖↗
   val diagonalBack  = Directions( backLeft ++  backRight) // ↙↘
@@ -66,20 +54,11 @@ object Directions {
   })
 }
 
-class Directions(protected val underlying: List[Vector])
-  extends immutable.LinearSeq[Vector]
-     with LinearSeqLike[Vector, Directions]
-     with SeqForwarder[Vector] {
+class Directions private (val self: Set[Vector])
+  extends SetProxy[Vector] {
 
-  override def newBuilder = Directions.newBuilder
-
-  def inverse: Directions = map(_ * -1)
+  def inverse: Directions = Directions(map(_ * -1))
 
   def inverseIfBlack(color: Color): Directions =
     if (color == Black) inverse else this
-
-  override def equals(that: Any): Boolean = that match {
-    case other: Directions => filterNot(other.contains).isEmpty
-    case _ => false
-  }
 }

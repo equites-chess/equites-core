@@ -42,10 +42,10 @@ class DirectionsSpec extends Specification {
       front.inverseIfBlack(Black) must_== back
     }
 
-    "build new collections with the same type" in {
-      anywhere.diff(diagonal) must haveClass[Directions]
-      anywhere.reverse        must haveClass[Directions]
-      anywhere.map(_ * 2)     must haveClass[Directions]
+    "must be comparable to Set[Vector]" in {
+      anywhere equals anywhere.self must_== true
+      anywhere.self equals anywhere must_== true
+      anywhere diff diagonal must_== straight
     }
   }
 }
