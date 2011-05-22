@@ -60,4 +60,13 @@ final class RichPiece(val self: Piece) extends Proxy {
     case Knight => "4"
     case _ => ""
   }
+
+  def centipawns: Int = self.pieceType match {
+    case King   => 100000000
+    case Queen  => 900
+    case Rook   => 500
+    case Bishop => 300
+    case Knight => 300
+    case Pawn   => 100
+  }
 }
