@@ -19,9 +19,7 @@ package equites
 import scala.collection._
 
 object Directions {
-  def apply(vectors: Vector*): Directions =
-    new Directions(vectors.toSet)
-
+  def apply(vectors: Vector*): Directions = apply(vectors)
   def apply(vectors: TraversableOnce[Vector]): Directions =
     new Directions(vectors.toSet)
 
