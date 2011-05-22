@@ -23,7 +23,8 @@ import RichPieceImplicit._
 import utils.Notation
 
 object RichActionImplicit {
-  implicit def actionWrapper(action: Action) = new RichAction(action)
+  implicit def   wrapAction(action: Action) = new RichAction(action)
+  implicit def unwrapAction(action: RichAction) = action.self
 }
 
 final class RichAction(val self: Action) extends Proxy {

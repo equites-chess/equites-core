@@ -20,17 +20,18 @@ package implicits
 import utils.Notation
 
 object RichSquareImplicit {
-  implicit def squareWrapper(square: Square) = new RichSquare(square)
+  implicit def   wrapSquare(square: Square) = new RichSquare(square)
+  implicit def unwrapSquare(square: RichSquare) = square.self
 }
 
-final class RichSquare(val square: Square) {
+final class RichSquare(val self: Square) extends Proxy {
   def toAlgebraic: String = {
-    Notation.algebraicFileRange(square.file).toString +
-    Notation.algebraicRankRange(square.rank).toString
+    Notation.algebraicFileRange(self.file).toString +
+    Notation.algebraicRankRange(self.rank).toString
   }
 
   def toNumeric: String = {
-    Notation.numericFileRange(square.file).toString +
-    Notation.numericRankRange(square.rank).toString
+    Notation.numericFileRange(self.file).toString +
+    Notation.numericRankRange(self.rank).toString
   }
 }

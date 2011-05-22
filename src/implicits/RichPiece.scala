@@ -18,7 +18,8 @@ package equites
 package implicits
 
 object RichPieceImplicit {
-  implicit def pieceWrapper(piece: Piece) = new RichPiece(piece)
+  implicit def   wrapPiece(piece: Piece) = new RichPiece(piece)
+  implicit def unwrapPiece(piece: RichPiece) = piece.self
 }
 
 final class RichPiece(val self: Piece) extends Proxy {
