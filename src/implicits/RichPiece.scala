@@ -37,16 +37,19 @@ final class RichPiece(val self: Piece) extends Proxy {
     if (self.color == White) letter else letter.toLowerCase
   }
 
-  def toFigurine: String = {
-    val figurine = self.pieceType match {
-      case King   => ("\u2654", "\u265A") // ♔ ♚
-      case Queen  => ("\u2655", "\u265B") // ♕ ♛
-      case Rook   => ("\u2656", "\u265C") // ♖ ♜
-      case Bishop => ("\u2657", "\u265D") // ♗ ♝
-      case Knight => ("\u2658", "\u265E") // ♘ ♞
-      case Pawn   => ("\u2659", "\u265F") // ♙ ♟
-    }
-    if (self.color == White) figurine._1 else figurine._2
+  def toFigurine: String = (self.color, self.pieceType) match {
+    case (White, King)   => "\u2654" // ♔
+    case (White, Queen)  => "\u2655" // ♕
+    case (White, Rook)   => "\u2656" // ♖
+    case (White, Bishop) => "\u2657" // ♗
+    case (White, Knight) => "\u2658" // ♘
+    case (White, Pawn)   => "\u2659" // ♙
+    case (Black, King)   => "\u265A" // ♚
+    case (Black, Queen)  => "\u265B" // ♛
+    case (Black, Rook)   => "\u265C" // ♜
+    case (Black, Bishop) => "\u265D" // ♝
+    case (Black, Knight) => "\u265E" // ♞
+    case (Black, Pawn)   => "\u265F" // ♟
   }
 
   def toWikiLetters: String = {
