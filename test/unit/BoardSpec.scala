@@ -88,5 +88,25 @@ class BoardSpec extends Specification {
       board.contains(piece1) must_== false
       board.isEmpty          must_== true
     }
+
+    "correctly perform/reverse moves" in {
+      val board = new Board
+      val piece = new Pawn(White)
+      val from = Square(0, 0)
+      val to   = Square(1, 0)
+      val move = Move(piece, from, to)
+
+      board.putPiece(from, piece)
+      board.occupiedBy(from, piece) must_== true
+      board.occupied(to)            must_== false
+
+      board.processAction(move)
+      board.occupied(from)          must_== false
+      board.occupiedBy(to, piece)   must_== true
+
+      board.reverseAction(move)
+      board.occupiedBy(from, piece) must_== true
+      board.occupied(to)            must_== false
+    }
   }
 }

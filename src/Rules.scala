@@ -108,6 +108,7 @@ object Rules {
   def rankBy(rank: Int, color: Color): Int =
     if (color == White) rank else rankRange.end - rank
 
+  // better use an iterator
   def squaresInDirection(from: Square, direction: Vector,
     maxDist: Int = maxLength): Stream[Square] = {
 
@@ -120,13 +121,46 @@ object Rules {
 }
 
 class Rules(board: Board) {
-  def takeUntilOccupied(fields: Stream[Field], color: Color): List[Field] = {
-    val occupied = fields.findIndexOf(board.occupied)
+
+/*
+  def takeUntilOccupied(squares: Stream[Square], color: Color): List[Square] = {
+    val occupied = squares.findIndexOf(board.occupied)
     if (occupied == -1)
-      fields.toList
+      squares.toList
     else {
-      val offset = if (board.opponentAt(fields(occupied), color)) 1 else 0
-      fields.take(occupied + offset).toList
+      val offset = if (board.opponentAt(squares(occupied), color)) 1 else 0
+      squares.take(occupied + offset).toList
     }
   }
+*/
+  def possibleEnPassants(pawn: Pawn, at: Square): List[EnPassant] = {
+    //if (rankBy(at.rank, pawn.color) != 4) Nil
+
+    // schaue auf file +- 1 ob dort ein bauer steht,
+    // wenn nein -> Nil
+    // wenn ja ..
+   // schaue in die history ob der pawn der letzte bewegte stein ist!!!
+    Nil
+  }
+
+/*
+  def possibleCastlings(king: King, at: Square): List[Action] = {
+    if (board.hasMoved(king)) Nil
+  
+    List()
+  }
+
+datenstruktur für piece auf dem Board: Pair[Piece, Square]
+
+Rules sollte davon ausgehen, dass alle informationen über das board korrekt
+sind. d.h. es sollten keine sanity checks auf dieser ebene durchgeführt werden
+*/
+
+  //def possibleActions(pawn: Pawn, at: Square)
+  //def possibleActions(king: King, at: Square)
+
+//def possibleCastlings
+// def possiblePromotions
+// de possibleEnPassants
+// achte auf züge, die den könig matt setzen
 }
