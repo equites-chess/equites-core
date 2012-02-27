@@ -12,7 +12,7 @@ Building
 
 The build tool `sbt`_ is used to build Equites.
 
-.. _sbt: http://code.google.com/p/simple-build-tool/
+.. _sbt: https://github.com/harrah/xsbt
 
 Download
 --------
