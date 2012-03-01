@@ -1,5 +1,5 @@
 // Equites, a simple chess interface
-// Copyright © 2011 Frank S. Thomas <f.thomas@gmx.de>
+// Copyright © 2011-2012 Frank S. Thomas <f.thomas@gmx.de>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -71,6 +71,13 @@ class SquareSpec extends Specification {
 
       Square(0, 0) - Vector(1, 1) must throwAn[IllegalArgumentException]
       Square(7, 7) + Vector(1, 1) must throwAn[IllegalArgumentException]
+    }
+
+    "correctly perform +(Square)" in {
+      Square(1, 1) + Square(1, 1) must_== Vector(2, 2)
+      Square(2, 2) + Square(1, 1) must_== Vector(3, 3)
+      Square(2, 1) + Square(0, 0) must_== Vector(2, 1)
+      Square(0, 0) + Square(3, 4) must_== Vector(3, 4)
     }
 
     "correctly perform -(Square)" in {

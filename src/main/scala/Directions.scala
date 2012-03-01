@@ -1,5 +1,5 @@
 // Equites, a simple chess interface
-// Copyright © 2011 Frank S. Thomas <f.thomas@gmx.de>
+// Copyright © 2011-2012 Frank S. Thomas <f.thomas@gmx.de>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -56,6 +56,9 @@ class Directions private (val self: Set[Vector])
   extends SetProxy[Vector] {
 
   def inverse: Directions = Directions(map(_ * -1))
+
+  def inverseIfWhite(color: Color): Directions =
+    if (color == White) inverse else this
 
   def inverseIfBlack(color: Color): Directions =
     if (color == Black) inverse else this

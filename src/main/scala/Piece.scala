@@ -19,7 +19,7 @@ package equites
 sealed abstract class Piece(val color: Color) {
   def pieceType: PieceType
 
-  def isFriendOf  (other: Piece): Boolean = color == other.color
+  def isFriendOf(other: Piece): Boolean = color == other.color
   def isOpponentOf(other: Piece): Boolean = color != other.color
 }
 

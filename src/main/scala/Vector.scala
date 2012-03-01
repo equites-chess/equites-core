@@ -1,5 +1,5 @@
 // Equites, a simple chess interface
-// Copyright © 2011 Frank S. Thomas <f.thomas@gmx.de>
+// Copyright © 2011-2012 Frank S. Thomas <f.thomas@gmx.de>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ case class Vector(file: Int, rank: Int) {
   def *(n: Int): Vector = map(_ * n)
   def /(n: Int): Vector = map(_ / n)
 
-  def max: Int = if (file > rank) file else rank
-  def min: Int = if (file < rank) file else rank
+  def max: Int = math.max(file, rank)
+  def min: Int = math.min(file, rank)
   def sum: Int = file + rank
 }

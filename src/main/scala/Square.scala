@@ -1,5 +1,5 @@
 // Equites, a simple chess interface
-// Copyright © 2011 Frank S. Thomas <f.thomas@gmx.de>
+// Copyright © 2011-2012 Frank S. Thomas <f.thomas@gmx.de>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -36,8 +36,10 @@ case class Square(file: Int, rank: Int) {
 
   def +(vec: Vector): Square = Square(file + vec.file, rank + vec.rank)
   def -(vec: Vector): Square = Square(file - vec.file, rank - vec.rank)
+
+  def +(that: Square): Vector = Vector(file + that.file, rank + that.rank)
   def -(that: Square): Vector = Vector(file - that.file, rank - that.rank)
 
   def isLight: Boolean = isOdd(file + rank)
-  def isDark:  Boolean = isEven(file + rank)
+  def isDark: Boolean = isEven(file + rank)
 }

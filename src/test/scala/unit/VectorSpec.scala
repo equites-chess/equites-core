@@ -1,5 +1,5 @@
 // Equites, a simple chess interface
-// Copyright © 2011 Frank S. Thomas <f.thomas@gmx.de>
+// Copyright © 2011-2012 Frank S. Thomas <f.thomas@gmx.de>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -55,6 +55,7 @@ class VectorSpec extends Specification {
       Vector(1, -2).sum must_== -1
 
       val v1 = Vector(1, -2)
+      v1.file + v1.rank must_== v1.sum
       v1.max + v1.min must_== v1.sum
     }
   }

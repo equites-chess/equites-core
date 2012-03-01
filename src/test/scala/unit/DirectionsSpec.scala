@@ -1,5 +1,5 @@
 // Equites, a simple chess interface
-// Copyright © 2011 Frank S. Thomas <f.thomas@gmx.de>
+// Copyright © 2011-2012 Frank S. Thomas <f.thomas@gmx.de>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -35,6 +35,11 @@ class DirectionsSpec extends Specification {
       diagonal.inverse   must_== diagonal
       anywhere.inverse   must_== anywhere
       knightLike.inverse must_== knightLike
+    }
+
+    "correctly perform inverseIfWhite" in {
+      front.inverseIfWhite(White) must_== back
+      front.inverseIfWhite(Black) must_== front
     }
 
     "correctly perform inverseIfBlack" in {
