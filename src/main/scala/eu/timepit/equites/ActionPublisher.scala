@@ -19,6 +19,6 @@ package eu.timepit.equites
 trait ActionPublisher
 
 trait ActionListener {
-  def processAction(action: Action) {}
-  def reverseAction(action: Action) {}
+  //def processAction(action: Action) {}
+  //def reverseAction(action: Action) {}
 }

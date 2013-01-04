@@ -51,13 +51,14 @@ final class RichAction(val self: Action) extends Proxy {
     case c: CastlingShort => "0-0"
     case c: CastlingLong  => "0-0-0"
   }*/
-
+/*
   private def flagsToAlgebraic: String = {
     if (self.isChecking)    return "+"
     if (self.isCheckmating) return "#"
     if (self.isStalemating) return ""
     ""
   }
+  */
 /*
   def toNumeric: String = self match {
     case p: PromotionLike

@@ -17,18 +17,20 @@
 package eu.timepit.equites
 package utils
 
+import scala.collection.immutable.NumericRange
+
 object Notation {
-  val algebraicFileRange =
+  val algebraicFileRange: NumericRange[Char] =
     (Rules.fileRange.start + 'a').toChar to
     (Rules.fileRange.end   + 'a').toChar
 
-  val algebraicRankRange =
+  val algebraicRankRange: Range =
     (Rules.rankRange.start + 1) to
     (Rules.rankRange.end   + 1)
 
-  val numericFileRange =
+  val numericFileRange: Range =
     (Rules.fileRange.start + 1) to
     (Rules.fileRange.end   + 1)
 
-  def numericRankRange = algebraicRankRange
+  def numericRankRange: Range = algebraicRankRange
 }

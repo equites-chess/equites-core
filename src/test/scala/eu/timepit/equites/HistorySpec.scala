@@ -18,6 +18,7 @@ package eu.timepit.equites
 
 import org.specs2.mutable._
 
+/*
 class HistorySpec extends Specification {
   "class History" should {
     val pawn = new Pawn(White)
@@ -101,3 +102,4 @@ class HistorySpec extends Specification {
     }
   }
 }
+*/

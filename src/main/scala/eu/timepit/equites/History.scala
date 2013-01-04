@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+/*
 package eu.timepit.equites
 
 import scala.collection._
@@ -50,3 +51,4 @@ class History private (val past: List[Action], val future: List[Action])
   def reverseIterator: Iterator[Action] =
     future.reverseIterator ++ past.iterator
 }
+*/

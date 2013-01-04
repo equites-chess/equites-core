@@ -1,5 +1,5 @@
 // Equites, a simple chess interface
-// Copyright © 2011 Frank S. Thomas <f.thomas@gmx.de>
+// Copyright © 2011, 2013 Frank S. Thomas <f.thomas@gmx.de>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,71 +16,73 @@
 
 package eu.timepit.equites
 
-sealed abstract class Action {
-  var isChecking = false
-  var isCheckmating = false
-  var isStalemating = false
-}
+sealed trait Action
 
-trait MoveLike extends Action {
+sealed trait MoveLike extends Action {
   def piece: Piece
   def from: Square
   def to: Square
 
   def diff: Vec = to - from
-  def l1Dist: Int = Square.l1Dist(from, to)
-  def lInfDist: Int = Square.lInfDist(from, to)
+  def l1Length: Int = diff.l1Length
+  def lInfLength: Int = diff.lInfLength
 }
 
-trait CaptureLike extends MoveLike {
+sealed trait CaptureLike extends MoveLike {
   require(piece isOpponentOf captured)
 
   def captured: Piece
   def capturedOn: Square = to
 }
 
-trait PromotionLike extends MoveLike {
+sealed trait PromotionLike extends MoveLike {
+  require(piece isFriendOf promotedTo)
+
   def piece: Pawn
-  var newPiece: Piece = new Queen(piece.color)
+  def promotedTo: Piece
 }
 
 case class Move(piece: Piece, from: Square, to: Square)
   extends MoveLike
 
-case class Promotion(piece: Pawn, from: Square, to: Square)
+case class Promotion(piece: Pawn, from: Square, to: Square, promotedTo: Piece)
   extends PromotionLike
 
 case class Capture(piece: Piece, from: Square, to: Square, captured: Piece)
   extends CaptureLike
 
 case class CaptureAndPromotion(piece: Pawn, from: Square, to: Square,
-  captured: Piece)
+  captured: Piece, promotedTo: Piece)
   extends CaptureLike with PromotionLike
 
-case class EnPassant(piece: Pawn, from: Square, to: Square,
-  captured: Pawn, override val capturedOn: Square)
+case class EnPassant(piece: Pawn, from: Square, to: Square, captured: Pawn,
+  override val capturedOn: Square)
   extends CaptureLike
 
-
-sealed abstract class Side
+sealed trait Side
 case object Kingside  extends Side
 case object Queenside extends Side
-/*
-sealed abstract class Castling(side: Side) extends Action {
-  require(king isFriendOf rook)
 
-  def king: King
-  def rook: Rook
+sealed trait Castling extends Action {
+  def color: Color
+  def side: Side
 
-  val kingMove: Move = constructMove(king)
-  val rookMove: Move = constructMove(rook)
+  def king = King(color)
+  def rook = Rook(color)
 
-  private def constructMove(piece: Piece): Move = {
-    val (from, to) =
-      Rules.castlingSquares((side, piece.color, piece.pieceType))
+  def kingMove: Move = moveOf(king)
+  def rookMove: Move = moveOf(rook)
+
+  private def moveOf(piece: Piece): Move = {
+    val (from, to) = Rules.castlingSquares((side, piece))
     Move(piece, from, to)
   }
-}*/
+}
 
-//case class CastlingShort(king: King, rook: Rook) extends Castling(Kingside)
-//case class CastlingLong (king: King, rook: Rook) extends Castling(Queenside)
+case class CastlingShort(color: Color) extends Castling {
+  def side = Kingside
+}
+
+case class CastlingLong(color: Color) extends Castling {
+  def side = Queenside
+}

@@ -18,6 +18,7 @@ package eu.timepit.equites
 
 import scala.collection._
 
+/*
 class Stats private (val self: List[Action]) extends SeqProxy[Action] {
   def this() = this(Nil)
 
@@ -28,6 +29,7 @@ class Stats private (val self: List[Action]) extends SeqProxy[Action] {
 
 // collectMoves: List[Moves]
 }
+*/
 
 /*
 class StatsMap private (val self: Map[Piece, Stats])

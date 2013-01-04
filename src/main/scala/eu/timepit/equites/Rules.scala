@@ -54,32 +54,34 @@ object Rules {
       White -> startingSquaresFor(White),
       Black -> startingSquaresFor(Black))
   }
+  */
 
-  val castlingSquares: Map[(Side, Color, PieceType), (Square, Square)] = {
-    def castlingSquaresFor(side: Side, color: Color, pieceType: PieceType):
-      (Square, Square) = {
 
-      val rank = backRankBy(color)
-      val rookFile    = if (side == Kingside) rookFiles(1) else rookFiles(0)
-      val leftOrRight = if (side == Kingside) 1 else -1
-
-      pieceType match {
-        case King =>
-          (Square(kingFile, rank), Square(kingFile + 2 * leftOrRight, rank))
-        case Rook =>
-          (Square(rookFile, rank), Square(kingFile + 1 * leftOrRight, rank))
+  val castlingSquares: Map[(Side, Piece), (Square, Square)] = {
+    def castlingSquaresFor(side: Side, piece: Piece): (Square, Square) = {
+      val rookFile = if (side == Kingside) rookFiles(1) else rookFiles(0)
+      val (fromFile, pieceOffset) = piece match {
+        case King(_) => (kingFile, 2)
+        case Rook(_) => (rookFile, 1)
         case _ => throw new IllegalArgumentException
       }
+
+      val leftOrRight = if (side == Kingside) 1 else -1
+      val toFile = kingFile + pieceOffset * leftOrRight
+      val rank = backRankBy(piece.color)
+
+      (Square(fromFile, rank), Square(toFile, rank))
     }
 
     val mappings = for {
       side  <- List(Kingside, Queenside)
       color <- List(White, Black)
-      piece <- List(King, Rook)
-    } yield (side, color, piece) -> castlingSquaresFor(side, color, piece)
-    Map[(Side, Color, PieceType), (Square, Square)]() ++ mappings
+      piece <- List(King(color), Rook(color))
+    } yield (side, piece) -> castlingSquaresFor(side, piece)
+    mappings.toMap
   }
 
+  /*
   def startingPositions(color: Color): Map[Square, Piece] = {
     def embattlePieces(pieceType: PieceType, newPiece: => Piece):
       List[(Square, Piece)] = {
@@ -98,6 +100,7 @@ object Rules {
 
   def startingPositions: Map[Square, Piece] =
     startingPositions(White) ++ startingPositions(Black)
+*/
 
   def backRankBy(color: Color): Int =
     if (color == White) rankRange.start else rankRange.end
@@ -105,6 +108,7 @@ object Rules {
   def pawnRankBy(color: Color): Int =
     if (color == White) rankRange.start + 1 else rankRange.end - 1
 
+/*
   def rankBy(rank: Int, color: Color): Int =
     if (color == White) rank else rankRange.end - rank
 
