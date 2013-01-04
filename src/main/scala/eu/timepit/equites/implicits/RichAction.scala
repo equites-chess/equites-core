@@ -1,5 +1,5 @@
 // Equites, a simple chess interface
-// Copyright © 2011 Frank S. Thomas <f.thomas@gmx.de>
+// Copyright © 2011, 2013 Frank S. Thomas <f.thomas@gmx.de>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,55 +17,42 @@
 package eu.timepit.equites
 package implicits
 
-import RichActionImplicit._
-import RichSquareImplicit._
 import RichPieceImplicit._
-import utils.Notation
+import RichSquareImplicit._
 
 object RichActionImplicit {
-  implicit def   wrapAction(action: Action) = new RichAction(action)
-  implicit def unwrapAction(action: RichAction) = action.self
-}
+  implicit final class RichAction(val self: Action) extends AnyVal {
+    def toLongAlgebraic: String = toLongAlgebraicImpl(_.toAlgebraic)
+    def toLongFigurine:  String = toLongAlgebraicImpl(_.toFigurine)
 
-final class RichAction(val self: Action) extends Proxy {
-/*  def toLongAlgebraic: String = toLongAlgebraic(piece => piece.toAlgebraic)
-  def toLongFigurine:  String = toLongAlgebraic(piece => piece.toFigurine)
+    private def toLongAlgebraicImpl(stringOf: Piece => String): String = {
+      self match {
+        case p: PromotionLike
+          => stringOf(p.piece) + moveToLongAlgebraic + stringOf(p.promotedTo)
+        case m: MoveLike
+          => stringOf(m.piece) + moveToLongAlgebraic
+        case _ => moveToLongAlgebraic
+      }
+    }
 
-  private def toLongAlgebraic(stringOf: Piece => String): String = {
-    (self match {
-      case p: PromotionLike
-        => stringOf(p.piece) + moveToLongAlgebraic + stringOf(p.newPiece)
+    private def moveToLongAlgebraic: String = self match {
+      case e: EnPassant
+        => e.from.toAlgebraic + "x" + e.to.toAlgebraic + "e.p."
+      case c: CaptureLike
+        => c.from.toAlgebraic + "x" + c.to.toAlgebraic
       case m: MoveLike
-        => stringOf(m.piece) + moveToLongAlgebraic
-      case _ => moveToLongAlgebraic
-    }) + flagsToAlgebraic
-  }*/
-/*
-  private def moveToLongAlgebraic: String = self match {
-    case e: EnPassant
-      => e.from.toAlgebraic + "x" + e.to.toAlgebraic + "e.p."
-    case c: CaptureLike
-      => c.from.toAlgebraic + "x" + c.to.toAlgebraic
-    case m: MoveLike
-      => m.from.toAlgebraic + "-" + m.to.toAlgebraic
-    case c: CastlingShort => "0-0"
-    case c: CastlingLong  => "0-0-0"
-  }*/
-/*
-  private def flagsToAlgebraic: String = {
-    if (self.isChecking)    return "+"
-    if (self.isCheckmating) return "#"
-    if (self.isStalemating) return ""
-    ""
+        => m.from.toAlgebraic + "-" + m.to.toAlgebraic
+      case c: CastlingShort => "0-0"
+      case c: CastlingLong  => "0-0-0"
+    }
+
+    def toNumeric: String = self match {
+      case p: PromotionLike
+        => p.from.toNumeric + p.to.toNumeric + p.promotedTo.toNumeric
+      case m: MoveLike
+        => m.from.toNumeric + m.to.toNumeric
+      case c: Castling
+        => c.kingMove.toNumeric
+    }
   }
-  */
-/*
-  def toNumeric: String = self match {
-    case p: PromotionLike
-      => p.from.toNumeric + p.to.toNumeric + p.newPiece.toNumeric
-    case m: MoveLike
-      => m.from.toNumeric + m.to.toNumeric
-    case c: Castling
-      => c.kingMove.toNumeric
-  }*/
 }
