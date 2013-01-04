@@ -19,7 +19,7 @@ package eu.timepit.equites
 import org.specs2.mutable._
 
 class VecSpec extends Specification {
-  "class Vec" should {
+  "Vec" should {
     "correctly perform map" in {
       Vec( 0,  0).map(_ + 1) must_== Vec(1, 1)
       Vec(-1, -1).map(_.abs) must_== Vec(1, 1)

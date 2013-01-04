@@ -1,5 +1,5 @@
 // Equites, a simple chess interface
-// Copyright © 2011 Frank S. Thomas <f.thomas@gmx.de>
+// Copyright © 2011, 2013 Frank S. Thomas <f.thomas@gmx.de>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,83 +18,83 @@ package eu.timepit.equites
 package implicits
 
 import org.specs2.mutable._
+
 import RichPieceImplicit._
 
 class RichPieceSpec extends Specification {
-  "class RichPiece" should {
+  "RichPiece" should {
     "correctly perform toAlgebraic" in {
-      (new King(White)).toAlgebraic   must_== "K"
-      (new King(Black)).toAlgebraic   must_== "K"
-      (new Queen(White)).toAlgebraic  must_== "Q"
-      (new Queen(Black)).toAlgebraic  must_== "Q"
-      (new Rook(White)).toAlgebraic   must_== "R"
-      (new Rook(Black)).toAlgebraic   must_== "R"
-      (new Bishop(White)).toAlgebraic must_== "B"
-      (new Bishop(Black)).toAlgebraic must_== "B"
-      (new Knight(White)).toAlgebraic must_== "N"
-      (new Knight(Black)).toAlgebraic must_== "N"
-      (new Pawn(White)).toAlgebraic   must_== ""
-      (new Pawn(Black)).toAlgebraic   must_== ""
+      King(White).toAlgebraic   must_== "K"
+      King(Black).toAlgebraic   must_== "K"
+      Queen(White).toAlgebraic  must_== "Q"
+      Queen(Black).toAlgebraic  must_== "Q"
+      Rook(White).toAlgebraic   must_== "R"
+      Rook(Black).toAlgebraic   must_== "R"
+      Bishop(White).toAlgebraic must_== "B"
+      Bishop(Black).toAlgebraic must_== "B"
+      Knight(White).toAlgebraic must_== "N"
+      Knight(Black).toAlgebraic must_== "N"
+      Pawn(White).toAlgebraic   must_== ""
+      Pawn(Black).toAlgebraic   must_== ""
     }
 
     "correctly perform toLetter" in {
-      (new King(White)).toLetter   must_== "K"
-      (new King(Black)).toLetter   must_== "k"
-      (new Queen(White)).toLetter  must_== "Q"
-      (new Queen(Black)).toLetter  must_== "q"
-      (new Rook(White)).toLetter   must_== "R"
-      (new Rook(Black)).toLetter   must_== "r"
-      (new Bishop(White)).toLetter must_== "B"
-      (new Bishop(Black)).toLetter must_== "b"
-      (new Knight(White)).toLetter must_== "N"
-      (new Knight(Black)).toLetter must_== "n"
-      (new Pawn(White)).toLetter   must_== "P"
-      (new Pawn(Black)).toLetter   must_== "p"
+      King(White).toLetter   must_== "K"
+      King(Black).toLetter   must_== "k"
+      Queen(White).toLetter  must_== "Q"
+      Queen(Black).toLetter  must_== "q"
+      Rook(White).toLetter   must_== "R"
+      Rook(Black).toLetter   must_== "r"
+      Bishop(White).toLetter must_== "B"
+      Bishop(Black).toLetter must_== "b"
+      Knight(White).toLetter must_== "N"
+      Knight(Black).toLetter must_== "n"
+      Pawn(White).toLetter   must_== "P"
+      Pawn(Black).toLetter   must_== "p"
     }
 
     "correctly perform toFigurine" in {
-      (new King(White)).toFigurine   must_== "♔"
-      (new King(Black)).toFigurine   must_== "♚"
-      (new Queen(White)).toFigurine  must_== "♕"
-      (new Queen(Black)).toFigurine  must_== "♛"
-      (new Rook(White)).toFigurine   must_== "♖"
-      (new Rook(Black)).toFigurine   must_== "♜"
-      (new Bishop(White)).toFigurine must_== "♗"
-      (new Bishop(Black)).toFigurine must_== "♝"
-      (new Knight(White)).toFigurine must_== "♘"
-      (new Knight(Black)).toFigurine must_== "♞"
-      (new Pawn(White)).toFigurine   must_== "♙"
-      (new Pawn(Black)).toFigurine   must_== "♟"
+      King(White).toFigurine   must_== "♔"
+      King(Black).toFigurine   must_== "♚"
+      Queen(White).toFigurine  must_== "♕"
+      Queen(Black).toFigurine  must_== "♛"
+      Rook(White).toFigurine   must_== "♖"
+      Rook(Black).toFigurine   must_== "♜"
+      Bishop(White).toFigurine must_== "♗"
+      Bishop(Black).toFigurine must_== "♝"
+      Knight(White).toFigurine must_== "♘"
+      Knight(Black).toFigurine must_== "♞"
+      Pawn(Black).toFigurine   must_== "♟"
     }
 
     "correctly perform toWikiLetters" in {
-      (new King(White)).toWikiLetters   must_== "kl"
-      (new King(Black)).toWikiLetters   must_== "kd"
-      (new Queen(White)).toWikiLetters  must_== "ql"
-      (new Queen(Black)).toWikiLetters  must_== "qd"
-      (new Rook(White)).toWikiLetters   must_== "rl"
-      (new Rook(Black)).toWikiLetters   must_== "rd"
-      (new Bishop(White)).toWikiLetters must_== "bl"
-      (new Bishop(Black)).toWikiLetters must_== "bd"
-      (new Knight(White)).toWikiLetters must_== "nl"
-      (new Knight(Black)).toWikiLetters must_== "nd"
-      (new Pawn(White)).toWikiLetters   must_== "pl"
-      (new Pawn(Black)).toWikiLetters   must_== "pd"
+      King(White).toWikiLetters   must_== "kl"
+      King(Black).toWikiLetters   must_== "kd"
+      Queen(White).toWikiLetters  must_== "ql"
+      Queen(Black).toWikiLetters  must_== "qd"
+      Rook(White).toWikiLetters   must_== "rl"
+      Rook(Black).toWikiLetters   must_== "rd"
+      Bishop(White).toWikiLetters must_== "bl"
+      Bishop(Black).toWikiLetters must_== "bd"
+      Knight(White).toWikiLetters must_== "nl"
+      Knight(Black).toWikiLetters must_== "nd"
+      Pawn(White).toWikiLetters   must_== "pl"
+      Pawn(Black).toWikiLetters   must_== "pd"
     }
 
     "correctly perform toNumeric" in {
-      (new King(White)).toNumeric   must_== ""
-      (new King(Black)).toNumeric   must_== ""
-      (new Queen(White)).toNumeric  must_== "1"
-      (new Queen(Black)).toNumeric  must_== "1"
-      (new Rook(White)).toNumeric   must_== "2"
-      (new Rook(Black)).toNumeric   must_== "2"
-      (new Bishop(White)).toNumeric must_== "3"
-      (new Bishop(Black)).toNumeric must_== "3"
-      (new Knight(White)).toNumeric must_== "4"
-      (new Knight(Black)).toNumeric must_== "4"
-      (new Pawn(White)).toNumeric   must_== ""
-      (new Pawn(Black)).toNumeric   must_== ""
+      King(White).toNumeric   must_== ""
+      King(Black).toNumeric   must_== ""
+      Queen(White).toNumeric  must_== "1"
+      Queen(Black).toNumeric  must_== "1"
+      Rook(White).toNumeric   must_== "2"
+      Rook(Black).toNumeric   must_== "2"
+      Bishop(White).toNumeric must_== "3"
+      Bishop(Black).toNumeric must_== "3"
+      Knight(White).toNumeric must_== "4"
+      Knight(Black).toNumeric must_== "4"
+      Pawn(White).toNumeric   must_== ""
+      Pawn(Black).toNumeric   must_== ""
     }
   }
 }
