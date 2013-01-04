@@ -19,37 +19,39 @@ package utils
 
 import org.specs2.mutable._
 
+import Math._
+
 class MathSpec extends Specification {
   "isEven and isOdd" should {
     "be correct for positive numbers" in {
-      Math.isEven(4) must beTrue
-      Math.isOdd(5) must beTrue
+      isEven(4) must beTrue
+      isOdd(5) must beTrue
 
-      Math.isEven(5) must beFalse
-      Math.isOdd(6) must beFalse
+      isEven(5) must beFalse
+      isOdd(6) must beFalse
     }
 
     "be correct for negative numbers" in {
-      Math.isEven(-4) must beTrue
-      Math.isOdd(-5) must beTrue
+      isEven(-4) must beTrue
+      isOdd(-5) must beTrue
 
-      Math.isEven(-5) must beFalse
-      Math.isOdd(-6) must beFalse
+      isEven(-5) must beFalse
+      isOdd(-6) must beFalse
     }
 
     "work with Int" in {
-      Math.isEven(2) must beTrue
-      Math.isOdd(3) must beTrue
+      isEven(2) must beTrue
+      isOdd(3) must beTrue
     }
 
     "work with Long" in {
-      Math.isEven(2: Long) must beTrue
-      Math.isOdd(3: Long) must beTrue
+      isEven(2: Long) must beTrue
+      isOdd(3: Long) must beTrue
     }
 
     "work with BigInt" in {
-      Math.isEven(BigInt(2)) must beTrue
-      Math.isOdd(BigInt(3)) must beTrue
+      isEven(BigInt(2)) must beTrue
+      isOdd(BigInt(3)) must beTrue
     }
   }
 }

@@ -1,5 +1,5 @@
 // Equites, a simple chess interface
-// Copyright © 2011 Frank S. Thomas <f.thomas@gmx.de>
+// Copyright © 2011, 2013 Frank S. Thomas <f.thomas@gmx.de>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -30,7 +30,5 @@ object Notation {
     (Rules.fileRange.start + 1) to
     (Rules.fileRange.end   + 1)
 
-  val numericRankRange =
-    (Rules.rankRange.start + 1) to
-    (Rules.rankRange.end   + 1)
+  def numericRankRange = algebraicRankRange
 }

@@ -24,21 +24,21 @@ object Square {
     Rules.rankRange.contains(rank)
   }
 
-  def validSum(that: Square, vec: Vector): Boolean =
+  def validSum(that: Square, vec: Vec): Boolean =
     validCoordinates(that.file + vec.file, that.rank + vec.rank)
 
-  def l1Dist(p: Square, q: Square): Int = (p - q).map(_.abs).sum
-  def lInfDist(p: Square, q: Square): Int = (p - q).map(_.abs).max
+  def l1Dist(p: Square, q: Square): Int = (p - q).l1Length
+  def lInfDist(p: Square, q: Square): Int = (p - q).lInfLength
 }
 
 case class Square(file: Int, rank: Int) {
   require(Square.validCoordinates(file, rank))
 
-  def +(vec: Vector): Square = Square(file + vec.file, rank + vec.rank)
-  def -(vec: Vector): Square = Square(file - vec.file, rank - vec.rank)
+  def +(vec: Vec): Square = Square(file + vec.file, rank + vec.rank)
+  def -(vec: Vec): Square = Square(file - vec.file, rank - vec.rank)
 
-  def +(that: Square): Vector = Vector(file + that.file, rank + that.rank)
-  def -(that: Square): Vector = Vector(file - that.file, rank - that.rank)
+  def +(that: Square): Vec = Vec(file + that.file, rank + that.rank)
+  def -(that: Square): Vec = Vec(file - that.file, rank - that.rank)
 
   def isLight: Boolean = isOdd(file + rank)
   def isDark: Boolean = isEven(file + rank)

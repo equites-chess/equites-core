@@ -28,12 +28,12 @@ object RichPieceImplicit {
       case Pawn(_)   => ""
     }
 
-    def toUpperCaseLetter: String = self match {
+    private def toUpperCaseLetter: String = self match {
       case Pawn(_) => "P"
       case _ => toAlgebraic
     }
 
-    def toLowerCaseLetter: String = toUpperCaseLetter.toLowerCase
+    private def toLowerCaseLetter: String = toUpperCaseLetter.toLowerCase
 
     def toLetter: String = self.color match {
       case White => toUpperCaseLetter

@@ -27,7 +27,7 @@ trait MoveLike extends Action {
   def from: Square
   def to: Square
 
-  def diff: Vector = to - from
+  def diff: Vec = to - from
   def l1Dist: Int = Square.l1Dist(from, to)
   def lInfDist: Int = Square.lInfDist(from, to)
 }

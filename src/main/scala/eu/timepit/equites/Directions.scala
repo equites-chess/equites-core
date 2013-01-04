@@ -19,19 +19,19 @@ package eu.timepit.equites
 import scala.collection._
 
 object Directions {
-  def apply(vectors: Vector*): Directions = apply(vectors)
-  def apply(vectors: TraversableOnce[Vector]): Directions =
+  def apply(vectors: Vec*): Directions = apply(vectors)
+  def apply(vectors: TraversableOnce[Vec]): Directions =
     new Directions(vectors.toSet)
 
-  val front = Directions(Vector( 0,  1)) // ↑
-  val right = Directions(Vector( 1,  0)) // →
-  val back  = Directions(Vector( 0, -1)) // ↓
-  val left  = Directions(Vector(-1,  0)) // ←
+  val front = Directions(Vec( 0,  1)) // ↑
+  val right = Directions(Vec( 1,  0)) // →
+  val back  = Directions(Vec( 0, -1)) // ↓
+  val left  = Directions(Vec(-1,  0)) // ←
 
-  val frontRight = Directions(Vector( 1,  1)) // ↗
-  val backRight  = Directions(Vector( 1, -1)) // ↘
-  val backLeft   = Directions(Vector(-1, -1)) // ↙
-  val frontLeft  = Directions(Vector(-1,  1)) // ↖
+  val frontRight = Directions(Vec( 1,  1)) // ↗
+  val backRight  = Directions(Vec( 1, -1)) // ↘
+  val backLeft   = Directions(Vec(-1, -1)) // ↙
+  val frontLeft  = Directions(Vec(-1,  1)) // ↖
 
   val diagonalFront = Directions(frontLeft ++ frontRight) // ↖↗
   val diagonalBack  = Directions( backLeft ++  backRight) // ↙↘
@@ -48,12 +48,12 @@ object Directions {
       file <- -2 to 2
       rank <- -2 to 2
       if file.abs + rank.abs == 3
-    } yield Vector(file, rank)
+    } yield Vec(file, rank)
   })
 }
 
-class Directions private (val self: Set[Vector])
-  extends SetProxy[Vector] {
+class Directions private (val self: Set[Vec])
+  extends SetProxy[Vec] {
 
   def inverse: Directions = Directions(map(_ * -1))
 

@@ -1,5 +1,5 @@
 // Equites, a simple chess interface
-// Copyright © 2011-2012 Frank S. Thomas <f.thomas@gmx.de>
+// Copyright © 2011-2013 Frank S. Thomas <f.thomas@gmx.de>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,16 +16,19 @@
 
 package eu.timepit.equites
 
-case class Vector(file: Int, rank: Int) {
-  def map(f: Int => Int): Vector = Vector(f(file), f(rank))
+case class Vec(file: Int, rank: Int) {
+  def map(f: Int => Int): Vec = Vec(f(file), f(rank))
 
-  def +(that: Vector): Vector = Vector(file + that.file, rank + that.rank)
-  def -(that: Vector): Vector = Vector(file - that.file, rank - that.rank)
+  def +(that: Vec): Vec = Vec(file + that.file, rank + that.rank)
+  def -(that: Vec): Vec = Vec(file - that.file, rank - that.rank)
 
-  def *(n: Int): Vector = map(_ * n)
-  def /(n: Int): Vector = map(_ / n)
+  def *(n: Int): Vec = map(_ * n)
+  def /(n: Int): Vec = map(_ / n)
 
   def max: Int = math.max(file, rank)
   def min: Int = math.min(file, rank)
   def sum: Int = file + rank
+
+  def l1Length: Int = map(_.abs).sum
+  def lInfLength: Int = map(_.abs).max
 }
