@@ -1,5 +1,5 @@
 // Equites, a simple chess interface
-// Copyright © 2011-2012 Frank S. Thomas <f.thomas@gmx.de>
+// Copyright © 2011-2013 Frank S. Thomas <f.thomas@gmx.de>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,14 +18,14 @@ package eu.timepit.equites
 
 import org.specs2.mutable._
 
-class VectorSpec extends Specification {
-  "class Vector" should {
+class VecSpec extends Specification {
+  "class Vec" should {
     "correctly perform map" in {
       Vec( 0,  0).map(_ + 1) must_== Vec(1, 1)
       Vec(-1, -1).map(_.abs) must_== Vec(1, 1)
     }
 
-    "correctly perform +(Vector) and -(Vector)" in {
+    "correctly perform +(Vec) and -(Vec)" in {
       Vec(1, 1) + Vec( 2,  2) must_== Vec( 3,  3)
       Vec(1, 1) + Vec(-2, -2) must_== Vec(-1, -1)
 
