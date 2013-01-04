@@ -1,5 +1,5 @@
 // Equites, a simple chess interface
-// Copyright © 2011 Frank S. Thomas <f.thomas@gmx.de>
+// Copyright © 2011, 2013 Frank S. Thomas <f.thomas@gmx.de>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,10 +18,11 @@ package eu.timepit.equites
 package implicits
 
 import org.specs2.mutable._
+
 import RichSquareImplicit._
 
 class RichSquareSpec extends Specification {
-  "class RichSquare" should {
+  "RichSquare" should {
     "correctly perform toAlgebraic" in {
       Square(0, 0).toAlgebraic must_== "a1"
       Square(1, 1).toAlgebraic must_== "b2"

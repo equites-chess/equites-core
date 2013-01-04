@@ -1,5 +1,5 @@
 // Equites, a simple chess interface
-// Copyright © 2011 Frank S. Thomas <f.thomas@gmx.de>
+// Copyright © 2011, 2013 Frank S. Thomas <f.thomas@gmx.de>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,21 +17,18 @@
 package eu.timepit.equites
 package implicits
 
-import utils.Notation
+import utils.Notation._
 
 object RichSquareImplicit {
-  implicit def   wrapSquare(square: Square) = new RichSquare(square)
-  implicit def unwrapSquare(square: RichSquare) = square.self
-}
+  implicit final class RichSquare(val self: Square) extends AnyVal {
+    def toAlgebraic: String = {
+      algebraicFileRange(self.file).toString +
+      algebraicRankRange(self.rank).toString
+    }
 
-final class RichSquare(val self: Square) extends Proxy {
-  def toAlgebraic: String = {
-    Notation.algebraicFileRange(self.file).toString +
-    Notation.algebraicRankRange(self.rank).toString
-  }
-
-  def toNumeric: String = {
-    Notation.numericFileRange(self.file).toString +
-    Notation.numericRankRange(self.rank).toString
+    def toNumeric: String = {
+      numericFileRange(self.file).toString +
+      numericRankRange(self.rank).toString
+    }
   }
 }

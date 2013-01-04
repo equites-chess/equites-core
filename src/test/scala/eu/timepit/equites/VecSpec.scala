@@ -33,6 +33,11 @@ class VecSpec extends Specification {
       Vec(1, 1) - Vec(-2, -2) must_== Vec( 3,  3) 
     }
 
+    "correctly perform unary_-" in {
+      -Vec( 1,  3) must_== Vec(-1, -3)
+      -Vec(-3, -1) must_== Vec( 3,  1)
+    }
+
     "correctly perform *(Int) and /(Int)" in {
       Vec(1, 2) * -1 must_== Vec(-1, -2)
       Vec(1, 2) *  0 must_== Vec( 0,  0)

@@ -1,5 +1,5 @@
 // Equites, a simple chess interface
-// Copyright © 2011-2012 Frank S. Thomas <f.thomas@gmx.de>
+// Copyright © 2011-2013 Frank S. Thomas <f.thomas@gmx.de>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,43 +17,44 @@
 package eu.timepit.equites
 
 import org.specs2.mutable._
+
 import Square._
-/*
+
 class SquareSpec extends Specification {
-  "object Square" should {
+  "Square companion" should {
     "correctly perform validCoordinates" in {
-      validCoordinates( 4,  4) must_== true
-      validCoordinates( 0,  0) must_== true
-      validCoordinates( 7,  7) must_== true
-      validCoordinates(-1,  4) must_== false
-      validCoordinates( 1,  8) must_== false
-      validCoordinates( 1, -2) must_== false
+      validCoordinates( 4,  4) must beTrue
+      validCoordinates( 0,  0) must beTrue
+      validCoordinates( 7,  7) must beTrue
+      validCoordinates(-1,  4) must beFalse
+      validCoordinates( 1,  8) must beFalse
+      validCoordinates( 1, -2) must beFalse
     }
 
     "correctly perform validSum" in {
-      validSum(Square(0, 0), Vector( 1,  1)) must_== true
-      validSum(Square(1, 1), Vector(-1, -1)) must_== true
-      validSum(Square(0, 0), Vector(-1, -1)) must_== false
-      validSum(Square(7, 7), Vector( 1,  1)) must_== false
-      validSum(Square(7, 7), Vector( 1,  1)) must_== false
+      validSum(Square(0, 0), Vec( 1,  1)) must beTrue
+      validSum(Square(1, 1), Vec(-1, -1)) must beTrue
+      validSum(Square(0, 0), Vec(-1, -1)) must beFalse
+      validSum(Square(7, 7), Vec( 1,  1)) must beFalse
+      validSum(Square(7, 7), Vec( 1,  1)) must beFalse
     }
 
     "correctly calculate l1Dist and lInfDist" in {
-      var p1 = Square(1, 2)
-      var p2 = Square(4, 3)
+      val s1 = Square(1, 2)
+      val s2 = Square(4, 3)
 
-      l1Dist(p1, p2)   must_== 4
-      lInfDist(p1, p2) must_== 3
+      l1Dist(s1, s2)   must_== 4
+      lInfDist(s1, s2) must_== 3
 
-      p1 = Square(0, 0)
-      p2 = Square(1, 1)
+      val s3 = Square(0, 0)
+      val s4 = Square(1, 1)
 
-      l1Dist(p1, p2)   must_== 2
-      lInfDist(p1, p2) must_== 1
+      l1Dist(s3, s4)   must_== 2
+      lInfDist(s3, s4) must_== 1
     }
   }
 
-  "class Square" should {
+  "Square" should {
     "throw an exception on invalid values" in {
       Square(-1,  0) must throwAn[IllegalArgumentException]
       Square( 0, -1) must throwAn[IllegalArgumentException]
@@ -63,41 +64,40 @@ class SquareSpec extends Specification {
       Square( 8,  8) must throwAn[IllegalArgumentException]
     }
 
-    "correctly perform +(Vector) and -(Vector)" in {
-      Square(1, 1) + Vector( 1,  1) must_== Square(2, 2)
-      Square(1, 1) - Vector(-1, -1) must_== Square(2, 2)
-      Square(1, 1) - Vector( 1,  1) must_== Square(0, 0)
-      Square(1, 1) + Vector(-1, -1) must_== Square(0, 0)
+    "correctly perform +(Vec) and -(Vec)" in {
+      Square(1, 1) + Vec( 1,  1) must_== Square(2, 2)
+      Square(1, 1) - Vec(-1, -1) must_== Square(2, 2)
+      Square(1, 1) - Vec( 1,  1) must_== Square(0, 0)
+      Square(1, 1) + Vec(-1, -1) must_== Square(0, 0)
 
-      Square(0, 0) - Vector(1, 1) must throwAn[IllegalArgumentException]
-      Square(7, 7) + Vector(1, 1) must throwAn[IllegalArgumentException]
+      Square(0, 0) - Vec(1, 1) must throwAn[IllegalArgumentException]
+      Square(7, 7) + Vec(1, 1) must throwAn[IllegalArgumentException]
     }
 
     "correctly perform +(Square)" in {
-      Square(1, 1) + Square(1, 1) must_== Vector(2, 2)
-      Square(2, 2) + Square(1, 1) must_== Vector(3, 3)
-      Square(2, 1) + Square(0, 0) must_== Vector(2, 1)
-      Square(0, 0) + Square(3, 4) must_== Vector(3, 4)
+      Square(1, 1) + Square(1, 1) must_== Vec(2, 2)
+      Square(2, 2) + Square(1, 1) must_== Vec(3, 3)
+      Square(2, 1) + Square(0, 0) must_== Vec(2, 1)
+      Square(0, 0) + Square(3, 4) must_== Vec(3, 4)
     }
 
     "correctly perform -(Square)" in {
-      Square(1, 1) - Square(1, 1) must_== Vector(0, 0)
-      Square(2, 2) - Square(1, 1) must_== Vector(1, 1)
-      Square(2, 1) - Square(0, 0) must_== Vector(2, 1)
-      Square(0, 0) - Square(3, 4) must_== Vector(-3, -4)
+      Square(1, 1) - Square(1, 1) must_== Vec(0, 0)
+      Square(2, 2) - Square(1, 1) must_== Vec(1, 1)
+      Square(2, 1) - Square(0, 0) must_== Vec(2, 1)
+      Square(0, 0) - Square(3, 4) must_== Vec(-3, -4)
     }
 
     "correctly perform isLight and isDark" in {
-      Square(0, 0).isDark must_== true
-      Square(7, 7).isDark must_== true
-      Square(0, 2).isDark must_== true
-      Square(2, 0).isDark must_== true
+      Square(0, 0).isDark must beTrue
+      Square(7, 7).isDark must beTrue
+      Square(0, 2).isDark must beTrue
+      Square(2, 0).isDark must beTrue
 
-      Square(0, 1).isLight must_== true
-      Square(0, 3).isLight must_== true
-      Square(1, 0).isLight must_== true
-      Square(3, 0).isLight must_== true
+      Square(0, 1).isLight must beTrue
+      Square(0, 3).isLight must beTrue
+      Square(1, 0).isLight must beTrue
+      Square(3, 0).isLight must beTrue
     }
   }
 }
-*/

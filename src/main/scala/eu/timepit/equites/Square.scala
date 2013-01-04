@@ -27,8 +27,8 @@ object Square {
   def validSum(that: Square, vec: Vec): Boolean =
     validCoordinates(that.file + vec.file, that.rank + vec.rank)
 
-  def l1Dist(p: Square, q: Square): Int = (p - q).l1Length
-  def lInfDist(p: Square, q: Square): Int = (p - q).lInfLength
+  def l1Dist(p: Square, q: Square): Int = p.l1Dist(q)
+  def lInfDist(p: Square, q: Square): Int = p.lInfDist(q)
 }
 
 case class Square(file: Int, rank: Int) {
@@ -42,4 +42,7 @@ case class Square(file: Int, rank: Int) {
 
   def isLight: Boolean = isOdd(file + rank)
   def isDark: Boolean = isEven(file + rank)
+
+  def l1Dist(that: Square): Int = (this - that).l1Length
+  def lInfDist(that: Square): Int = (this - that).lInfLength
 }
