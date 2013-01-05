@@ -1,5 +1,5 @@
 // Equites, a simple chess interface
-// Copyright © 2011 Frank S. Thomas <f.thomas@gmx.de>
+// Copyright © 2011, 2013 Frank S. Thomas <f.thomas@gmx.de>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,97 +18,61 @@ package eu.timepit.equites
 
 import org.specs2.mutable._
 
-/*
 class BoardSpec extends Specification {
-  "class Board" should {
-    "correctly report occupied squares" in {
-      val board = new Board
-      val piece1 = new Pawn(White)
-      val piece2 = new Pawn(White)
-      val piece3 = new Pawn(Black)
+  "Board" should {
+    "report occupied squares" in {
+      val board = Board(Square(0, 0) -> Pawn(White),
+                        Square(1, 1) -> Pawn(Black))
 
-      board.contains(piece1)       must_== false
-      board.occupied(Square(0, 0)) must_== false
-      board.occupiedBy(Square(0, 0), piece1) must_== false
+      board.isOccupied(Square(0, 0)) must beTrue
+      board.isOccupied(Square(1, 1)) must beTrue
 
-      board.putPiece(Square(0, 0), piece1)
-      board.contains(piece1)       must_== true
-      board.occupied(Square(0, 0)) must_== true
-      board.occupiedBy(Square(0, 0), piece1) must_== true
-      board.occupiedBy(Square(0, 0), piece2) must_== false
-      board.opponentAt(Square(0, 0), piece2.color) must_== false
-      board.opponentAt(Square(0, 0), piece3.color) must_== true
+      board.isOccupied(Square(1, 0)) must beFalse
+      board.isOccupied(Square(0, 1)) must beFalse
 
-      board.putPiece(Square(1, 1), piece2)
-      board.occupiedBy(Square(0, 0), piece1) must_== true
-      board.occupiedBy(Square(1, 1), piece2) must_== true
+      board.isOccupiedBy(Square(0, 0), Pawn(White)) must beTrue
+      board.isOccupiedBy(Square(1, 1), Pawn(White)) must beFalse
+
+      board.isOccupiedBy(Square(0, 0), Pawn(Black)) must beFalse
+      board.isOccupiedBy(Square(1, 1), Pawn(Black)) must beTrue
+
+      board.isOccupiedBy(Square(0, 1), Pawn(White)) must beFalse
+      board.isOccupiedBy(Square(1, 0), Pawn(Black)) must beFalse
     }
 
-    "correctly perform getter/setter methods" in {
-      val board = new Board
-      val piece1 = new Pawn(White)
-      val piece2 = new Pawn(White)
-      val piece3 = new Pawn(Black)
+    def checkAction(before: Board, after: Board, action: Action) {
+      before.processAction(action) must_!= before
+      before.processAction(action) must_== after
 
-      board.getPiece(Square(0, 0)) must_== None
-      board.getSquare(piece1)      must_== None
-
-      board.putPiece(Square(0, 0), piece1)
-      board.getPiece(Square(0, 0)).get must_== piece1
-      board.getSquare(piece1).get      must_== Square(0, 0)
-
-      board.contains(piece1) must_== true
-      board.contains(piece2) must_== false
-      board.contains(piece3) must_== false
-
-      board.putPieces(Seq((Square(1, 1), piece2), (Square(2, 2), piece3)))
-      board.contains(piece1) must_== true
-      board.contains(piece2) must_== true
-      board.contains(piece3) must_== true
-
-      board.removePiece(Square(2, 2)).get must_== piece3
-      board.getPiece(Square(2, 2))  must_== None
-      board.contains(piece3)        must_== false
-
-      board.removePiece(piece2).get must_== Square(1, 1)
-      board.getPiece(Square(1, 1))  must_== None
-      board.contains(piece2)        must_== false
-
-      board.putPieces(Seq((Square(1, 1), piece2), (Square(2, 2), piece3)))
-      board.contains(piece1) must_== true
-      board.contains(piece2) must_== true
-      board.contains(piece3) must_== true
-
-      board.removePieces(Seq(piece2, piece3))
-      board.contains(piece1) must_== true
-      board.contains(piece2) must_== false
-      board.contains(piece3) must_== false
-      board.isEmpty          must_== false
-
-      board.clear()
-      board.contains(piece1) must_== false
-      board.isEmpty          must_== true
+      before.processAction(action).reverseAction(action) must_== before
+      before.processAction(action).reverseAction(action) must_!= after
     }
 
-    "correctly perform/reverse moves" in {
-      val board = new Board
-      val piece = new Pawn(White)
-      val from = Square(0, 0)
-      val to   = Square(1, 0)
-      val move = Move(piece, from, to)
+    "correctly process/reverse Moves" in {
+      val before = Board(Square(0, 0) -> Queen(White))
+      val after  = Board(Square(7, 7) -> Queen(White))
+      val action = Move(Queen(White), Square(0, 0), Square(7, 7))
 
-      board.putPiece(from, piece)
-      board.occupiedBy(from, piece) must_== true
-      board.occupied(to)            must_== false
+      checkAction(before, after, action)
+    }
 
-      board.processAction(move)
-      board.occupied(from)          must_== false
-      board.occupiedBy(to, piece)   must_== true
+    "correctly process/reverse Promotions" in {
+      val before = Board(Square(0, 6) -> Pawn(White))
+      val after  = Board(Square(0, 7) -> Queen(White))
+      val action =
+        Promotion(Pawn(White), Square(0, 6), Square(0, 7), Queen(White))
 
-      board.reverseAction(move)
-      board.occupiedBy(from, piece) must_== true
-      board.occupied(to)            must_== false
+      checkAction(before, after, action)
+    }
+
+    "correctly process/reverse Captures" in {
+      val before = Board(Square(0, 0) -> Queen(White),
+                         Square(7, 7) -> Pawn(Black))
+      val after  = Board(Square(7, 7) -> Queen(White))
+      val action =
+        Capture(Queen(White), Square(0, 0), Square(7, 7), Pawn(Black))
+
+      checkAction(before, after, action)
     }
   }
 }
-*/
