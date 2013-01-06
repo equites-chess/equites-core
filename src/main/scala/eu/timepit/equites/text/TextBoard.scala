@@ -1,5 +1,5 @@
 // Equites, a simple chess interface
-// Copyright © 2011 Frank S. Thomas <f.thomas@gmx.de>
+// Copyright © 2011, 2013 Frank S. Thomas <f.thomas@gmx.de>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,65 +18,54 @@ package eu.timepit.equites
 package text
 
 import implicits.RichPieceImplicit._
-import utils.Notation
+import utils.Notation._
 
 trait Letters {
   def pieceToString(piece: Piece): String = piece.toLetter
-  val tile: String = "."
-  val hBar: String = ""
-  val vBar: String = " "
-  val edge: String = ""
+  def emptyTile: String     = "."
+  def horizontalBar: String = ""
+  def verticalBar: String   = " "
+  def corner: String        = ""
 }
 
 trait Figurine {
   def pieceToString(piece: Piece): String = piece.toFigurine
-  val tile: String = "\u00B7" // ·
-  val hBar: String = "\u2500" // ─
-  val vBar: String = "\u2502" // │
-  val edge: String = "\u2518" // ┘
+  def emptyTile: String     = "\u00B7" // ·
+  def horizontalBar: String = "\u2500" // ─
+  def verticalBar: String   = "\u2502" // │
+  def corner: String        = "\u2518" // ┘
 }
 
-/*
-abstract class TextBoard(board: Board) {
-  def unlabeledBoard(): String = {
-    def squareToString(square: Square): String = {
-      board.getPiece(square) match {
-        case Some(piece) => pieceToString(piece)
-        case None => tile
-      }
-    }
+abstract class TextBoard {
+  def mkUnlabeled(board: Board): String = {
+    def squareToString(square: Square): String =
+      board.get(square).map(pieceToString).getOrElse(emptyTile)
 
-    def mkRow(rank: Int): String = {
-      val squares = Rules.fileRange.map(x => squareToString(Square(x, rank)))
-      squares.mkString("", " ", " \n")
-    }
+    def rowToString(rank: Int): String =
+      Rules.rankSquares(rank).map(squareToString).mkString("", " ", " \n")
 
-    Rules.rankRange.reverse.map(mkRow).mkString
+    Rules.rankRange.reverse.map(rowToString).mkString
   }
 
-  def labeledBoard(): String = {
-    import Notation._
-
+  def mkLabeled(board: Board): String = {
     def boardWithRankLabels: String = {
-      val boardLines = unlabeledBoard.split(" \n")
-      val rankLabels = algebraicRankRange.reverse.map(vBar + " " + _ + "\n")
-      boardLines.zip(rankLabels).map(x => x._1 + x._2).mkString
+      val lines = mkUnlabeled(board).split(" \n")
+      val labels = algebraicRankRange.reverse.map(r => s"${verticalBar} ${r}\n")
+      lines.zip(labels).map(_.productIterator.mkString).mkString
     }
 
     def bottomBorder: String = {
-      val barLength = Rules.fileRange.length * 2 - 1
-      (hBar * barLength) + edge + "\n"
+      val barWidth = Rules.fileRange.length * 2 - 1
+      (horizontalBar * barWidth) + corner + "\n"
     }
 
-    def fileLabels: String = algebraicFileRange.mkString("", " ", " \n")
-
-    boardWithRankLabels + bottomBorder + fileLabels
+    boardWithRankLabels + bottomBorder +
+      algebraicFileRange.mkString("", " ", " \n")
   }
 
   protected def pieceToString(piece: Piece): String
-  protected val tile: String
-  protected val hBar: String
-  protected val vBar: String
-  protected val edge: String
+  protected def emptyTile: String
+  protected def horizontalBar: String
+  protected def verticalBar: String
+  protected def corner: String
 }
-*/

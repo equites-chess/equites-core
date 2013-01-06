@@ -1,5 +1,5 @@
 // Equites, a simple chess interface
-// Copyright © 2011 Frank S. Thomas <f.thomas@gmx.de>
+// Copyright © 2011, 2013 Frank S. Thomas <f.thomas@gmx.de>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,15 +19,13 @@ package text
 
 import org.specs2.mutable._
 
-/*
 class TextBoardSpec extends Specification {
-  "class TextBoard" should {
-    "correctly perform (un)labeledBoard with Letters" in {
-      val board = new Board
-      board.putPieces(Rules.startingPositions)
-      val tb = new TextBoard(board) with Letters
+  "TextBoard" should {
+    "make (un)labeled boards with Letters" in {
+      val board = Rules.startingBoard
+      val tb = new TextBoard with Letters
 
-      tb.unlabeledBoard must_==
+      tb.mkUnlabeled(board) must_==
         "r n b q k b n r \n" +
         "p p p p p p p p \n" +
         ". . . . . . . . \n" +
@@ -37,7 +35,7 @@ class TextBoardSpec extends Specification {
         "P P P P P P P P \n" +
         "R N B Q K B N R \n"
 
-      tb.labeledBoard must_==
+      tb.mkLabeled(board) must_==
         "r n b q k b n r  8\n" +
         "p p p p p p p p  7\n" +
         ". . . . . . . .  6\n" +
@@ -49,8 +47,17 @@ class TextBoardSpec extends Specification {
         "\n" +
         "a b c d e f g h \n"
 
-      board.clear()
-      tb.labeledBoard must_==
+      tb.mkUnlabeled(Board()) must_==
+        ". . . . . . . . \n" +
+        ". . . . . . . . \n" +
+        ". . . . . . . . \n" +
+        ". . . . . . . . \n" +
+        ". . . . . . . . \n" +
+        ". . . . . . . . \n" +
+        ". . . . . . . . \n" +
+        ". . . . . . . . \n"
+
+      tb.mkLabeled(Board()) must_==
         ". . . . . . . .  8\n" +
         ". . . . . . . .  7\n" +
         ". . . . . . . .  6\n" +
@@ -63,12 +70,11 @@ class TextBoardSpec extends Specification {
         "a b c d e f g h \n"
     }
 
-    "correctly perform (un)labeledBoard with Figurine" in {
-      val board = new Board
-      board.putPieces(Rules.startingPositions)
-      val tb = new TextBoard(board) with Figurine
+    "make (un)labeled boards with Figurine" in {
+      val board = Rules.startingBoard
+      val tb = new TextBoard with Figurine
 
-      tb.unlabeledBoard must_==
+      tb.mkUnlabeled(board) must_==
         "♜ ♞ ♝ ♛ ♚ ♝ ♞ ♜ \n" +
         "♟ ♟ ♟ ♟ ♟ ♟ ♟ ♟ \n" +
         "· · · · · · · · \n" +
@@ -78,7 +84,7 @@ class TextBoardSpec extends Specification {
         "♙ ♙ ♙ ♙ ♙ ♙ ♙ ♙ \n" +
         "♖ ♘ ♗ ♕ ♔ ♗ ♘ ♖ \n"
 
-      tb.labeledBoard must_==
+      tb.mkLabeled(board) must_==
         "♜ ♞ ♝ ♛ ♚ ♝ ♞ ♜│ 8\n" +
         "♟ ♟ ♟ ♟ ♟ ♟ ♟ ♟│ 7\n" +
         "· · · · · · · ·│ 6\n" +
@@ -90,8 +96,17 @@ class TextBoardSpec extends Specification {
         "───────────────┘\n" +
         "a b c d e f g h \n"
 
-      board.clear()
-      tb.labeledBoard must_==
+      tb.mkUnlabeled(Board()) must_==
+        "· · · · · · · · \n" +
+        "· · · · · · · · \n" +
+        "· · · · · · · · \n" +
+        "· · · · · · · · \n" +
+        "· · · · · · · · \n" +
+        "· · · · · · · · \n" +
+        "· · · · · · · · \n" +
+        "· · · · · · · · \n"
+
+      tb.mkLabeled(Board()) must_==
         "· · · · · · · ·│ 8\n" +
         "· · · · · · · ·│ 7\n" +
         "· · · · · · · ·│ 6\n" +
@@ -105,4 +120,3 @@ class TextBoardSpec extends Specification {
     }
   }
 }
-*/

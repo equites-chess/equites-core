@@ -21,6 +21,9 @@ object Rules {
   val rankRange = 0 to 7
   val maxLength = math.max(fileRange.length, rankRange.length) - 1
 
+  def fileSquares(file: Int) = rankRange.map(Square(file, _))
+  def rankSquares(rank: Int) = fileRange.map(Square(_, rank))
+
   val kingFile  = 4
   val queenFile = 3
   val rookFiles   = List(0, 7)

@@ -61,12 +61,12 @@ class Board(val self: Map[Square, Piece]) extends MapProxy[Square, Piece] {
     this - capture.from - capture.capturedOn + (capture.to -> capture.piece)
 
   def reverseCapture(capture: CaptureLike): Board =
-    (this - capture.to + (capture.capturedOn -> capture.captured) +
-      (capture.from -> capture.piece))
+    this - capture.to + (capture.capturedOn -> capture.captured) +
+      (capture.from -> capture.piece)
 
   def processCaptureAndPromotion(capture: CaptureAndPromotion): Board =
-    (this - capture.from - capture.capturedOn +
-      (capture.to -> capture.promotedTo))
+    this - capture.from - capture.capturedOn +
+      (capture.to -> capture.promotedTo)
 
   def reverseCaptureAndPromotion(capture: CaptureAndPromotion): Board =
     reverseCapture(capture: CaptureLike)

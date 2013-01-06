@@ -45,9 +45,11 @@ case class Square(file: Int, rank: Int) {
   def +(that: Square): Vec = Vec(file + that.file, rank + that.rank)
   def -(that: Square): Vec = Vec(file - that.file, rank - that.rank)
 
-  def isLight: Boolean = isOdd(file + rank)
-  def isDark: Boolean = isEven(file + rank)
+  def isLight: Boolean = isOdd(sum)
+  def isDark: Boolean = isEven(sum)
 
   def l1Dist(that: Square): Int = (this - that).l1Length
   def lInfDist(that: Square): Int = (this - that).lInfLength
+
+  private def sum: Int = file + rank
 }
