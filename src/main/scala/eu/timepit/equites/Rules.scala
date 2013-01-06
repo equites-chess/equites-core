@@ -26,36 +26,21 @@ object Rules {
   val rookFiles   = List(0, 7)
   val knightFiles = List(1, 6)
   val bishopFiles = List(2, 5)
-/*
-  val movementType: Map[PieceType, (Directions, Int)] = {
-    import Directions._
-    Map(King   -> (anywhere,   1),
-        Queen  -> (anywhere,   maxLength),
-        Rook   -> (straight,   maxLength),
-        Bishop -> (diagonal,   maxLength),
-        Knight -> (knightLike, 1))
+
+  val startingSquares: Map[Piece, List[Square]] = {
+    (for {
+      color <- List(White, Black)
+      backRank = backRankBy(color)
+      pawnRank = pawnRankBy(color)
+    } yield {
+      Map(King(color)   -> List(Square(kingFile,  backRank)),
+          Queen(color)  -> List(Square(queenFile, backRank)),
+          Rook(color)   ->   rookFiles.map(Square(_, backRank)),
+          Bishop(color) -> bishopFiles.map(Square(_, backRank)),
+          Knight(color) -> knightFiles.map(Square(_, backRank)),
+          Pawn(color)   ->   fileRange.map(Square(_, pawnRank)).toList)
+    }).flatten.toMap
   }
-
-  val startingSquares: Map[Color, Map[PieceType, List[Square]]] = {
-    def startingSquaresFor(color: Color): Map[PieceType, List[Square]] = {
-      val backRank = backRankBy(color)
-      val pawnRank = pawnRankBy(color)
-
-      Map[PieceType, List[Square]](
-        King   -> List(Square(kingFile,  backRank)),
-        Queen  -> List(Square(queenFile, backRank)),
-        Rook   ->   rookFiles.map(Square(_, backRank)),
-        Bishop -> bishopFiles.map(Square(_, backRank)),
-        Knight -> knightFiles.map(Square(_, backRank)),
-        Pawn   ->   fileRange.map(Square(_, pawnRank)).toList)
-    }
-
-    Map[Color, Map[PieceType, List[Square]]](
-      White -> startingSquaresFor(White),
-      Black -> startingSquaresFor(Black))
-  }
-  */
-
 
   val castlingSquares: Map[(Side, Piece), (Square, Square)] = {
     def castlingSquaresFor(side: Side, piece: Piece): (Square, Square) = {
@@ -81,26 +66,13 @@ object Rules {
     mappings.toMap
   }
 
-  /*
-  def startingPositions(color: Color): Map[Square, Piece] = {
-    def embattlePieces(pieceType: PieceType, newPiece: => Piece):
-      List[(Square, Piece)] = {
-
-      startingSquares(color)(pieceType).map(_ -> newPiece)
-    }
-
-    Map[Square, Piece]() ++
-      embattlePieces(King,   new King(color))   ++
-      embattlePieces(Queen,  new Queen(color))  ++
-      embattlePieces(Rook,   new Rook(color))   ++
-      embattlePieces(Bishop, new Bishop(color)) ++
-      embattlePieces(Knight, new Knight(color)) ++
-      embattlePieces(Pawn,   new Pawn(color))
+  val startingBoard: Board = {
+    val mapping = for {
+      (piece, squares) <- startingSquares
+      square <- squares
+    } yield square -> piece
+    Board(mapping)
   }
-
-  def startingPositions: Map[Square, Piece] =
-    startingPositions(White) ++ startingPositions(Black)
-*/
 
   def backRankBy(color: Color): Int =
     if (color == White) rankRange.start else rankRange.end
@@ -108,64 +80,6 @@ object Rules {
   def pawnRankBy(color: Color): Int =
     if (color == White) rankRange.start + 1 else rankRange.end - 1
 
-/*
   def rankBy(rank: Int, color: Color): Int =
     if (color == White) rank else rankRange.end - rank
-
-  // better use an iterator
-  def squaresInDirection(from: Square, direction: Vector,
-    maxDist: Int = maxLength): Stream[Square] = {
-
-    if (maxDist > 0 && Square.validSum(from, direction)) {
-      val next: Square = from + direction
-      Stream.cons(next, squaresInDirection(next, direction, maxDist - 1))
-    }
-    else Stream.empty
-  }
-  */
 }
-
-//class Rules(board: Board) {
-
-/*
-  def takeUntilOccupied(squares: Stream[Square], color: Color): List[Square] = {
-    val occupied = squares.findIndexOf(board.occupied)
-    if (occupied == -1)
-      squares.toList
-    else {
-      val offset = if (board.opponentAt(squares(occupied), color)) 1 else 0
-      squares.take(occupied + offset).toList
-    }
-  }
-*/
-/*  def possibleEnPassants(pawn: Pawn, at: Square): List[EnPassant] = {
-    //if (rankBy(at.rank, pawn.color) != 4) Nil
-
-    // schaue auf file +- 1 ob dort ein bauer steht,
-    // wenn nein -> Nil
-    // wenn ja ..
-   // schaue in die history ob der pawn der letzte bewegte stein ist!!!
-    Nil
-  }
-*/
-/*
-  def possibleCastlings(king: King, at: Square): List[Action] = {
-    if (board.hasMoved(king)) Nil
-  
-    List()
-  }
-
-datenstruktur für piece auf dem Board: Pair[Piece, Square]
-
-Rules sollte davon ausgehen, dass alle informationen über das board korrekt
-sind. d.h. es sollten keine sanity checks auf dieser ebene durchgeführt werden
-*/
-
-  //def possibleActions(pawn: Pawn, at: Square)
-  //def possibleActions(king: King, at: Square)
-
-//def possibleCastlings
-// def possiblePromotions
-// de possibleEnPassants
-// achte auf züge, die den könig matt setzen
-//}

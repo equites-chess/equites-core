@@ -17,6 +17,7 @@
 package eu.timepit.equites
 
 import org.specs2.mutable._
+
 import Rules._
 
 class RulesSpec extends Specification {

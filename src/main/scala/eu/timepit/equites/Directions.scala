@@ -1,5 +1,5 @@
 // Equites, a simple chess interface
-// Copyright © 2011-2012 Frank S. Thomas <f.thomas@gmx.de>
+// Copyright © 2011-2013 Frank S. Thomas <f.thomas@gmx.de>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 
 package eu.timepit.equites
 
-import scala.collection._
+import scala.collection.immutable._
 
 object Directions {
   def apply(vectors: Vec*): Directions = apply(vectors)
@@ -52,9 +52,7 @@ object Directions {
   })
 }
 
-class Directions private (val self: Set[Vec])
-  extends SetProxy[Vec] {
-
+class Directions(val self: Set[Vec]) extends SetProxy[Vec] {
   def inverse: Directions = Directions(map(_ * -1))
 
   def inverseIfWhite(color: Color): Directions =

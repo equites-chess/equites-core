@@ -1,5 +1,5 @@
 // Equites, a simple chess interface
-// Copyright © 2011-2012 Frank S. Thomas <f.thomas@gmx.de>
+// Copyright © 2011-2013 Frank S. Thomas <f.thomas@gmx.de>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,10 +17,11 @@
 package eu.timepit.equites
 
 import org.specs2.mutable._
+
 import Directions._
 
 class DirectionsSpec extends Specification {
-  "class Directions" should {
+  "Directions" should {
     "correctly perform inverse" in {
       Directions.front.inverse must_== Directions.back
       Directions.right.inverse must_== Directions.left
@@ -48,8 +49,8 @@ class DirectionsSpec extends Specification {
     }
 
     "must be comparable to Set[Vector]" in {
-      anywhere equals anywhere.self must_== true
-      anywhere.self equals anywhere must_== true
+      anywhere equals anywhere.self must beTrue
+      anywhere.self equals anywhere must beTrue
       anywhere diff diagonal must_== straight
     }
   }

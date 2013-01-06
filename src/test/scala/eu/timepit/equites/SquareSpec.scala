@@ -99,5 +99,13 @@ class SquareSpec extends Specification {
       Square(1, 0).isLight must beTrue
       Square(3, 0).isLight must beTrue
     }
+
+    "accept algebraic arguments" in {
+      Square(0, 0) must_== Square('a', 1)
+      Square(7, 7) must_== Square('h', 8)
+
+      Square('i', 1) must throwAn[IllegalArgumentException]
+      Square('a', 9) must throwAn[IllegalArgumentException]
+    }
   }
 }

@@ -1,5 +1,5 @@
 // Equites, a simple chess interface
-// Copyright © 2011-2012 Frank S. Thomas <f.thomas@gmx.de>
+// Copyright © 2011-2013 Frank S. Thomas <f.thomas@gmx.de>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,8 +17,13 @@
 package eu.timepit.equites
 
 import utils.Math._
+import utils.Notation._
 
 object Square {
+  def apply(algebraicFile: Char, algebraicRank: Int): Square =
+    Square(algebraicFileRange.indexOf(algebraicFile),
+           algebraicRankRange.indexOf(algebraicRank))
+
   def validCoordinates(file: Int, rank: Int): Boolean = {
     Rules.fileRange.contains(file) &&
     Rules.rankRange.contains(rank)
