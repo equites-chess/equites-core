@@ -21,9 +21,9 @@ import org.specs2.mutable._
 
 class TextBoardSpec extends Specification {
   "TextBoard" should {
-    "make (un)labeled boards with Letters" in {
+    "make (un)labeled boards with letters" in {
       val board = Rules.startingBoard
-      val tb = new TextBoard with Letters
+      val tb = new TextBoard with LetterRepr
 
       tb.mkUnlabeled(board) must_==
         "r n b q k b n r \n" +
@@ -70,9 +70,9 @@ class TextBoardSpec extends Specification {
         "a b c d e f g h \n"
     }
 
-    "make (un)labeled boards with Figurine" in {
+    "make (un)labeled boards with figurines" in {
       val board = Rules.startingBoard
-      val tb = new TextBoard with Figurine
+      val tb = new TextBoard with FigurineRepr
 
       tb.mkUnlabeled(board) must_==
         "♜ ♞ ♝ ♛ ♚ ♝ ♞ ♜ \n" +

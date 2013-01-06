@@ -10,3 +10,5 @@ libraryDependencies ++= Seq(
 )
 
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature")
+
+scaladocOptions in (Compile, doc) ++= Seq("-diagrams")

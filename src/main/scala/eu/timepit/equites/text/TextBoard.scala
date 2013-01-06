@@ -20,7 +20,7 @@ package text
 import implicits.RichPieceImplicit._
 import utils.Notation._
 
-trait Letters {
+trait LetterRepr {
   def pieceToString(piece: Piece): String = piece.toLetter
   def emptyTile: String     = "."
   def horizontalBar: String = ""
@@ -28,7 +28,7 @@ trait Letters {
   def corner: String        = ""
 }
 
-trait Figurine {
+trait FigurineRepr {
   def pieceToString(piece: Piece): String = piece.toFigurine
   def emptyTile: String     = "\u00B7" // ·
   def horizontalBar: String = "\u2500" // ─
