@@ -12,3 +12,10 @@ libraryDependencies ++= Seq(
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature")
 
 scaladocOptions in (Compile, doc) ++= Seq("-diagrams")
+
+scaladocOptions in (Compile, doc) <++= baseDirectory.map {
+  (bd: File) => Seq[String](
+     "-sourcepath", bd.getAbsolutePath,
+     "-doc-source-url", "https://github.com/fthomas/equites/tree/master€{FILE_PATH}.scala"
+  )
+}
