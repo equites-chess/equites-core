@@ -118,5 +118,52 @@ class TextBoardSpec extends Specification {
         "───────────────┘\n" +
         "a b c d e f g h \n"
     }
+
+    "make (un)labeled boards as MediWiki diagram" in {
+      val board = Rules.startingBoard
+      val tb = new TextBoard with WikiRepr
+
+      tb.mkUnlabeled(board) must_==
+        "|rd|nd|bd|qd|kd|bd|nd|rd|= \n" +
+        "|pd|pd|pd|pd|pd|pd|pd|pd|= \n" +
+        "|  |  |  |  |  |  |  |  |= \n" +
+        "|  |  |  |  |  |  |  |  |= \n" +
+        "|  |  |  |  |  |  |  |  |= \n" +
+        "|  |  |  |  |  |  |  |  |= \n" +
+        "|pl|pl|pl|pl|pl|pl|pl|pl|= \n" +
+        "|rl|nl|bl|ql|kl|bl|nl|rl|= \n"
+
+      tb.mkLabeled(board) must_==
+        "8 |rd|nd|bd|qd|kd|bd|nd|rd|=\n" +
+        "7 |pd|pd|pd|pd|pd|pd|pd|pd|=\n" +
+        "6 |  |  |  |  |  |  |  |  |=\n" +
+        "5 |  |  |  |  |  |  |  |  |=\n" +
+        "4 |  |  |  |  |  |  |  |  |=\n" +
+        "3 |  |  |  |  |  |  |  |  |=\n" +
+        "2 |pl|pl|pl|pl|pl|pl|pl|pl|=\n" +
+        "1 |rl|nl|bl|ql|kl|bl|nl|rl|=\n" +
+        "   a  b  c  d  e  f  g  h \n"
+
+      tb.mkUnlabeled(Board()) must_==
+        "|  |  |  |  |  |  |  |  |= \n" +
+        "|  |  |  |  |  |  |  |  |= \n" +
+        "|  |  |  |  |  |  |  |  |= \n" +
+        "|  |  |  |  |  |  |  |  |= \n" +
+        "|  |  |  |  |  |  |  |  |= \n" +
+        "|  |  |  |  |  |  |  |  |= \n" +
+        "|  |  |  |  |  |  |  |  |= \n" +
+        "|  |  |  |  |  |  |  |  |= \n"
+
+      tb.mkLabeled(Board()) must_==
+        "8 |  |  |  |  |  |  |  |  |=\n" +
+        "7 |  |  |  |  |  |  |  |  |=\n" +
+        "6 |  |  |  |  |  |  |  |  |=\n" +
+        "5 |  |  |  |  |  |  |  |  |=\n" +
+        "4 |  |  |  |  |  |  |  |  |=\n" +
+        "3 |  |  |  |  |  |  |  |  |=\n" +
+        "2 |  |  |  |  |  |  |  |  |=\n" +
+        "1 |  |  |  |  |  |  |  |  |=\n" +
+        "   a  b  c  d  e  f  g  h \n"
+    }
   }
 }

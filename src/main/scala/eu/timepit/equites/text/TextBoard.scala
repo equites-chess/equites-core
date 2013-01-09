@@ -20,29 +20,46 @@ package text
 import implicits.RichPieceImplicit._
 import utils.Notation._
 
-trait LetterRepr {
-  def pieceToString(piece: Piece): String = piece.toLetter
-  def emptyTile: String     = "."
+trait AbstractRepr {
+  def pieceToString(piece: Piece): String
+  def emptyTile: String     = ""
+  def rankSep: String       = ""
+  def rankEnd: String       = ""
   def horizontalBar: String = ""
-  def verticalBar: String   = " "
+  def verticalBar: String   = ""
   def corner: String        = ""
 }
 
-trait FigurineRepr {
-  def pieceToString(piece: Piece): String = piece.toFigurine
-  def emptyTile: String     = "\u00B7" // ·
-  def horizontalBar: String = "\u2500" // ─
-  def verticalBar: String   = "\u2502" // │
-  def corner: String        = "\u2518" // ┘
+trait LetterRepr extends AbstractRepr {
+  def pieceToString(piece: Piece): String = piece.toLetter
+  override def emptyTile: String     = "."
+  override def rankSep: String       = " "
+  override def verticalBar: String   = " "
 }
 
-abstract class TextBoard {
+trait FigurineRepr extends AbstractRepr {
+  def pieceToString(piece: Piece): String = piece.toFigurine
+  override def emptyTile: String     = "\u00B7" // ·
+  override def rankSep: String       = " "
+  override def horizontalBar: String = "\u2500" // ─
+  override def verticalBar: String   = "\u2502" // │
+  override def corner: String        = "\u2518" // ┘
+}
+
+trait WikiRepr extends AbstractRepr {
+  def pieceToString(piece: Piece): String = "|" + piece.toWikiLetters
+  override def emptyTile: String     = "|  "
+  override def rankEnd: String       = "|="
+}
+
+abstract class TextBoard extends AbstractRepr {
   def mkUnlabeled(board: Board): String = {
     def squareToString(square: Square): String =
       board.get(square).map(pieceToString).getOrElse(emptyTile)
 
     def rowToString(rank: Int): String =
-      Rules.rankSquares(rank).map(squareToString).mkString("", " ", " \n")
+      Rules.rankSquares(rank).map(squareToString).mkString(
+        "", rankSep, rankEnd + " \n")
 
     Rules.rankRange.reverse.map(rowToString).mkString
   }
@@ -62,10 +79,4 @@ abstract class TextBoard {
     boardWithRankLabels + bottomBorder +
       algebraicFileRange.mkString("", " ", " \n")
   }
-
-  protected def pieceToString(piece: Piece): String
-  protected def emptyTile: String
-  protected def horizontalBar: String
-  protected def verticalBar: String
-  protected def corner: String
 }
