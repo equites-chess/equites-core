@@ -22,61 +22,85 @@ import utils.Notation._
 
 trait AbstractRepr {
   def pieceToString(piece: Piece): String
-  def emptyTile: String     = ""
-  def rankSep: String       = ""
-  def rankEnd: String       = ""
-  def horizontalBar: String = ""
-  def verticalBar: String   = ""
-  def corner: String        = ""
+  def tileStart: String       = ""
+  def tileEmpty: String       = ""
+  def tileEnd: String         = ""
+  def rankBegin: String       = ""
+  def rankSep: String         = ""
+  def rankEnd: String         = ""
+  def horizontalBar: String   = ""
+  def verticalBar: String     = ""
+  def corner: String          = ""
+  def fileLabelsStart: String = ""
+  def fileLabelsSep: String   = " "
+  def fileLabelsEnd: String   = " "
+
+  def rankLabelsRight: Boolean = true
 }
 
 trait LetterRepr extends AbstractRepr {
-  def pieceToString(piece: Piece): String = piece.toLetter
-  override def emptyTile: String     = "."
-  override def rankSep: String       = " "
-  override def verticalBar: String   = " "
+  def pieceToString(piece: Piece) = piece.toLetter
+  override def tileEmpty   = "."
+  override def rankSep     = " "
+  override def verticalBar = "  "
+  override def corner      = " "
 }
 
 trait FigurineRepr extends AbstractRepr {
-  def pieceToString(piece: Piece): String = piece.toFigurine
-  override def emptyTile: String     = "\u00B7" // ·
-  override def rankSep: String       = " "
-  override def horizontalBar: String = "\u2500" // ─
-  override def verticalBar: String   = "\u2502" // │
-  override def corner: String        = "\u2518" // ┘
+  def pieceToString(piece: Piece) = piece.toFigurine
+  override def tileEmpty     = "\u00B7"  // ·
+  override def rankSep       = " "
+  override def horizontalBar = "\u2500"  // ─
+  override def verticalBar   = "\u2502 " // │
+  override def corner        = "\u2518"  // ┘
 }
 
 trait WikiRepr extends AbstractRepr {
-  def pieceToString(piece: Piece): String = "|" + piece.toWikiLetters
-  override def emptyTile: String     = "|  "
-  override def rankEnd: String       = "|="
+  def pieceToString(piece: Piece) = piece.toWikiLetters
+  override def tileStart       = "|"
+  override def tileEmpty       = "  "
+  override def tileEnd         = ""
+  override def rankEnd         = "|="
+  override def verticalBar     = " "
+  override def fileLabelsStart = "   "
+  override def fileLabelsSep   = "  "
+  override def fileLabelsEnd   = " "
+  override def rankLabelsRight = false
 }
 
 abstract class TextBoard extends AbstractRepr {
   def mkUnlabeled(board: Board): String = {
     def squareToString(square: Square): String =
-      board.get(square).map(pieceToString).getOrElse(emptyTile)
+      board.get(square).map(pieceToString).getOrElse(tileEmpty).mkString(
+        tileStart, "", tileEnd)
 
     def rowToString(rank: Int): String =
       Rules.rankSquares(rank).map(squareToString).mkString(
-        "", rankSep, rankEnd + " \n")
+        rankBegin, rankSep, rankEnd + "\n")
 
     Rules.rankRange.reverse.map(rowToString).mkString
   }
 
   def mkLabeled(board: Board): String = {
+    def addRankLabel(r: Int): String =
+      if (rankLabelsRight) s"${verticalBar}${r}" else s"${r}${verticalBar}"
+
     def boardWithRankLabels: String = {
-      val lines = mkUnlabeled(board).split(" \n")
-      val labels = algebraicRankRange.reverse.map(r => s"${verticalBar} ${r}\n")
-      lines.zip(labels).map(_.productIterator.mkString).mkString
+      val lines = mkUnlabeled(board).split("\n").toSeq
+      val labels = algebraicRankRange.reverse.map(addRankLabel)
+      val zipped =
+        if (rankLabelsRight) lines.zip(labels) else labels.zip(lines)
+
+      zipped.map(_.productIterator.mkString("", "", "\n")).mkString
     }
 
     def bottomBorder: String = {
       val barWidth = Rules.fileRange.length * 2 - 1
-      (horizontalBar * barWidth) + corner + "\n"
+      val border = (horizontalBar * barWidth) + corner
+      if (border.isEmpty()) "" else border + "\n"
     }
 
-    boardWithRankLabels + bottomBorder +
-      algebraicFileRange.mkString("", " ", " \n")
+    boardWithRankLabels + bottomBorder + algebraicFileRange.mkString(
+      fileLabelsStart, fileLabelsSep, fileLabelsEnd + "\n")
   }
 }

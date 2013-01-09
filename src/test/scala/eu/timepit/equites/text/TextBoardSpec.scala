@@ -26,14 +26,14 @@ class TextBoardSpec extends Specification {
       val tb = new TextBoard with LetterRepr
 
       tb.mkUnlabeled(board) must_==
-        "r n b q k b n r \n" +
-        "p p p p p p p p \n" +
-        ". . . . . . . . \n" +
-        ". . . . . . . . \n" +
-        ". . . . . . . . \n" +
-        ". . . . . . . . \n" +
-        "P P P P P P P P \n" +
-        "R N B Q K B N R \n"
+        "r n b q k b n r\n" +
+        "p p p p p p p p\n" +
+        ". . . . . . . .\n" +
+        ". . . . . . . .\n" +
+        ". . . . . . . .\n" +
+        ". . . . . . . .\n" +
+        "P P P P P P P P\n" +
+        "R N B Q K B N R\n"
 
       tb.mkLabeled(board) must_==
         "r n b q k b n r  8\n" +
@@ -44,18 +44,18 @@ class TextBoardSpec extends Specification {
         ". . . . . . . .  3\n" +
         "P P P P P P P P  2\n" +
         "R N B Q K B N R  1\n" +
-        "\n" +
+        " \n" +
         "a b c d e f g h \n"
 
       tb.mkUnlabeled(Board()) must_==
-        ". . . . . . . . \n" +
-        ". . . . . . . . \n" +
-        ". . . . . . . . \n" +
-        ". . . . . . . . \n" +
-        ". . . . . . . . \n" +
-        ". . . . . . . . \n" +
-        ". . . . . . . . \n" +
-        ". . . . . . . . \n"
+        ". . . . . . . .\n" +
+        ". . . . . . . .\n" +
+        ". . . . . . . .\n" +
+        ". . . . . . . .\n" +
+        ". . . . . . . .\n" +
+        ". . . . . . . .\n" +
+        ". . . . . . . .\n" +
+        ". . . . . . . .\n"
 
       tb.mkLabeled(Board()) must_==
         ". . . . . . . .  8\n" +
@@ -66,7 +66,7 @@ class TextBoardSpec extends Specification {
         ". . . . . . . .  3\n" +
         ". . . . . . . .  2\n" +
         ". . . . . . . .  1\n" +
-        "\n" +
+        " \n" +
         "a b c d e f g h \n"
     }
 
@@ -75,14 +75,14 @@ class TextBoardSpec extends Specification {
       val tb = new TextBoard with FigurineRepr
 
       tb.mkUnlabeled(board) must_==
-        "♜ ♞ ♝ ♛ ♚ ♝ ♞ ♜ \n" +
-        "♟ ♟ ♟ ♟ ♟ ♟ ♟ ♟ \n" +
-        "· · · · · · · · \n" +
-        "· · · · · · · · \n" +
-        "· · · · · · · · \n" +
-        "· · · · · · · · \n" +
-        "♙ ♙ ♙ ♙ ♙ ♙ ♙ ♙ \n" +
-        "♖ ♘ ♗ ♕ ♔ ♗ ♘ ♖ \n"
+        "♜ ♞ ♝ ♛ ♚ ♝ ♞ ♜\n" +
+        "♟ ♟ ♟ ♟ ♟ ♟ ♟ ♟\n" +
+        "· · · · · · · ·\n" +
+        "· · · · · · · ·\n" +
+        "· · · · · · · ·\n" +
+        "· · · · · · · ·\n" +
+        "♙ ♙ ♙ ♙ ♙ ♙ ♙ ♙\n" +
+        "♖ ♘ ♗ ♕ ♔ ♗ ♘ ♖\n"
 
       tb.mkLabeled(board) must_==
         "♜ ♞ ♝ ♛ ♚ ♝ ♞ ♜│ 8\n" +
@@ -97,14 +97,14 @@ class TextBoardSpec extends Specification {
         "a b c d e f g h \n"
 
       tb.mkUnlabeled(Board()) must_==
-        "· · · · · · · · \n" +
-        "· · · · · · · · \n" +
-        "· · · · · · · · \n" +
-        "· · · · · · · · \n" +
-        "· · · · · · · · \n" +
-        "· · · · · · · · \n" +
-        "· · · · · · · · \n" +
-        "· · · · · · · · \n"
+        "· · · · · · · ·\n" +
+        "· · · · · · · ·\n" +
+        "· · · · · · · ·\n" +
+        "· · · · · · · ·\n" +
+        "· · · · · · · ·\n" +
+        "· · · · · · · ·\n" +
+        "· · · · · · · ·\n" +
+        "· · · · · · · ·\n"
 
       tb.mkLabeled(Board()) must_==
         "· · · · · · · ·│ 8\n" +
@@ -124,14 +124,14 @@ class TextBoardSpec extends Specification {
       val tb = new TextBoard with WikiRepr
 
       tb.mkUnlabeled(board) must_==
-        "|rd|nd|bd|qd|kd|bd|nd|rd|= \n" +
-        "|pd|pd|pd|pd|pd|pd|pd|pd|= \n" +
-        "|  |  |  |  |  |  |  |  |= \n" +
-        "|  |  |  |  |  |  |  |  |= \n" +
-        "|  |  |  |  |  |  |  |  |= \n" +
-        "|  |  |  |  |  |  |  |  |= \n" +
-        "|pl|pl|pl|pl|pl|pl|pl|pl|= \n" +
-        "|rl|nl|bl|ql|kl|bl|nl|rl|= \n"
+        "|rd|nd|bd|qd|kd|bd|nd|rd|=\n" +
+        "|pd|pd|pd|pd|pd|pd|pd|pd|=\n" +
+        "|  |  |  |  |  |  |  |  |=\n" +
+        "|  |  |  |  |  |  |  |  |=\n" +
+        "|  |  |  |  |  |  |  |  |=\n" +
+        "|  |  |  |  |  |  |  |  |=\n" +
+        "|pl|pl|pl|pl|pl|pl|pl|pl|=\n" +
+        "|rl|nl|bl|ql|kl|bl|nl|rl|=\n"
 
       tb.mkLabeled(board) must_==
         "8 |rd|nd|bd|qd|kd|bd|nd|rd|=\n" +
@@ -145,14 +145,14 @@ class TextBoardSpec extends Specification {
         "   a  b  c  d  e  f  g  h \n"
 
       tb.mkUnlabeled(Board()) must_==
-        "|  |  |  |  |  |  |  |  |= \n" +
-        "|  |  |  |  |  |  |  |  |= \n" +
-        "|  |  |  |  |  |  |  |  |= \n" +
-        "|  |  |  |  |  |  |  |  |= \n" +
-        "|  |  |  |  |  |  |  |  |= \n" +
-        "|  |  |  |  |  |  |  |  |= \n" +
-        "|  |  |  |  |  |  |  |  |= \n" +
-        "|  |  |  |  |  |  |  |  |= \n"
+        "|  |  |  |  |  |  |  |  |=\n" +
+        "|  |  |  |  |  |  |  |  |=\n" +
+        "|  |  |  |  |  |  |  |  |=\n" +
+        "|  |  |  |  |  |  |  |  |=\n" +
+        "|  |  |  |  |  |  |  |  |=\n" +
+        "|  |  |  |  |  |  |  |  |=\n" +
+        "|  |  |  |  |  |  |  |  |=\n" +
+        "|  |  |  |  |  |  |  |  |=\n"
 
       tb.mkLabeled(Board()) must_==
         "8 |  |  |  |  |  |  |  |  |=\n" +
