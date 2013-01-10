@@ -17,7 +17,7 @@
 package eu.timepit.equites
 package implicits
 
-import utils.Notation._
+import util.Notation._
 
 object RichSquareImplicit {
   implicit final class RichSquare(val self: Square) extends AnyVal {

@@ -15,7 +15,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package eu.timepit.equites
-package utils
+package util
 
 import scala.collection.immutable.NumericRange
 
@@ -69,5 +69,9 @@ object Notation {
       from    <- squareFromAlgebraic(square1)
       to      <- squareFromAlgebraic(square2)
     } yield Move(piece, from, to)
+  }
+
+  def splitByMoveNumber(s: String): List[(Int, String, String)] = {
+    ???
   }
 }

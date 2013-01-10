@@ -18,7 +18,7 @@ package eu.timepit.equites
 package text
 
 import implicits.RichPieceImplicit._
-import utils.Notation._
+import util.Notation._
 
 trait AbstractRepr {
   def pieceToString(piece: Piece): String

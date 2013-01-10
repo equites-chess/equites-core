@@ -16,8 +16,8 @@
 
 package eu.timepit.equites
 
-import utils.Math._
-import utils.Notation._
+import util.Math._
+import util.Notation._
 
 object Square {
   def apply(algebraicFile: Char, algebraicRank: Int): Square =

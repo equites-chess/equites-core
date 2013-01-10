@@ -15,7 +15,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package eu.timepit.equites
-package utils
+package util
 
 object Math {
   def isEven[A](i: A)(implicit integral: Integral[A]): Boolean = {
