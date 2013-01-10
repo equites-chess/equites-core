@@ -17,9 +17,24 @@
 package eu.timepit.equites
 package util
 
-import scala.util.parsing.combinator._
+import org.specs2.mutable._
+import org.specs2.matcher.ParserMatchers
 
-object PGNParsers extends RegexParsers {
-  def moveNumberIndicator: Parser[String] =
-    """\d+(\.{3}|\.)""".r
+class PGNParsersSpec extends Specification with ParserMatchers {
+  val parsers = PGNParsers
+  import parsers._
+
+  "moveNumberIndicator" should {
+    "succeed on" in {
+      moveNumberIndicator must succeedOn("23.")
+      moveNumberIndicator must succeedOn("42...")
+    }
+
+    "fail on" in {
+      moveNumberIndicator must failOn("1")
+      moveNumberIndicator must failOn("2..")
+      moveNumberIndicator must failOn("a3.")
+      moveNumberIndicator must failOn("4....")
+    }
+  }
 }
