@@ -25,4 +25,7 @@ object PGNParsers extends RegexParsers {
 
   def blockComment: Parser[String] =
     """\{[^}]*\}""".r
+
+  def lineComment: Parser[String] =
+    """;.*$""".r
 }

@@ -50,4 +50,16 @@ class PGNParsersSpec extends Specification with ParserMatchers {
       blockComment must failOn("{missing paren")
     }
   }
+
+  "lineComment" should {
+    "succeed on" in {
+      lineComment must succeedOn("; no comment")
+      lineComment must succeedOn(";")
+    }
+
+    "fail on" in {
+      lineComment must failOn("; comment\n")
+      lineComment must failOn("; 123\n next line")
+    }
+  }
 }
