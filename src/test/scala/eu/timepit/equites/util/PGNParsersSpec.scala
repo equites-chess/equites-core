@@ -37,4 +37,17 @@ class PGNParsersSpec extends Specification with ParserMatchers {
       moveNumberIndicator must failOn("4....")
     }
   }
+
+  "blockComment" should {
+    "succeed on" in {
+      blockComment must succeedOn("{no comment}")
+      blockComment must succeedOn("{}")
+      blockComment must succeedOn("{{}")
+    }
+
+    "fail on" in {
+      blockComment must failOn("{unbalanced} parens}")
+      blockComment must failOn("{missing paren")
+    }
+  }
 }

@@ -22,4 +22,7 @@ import scala.util.parsing.combinator._
 object PGNParsers extends RegexParsers {
   def moveNumberIndicator: Parser[String] =
     """\d+(\.{3}|\.)""".r
+
+  def blockComment: Parser[String] =
+    """\{[^}]*\}""".r
 }
