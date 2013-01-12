@@ -20,20 +20,22 @@ package util
 import scala.util.parsing.combinator._
 
 object PGNParsers extends RegexParsers {
+  def toTuple[T, U](seq: T ~ U): (T, U) = (seq._1, seq._2)
+
   def integer: Parser[Int] =
     """\d+""".r ^^ (_.toInt)
 
+    // \" -> " and \\ -> \
   def string: Parser[String] =
     """"\w*"""".r
 
   def symbol: Parser[String] =
-    """[\d\p{Alpha}][\w+#=:-]{0,254}""".r
+    """[\d\p{Alpha}][\w+#=:-]*""".r
 
   def tagPair: Parser[(String, String)] = {
-    val fst = "[" ~> whiteSpace.? ~> symbol <~ whiteSpace.?
-    val snd = string <~ whiteSpace.? <~ "]"
-
-    fst ~ snd ^^ (x => (x._1, x._2))
+    val name  = whiteSpace.? ~> symbol
+    val value = whiteSpace.? ~> string <~ whiteSpace.?
+    "[" ~> name ~ value <~ "]" ^^ toTuple
   }
 
   def blockComment: Parser[String] =

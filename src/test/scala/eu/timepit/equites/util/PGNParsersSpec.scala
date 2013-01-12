@@ -24,13 +24,12 @@ class PGNParsersSpec extends Specification with ParserMatchers {
   val parsers = PGNParsers
   import parsers._
 
-  "" should {
-    "" in {
+  "tagPair" should {
+    "succeed on valid input" in {
       val result = ("Tag", "\"Value\"")
       tagPair must succeedOn("""[Tag"Value"]""").withResult(result)
       tagPair must succeedOn("""[Tag "Value"]""").withResult(result)
       tagPair must succeedOn("""[ Tag "Value"]""").withResult(result)
-      tagPair must succeedOn("""[ Tag "Value" ]""").withResult(result)
       tagPair must succeedOn("""[ Tag "Value" ]""").withResult(result)
     }
   }
