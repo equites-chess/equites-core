@@ -24,6 +24,17 @@ class PGNParsersSpec extends Specification with ParserMatchers {
   val parsers = PGNParsers
   import parsers._
 
+  "" should {
+    "" in {
+      val result = ("Tag", "\"Value\"")
+      tagPair must succeedOn("""[Tag"Value"]""").withResult(result)
+      tagPair must succeedOn("""[Tag "Value"]""").withResult(result)
+      tagPair must succeedOn("""[ Tag "Value"]""").withResult(result)
+      tagPair must succeedOn("""[ Tag "Value" ]""").withResult(result)
+      tagPair must succeedOn("""[ Tag "Value" ]""").withResult(result)
+    }
+  }
+
   "moveNumberIndicator" should {
     "succeed on" in {
       moveNumberIndicator must succeedOn("23.")
@@ -60,6 +71,33 @@ class PGNParsersSpec extends Specification with ParserMatchers {
     "fail on" in {
       lineComment must failOn("; comment\n")
       lineComment must failOn("; 123\n next line")
+    }
+  }
+
+  "moveAnnotation" should {
+    "succeed on" in {
+      moveAnnotation must succeedOn("!")
+      moveAnnotation must succeedOn("?")
+      moveAnnotation must succeedOn("!!")
+      moveAnnotation must succeedOn("??")
+      moveAnnotation must succeedOn("!?")
+      moveAnnotation must succeedOn("?!")
+    }
+  }
+/*
+  "numericAnnotationGlyph" should {
+    "succeed on" in {
+      numericAnnotationGlyph must succeedOn("$123").withResult("$", 123)
+    }
+  }
+*/
+
+  "terminationMarker" should {
+    "succeed on" in {
+      terminationMarker must succeedOn("1-0")
+      terminationMarker must succeedOn("0-1")
+      terminationMarker must succeedOn("1/2-1/2")
+      terminationMarker must succeedOn("*")
     }
   }
 }

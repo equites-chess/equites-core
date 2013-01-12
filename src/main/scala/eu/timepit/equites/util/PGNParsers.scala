@@ -20,12 +20,42 @@ package util
 import scala.util.parsing.combinator._
 
 object PGNParsers extends RegexParsers {
-  def moveNumberIndicator: Parser[String] =
-    """\d+(\.{3}|\.)""".r
+  def integer: Parser[Int] =
+    """\d+""".r ^^ (_.toInt)
+
+  def string: Parser[String] =
+    """"\w*"""".r
+
+  def symbol: Parser[String] =
+    """[\d\p{Alpha}][\w+#=:-]{0,254}""".r
+
+  def tagPair: Parser[(String, String)] = {
+    val fst = "[" ~> whiteSpace.? ~> symbol <~ whiteSpace.?
+    val snd = string <~ whiteSpace.? <~ "]"
+
+    fst ~ snd ^^ (x => (x._1, x._2))
+  }
 
   def blockComment: Parser[String] =
     """\{[^}]*\}""".r
 
   def lineComment: Parser[String] =
     """;.*$""".r
+
+  def moveText = ???
+
+  def moveNumberIndicator: Parser[Any] =
+    integer ~ """(\.{3}|\.)""".r
+
+  def moveSymbol =
+    """(\p{Print}?x?[a-z]\d(=\p{Print})?|O(-O){1,2})""".r
+
+  def moveAnnotation: Parser[String] =
+    """[!?]{1,2}""".r
+
+  def numericAnnotationGlyph: Parser[Any] =
+    "$" ~ integer
+
+  def terminationMarker: Parser[String] =
+    """(1-0|0-1|1/2-1/2|\*)""".r
 }
