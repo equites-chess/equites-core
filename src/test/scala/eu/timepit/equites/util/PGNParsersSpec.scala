@@ -33,8 +33,10 @@ class PGNParsersSpec extends Specification with ParserMatchers {
       string must succeedOn("\"hello world\"").withResult("hello world")
     }
     "succeed on escaped quotes" in {
-      string must succeedOn(""""hello \" world"""").withResult("hello \" world")
+      string must succeedOn(""""hello \" world"""")
+        .withResult("hello \" world")
       string must succeedOn(""""hello \"\" world"""")
+        .withResult("hello \"\" world")
     }
     "succeed on escaped backslashes" in {
       string must succeedOn(""""hello \\ world"""")

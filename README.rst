@@ -10,9 +10,9 @@ and currently not playable.
 Building
 --------
 
-The build tool `sbt`_ is used to build Equites.
+`sbt`_ is used for building Equites.
 
-.. _sbt: https://github.com/harrah/xsbt
+.. _sbt: http://www.scala-sbt.org/
 
 Download
 --------

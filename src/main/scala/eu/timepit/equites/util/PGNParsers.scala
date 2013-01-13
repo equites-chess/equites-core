@@ -64,7 +64,7 @@ object PGNParsers extends RegexParsers {
     "$" ~ integer
 
   def terminationMarker: Parser[String] =
-    """(1-0|0-1|1/2-1/2|\*)""".r
+    "1-0" | "0-1" | "1/2-1/2" | "*"
 
 
   def withMaybeWS[T](p: Parser[T]): Parser[T] =
@@ -72,3 +72,39 @@ object PGNParsers extends RegexParsers {
 
   def toTuple[T, U](seq: T ~ U): (T, U) = (seq._1, seq._2)
 }
+
+/*
+18: Formal syntax
+
+<PGN-database> ::= <PGN-game> <PGN-database>
+                   <empty>
+
+<PGN-game> ::= <tag-section> <movetext-section>
+
+<tag-section> ::= <tag-pair> <tag-section>
+                  <empty>
+
+<tag-pair> ::= [ <tag-name> <tag-value> ]
+
+<tag-name> ::= <identifier>
+
+<tag-value> ::= <string>
+
+<movetext-section> ::= <element-sequence> <game-termination>
+
+<element-sequence> ::= <element> <element-sequence>
+                       <recursive-variation> <element-sequence>
+                       <empty>
+
+<element> ::= <move-number-indication>
+              <SAN-move>
+              <numeric-annotation-glyph>
+
+<recursive-variation> ::= ( <element-sequence> )
+
+<game-termination> ::= 1-0
+                       0-1
+                       1/2-1/2
+                       *
+<empty> ::=
+*/
