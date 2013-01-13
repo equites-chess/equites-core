@@ -29,19 +29,23 @@ object PGNParsers extends RegexParsers {
     """\d+""".r ^^ (_.toInt)
 
   def string: Parser[String] =
-    """"([^"\\]|\\.)*"""".r ^^ { _.drop(1).dropRight(1)
-      .replaceAllLiterally("\\\\", "\\")
-      .replaceAllLiterally("\\\"", "\"")
+    """"([^"\\]|\\.)*"""".r ^^ {
+      _.drop(1).dropRight(1)
+       .replaceAllLiterally("\\\\", "\\")
+       .replaceAllLiterally("\\\"", "\"")
     }
 
   def symbol: Parser[String] =
     """[\d\p{Alpha}][\w+#=:-]*""".r
 
-  def tagPair: Parser[(String, String)] = {
-    val name  = withMaybeWS(symbol)
-    val value = withMaybeWS(string)
-    "[" ~> name ~ value <~ "]" ^^ toTuple
-  }
+  def tagPair: Parser[(String, String)] =
+    "[" ~> tagName ~ tagValue <~ "]" ^^ toTuple
+
+  def tagName: Parser[String] =
+    withMaybeWS(symbol)
+
+  def tagValue: Parser[String] =
+    withMaybeWS(string)
 
   def blockComment: Parser[String] =
     """\{[^}]*\}""".r
