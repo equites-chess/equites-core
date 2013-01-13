@@ -24,15 +24,48 @@ class PGNParsersSpec extends Specification with ParserMatchers {
   val parsers = PGNParsers
   import parsers._
 
-  "tagPair" should {
-    "succeed on valid input" in {
-      val result = ("Tag", "\"Value\"")
-      tagPair must succeedOn("""[Tag"Value"]""").withResult(result)
-      tagPair must succeedOn("""[Tag "Value"]""").withResult(result)
-      tagPair must succeedOn("""[ Tag "Value"]""").withResult(result)
-      tagPair must succeedOn("""[ Tag "Value" ]""").withResult(result)
+  "string" should {
+    "succed on the empty string" in {
+      string must succeedOn("\"\"").withResult("")
+    }
+    "succed on simple strings" in {
+      string must succeedOn("\"hello\"").withResult("hello")
+      string must succeedOn("\"hello world\"").withResult("hello world")
+    }
+    "succeed on escaped quotes" in {
+      string must succeedOn(""""hello \" world"""").withResult("hello \" world")
+      string must succeedOn(""""hello \"\" world"""")
+    }
+    "succeed on escaped backslashes" in {
+      string must succeedOn(""""hello \\ world"""")
+      string must succeedOn(""""hello \\ \\ world"""")
+    }
+    "fail on unquoted strings" in {
+      string must failOn("hello")
+      string must failOn("\"hello")
+      string must failOn("hello\"")
+    }
+    "fail on unescaped quotes" in {
+      string must failOn(""""hello " world"""")
+      string must failOn(""""hello "" world"""")
     }
   }
+
+  "tagPair" should {
+    "succeed on valid input" in {
+      val result = ("name", "value")
+      tagPair must succeedOn("""[name"value"]""").withResult(result)
+      tagPair must succeedOn("""[name "value"]""").withResult(result)
+      tagPair must succeedOn("""[ name "value"]""").withResult(result)
+      tagPair must succeedOn("""[ name "value" ]""").withResult(result)
+    }
+    "fail on invalid input" in {
+      tagPair must failOn("""[name "value"""")
+      tagPair must failOn("""name "value"]""")
+      tagPair must failOn("""[name ["value"]""")
+    }
+  }
+
 
   "moveNumberIndicator" should {
     "succeed on" in {

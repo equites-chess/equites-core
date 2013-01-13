@@ -28,9 +28,11 @@ object PGNParsers extends RegexParsers {
   def integer: Parser[Int] =
     """\d+""".r ^^ (_.toInt)
 
-    // \" -> " and \\ -> \
   def string: Parser[String] =
-    """"\w*"""".r
+    """"([^"\\]|\\.)*"""".r ^^ { _.drop(1).dropRight(1)
+      .replaceAllLiterally("\\\\", "\\")
+      .replaceAllLiterally("\\\"", "\"")
+    }
 
   def symbol: Parser[String] =
     """[\d\p{Alpha}][\w+#=:-]*""".r
