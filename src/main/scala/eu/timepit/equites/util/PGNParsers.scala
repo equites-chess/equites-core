@@ -74,6 +74,8 @@ object PGNParsers extends RegexParsers {
 }
 
 /*
+from http://www.chessclub.com/help/PGN-spec:
+
 18: Formal syntax
 
 <PGN-database> ::= <PGN-game> <PGN-database>
