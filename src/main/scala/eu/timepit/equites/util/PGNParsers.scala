@@ -59,7 +59,8 @@ object PGNParsers extends RegexParsers {
   def tagSection: Parser[List[(String, String)]] =
     (tagPair <~ comment.*).*
 
-  def moveText = ???
+  def moveText: Parser[Any] =
+    "" ~ terminationMarker
 
   def moveNumberIndicator: Parser[Any] =
     integer ~ """(\.{3}|\.)""".r
