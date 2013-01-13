@@ -21,9 +21,9 @@ You can download the Equites sources in either [tar.gz][] or [zip][] formats.
 
 The version control system used for development of Equites is Git. The [Git
 repository][] can be inspected and browsed online at [GitHub][] and it can
-be cloned by running::
+be cloned by running:
 
-  git clone git://github.com/fthomas/equites.git
+    git clone git://github.com/fthomas/equites.git
 
 [Git repository]: http://github.com/fthomas/equites
 [GitHub]: http://github.com/
@@ -38,4 +38,4 @@ of the license can be found in the file `COPYING` in Equites' source tree.
 
 ## Author
 
-Equites was written by Frank S. Thomas <f.thomas@gmx.de>
+Equites was written by Frank S. Thomas <<f.thomas@gmx.de>>
