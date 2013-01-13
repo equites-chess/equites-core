@@ -38,20 +38,26 @@ object PGNParsers extends RegexParsers {
   def symbol: Parser[String] =
     """[\d\p{Alpha}][\w+#=:-]*""".r
 
-  def tagPair: Parser[(String, String)] =
-    "[" ~> tagName ~ tagValue <~ "]" ^^ toTuple
-
-  def tagName: Parser[String] =
-    withMaybeWS(symbol)
-
-  def tagValue: Parser[String] =
-    withMaybeWS(string)
-
   def blockComment: Parser[String] =
     """\{[^}]*\}""".r
 
   def lineComment: Parser[String] =
-    """;.*$""".r
+    """;.*""".r
+
+  def comment: Parser[String] =
+    blockComment | lineComment
+
+  def tagName: Parser[String] =
+    symbol
+
+  def tagValue: Parser[String] =
+    string
+
+  def tagPair: Parser[(String, String)] =
+    "[" ~> tagName ~ tagValue <~ "]" ^^ toTuple
+
+  def tagSection: Parser[List[(String, String)]] =
+    (tagPair <~ comment.*).*
 
   def moveText = ???
 
@@ -70,9 +76,6 @@ object PGNParsers extends RegexParsers {
   def terminationMarker: Parser[String] =
     "1-0" | "0-1" | "1/2-1/2" | "*"
 
-
-  def withMaybeWS[T](p: Parser[T]): Parser[T] =
-    whiteSpace.? ~> p <~ whiteSpace.?
 
   def toTuple[T, U](seq: T ~ U): (T, U) = (seq._1, seq._2)
 }

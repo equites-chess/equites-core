@@ -68,6 +68,38 @@ class PGNParsersSpec extends Specification with ParserMatchers {
     }
   }
 
+  "tagSection" should {
+    "succeed on valid input" in {
+      val section =
+        """|[Event "F/S Return Match"]
+           |[Site "Belgrade, Serbia Yugoslavia|JUG"]
+           |[Date "1992.11.04"]
+           |[Round "29"]
+           |[White "Fischer, Robert J."]
+           |[Black "Spassky, Boris V."]
+           |[Result "1/2-1/2"]""".stripMargin
+      val result = List(
+        ("Event", "F/S Return Match"),
+        ("Site", "Belgrade, Serbia Yugoslavia|JUG"),
+        ("Date", "1992.11.04"),
+        ("Round", "29"),
+        ("White", "Fischer, Robert J."),
+        ("Black", "Spassky, Boris V."),
+        ("Result", "1/2-1/2"))
+      tagSection must succeedOn(section).withResult(result)
+    }
+    "succeed on valid input with trailing comments" in {
+      val section =
+        """|[name1 "value1"] ; no comment
+           |[name2 "value2"] { comment1 } { comment2 }
+           |[name3 "value3"]""".stripMargin
+      val result = List(
+        ("name1", "value1"),
+        ("name2", "value2"),
+        ("name3", "value3"))
+      tagSection must succeedOn(section).withResult(result)
+    }
+  }
 
   "moveNumberIndicator" should {
     "succeed on" in {
