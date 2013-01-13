@@ -19,9 +19,12 @@ package util
 
 import scala.util.parsing.combinator._
 
+/**
+ * Parsers for the Portable Game Notation (PGN).
+ *
+ * @see [[http://www.chessclub.com/help/PGN-spec Portable Game Notation Specification and Implementation Guide]]
+ */
 object PGNParsers extends RegexParsers {
-  def toTuple[T, U](seq: T ~ U): (T, U) = (seq._1, seq._2)
-
   def integer: Parser[Int] =
     """\d+""".r ^^ (_.toInt)
 
@@ -33,8 +36,8 @@ object PGNParsers extends RegexParsers {
     """[\d\p{Alpha}][\w+#=:-]*""".r
 
   def tagPair: Parser[(String, String)] = {
-    val name  = whiteSpace.? ~> symbol
-    val value = whiteSpace.? ~> string <~ whiteSpace.?
+    val name  = withMaybeWS(symbol)
+    val value = withMaybeWS(string)
     "[" ~> name ~ value <~ "]" ^^ toTuple
   }
 
@@ -60,4 +63,10 @@ object PGNParsers extends RegexParsers {
 
   def terminationMarker: Parser[String] =
     """(1-0|0-1|1/2-1/2|\*)""".r
+
+
+  def withMaybeWS[T](p: Parser[T]): Parser[T] =
+    whiteSpace.? ~> p <~ whiteSpace.?
+
+  def toTuple[T, U](seq: T ~ U): (T, U) = (seq._1, seq._2)
 }
