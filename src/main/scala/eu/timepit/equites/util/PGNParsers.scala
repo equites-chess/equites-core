@@ -19,6 +19,8 @@ package util
 
 import scala.util.parsing.combinator._
 
+import implicits.GenericImplicits._
+
 /**
  * Parsers for the Portable Game Notation (PGN).
  *
@@ -30,7 +32,7 @@ object PGNParsers extends RegexParsers {
 
   def string: Parser[String] =
     """"([^"\\]|\\.)*"""".r ^^ {
-      _.drop(1).dropRight(1)
+      _.dropLeftRight(1)
        .replaceAllLiterally("\\\\", "\\")
        .replaceAllLiterally("\\\"", "\"")
     }
@@ -39,7 +41,7 @@ object PGNParsers extends RegexParsers {
     """[\d\p{Alpha}][\w+#=:-]*""".r
 
   def blockComment: Parser[String] =
-    """\{[^}]*\}""".r
+    """\{[^}]*\}""".r ^^ (_.dropLeftRight(1))
 
   def lineComment: Parser[String] =
     """;.*""".r
@@ -68,6 +70,7 @@ object PGNParsers extends RegexParsers {
   def sanMove: Parser[String] =
     """(\p{Print}?([a-z]?\d?|)x?[a-z]\d(=\p{Print})?[+#]?|O(-O){1,2})""".r
 
+  // translate to NAG
   def moveAnnotation: Parser[String] =
     """[!?]{1,2}""".r
 
@@ -76,6 +79,18 @@ object PGNParsers extends RegexParsers {
 
   def terminationMarker: Parser[String] =
     "1-0" | "0-1" | "1/2-1/2" | "*"
+
+  def moveTextElem: Parser[Any] =
+    moveNumberIndicator | (sanMove ~ moveAnnotation.?) | numericAnnotationGlyph
+
+  def moveTextSeq: Parser[Any] =
+    (moveTextElem | blockComment | recursiveVariation).*
+
+  def recursiveVariation: Parser[Any] =
+    "(" ~> moveTextSeq <~ ")"
+
+  def moveText: Parser[Any] =
+    moveTextSeq ~ terminationMarker
 
 
   def toTuple[T, U](seq: T ~ U): (T, U) = (seq._1, seq._2)

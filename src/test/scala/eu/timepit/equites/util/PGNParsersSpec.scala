@@ -176,4 +176,19 @@ class PGNParsersSpec extends Specification with ParserMatchers {
       terminationMarker must succeedOn("*")
     }
   }
+
+  "moveTextSeq" should {
+    "succeed on valid input" in {
+      val text =
+        "1. e4 e5 2. Nf3 Nc6 3. Bb5 " +
+        "{This opening is called the Ruy Lopez.} 3... a6"
+      val result = List(
+        (1, White), new ~("e4", None),  new ~("e5", None),
+        (2, White), new ~("Nf3", None), new ~("Nc6", None),
+        (3, White), new ~("Bb5", None), "This opening is called the Ruy Lopez.",
+        (3, Black), new ~("a6", None))
+
+      moveTextSeq must succeedOn(text).withResult(result)
+    }
+  }
 }
