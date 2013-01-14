@@ -1,16 +1,14 @@
-# Equites, a simple chess interface
+# Equites, a simple chess interface 
 
 Equites is a simple chess interface written in Scala. It is work in progress
 and currently not playable.
 
-## Building
+## Building [![Build Status][]](http://travis-ci.org/fthomas/equites)
 
-[sbt][] is used for building Equites and [Travis CI][] to verify the build:
-[![Build Status][]](http://travis-ci.org/fthomas/equites)
+[sbt][] is used for building Equites.
 
-[sbt]: http://www.scala-sbt.org/
-[Travis CI]: http://travis-ci.org/
 [Build Status]: https://secure.travis-ci.org/fthomas/equites.png
+[sbt]: http://www.scala-sbt.org/
 
 ## Download
 
