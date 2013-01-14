@@ -1,4 +1,4 @@
-# Equites, a simple chess interface 
+# Equites, a simple chess interface
 
 Equites is a simple chess interface written in Scala. It is work in progress
 and currently not playable.
