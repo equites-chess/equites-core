@@ -142,7 +142,7 @@ class PGNParsersSpec extends Specification with ParserMatchers {
       sanMove must succeedOn("dxc4")
       sanMove must succeedOn("Qc8+")
       sanMove must succeedOn("e8=Q#")
-      sanMove must succeedOn("f4exf3")
+      sanMove must succeedOn("exf3")
       sanMove must succeedOn("Qa6xb7#")
       sanMove must succeedOn("fxg1=Q+")
       sanMove must succeedOn("O-O")

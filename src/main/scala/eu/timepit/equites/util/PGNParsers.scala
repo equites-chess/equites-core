@@ -66,7 +66,7 @@ object PGNParsers extends RegexParsers {
   }
 
   def sanMove: Parser[String] =
-    """(\p{Print}?x?[a-z]\d(=\p{Print})?|O(-O){1,2})""".r
+    """(\p{Print}?([a-z]?\d?|)x?[a-z]\d(=\p{Print})?[+#]?|O(-O){1,2})""".r
 
   def moveAnnotation: Parser[String] =
     """[!?]{1,2}""".r
