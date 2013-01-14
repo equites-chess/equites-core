@@ -3,14 +3,12 @@
 Equites is a simple chess interface written in Scala. It is work in progress
 and currently not playable.
 
-## Building
+## Building [![Build Status][]](http://travis-ci.org/fthomas/equites)
 
-[sbt][] is used for building Equites and [Travis CI][] to verify the build:
-[![Build Status][]](http://travis-ci.org/fthomas/equites)
+[sbt][] is used for building Equites.
 
-[sbt]: http://www.scala-sbt.org/
-[Travis CI]: http://travis-ci.org/
 [Build Status]: https://secure.travis-ci.org/fthomas/equites.png
+[sbt]: http://www.scala-sbt.org/
 
 ## Download
 
@@ -31,10 +29,12 @@ be cloned by running:
 ## License
 
 Equites is [free software][] and licensed under the [GPLv3][]. The full text
-of the license can be found in the file `COPYING` in Equites' source tree.
+of the license can be found in the file [`COPYING`][COPYING] in Equites'
+source tree.
 
 [free software]: http://www.gnu.org/philosophy/free-sw.html
 [GPLv3]: http://www.gnu.org/licenses/gpl-3.0.html
+[COPYING]: https://github.com/fthomas/equites/blob/master/COPYING
 
 ## Author
 
