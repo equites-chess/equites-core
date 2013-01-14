@@ -59,20 +59,20 @@ object PGNParsers extends RegexParsers {
   def tagSection: Parser[List[(String, String)]] =
     (tagPair <~ comment.*).*
 
-  def moveText: Parser[Any] =
-    "" ~ terminationMarker
+  def moveNumberIndicator: Parser[(Int, Color)] = {
+    def white = "."   ^^ (_ => White)
+    def black = "..." ^^ (_ => Black)
+    integer ~ (black | white) ^^ toTuple
+  }
 
-  def moveNumberIndicator: Parser[Any] =
-    integer ~ """(\.{3}|\.)""".r
-
-  def moveSymbol =
+  def sanMove: Parser[String] =
     """(\p{Print}?x?[a-z]\d(=\p{Print})?|O(-O){1,2})""".r
 
   def moveAnnotation: Parser[String] =
     """[!?]{1,2}""".r
 
-  def numericAnnotationGlyph: Parser[Any] =
-    "$" ~ integer
+  def numericAnnotationGlyph: Parser[Int] =
+    "$" ~> integer
 
   def terminationMarker: Parser[String] =
     "1-0" | "0-1" | "1/2-1/2" | "*"

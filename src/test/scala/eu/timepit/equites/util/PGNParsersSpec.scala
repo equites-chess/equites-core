@@ -53,6 +53,27 @@ class PGNParsersSpec extends Specification with ParserMatchers {
     }
   }
 
+  "blockComment" should {
+    "succeed on valid input" in {
+      blockComment must succeedOn("{no comment}")
+      blockComment must succeedOn("{}")
+      blockComment must succeedOn("{{}")
+    }
+    "fail on unbalanced parens" in {
+      blockComment must failOn("{unbalanced} parens}")
+    }
+    "fail on missing paren" in {
+      blockComment must failOn("{missing paren")
+    }
+  }
+
+  "lineComment" should {
+    "succeed on valid input" in {
+      lineComment must succeedOn("; no comment")
+      lineComment must succeedOn(";")
+    }
+  }
+
   "tagPair" should {
     "succeed on valid input" in {
       val result = ("name", "value")
@@ -102,12 +123,11 @@ class PGNParsersSpec extends Specification with ParserMatchers {
   }
 
   "moveNumberIndicator" should {
-    "succeed on" in {
-      moveNumberIndicator must succeedOn("23.")
-      moveNumberIndicator must succeedOn("42...")
+    "succeed on numbers with on or three periods" in {
+      moveNumberIndicator must succeedOn("23.").withResult((23, White))
+      moveNumberIndicator must succeedOn("42...").withResult((42, Black))
     }
-
-    "fail on" in {
+    "fail on invalid input" in {
       moveNumberIndicator must failOn("1")
       moveNumberIndicator must failOn("2..")
       moveNumberIndicator must failOn("a3.")
@@ -115,33 +135,23 @@ class PGNParsersSpec extends Specification with ParserMatchers {
     }
   }
 
-  "blockComment" should {
-    "succeed on" in {
-      blockComment must succeedOn("{no comment}")
-      blockComment must succeedOn("{}")
-      blockComment must succeedOn("{{}")
-    }
-
-    "fail on" in {
-      blockComment must failOn("{unbalanced} parens}")
-      blockComment must failOn("{missing paren")
-    }
-  }
-
-  "lineComment" should {
-    "succeed on" in {
-      lineComment must succeedOn("; no comment")
-      lineComment must succeedOn(";")
-    }
-
-    "fail on" in {
-      lineComment must failOn("; comment\n")
-      lineComment must failOn("; 123\n next line")
+  "sanMove" should {
+    "succeed on valid input" in {
+      sanMove must succeedOn("d5")
+      sanMove must succeedOn("Nf3")
+      sanMove must succeedOn("dxc4")
+      sanMove must succeedOn("Qc8+")
+      sanMove must succeedOn("e8=Q#")
+      sanMove must succeedOn("f4exf3")
+      sanMove must succeedOn("Qa6xb7#")
+      sanMove must succeedOn("fxg1=Q+")
+      sanMove must succeedOn("O-O")
+      sanMove must succeedOn("O-O-O")
     }
   }
 
   "moveAnnotation" should {
-    "succeed on" in {
+    "succeed on all valid possibilities" in {
       moveAnnotation must succeedOn("!")
       moveAnnotation must succeedOn("?")
       moveAnnotation must succeedOn("!!")
@@ -150,16 +160,16 @@ class PGNParsersSpec extends Specification with ParserMatchers {
       moveAnnotation must succeedOn("?!")
     }
   }
-/*
+
   "numericAnnotationGlyph" should {
-    "succeed on" in {
-      numericAnnotationGlyph must succeedOn("$123").withResult("$", 123)
+    "succeed on valid input" in {
+      numericAnnotationGlyph must succeedOn("$1").withResult(1)
+      numericAnnotationGlyph must succeedOn("$123").withResult(123)
     }
   }
-*/
 
   "terminationMarker" should {
-    "succeed on" in {
+    "succeed on all possible termination markers" in {
       terminationMarker must succeedOn("1-0")
       terminationMarker must succeedOn("0-1")
       terminationMarker must succeedOn("1/2-1/2")
