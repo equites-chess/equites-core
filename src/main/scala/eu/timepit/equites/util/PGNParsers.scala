@@ -91,10 +91,10 @@ object PGNParsers extends RegexParsers {
   def moveTextElem: Parser[Any] =
     moveNumberIndicator | sanMove  | moveAnnotation | numericAnnotationGlyph
 
-  def moveTextSeq: Parser[Any] =
+  def moveTextSeq: Parser[List[Any]] =
     (moveTextElem | blockComment | recursiveVariation).*
 
-  def recursiveVariation: Parser[Any] =
+  def recursiveVariation: Parser[List[Any]] =
     "(" ~> moveTextSeq <~ ")"
 
   def moveText: Parser[Any] =

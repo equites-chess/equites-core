@@ -18,5 +18,5 @@ package eu.timepit.equites
 package util
 
 object PGN {
-  def parseMoveText(text: String): List[Action] = ???
+  def translateMoveTextSeq(seq: List[Any]): List[Action] = ???
 }
