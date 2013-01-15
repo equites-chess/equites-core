@@ -70,8 +70,4 @@ object Notation {
       to      <- squareFromAlgebraic(square2)
     } yield Move(piece, from, to)
   }
-
-  def splitByMoveNumber(s: String): List[(Int, String, String)] = {
-    ???
-  }
 }
