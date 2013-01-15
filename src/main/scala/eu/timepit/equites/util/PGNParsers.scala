@@ -21,6 +21,8 @@ import scala.util.parsing.combinator._
 
 import implicits.GenericImplicits._
 
+case class Comment(text: String)
+
 /**
  * Parsers for the Portable Game Notation (PGN).
  *
@@ -40,13 +42,13 @@ object PGNParsers extends RegexParsers {
   def symbol: Parser[String] =
     """[\d\p{Alpha}][\w+#=:-]*""".r
 
-  def blockComment: Parser[String] =
-    """\{[^}]*\}""".r ^^ (_.dropLeftRight(1))
+  def blockComment: Parser[Comment] =
+    """\{[^}]*\}""".r ^^ (x => Comment(x.dropLeftRight(1)))
 
-  def lineComment: Parser[String] =
-    """;.*""".r
+  def lineComment: Parser[Comment] =
+    """;.*""".r ^^ (x => Comment(x.drop(1)))
 
-  def comment: Parser[String] =
+  def comment: Parser[Comment] =
     blockComment | lineComment
 
   def tagName: Parser[String] =
@@ -70,9 +72,15 @@ object PGNParsers extends RegexParsers {
   def sanMove: Parser[String] =
     """(\p{Print}?([a-z]?\d?|)x?[a-z]\d(=\p{Print})?[+#]?|O(-O){1,2})""".r
 
-  // translate to NAG
-  def moveAnnotation: Parser[String] =
-    """[!?]{1,2}""".r
+  def moveAnnotation: Parser[Int] =
+    """[!?]{1,2}""".r ^^ {
+      case "!"  => 1
+      case "?"  => 2
+      case "!!" => 3
+      case "??" => 4
+      case "!?" => 5
+      case "?!" => 6
+    }
 
   def numericAnnotationGlyph: Parser[Int] =
     "$" ~> integer
@@ -81,7 +89,7 @@ object PGNParsers extends RegexParsers {
     "1-0" | "0-1" | "1/2-1/2" | "*"
 
   def moveTextElem: Parser[Any] =
-    moveNumberIndicator | (sanMove ~ moveAnnotation.?) | numericAnnotationGlyph
+    moveNumberIndicator | sanMove  | moveAnnotation | numericAnnotationGlyph
 
   def moveTextSeq: Parser[Any] =
     (moveTextElem | blockComment | recursiveVariation).*

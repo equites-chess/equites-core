@@ -152,12 +152,12 @@ class PGNParsersSpec extends Specification with ParserMatchers {
 
   "moveAnnotation" should {
     "succeed on all valid possibilities" in {
-      moveAnnotation must succeedOn("!")
-      moveAnnotation must succeedOn("?")
-      moveAnnotation must succeedOn("!!")
-      moveAnnotation must succeedOn("??")
-      moveAnnotation must succeedOn("!?")
-      moveAnnotation must succeedOn("?!")
+      moveAnnotation must succeedOn("!").withResult(1)
+      moveAnnotation must succeedOn("?").withResult(2)
+      moveAnnotation must succeedOn("!!").withResult(3)
+      moveAnnotation must succeedOn("??").withResult(4)
+      moveAnnotation must succeedOn("!?").withResult(5)
+      moveAnnotation must succeedOn("?!").withResult(6)
     }
   }
 
@@ -182,10 +182,10 @@ class PGNParsersSpec extends Specification with ParserMatchers {
       val text = "1. e4 e5 2. Nf3 Nc6 3. Bb5 " +
                  "{This opening is called the Ruy Lopez.} 3... a6"
       val result = List(
-        (1, White), new ~("e4", None),  new ~("e5", None),
-        (2, White), new ~("Nf3", None), new ~("Nc6", None),
-        (3, White), new ~("Bb5", None), "This opening is called the Ruy Lopez.",
-        (3, Black), new ~("a6", None))
+        (1, White), "e4", "e5",
+        (2, White), "Nf3", "Nc6",
+        (3, White), "Bb5", Comment("This opening is called the Ruy Lopez."),
+        (3, Black), "a6")
 
       moveTextSeq must succeedOn(text).withResult(result)
     }
