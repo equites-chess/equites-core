@@ -101,8 +101,15 @@ object Rules {
   }
 
   def squaresInDirection(from: Square, direction: Vec): Stream[Square] = {
-    val next = from + direction
-    if (next.isValid) next #:: squaresInDirection(next, direction)
-    else Stream.Empty
+    val advance = (_: Square) + direction
+    Stream.iterate(advance(from))(advance).takeWhile(_.isValid)
+  }
+
+  def possibleSquares(placed: PlacedPiece): List[Square] = {
+    val (directions, dist) = movementType(placed.piece)
+    for {
+      direction <- directions.toList
+      square <- squaresInDirection(placed.position, direction).take(dist)
+    } yield square
   }
 }

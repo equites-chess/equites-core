@@ -30,5 +30,14 @@ class RulesSpec extends Specification {
       squaresInDirection(Square(3, 3), Vec(3, 1)).toList must_==
         List(Square(6, 4))
     }
+
+    "correctly perform possibleSquares" in {
+      possibleSquares(PlacedPiece(King(White), Square(3, 2))).toSet must_==
+        Set(Square(3, 3), Square(4, 3), Square(4, 2), Square(4, 1),
+            Square(3, 1), Square(2, 1), Square(2, 2), Square(2, 3))
+
+      possibleSquares(PlacedPiece(Pawn(White), Square(3, 3))).toSet must_==
+        Set(Square(3, 4))
+    }
   }
 }
