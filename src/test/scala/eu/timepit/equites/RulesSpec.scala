@@ -38,6 +38,10 @@ class RulesSpec extends Specification {
 
       possibleSquares(PlacedPiece(Pawn(White), Square(3, 3))).toSet must_==
         Set(Square(3, 4))
+      possibleSquares(PlacedPiece(Pawn(White), Square(0, 1))).toSet must_==
+        Set(Square(0, 2), Square(0, 3))
+      possibleSquares(PlacedPiece(Pawn(Black), Square(0, 6))).toSet must_==
+        Set(Square(0, 5), Square(0, 4))
     }
   }
 }

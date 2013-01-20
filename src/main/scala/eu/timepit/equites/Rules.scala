@@ -45,6 +45,9 @@ object Rules {
     }).flatten.toMap
   }
 
+  def onStartingSquare(placed: PlacedPiece): Boolean =
+    startingSquares(placed.piece) contains placed.position
+
   val castlingSquares: Map[(Side, Piece), (Square, Square)] = {
     def castlingSquaresFor(side: Side, piece: Piece): (Square, Square) = {
       val rookFile = if (side == Kingside) rookFiles(1) else rookFiles(0)
@@ -86,7 +89,7 @@ object Rules {
   def rankBy(rank: Int, color: Color): Int =
     if (color == White) rank else rankRange.end - rank
 
-  val movementType: Map[Piece, (Directions, Int)] = {
+  val movementTypes: Map[Piece, (Directions, Int)] = {
     import Directions._
     (for {
       color <- Color.values
@@ -100,13 +103,21 @@ object Rules {
     }).flatten.toMap
   }
 
+  def movementTypeOf(placed: PlacedPiece): (Directions, Int) = {
+    val (directions, dist) = movementTypes(placed.piece)
+    placed.piece match {
+      case Pawn(_) if onStartingSquare(placed) => (directions, 2)
+      case _ => (directions, dist)
+    }
+  }
+
   def squaresInDirection(from: Square, direction: Vec): Stream[Square] = {
     val advance = (_: Square) + direction
     Stream.iterate(advance(from))(advance).takeWhile(_.isValid)
   }
 
   def possibleSquares(placed: PlacedPiece): List[Square] = {
-    val (directions, dist) = movementType(placed.piece)
+    val (directions, dist) = movementTypeOf(placed)
     for {
       direction <- directions.toList
       square <- squaresInDirection(placed.position, direction).take(dist)
