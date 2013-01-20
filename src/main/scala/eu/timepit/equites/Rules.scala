@@ -61,12 +61,12 @@ object Rules {
       (Square(fromFile, rank), Square(toFile, rank))
     }
 
-    val mappings = for {
+    val mapping = for {
       side  <- Side.values
       color <- Color.values
       piece <- List(King(color), Rook(color))
     } yield (side, piece) -> castlingSquaresFor(side, piece)
-    mappings.toMap
+    mapping.toMap
   }
 
   val startingBoard: Board = {
@@ -85,4 +85,18 @@ object Rules {
 
   def rankBy(rank: Int, color: Color): Int =
     if (color == White) rank else rankRange.end - rank
+
+  val movementType: Map[Piece, (Directions, Int)] = {
+    import Directions._
+    (for {
+      color <- Color.values
+    } yield {
+      Map(King(color)   -> (anywhere, 1),
+          Queen(color)  -> (anywhere, maxLength),
+          Rook(color)   -> (straight, maxLength),
+          Bishop(color) -> (diagonal, maxLength),
+          Knight(color) -> (knightLike, 1),
+          Pawn(color)   -> (front.fromPOV(color), 1))
+    }).flatten.toMap
+  }
 }

@@ -60,4 +60,6 @@ class Directions(val self: Set[Vec]) extends SetProxy[Vec] {
 
   def inverseIfBlack(color: Color): Directions =
     if (color == Black) inverse else this
+
+  def fromPOV(color: Color): Directions = inverseIfBlack(color)
 }
