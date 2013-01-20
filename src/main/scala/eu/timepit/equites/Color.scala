@@ -16,6 +16,10 @@
 
 package eu.timepit.equites
 
+object Color {
+  def values: List[Color] = List(White, Black)
+}
+
 sealed trait Color {
   def opposite: Color
 }

@@ -59,6 +59,10 @@ case class EnPassant(piece: Pawn, from: Square, to: Square, captured: Pawn,
   override val capturedOn: Square)
   extends CaptureLike
 
+object Side {
+  def values: List[Side] = List(Kingside, Queenside)
+}
+
 sealed trait Side
 case object Kingside  extends Side
 case object Queenside extends Side

@@ -32,7 +32,7 @@ object Rules {
 
   val startingSquares: Map[Piece, List[Square]] = {
     (for {
-      color <- List(White, Black)
+      color <- Color.values
       backRank = backRankBy(color)
       pawnRank = pawnRankBy(color)
     } yield {
@@ -62,8 +62,8 @@ object Rules {
     }
 
     val mappings = for {
-      side  <- List(Kingside, Queenside)
-      color <- List(White, Black)
+      side  <- Side.values
+      color <- Color.values
       piece <- List(King(color), Rook(color))
     } yield (side, piece) -> castlingSquaresFor(side, piece)
     mappings.toMap
