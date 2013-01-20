@@ -21,4 +21,14 @@ import org.specs2.mutable._
 import Rules._
 
 class RulesSpec extends Specification {
+  "Rules" should {
+    "correctly perform squaresInDirection" in {
+      squaresInDirection(Square(3, 3), Vec(1, 1)).toList must_==
+        List(Square(4, 4), Square(5, 5), Square(6, 6), Square(7, 7))
+      squaresInDirection(Square(3, 3), Vec(-1, 0)).toList must_==
+        List(Square(2, 3), Square(1, 3), Square(0, 3))
+      squaresInDirection(Square(3, 3), Vec(3, 1)).toList must_==
+        List(Square(6, 4))
+    }
+  }
 }

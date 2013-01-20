@@ -37,13 +37,13 @@ object Square {
 }
 
 case class Square(file: Int, rank: Int) {
-  require(Square.validCoordinates(file, rank))
-
   def +(vec: Vec): Square = Square(file + vec.file, rank + vec.rank)
   def -(vec: Vec): Square = Square(file - vec.file, rank - vec.rank)
 
   def +(that: Square): Vec = Vec(file + that.file, rank + that.rank)
   def -(that: Square): Vec = Vec(file - that.file, rank - that.rank)
+
+  def isValid: Boolean = Square.validCoordinates(file, rank)
 
   def isLight: Boolean = isOdd(sum)
   def isDark: Boolean = isEven(sum)

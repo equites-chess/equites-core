@@ -55,23 +55,14 @@ class SquareSpec extends Specification {
   }
 
   "Square" should {
-    "throw an exception on invalid values" in {
-      Square(-1,  0) must throwAn[IllegalArgumentException]
-      Square( 0, -1) must throwAn[IllegalArgumentException]
-      Square(-1, -1) must throwAn[IllegalArgumentException]
-      Square( 8,  0) must throwAn[IllegalArgumentException]
-      Square( 0,  8) must throwAn[IllegalArgumentException]
-      Square( 8,  8) must throwAn[IllegalArgumentException]
-    }
-
     "correctly perform +(Vec) and -(Vec)" in {
       Square(1, 1) + Vec( 1,  1) must_== Square(2, 2)
       Square(1, 1) - Vec(-1, -1) must_== Square(2, 2)
       Square(1, 1) - Vec( 1,  1) must_== Square(0, 0)
       Square(1, 1) + Vec(-1, -1) must_== Square(0, 0)
 
-      Square(0, 0) - Vec(1, 1) must throwAn[IllegalArgumentException]
-      Square(7, 7) + Vec(1, 1) must throwAn[IllegalArgumentException]
+      (Square(0, 0) - Vec(1, 1)).isValid must beFalse
+      (Square(7, 7) + Vec(1, 1)).isValid must beFalse
     }
 
     "correctly perform +(Square)" in {
@@ -86,6 +77,20 @@ class SquareSpec extends Specification {
       Square(2, 2) - Square(1, 1) must_== Vec(1, 1)
       Square(2, 1) - Square(0, 0) must_== Vec(2, 1)
       Square(0, 0) - Square(3, 4) must_== Vec(-3, -4)
+    }
+
+    "correctly perform isValid" in {
+      Square(0,  0).isValid must beTrue
+      Square(0,  7).isValid must beTrue
+      Square(7,  0).isValid must beTrue
+      Square(7,  7).isValid must beTrue
+
+      Square(-1,  0).isValid must beFalse
+      Square( 0, -1).isValid must beFalse
+      Square(-1, -1).isValid must beFalse
+      Square( 8,  0).isValid must beFalse
+      Square( 0,  8).isValid must beFalse
+      Square( 8,  8).isValid must beFalse
     }
 
     "correctly perform isLight and isDark" in {
@@ -104,8 +109,8 @@ class SquareSpec extends Specification {
       Square(0, 0) must_== Square('a', 1)
       Square(7, 7) must_== Square('h', 8)
 
-      Square('i', 1) must throwAn[IllegalArgumentException]
-      Square('a', 9) must throwAn[IllegalArgumentException]
+      Square('i', 1).isValid must beFalse
+      Square('a', 9).isValid must beFalse
     }
   }
 }

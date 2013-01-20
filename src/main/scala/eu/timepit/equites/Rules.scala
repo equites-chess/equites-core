@@ -99,4 +99,10 @@ object Rules {
           Pawn(color)   -> (front.fromPOV(color), 1))
     }).flatten.toMap
   }
+
+  def squaresInDirection(from: Square, direction: Vec): Stream[Square] = {
+    val next = from + direction
+    if (next.isValid) next #:: squaresInDirection(next, direction)
+    else Stream.Empty
+  }
 }
