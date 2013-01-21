@@ -29,6 +29,9 @@ class Board(val self: Map[Square, Piece]) extends MapProxy[Square, Piece] {
   def isOccupiedBy(square: Square, piece: Piece): Boolean =
     get(square).exists(_ == piece)
 
+  def placedPieces: Seq[PlacedPiece] =
+    self.map(PlacedPiece(_)).toSeq
+
   def processAction(action: Action): Board = action match {
     case a: CaptureAndPromotion => processCaptureAndPromotion(a)
     case a: CaptureLike         => processCapture(a)

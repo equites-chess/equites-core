@@ -16,4 +16,9 @@
 
 package eu.timepit.equites
 
+object PlacedPiece {
+  def apply(tuple: (Square, Piece)): PlacedPiece =
+    PlacedPiece(tuple._2, tuple._1)
+}
+
 case class PlacedPiece(piece: Piece, position: Square)
