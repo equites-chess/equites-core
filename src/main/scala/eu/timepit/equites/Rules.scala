@@ -116,10 +116,10 @@ object Rules {
     Stream.iterate(advance(from))(advance).takeWhile(_.isValid)
   }
 
-  def possibleSquares(placed: PlacedPiece): List[Square] = {
+  def possibleSquares(placed: PlacedPiece): Stream[Square] = {
     val (directions, dist) = movementTypeOf(placed)
     for {
-      direction <- directions.toList
+      direction <- directions.toStream
       square <- squaresInDirection(placed.position, direction).take(dist)
     } yield square
   }
