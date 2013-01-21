@@ -119,7 +119,7 @@ class TextBoardSpec extends Specification {
         "a b c d e f g h \n"
     }
 
-    "make (un)labeled boards as MediWiki diagram" in {
+    "make (un)labeled boards as MediaWiki diagram" in {
       val board = Rules.startingBoard
       val tb = new TextBoard with WikiRepr
 
