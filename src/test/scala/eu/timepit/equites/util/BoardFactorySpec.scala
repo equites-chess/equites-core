@@ -43,6 +43,15 @@ class BoardFactorySpec extends Specification {
          -.-.-.-.-.-.-.-.
          P.P.P.P.P.P.P.P.
          R.N.B.Q.K.B.N.R.<| must_== Rules.startingBoard
+
+      |>.♜.♞.♝.♛.♚.♝.♞.♜.
+         ♟.♟.♟.♟.♟.♟.♟.♟.
+         -.-.-.-.-.-.-.-.
+         -.-.-.-.-.-.-.-.
+         -.-.-.-.-.-.-.-.
+         -.-.-.-.-.-.-.-.
+         ♙.♙.♙.♙.♙.♙.♙.♙.
+         ♖.♘.♗.♕.♔.♗.♘.♖.<| must_== Rules.startingBoard
     }
   }
 }
