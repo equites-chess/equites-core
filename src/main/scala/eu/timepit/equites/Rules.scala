@@ -116,11 +116,34 @@ object Rules {
     Stream.iterate(advance(from))(advance).takeWhile(_.isValid)
   }
 
-  def possibleSquares(placed: PlacedPiece): Stream[Square] = {
+  def possibleSquaresOf(placed: PlacedPiece): Stream[Square] = {
     val (directions, dist) = movementTypeOf(placed)
     for {
       direction <- directions.toStream
       square <- squaresInDirection(placed.position, direction).take(dist)
+    } yield square
+  }
+
+  def squaresInDirection(placed: PlacedPiece, direction: Vec, board: Board):
+      Stream[Square] = {
+    // does not work correctly for pawns
+    def iterate(from: Square): Stream[Square] = {
+      val next = from + direction
+      board.get(next) match {
+        case Some(piece)
+          => if (piece isOpponentOf placed.piece) Stream(next) else Stream()
+        case None
+          => next #:: iterate(next)
+      }
+    }
+    iterate(placed.position)
+  }
+
+  def possibleSquaresOf(placed: PlacedPiece, board: Board): Stream[Square] = {
+    val (directions, dist) = movementTypeOf(placed)
+    for {
+      direction <- directions.toStream
+      square <- squaresInDirection(placed, direction, board).take(dist)
     } yield square
   }
 }
