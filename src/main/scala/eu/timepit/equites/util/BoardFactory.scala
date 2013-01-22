@@ -37,6 +37,8 @@ class BoardFactory(board: Board, square: Square) {
   def n = embattle(Knight(Black))
   def p = embattle(Pawn(Black))
 
+  def ♜ = r
+
   def - = empty
   def <| = board
 
