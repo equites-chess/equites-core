@@ -36,13 +36,13 @@ class BoardFactory(board: Board, square: Square) {
   def b = embattle(Bishop(Black))
   def n = embattle(Knight(Black))
   def p = embattle(Pawn(Black))
-  
-  def ♔ = K; def ♚ = k
-  def ♕ = Q; def ♛ = q 
-  def ♖ = R; def ♜ = r
-  def ♗ = B; def ♝ = b
-  def ♘ = N; def ♞ = n
-  def ♙ = P; def ♟ = p
+
+  def ♔ = K ; def ♚ = k
+  def ♕ = Q ; def ♛ = q
+  def ♖ = R ; def ♜ = r
+  def ♗ = B ; def ♝ = b
+  def ♘ = N ; def ♞ = n
+  def ♙ = P ; def ♟ = p
 
   def - = empty
   def <| = board
