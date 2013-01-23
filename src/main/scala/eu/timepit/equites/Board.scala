@@ -24,13 +24,17 @@ object Board {
 }
 
 class Board(val self: Map[Square, Piece]) extends MapProxy[Square, Piece] {
+  def getPlacedPiece(square: Square): Option[PlacedPiece] =
+    self.get(square).map(PlacedPiece(_, square))
+
+  def isVacant(square: Square): Boolean = !isOccupied(square)
   def isOccupied(square: Square): Boolean = contains(square)
 
   def isOccupiedBy(square: Square, piece: Piece): Boolean =
     get(square).exists(_ == piece)
 
   def placedPieces: Seq[PlacedPiece] =
-    self.map(PlacedPiece(_)).toSeq
+    self.toSeq.map(PlacedPiece(_))
 
   def processAction(action: Action): Board = action match {
     case a: CaptureAndPromotion => processCaptureAndPromotion(a)
