@@ -18,7 +18,7 @@ package eu.timepit.equites
 
 import scalaz.Monoid
 
-object Vec {
+trait VecInstances {
   implicit val vecAddition = new Monoid[Vec] {
     def zero: Vec = Vec(0, 0)
     def append(s1: Vec, s2: => Vec): Vec = s1 + s2

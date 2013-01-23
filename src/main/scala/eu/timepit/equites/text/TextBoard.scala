@@ -68,7 +68,9 @@ trait WikiRepr extends AbstractRepr {
   override def rankLabelsRight = false
 }
 
-trait TextBoard extends AbstractRepr {
+trait TextBoard {
+  self: AbstractRepr =>
+
   def mkUnlabeled(board: Board): String = {
     def squareToString(square: Square): String =
       board.get(square).map(pieceToString).getOrElse(tileEmpty).mkString(
