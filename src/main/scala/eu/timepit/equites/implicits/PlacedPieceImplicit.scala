@@ -17,6 +17,8 @@
 package eu.timepit.equites
 package implicits
 
+import scala.language.implicitConversions
+
 object PlacedPieceImplicit {
   implicit def placed2piece(placed: PlacedPiece): Piece = placed.piece
 }

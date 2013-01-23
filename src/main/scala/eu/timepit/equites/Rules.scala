@@ -111,10 +111,8 @@ object Rules {
     }
   }
 
-  def squaresInDirection(from: Square, direction: Vec): Stream[Square] = {
-    val advance = (_: Square) + direction
-    Stream.iterate(advance(from))(advance).takeWhile(_.isValid)
-  }
+  def squaresInDirection(from: Square, direction: Vec): Stream[Square] =
+    Stream.iterate(from)(_ + direction).tail.takeWhile(_.isValid)
 
   def possibleSquaresOf(placed: PlacedPiece): Stream[Square] = {
     val (directions, dist) = movementTypeOf(placed)
