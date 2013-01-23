@@ -16,12 +16,13 @@
 
 package eu.timepit.equites
 
-import scalaz.Monoid
+import scalaz._
 
 trait VecInstances {
-  implicit val vecAddition = new Monoid[Vec] {
+  implicit object vecInstance extends Monoid[Vec] with Equal[Vec] {
     def zero: Vec = Vec(0, 0)
-    def append(s1: Vec, s2: => Vec): Vec = s1 + s2
+    def append(v1: Vec, v2: => Vec): Vec = v1 + v2
+    def equal(v1: Vec, v2: Vec): Boolean = v1 == v2
   }
 }
 
