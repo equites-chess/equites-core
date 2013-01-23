@@ -16,11 +16,20 @@
 
 package eu.timepit.equites
 
+import scalaz.Monoid
+
+object Vec {
+  implicit val vecAddition = new Monoid[Vec] {
+    def zero: Vec = Vec(0, 0)
+    def append(s1: Vec, s2: => Vec): Vec = s1 + s2
+  }
+}
+
 case class Vec(file: Int, rank: Int) {
   def map(f: Int => Int): Vec = Vec(f(file), f(rank))
 
   def +(that: Vec): Vec = Vec(file + that.file, rank + that.rank)
-  def -(that: Vec): Vec = Vec(file - that.file, rank - that.rank)
+  def -(that: Vec): Vec = this + -that
   def unary_- : Vec = Vec(-file, -rank)
 
   def *(n: Int): Vec = map(_ * n)
