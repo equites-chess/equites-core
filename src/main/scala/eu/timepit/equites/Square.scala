@@ -16,8 +16,17 @@
 
 package eu.timepit.equites
 
+import scalaz._
+
 import util.Math._
 import util.Notation._
+
+trait SquareInstances {
+  implicit object squareInstance extends Equal[Square] {
+    // Equal
+    def equal(s1: Square, s2: Square): Boolean = s1 == s2
+  }
+}
 
 object Square {
   def apply(algebraicFile: Char, algebraicRank: Int): Square =
