@@ -19,10 +19,12 @@ package eu.timepit.equites
 import scalaz._
 
 trait VecInstances {
-  implicit object vecInstance extends Monoid[Vec] with Equal[Vec] {
+  implicit object vecInstance extends Equal[Vec] with Monoid[Vec] {
+    // Equal:
+    def equal(v1: Vec, v2: Vec): Boolean = v1 == v2
+    // Monoid:
     def zero: Vec = Vec(0, 0)
     def append(v1: Vec, v2: => Vec): Vec = v1 + v2
-    def equal(v1: Vec, v2: Vec): Boolean = v1 == v2
   }
 }
 
