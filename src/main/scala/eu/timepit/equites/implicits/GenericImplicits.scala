@@ -24,7 +24,7 @@ object GenericImplicits {
     def asOption(implicit ev: C => GenTraversableOnce[_]): Option[C] =
       if (self.isEmpty) None else Some(self)
 
-    def dropLeftRight(n: Int)(implicit ev: C => IterableLike[_,C]): C =
+    def dropLeftRight(n: Int)(implicit ev: C => IterableLike[_, C]): C =
       self.drop(n).dropRight(n)
   }
 }

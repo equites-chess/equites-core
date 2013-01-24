@@ -20,7 +20,7 @@ import scala.collection.GenSeqLike
 
 package object util {
   // DANGER! This function is impure! Replace ASAP.
-  def pickRandom[A, C <% GenSeqLike[A,C]](from: C): Option[A] = {
+  def pickRandom[A, C <% GenSeqLike[A, C]](from: C): Option[A] = {
     import scala.util.Random.nextInt
 
     from.length match {
