@@ -114,13 +114,19 @@ object Rules {
   def squaresInDirection(from: Square, direction: Vec): Stream[Square] =
     Stream.iterate(from)(_ + direction).tail.takeWhile(_.isValid)
 
-  def possibleSquaresOf(placed: PlacedPiece): Stream[Square] = {
+  def possibleSquares(placed: PlacedPiece): Stream[Square] = {
     val (directions, dist) = movementTypeOf(placed)
     for {
       direction <- directions.toStream
       square <- squaresInDirection(placed.position, direction).take(dist)
     } yield square
   }
+
+  def unvisitedSquares(placed: PlacedPiece, visited: Set[Square])
+      : Stream[Square] =
+    possibleSquares(placed).filterNot(visited(_))
+
+
 
   def squaresInDirection(placed: PlacedPiece, direction: Vec, board: Board):
       Stream[Square] = {

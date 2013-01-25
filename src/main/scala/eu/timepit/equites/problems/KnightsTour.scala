@@ -24,8 +24,8 @@ object KnightsTour {
 
   def genericTour(start: Square, select: Selector): Vector[Square] = {
     @tailrec
-    def accumulate(from: Square, visited: Set[Square], acc: Vector[Square]):
-        Vector[Square] = {
+    def accumulate(from: Square, visited: Set[Square], acc: Vector[Square])
+        : Vector[Square] = {
       val newAcc = acc :+ from
       select(unvisited(from, visited), visited) match {
         case Some(next) => accumulate(next, visited + from, newAcc)
@@ -38,6 +38,7 @@ object KnightsTour {
   def staticTour(start: Square) =
     genericTour(start, (squares, _) => squares.headOption)
 
+  // impure
   def randomTour(start: Square) =
     genericTour(start, (squares, _) => util.pickRandom(squares))
 
@@ -45,9 +46,8 @@ object KnightsTour {
     genericTour(start, (squares, visited) =>
       squares.sortBy(sq => unvisited(sq, visited).length).headOption)
 
-  private def knightOn(square: Square): PlacedPiece =
-    PlacedPiece(Knight(White), square)
+  private def knightOn(square: Square) = PlacedPiece(Knight(White), square)
 
-  private def unvisited(from: Square, visited: Set[Square]): Stream[Square] =
-    Rules.possibleSquaresOf(knightOn(from)).filterNot(visited(_))
+  private def unvisited(from: Square, visited: Set[Square]) =
+    Rules.unvisitedSquares(knightOn(from), visited)
 }

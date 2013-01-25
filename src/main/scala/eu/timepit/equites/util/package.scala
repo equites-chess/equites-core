@@ -19,7 +19,7 @@ package eu.timepit.equites
 import scala.collection.GenSeqLike
 
 package object util {
-  // DANGER! This function is impure! Replace ASAP.
+  // impure
   def pickRandom[A, C <% GenSeqLike[A, C]](from: C): Option[A] = {
     import scala.util.Random.nextInt
 
