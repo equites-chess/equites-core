@@ -1,0 +1,11 @@
+body {
+  text-align: center;
+}
+.centered {
+  text-align: left;
+  margin: 0 auto;
+}
+#canvas {
+  padding: 0;
+  width: 600px;
+}
