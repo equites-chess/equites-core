@@ -17,22 +17,18 @@
 package eu.timepit.equites
 package problems
 
-import annotation.tailrec
+import scalaz.std.stream
 
 object KnightsTour {
   type Selector = (Stream[Square], Set[Square]) => Option[Square]
 
-  def genericTour(start: Square, select: Selector): Vector[Square] = {
-    @tailrec
-    def accumulate(from: Square, visited: Set[Square], acc: Vector[Square])
-        : Vector[Square] = {
-      val newAcc = acc :+ from
-      select(unvisited(from, visited), visited) match {
-        case Some(next) => accumulate(next, visited + from, newAcc)
-        case None => newAcc
-      }
+  def genericTour(start: Square, select: Selector): Stream[Square] = {
+    def f(z: (Square, Set[Square])): Option[(Square, (Square, Set[Square]))] = {
+      val (from, visited) = z
+      val nextOption = select(unvisited(from, visited), visited)
+      nextOption.map(next => (next, (next, visited + from)))
     }
-    accumulate(start, Set(), Vector())
+    start #:: stream.unfold[(Square, Set[Square]), Square]((start, Set()))(f)
   }
 
   def staticTour(start: Square) =
