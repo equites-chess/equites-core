@@ -60,5 +60,14 @@ case class Square(file: Int, rank: Int) {
   def l1Dist(that: Square): Int = (this - that).l1Length
   def lInfDist(that: Square): Int = (this - that).lInfLength
 
-  private def sum: Int = file + rank
+  def up: Square   = this + Vec(0, 1)
+  def down: Square = this - Vec(0, 1)
+
+  def right: Square = this + Vec(1, 0)
+  def left: Square  = this - Vec(1, 0)
+
+  def rightmost: Square = Square(Rules.fileRange.end, rank)
+  def leftmost: Square = Square(Rules.fileRange.start, rank)
+
+  private def sum = file + rank
 }

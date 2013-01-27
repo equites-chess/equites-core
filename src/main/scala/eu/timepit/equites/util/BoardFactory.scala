@@ -54,8 +54,7 @@ class BoardFactory(board: Board, square: Square) {
     new BoardFactory(board, nextSquare)
 
   private def nextSquare: Square = {
-    val right = square + Vec(1, 0)
-    if (right.isValid) right
-    else square - Vec(square.file, 1)
+    val right = square.right
+    if (right.isValid) right else square.down.leftmost
   }
 }
