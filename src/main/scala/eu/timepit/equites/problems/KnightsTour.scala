@@ -22,14 +22,13 @@ import scalaz.std.stream
 object KnightsTour {
   type Selector = (Stream[Square], Set[Square]) => Option[Square]
 
-  def genericTour(start: Square, select: Selector): Stream[Square] = {
+  def genericTour(start: Square, select: Selector): Stream[Square] =
     start #:: stream.unfold((start, Set[Square]())) {
       case (from, visited) => {
         val nextOption = select(unvisited(from, visited), visited)
         nextOption.map(next => (next, (next, visited + from)))
       }
     }
-  }
 
   def staticTour(start: Square) =
     genericTour(start, (squares, _) => squares.headOption)
