@@ -23,12 +23,12 @@ object KnightsTour {
   type Selector = (Stream[Square], Set[Square]) => Option[Square]
 
   def genericTour(start: Square, select: Selector): Stream[Square] = {
-    def f(z: (Square, Set[Square])): Option[(Square, (Square, Set[Square]))] = {
-      val (from, visited) = z
-      val nextOption = select(unvisited(from, visited), visited)
-      nextOption.map(next => (next, (next, visited + from)))
+    start #:: stream.unfold((start, Set[Square]())) {
+      case (from, visited) => {
+        val nextOption = select(unvisited(from, visited), visited)
+        nextOption.map(next => (next, (next, visited + from)))
+      }
     }
-    start #:: stream.unfold[(Square, Set[Square]), Square]((start, Set()))(f)
   }
 
   def staticTour(start: Square) =
