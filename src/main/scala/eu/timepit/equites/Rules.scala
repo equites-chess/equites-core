@@ -81,10 +81,10 @@ object Rules {
   }
 
   def backRankBy(color: Color): Int =
-    if (color == White) rankRange.start else rankRange.end
+    rankBy(rankRange.start, color)
 
   def pawnRankBy(color: Color): Int =
-    if (color == White) rankRange.start + 1 else rankRange.end - 1
+    rankBy(rankRange.start + 1, color)
 
   def rankBy(rank: Int, color: Color): Int =
     if (color == White) rank else rankRange.end - rank
