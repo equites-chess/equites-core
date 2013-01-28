@@ -1,3 +1,4 @@
+bin/
 dist/
 logs/
 target/
@@ -8,4 +9,5 @@ tmp/
 .history
 .project
 .settings
+.target/
 .vimrc.local
