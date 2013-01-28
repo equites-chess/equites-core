@@ -75,5 +75,7 @@ case class Square(file: Int, rank: Int) {
   def rightmost: Square = Square(Rules.fileRange.end, rank)
   def leftmost: Square = Square(Rules.fileRange.start, rank)
 
+  def toSeq: Seq[Int] = Seq(file, rank)
+
   private def sum = file + rank
 }

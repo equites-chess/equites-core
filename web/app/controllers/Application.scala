@@ -2,15 +2,13 @@ package controllers
 
 import play.api._
 import play.api.mvc._
+import play.api.libs.json.Json._
 
 import eu.timepit.equites._
+import eu.timepit.equites.problems.KnightsTour._
 
 object Application extends Controller {
-  def index = Action {
-    Ok(views.html.index("Your new application is ready."))
-  }
-
   def knightstour = Action {
-    Ok("works " + Square.random().toString)
+    Ok(toJson(warnsdorffTour(Square.random()).map(_.toSeq)))
   }
 }
