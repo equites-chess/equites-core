@@ -1,4 +1,4 @@
-name := "Equites"
+name := "Equites-core"
 
 version := "0.0"
 

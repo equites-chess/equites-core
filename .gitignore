@@ -1,6 +1,11 @@
+dist/
+logs/
 target/
-.settings/
+out/
+tmp/
 .cache
 .classpath
+.history
 .project
+.settings
 .vimrc.local
