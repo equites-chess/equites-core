@@ -1,3 +1,6 @@
+var curr = 0;
+var tour = {};
+
 window.onload = function () {
   var board_width = 600,
       board_height = 600;
@@ -31,7 +34,19 @@ window.onload = function () {
     var square = squares[file][rank];
     square.attr("fill", "#EEE");
   }
+  
+  function visitStart() {
+    visit(tour[curr][0], tour[curr][1]);
+    setTimeout(visitEnd, 1000);
+  }
+  function visitEnd(){
+    ++curr;
+    visitStart();
+  }
 
-  visit(6,6);
-  visit(7,7);
+  $.getJSON("knightstour.json", function(json) {
+    tour = eval(json);
+    visitStart()
+  });
+
 };
