@@ -1,52 +1,97 @@
-var curr = 0;
-var tour = {};
+var board_width = 600;
+var board_height = 600;
 
-window.onload = function () {
-  var board_width = 600,
-      board_height = 600;
+var file_count = 8;
+var rank_count = 8;
 
-  var file_cnt = 8;
-  var rank_cnt = 8;
+var square_width = board_width / file_count;
+var square_height = board_height / rank_count;
 
-  var square_width = board_width / file_cnt,
-      square_height = board_height / rank_cnt;
-
-  var paper = Raphael("canvas", board_width, board_height);
-
-  var squares = new Array(file_cnt);
-  for (var file = 0; file < file_cnt; file++) {
-    squares[file] = new Array(rank_cnt);
-    for (var rank = 0; rank < rank_cnt; rank++) {
-      squares[file][rank] =
-        paper.rect(file * square_width, (rank_cnt - rank - 1) * square_height,
-                   square_width, square_height);
-      squares[file][rank].attr("stroke", "#909090");
-    }
-  }
-
-  var board = paper.rect(0, 0, board_width, board_height);
+function createBoard(paper, width, height) {
+  var board = paper.rect(0, 0, width, height);
   board.attr({
     "stroke": "#808080",
     "stroke-width": 3
   });
+  return board;
+}
 
-  function visit(file, rank) {
-    var square = squares[file][rank];
-    square.attr("fill", "#EEE");
+function createSquares(paper) {
+  var squares = new Array(file_count);
+  for (var file = 0; file < file_count; file++) {
+    squares[file] = new Array(rank_count);
+    for (var rank = 0; rank < rank_count; rank++) {
+      var x = square_width * file;
+      var y = square_height * (rank_count - rank -1);
+
+      var square = paper.rect(x, y, square_width, square_height);
+      square.attr("stroke", "#909090");
+
+      squares[file][rank] = square;
+    }
   }
-  
-  function visitStart() {
-    visit(tour[curr][0], tour[curr][1]);
-    setTimeout(visitEnd, 1000);
+  return squares;
+}
+
+function visitSquare(square) {
+  square.attr("fill", "#EEE");
+  square.toBack();
+}
+
+function drawLine(line, last_square, curr_square) {
+  if (last_square == null || curr_square == null) return;
+
+  var last_cx = last_square.attr("x") + square_width / 2;
+  var last_cy = last_square.attr("y") + square_height / 2;
+
+  var curr_cx = curr_square.attr("x") + square_width / 2;
+  var curr_cy = curr_square.attr("y") + square_height / 2;
+
+  var new_path = "M" + last_cx + "," + last_cy +
+                 "L" + curr_cx + "," + curr_cy;
+
+  var path = line.attr("path");
+  line.attr("path", path + new_path);
+}
+
+window.onload = function () {
+  var paper = Raphael("canvas", board_width, board_height);
+  var squares = createSquares(paper);
+  var board = createBoard(paper, board_width, board_height);
+
+  var tour = {};
+  var index = 0;
+
+  var last_square = null;
+  var curr_square = null;
+  var line = paper.path();
+
+  line.attr({
+    "stroke": "#555",
+    "stroke-width": 2
+  });
+
+  function jump() {
+    curr_square = squares[tour[index][0]][tour[index][1]];
+    visitSquare(curr_square);
+    drawLine(line, last_square, curr_square);
+
+    setTimeout(repeat, 500);
   }
-  function visitEnd(){
-    ++curr;
-    visitStart();
+
+  function repeat() {
+    ++index;
+    last_square = curr_square;
+
+    if (index < file_count * rank_count) {
+      jump();
+    } else {
+      window.location.reload(false);
+    }
   }
 
   $.getJSON("knightstour.json", function(json) {
     tour = eval(json);
-    visitStart()
+    jump();
   });
-
 };
