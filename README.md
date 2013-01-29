@@ -37,4 +37,4 @@ source tree.
 
 ## Author
 
-Equites was written by Frank S. Thomas <<f.thomas@gmx.de>>
+Equites was written by Frank S. Thomas <<frank@timepit.eu>>
