@@ -21,8 +21,9 @@ object Rules {
   val rankRange = 0 to 7
   val maxLength = math.max(fileRange.length, rankRange.length) - 1
 
-  def fileSquares(file: Int) = rankRange.map(Square(file, _))
-  def rankSquares(rank: Int) = fileRange.map(Square(_, rank))
+  def fileSquares(file: Int): Seq[Square] = rankRange.map(Square(file, _))
+  def rankSquares(rank: Int): Seq[Square] = fileRange.map(Square(_, rank))
+  def allSquares: Seq[Square] = fileRange.flatMap(fileSquares(_))
 
   val kingFile  = 4
   val queenFile = 3
