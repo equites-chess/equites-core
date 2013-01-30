@@ -41,6 +41,11 @@ object KnightsTour {
     genericTour(start, (squares, visited) =>
       squares.sortBy(sq => unvisited(sq, visited).length).headOption)
 
+  def isClosed(tour: Stream[Square]): Boolean = {
+    if (tour.isEmpty) false
+    else Directions.knightLike contains (tour.last - tour.head)
+  }
+
   private def knightOn(square: Square) = PlacedPiece(Knight(White), square)
 
   private def unvisited(from: Square, visited: Set[Square]) =
