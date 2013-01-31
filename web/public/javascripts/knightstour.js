@@ -83,14 +83,16 @@ window.onload = function () {
     ++index;
     last_square = curr_square;
 
-    if (index < file_count * rank_count) {
+    if (index < tour.length) {
       jump();
     } else {
       window.location.reload(false);
     }
   }
 
-  $.getJSON("knightstour.json", function(json) {
+  //$.getJSON("api/knightstour/static.json", function(json) {
+  $.getJSON("api/knightstour/warnsdorff.json", function(json) {
+  //$.getJSON("api/knightstour/random.json", function(json) {
     tour = eval(json);
     jump();
   });
