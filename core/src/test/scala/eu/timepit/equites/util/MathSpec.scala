@@ -1,4 +1,4 @@
-// Equites, a simple chess interface
+// Equites, a Scala chess playground
 // Copyright © 2013 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify

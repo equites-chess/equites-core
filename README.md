@@ -1,7 +1,7 @@
-# Equites, a simple chess interface
+# Equites, a Scala chess playground
 
-Equites is a simple chess interface written in Scala. It is work in progress
-and currently not playable.
+Equites is chess related code mostly implemented in Scala. Currently there is
+nothing usable from a chess player's point of view.
 
 ## Building [![Build Status](https://travis-ci.org/fthomas/equites.png?branch=master)](https://travis-ci.org/fthomas/equites)
 
