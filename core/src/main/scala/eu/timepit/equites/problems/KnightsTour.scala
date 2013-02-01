@@ -20,7 +20,7 @@ package problems
 import scalaz.std.stream
 
 object KnightsTour {
-  type Selector = (Stream[Square], Set[Square]) => Option[Square]
+  type Selector = (Seq[Square], Set[Square]) => Option[Square]
 
   def genericTour(start: Square, selectNext: Selector): Stream[Square] =
     start #:: stream.unfold((start, Set[Square]())) {
@@ -41,7 +41,7 @@ object KnightsTour {
     genericTour(start, (squares, visited) =>
       squares.sortBy(sq => unvisited(sq, visited).length).headOption)
 
-  def isClosed(tour: Stream[Square]): Boolean = {
+  def isClosed(tour: Seq[Square]): Boolean = {
     if (tour.isEmpty) false
     else Directions.knightLike contains (tour.last - tour.head)
   }
