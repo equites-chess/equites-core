@@ -2,15 +2,14 @@ body {
   background: #333;
   color: #FFF;
   font-family: sans-serif;
-  font-size: small;
   text-align: center;
 }
 a {
   color: #FFF;
 }
 .centered {
-  text-align: left;
   margin: 0 auto;
+  text-align: left;
 }
 #canvas {
   padding: 0;
