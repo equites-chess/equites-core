@@ -4,7 +4,7 @@ import play.api._
 import play.api.mvc._
 
 object Application extends Controller {
-  def knightstour_html = Action {
+  def knightstour = Action {
     Ok(views.html.knightstour())
   }
 }

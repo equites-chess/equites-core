@@ -10,8 +10,8 @@ var square_height = board_height / rank_count;
 function createBoard(paper, width, height) {
   var board = paper.rect(0, 0, width, height);
   board.attr({
-    "stroke": "#808080",
-    "stroke-width": 3
+    "stroke": "#ddd",
+    "stroke-width": 4
   });
   return board;
 }
@@ -25,7 +25,10 @@ function createSquares(paper) {
       var y = square_height * (rank_count - rank -1);
 
       var square = paper.rect(x, y, square_width, square_height);
-      square.attr("stroke", "#909090");
+      square.attr({
+        "stroke": "#ddd",
+        "stroke-width": 2
+      });
 
       squares[file][rank] = square;
     }
@@ -34,7 +37,7 @@ function createSquares(paper) {
 }
 
 function visitSquare(square) {
-  square.attr("fill", "#EEE");
+  square.attr("fill", "#666");
   square.toBack();
 }
 
@@ -67,8 +70,10 @@ window.onload = function () {
   var line = paper.path();
 
   line.attr({
-    "stroke": "#555",
-    "stroke-width": 2
+    "arrow-end": "block-wide-long",
+    "stroke": "#FFDD00",
+    "stroke-linecap": "round",
+    "stroke-width": 3
   });
 
   function jump() {
