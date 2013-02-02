@@ -13,6 +13,11 @@ a {
   margin: 0 auto;
 }
 #canvas {
-  padding: 0;
   width: 600px;
+  height: 600px;
+  left: 50%;
+  top: 50%;
+  position: absolute;
+  margin: -300px 0 0 -300px;
+  padding: 0;
 }
