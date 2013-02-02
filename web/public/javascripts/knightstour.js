@@ -71,7 +71,7 @@ window.onload = function () {
 
   line.attr({
     "arrow-end": "block-wide-long",
-    "stroke": "#FFDD00",
+    "stroke": "#FFBF00",
     "stroke-linecap": "round",
     "stroke-width": 3
   });
