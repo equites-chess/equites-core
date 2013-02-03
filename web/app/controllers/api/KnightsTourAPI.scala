@@ -31,5 +31,6 @@ object KnightsTourAPI {
 
   def genericTourAsJson(tourFun: Square => Stream[Square]) = Action {
     Ok(toJson(tourFun(Square.random()).map(_.toSeq)))
+      .withHeaders(("Cache-Control", "no-cache"))
   }
 }
