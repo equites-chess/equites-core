@@ -9,6 +9,7 @@ a {
 }
 .centered {
   margin: 0 auto;
+  margin-top: 15px;
   text-align: left;
 }
 #canvas {

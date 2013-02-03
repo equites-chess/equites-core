@@ -1,104 +1,163 @@
-var board_width = 600;
-var board_height = 600;
-
-var file_count = 8;
-var rank_count = 8;
-
-var square_width = board_width / file_count;
-var square_height = board_height / rank_count;
-
-function createBoard(paper, width, height) {
-  var board = paper.rect(0, 0, width, height);
-  board.attr({
-    "stroke": "#ddd",
-    "stroke-width": 4
-  });
-  return board;
-}
-
-function createSquares(paper) {
-  var squares = new Array(file_count);
-  for (var file = 0; file < file_count; file++) {
-    squares[file] = new Array(rank_count);
-    for (var rank = 0; rank < rank_count; rank++) {
-      var x = square_width * file;
-      var y = square_height * (rank_count - rank -1);
-
-      var square = paper.rect(x, y, square_width, square_height);
-      square.attr({
-        "stroke": "#ddd",
-        "stroke-width": 2
-      });
-
-      squares[file][rank] = square;
+var knightstour = function () {
+    function centerOf(elem) {
+        return {
+            x: elem.attr("x") + elem.attr("width")  / 2,
+            y: elem.attr("y") + elem.attr("height") / 2
+        };
     }
-  }
-  return squares;
-}
 
-function visitSquare(square) {
-  square.attr("fill", "#666");
-  square.toBack();
-}
+    function lineBetween(fromElem, toElem) {
+        var c1 = centerOf(fromElem);
+        var c2 = centerOf(toElem);
 
-function drawLine(line, last_square, curr_square) {
-  if (last_square == null || curr_square == null) return;
-
-  var last_cx = last_square.attr("x") + square_width / 2;
-  var last_cy = last_square.attr("y") + square_height / 2;
-
-  var curr_cx = curr_square.attr("x") + square_width / 2;
-  var curr_cy = curr_square.attr("y") + square_height / 2;
-
-  var new_path = "M" + last_cx + "," + last_cy +
-                 "L" + curr_cx + "," + curr_cy;
-
-  var path = line.attr("path");
-  line.attr("path", path + new_path);
-}
-
-window.onload = function () {
-  var paper = Raphael("canvas", board_width, board_height);
-  var squares = createSquares(paper);
-  var board = createBoard(paper, board_width, board_height);
-
-  var tour = {};
-  var index = 0;
-
-  var last_square = null;
-  var curr_square = null;
-  var line = paper.path();
-
-  line.attr({
-    "arrow-end": "block-wide-long",
-    "stroke": "#FFBF00",
-    "stroke-linecap": "round",
-    "stroke-width": 3
-  });
-
-  function jump() {
-    curr_square = squares[tour[index][0]][tour[index][1]];
-    visitSquare(curr_square);
-    drawLine(line, last_square, curr_square);
-
-    setTimeout(repeat, 500);
-  }
-
-  function repeat() {
-    ++index;
-    last_square = curr_square;
-
-    if (index < tour.length) {
-      jump();
-    } else {
-      window.location.reload(false);
+        return "M" + c1.x + "," + c1.y +
+               "L" + c2.x + "," + c2.y;
     }
-  }
 
-  //$.getJSON("api/knightstour/static.json", function(json) {
-  $.getJSON("api/knightstour/warnsdorff.json", function(json) {
-  //$.getJSON("api/knightstour/random.json", function(json) {
-    tour = eval(json);
-    jump();
-  });
+    function addLine(path, fromElem, toElem) {
+        if (fromElem === null || toElem === null) {
+            return;
+        }
+        var path_attr = path.attr("path");
+        path.attr("path", path_attr + lineBetween(fromElem, toElem));
+    }
+
+    var boardWidth = 600;
+    var boardHeight = 600;
+    var fileCount = 8;
+    var rankCount = 8;
+
+    var squareWidth = boardWidth / fileCount;
+    var squareHeight = boardHeight / rankCount;
+
+    var borderColor = "#EEE";
+    var pathColor = "#FFBF00";
+    var fillColor = "#666";
+    var timeout = 400;
+
+    var paper = Raphael("canvas", boardWidth, boardHeight);
+
+    function createBoard() {
+        var board = paper.rect(0, 0, boardWidth, boardHeight);
+        board.attr({
+            "stroke": borderColor,
+            "stroke-width": 4
+        });
+        return board;
+    }
+
+    function createPath() {
+        var path = paper.path();
+        path.attr({
+            "arrow-end": "block-wide-long",
+            "stroke": pathColor,
+            "stroke-linecap": "round",
+            "stroke-width": 3
+        });
+        return path;
+    }
+
+    function createStartPoint(square) {
+        var center = centerOf(square);
+        var point = paper.circle(center.x, center.y, 6);
+        point.attr({
+            "fill": pathColor,
+            "stroke": pathColor,
+            "stroke-width": 3
+        });
+        return point;
+    }
+
+    function createSquares() {
+        var squares = [];
+        for (var file = 0; file < fileCount; file++) {
+            squares[file] = [];
+
+            for (var rank = 0; rank < rankCount; rank++) {
+                var x = squareWidth * file;
+                var y = squareHeight * (rankCount - rank -1);
+
+                var square = paper.rect(x, y, squareWidth, squareHeight);
+                square.attr({
+                    "stroke": borderColor,
+                    "stroke-width": 2
+                });
+                squares[file][rank] = square;
+            }
+        }
+        return squares;
+    }
+
+    var squares = createSquares();
+    var board = createBoard();
+    var path = createPath();
+    var startPoint = null;
+
+    var tour = {};
+    var index = 0;
+
+    var lastSquare = null;
+    var currSquare = null;
+
+    function resetSquares() {
+        for (var i = 0; i < squares.length; i++) {
+            for (var j = 0; j < squares[i].length; j++) {
+                squares[i][j].attr("fill", "");
+            }
+        }
+    }
+
+    function resetAll() {
+        path.attr("path", "");
+        resetSquares();
+        if (startPoint !== null) {
+            startPoint.remove();
+        }
+
+        tour = {};
+        index = 0;
+
+        lastSquare = null;
+        currSquare = null;
+    }
+
+    function fillSquare(square) {
+        square.attr("fill", fillColor);
+    }
+
+    function runAnimation() {
+        var file = tour[index][0];
+        var rank = tour[index][1];
+        currSquare = squares[file][rank];
+
+        if (lastSquare === null) {
+            startPoint = createStartPoint(currSquare);
+        }
+        fillSquare(currSquare);
+        addLine(path, lastSquare, currSquare);
+
+        setTimeout(loopAnimation, timeout);
+    }
+
+    function loopAnimation() {
+        lastSquare = currSquare;
+        ++index;
+
+        if (index < tour.length) {
+            runAnimation();
+        } else {
+            setTimeout(queryTour, timeout);
+        }
+    }
+
+    function queryTour() {
+        $.getJSON("api/knightstour/warnsdorff.json", function(jsonTour) {
+            resetAll();
+            tour = eval(jsonTour);
+            runAnimation();
+        });
+    }
+    queryTour();
 };
+
+$(document).ready(knightstour);
