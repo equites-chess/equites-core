@@ -38,8 +38,21 @@ object KnightsTour {
     genericTour(start, (squares, _) => util.pickRandom(squares))
 
   def warnsdorffTour(start: Square) =
-    genericTour(start, (squares, visited) =>
-      squares.sortBy(sq => unvisited(sq, visited).length).headOption)
+    genericTour(start, leastDegreeSquare)
+
+  def leastDegreeSquare: Selector = (squares, visited) =>
+    squares.sortBy(sq => unvisited(sq, visited).length).headOption
+
+  // impure
+  def randomWarnsdorffTour(start: Square) =
+    genericTour(start, randomLeastDegreeSquare)
+
+  // impure
+  def randomLeastDegreeSquare: Selector = (squares, visited) => {
+    val grouped = squares.groupBy(sq => unvisited(sq, visited).length)
+    if (grouped.isEmpty) None
+    else util.pickRandom(grouped.minBy(_._1)._2)
+  }
 
   def isClosed(tour: Seq[Square]): Boolean = {
     if (tour.isEmpty) false
