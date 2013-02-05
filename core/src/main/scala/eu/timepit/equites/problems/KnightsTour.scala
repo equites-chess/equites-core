@@ -44,8 +44,11 @@ object KnightsTour {
     squares.sortBy(sq => unvisited(sq, visited).length).headOption
 
   // impure
-  def randomWarnsdorffTour(start: Square) =
-    genericTour(start, randomLeastDegreeSquare)
+  def randomWarnsdorffTour(start: Square) = {
+    val squaresCount = Rules.allSquares.length
+    Iterator.continually(genericTour(start, randomLeastDegreeSquare))
+      .find(_.length == squaresCount).get
+  }
 
   // impure
   def randomLeastDegreeSquare: Selector = (squares, visited) => {
