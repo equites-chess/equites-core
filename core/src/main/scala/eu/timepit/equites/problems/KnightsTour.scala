@@ -46,7 +46,7 @@ object KnightsTour {
   // impure
   def randomWarnsdorffTour(start: Square) = {
     val squaresCount = Rules.allSquares.length
-    Iterator.continually(genericTour(start, randomLeastDegreeSquare))
+    Stream.continually(genericTour(start, randomLeastDegreeSquare))
       .find(_.length == squaresCount).get
   }
 
@@ -57,10 +57,8 @@ object KnightsTour {
     else util.pickRandom(grouped.minBy(_._1)._2)
   }
 
-  def isClosed(tour: Seq[Square]): Boolean = {
-    if (tour.isEmpty) false
-    else Directions.knightLike contains (tour.last - tour.head)
-  }
+  def isClosed(tour: Seq[Square]): Boolean =
+    tour.nonEmpty && Directions.knightLike.contains(tour.last - tour.head)
 
   private def knightOn(square: Square) = PlacedPiece(Knight(White), square)
 

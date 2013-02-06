@@ -28,6 +28,7 @@ object KnightsTourAPI {
   def staticTourAsJson = genericTourAsJson(staticTour)
   def randomTourAsJson = genericTourAsJson(randomTour)
   def warnsdorffTourAsJson = genericTourAsJson(warnsdorffTour)
+  def randomWarnsdorffTourAsJson = genericTourAsJson(randomWarnsdorffTour)
 
   def genericTourAsJson(tourFun: Square => Stream[Square]) = Action {
     Ok(toJson(tourFun(Square.random()).map(_.toSeq)))
