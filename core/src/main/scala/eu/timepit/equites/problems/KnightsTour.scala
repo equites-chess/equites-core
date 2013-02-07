@@ -54,7 +54,10 @@ object KnightsTour {
   def randomLeastDegreeSquare: Selector = (squares, visited) => {
     val grouped = squares.groupBy(sq => unvisited(sq, visited).length)
     if (grouped.isEmpty) None
-    else util.pickRandom(grouped.minBy(_._1)._2)
+    else {
+      val (_, ldSquares) = grouped.minBy { case (degree, _) => degree }
+      util.pickRandom(ldSquares)
+    }
   }
 
   def isClosed(tour: Seq[Square]): Boolean =
