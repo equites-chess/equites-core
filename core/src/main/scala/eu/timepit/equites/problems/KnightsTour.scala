@@ -45,9 +45,8 @@ object KnightsTour {
 
   // impure
   def randomWarnsdorffTour(start: Square) = {
-    val squaresCount = Rules.allSquares.length
-    Stream.continually(genericTour(start, randomLeastDegreeSquare))
-      .find(_.length == squaresCount).get
+    Iterator.continually(genericTour(start, randomLeastDegreeSquare))
+      .find(_.length == Rules.allSquares.length).get
   }
 
   // impure
