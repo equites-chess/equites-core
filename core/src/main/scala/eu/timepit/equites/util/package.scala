@@ -23,18 +23,13 @@ import scalaz._
 package object util {
   type Rand[A] = State[Random, A]
 
-  def pickRandomPure[A, C <% GenSeqLike[A, C]](from: C): Rand[Option[A]] =
+  def pickRandom[A, C <% GenSeqLike[A, C]](from: C): Rand[Option[A]] =
     State(rnd =>
       from.length match {
       case 0 => (rnd, None)
       case x => (rnd, Some(from(rnd.nextInt(x))))
     })
 
-  // impure
-  def pickRandom[A, C <% GenSeqLike[A, C]](from: C): Option[A] = {
-    from.length match {
-      case 0 => None
-      case x => Some(from(Random.nextInt(x)))
-    }
-  }
+  def pickRandomImpure[A, C <% GenSeqLike[A, C]](from: C): Option[A] =
+    pickRandom(from).eval(Random)
 }

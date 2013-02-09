@@ -35,7 +35,7 @@ object KnightsTour {
 
   // impure
   def randomTour(start: Square) =
-    genericTour(start, (squares, _) => util.pickRandom(squares))
+    genericTour(start, (squares, _) => util.pickRandomImpure(squares))
 
   def warnsdorffTour(start: Square) =
     genericTour(start, leastDegreeSquare)
@@ -55,7 +55,7 @@ object KnightsTour {
     if (grouped.isEmpty) None
     else {
       val (_, ldSquares) = grouped.minBy { case (degree, _) => degree }
-      util.pickRandom(ldSquares)
+      util.pickRandomImpure(ldSquares)
     }
   }
 

@@ -151,7 +151,7 @@ var knightstour = function () {
     }
 
     function queryTour() {
-        $.getJSON("api/knightstour/warnsdorff.json", function(jsonTour) {
+        $.getJSON("api/knightstour/warnsdorff2.json", function(jsonTour) {
             resetAll();
             tour = eval(jsonTour);
             runAnimation();

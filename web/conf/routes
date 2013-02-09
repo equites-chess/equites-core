@@ -7,6 +7,7 @@ GET     /   controllers.Application.knightstour
 GET     /api/knightstour/static.json        controllers.api.KnightsTourAPI.staticTourAsJson
 GET     /api/knightstour/random.json        controllers.api.KnightsTourAPI.randomTourAsJson
 GET     /api/knightstour/warnsdorff.json    controllers.api.KnightsTourAPI.warnsdorffTourAsJson
+GET     /api/knightstour/warnsdorff2.json   controllers.api.KnightsTourAPI.randomWarnsdorffTourAsJson
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file   controllers.Assets.at(path="/public", file)
