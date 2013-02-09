@@ -32,20 +32,20 @@ class RulesSpec extends Specification {
     }
 
     "correctly perform possibleSquares" in {
-      possibleSquares(PlacedPiece(King(White), Square(3, 2))).toSet must_==
+      possibleSquares(Placed(King(White), Square(3, 2))).toSet must_==
         Set(Square(3, 3), Square(4, 3), Square(4, 2), Square(4, 1),
             Square(3, 1), Square(2, 1), Square(2, 2), Square(2, 3))
 
-      possibleSquares(PlacedPiece(Pawn(White), Square(3, 3))).toSet must_==
+      possibleSquares(Placed(Pawn(White), Square(3, 3))).toSet must_==
         Set(Square(3, 4))
-      possibleSquares(PlacedPiece(Pawn(White), Square(0, 1))).toSet must_==
+      possibleSquares(Placed(Pawn(White), Square(0, 1))).toSet must_==
         Set(Square(0, 2), Square(0, 3))
-      possibleSquares(PlacedPiece(Pawn(Black), Square(0, 6))).toSet must_==
+      possibleSquares(Placed(Pawn(Black), Square(0, 6))).toSet must_==
         Set(Square(0, 5), Square(0, 4))
     }
 
     "correctly perform possibleSquares for Bishop" in {
-      possibleSquares(PlacedPiece(Bishop(White), Square(3, 3))).toSet must_==
+      possibleSquares(Placed(Bishop(White), Square(3, 3))).toSet must_==
         Set(Square(0, 0), Square(1, 1), Square(2, 2), Square(4, 4),
             Square(5, 5), Square(6, 6), Square(7, 7),
             Square(0, 6), Square(1, 5), Square(2, 4), Square(4, 2),

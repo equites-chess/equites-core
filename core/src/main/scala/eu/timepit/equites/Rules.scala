@@ -16,6 +16,8 @@
 
 package eu.timepit.equites
 
+import scalaz._
+
 object Rules {
   val fileRange = 0 to 7
   val rankRange = 0 to 7
@@ -46,8 +48,8 @@ object Rules {
     }).flatten.toMap
   }
 
-  def onStartingSquare(placed: PlacedPiece): Boolean =
-    startingSquares(placed.piece) contains placed.position
+  def onStartingSquare(placed: Placed[Piece]): Boolean =
+    startingSquares(placed.piece) contains placed.square
 
   val castlingSquares: Map[(Side, Piece), (Square, Square)] = {
     def castlingSquaresFor(side: Side, piece: Piece): (Square, Square) = {
@@ -104,7 +106,7 @@ object Rules {
     }).flatten.toMap
   }
 
-  def movementTypeOf(placed: PlacedPiece): (Directions, Int) = {
+  def movementTypeOf(placed: Placed[Piece]): (Directions, Int) = {
     val (directions, dist) = movementTypes(placed.piece)
     placed.piece match {
       case Pawn(_) if onStartingSquare(placed) => (directions, 2)
@@ -115,20 +117,22 @@ object Rules {
   def squaresInDirection(from: Square, direction: Vec): Stream[Square] =
     Stream.iterate(from)(_ + direction).tail.takeWhile(_.isValid)
 
-  def possibleSquares(placed: PlacedPiece): Stream[Square] = {
+  def possibleSquares(placed: Placed[Piece]): Stream[Square] = {
     val (directions, dist) = movementTypeOf(placed)
     for {
       direction <- directions.toStream
-      square <- squaresInDirection(placed.position, direction).take(dist)
+      square <- squaresInDirection(placed.square, direction).take(dist)
     } yield square
   }
 
-  def unvisitedSquares(placed: PlacedPiece, visited: Set[Square])
+  def unvisitedSquares(placed: Placed[Piece], visited: Set[Square])
       : Stream[Square] =
     possibleSquares(placed).filterNot(visited(_))
 
 
 
+
+/*
   def squaresInDirection(placed: PlacedPiece, direction: Vec, board: Board):
       Stream[Square] = {
     // does not work correctly for pawns
@@ -151,4 +155,12 @@ object Rules {
       square <- squaresInDirection(placed, direction, board).take(dist)
     } yield square
   }
+
+
+  type BoardS[A] = State[Board, A]
+
+  def possibleMoves(placed: Placed[Piece]): BoardS[Seq[Action]] = ???
+
+  def possibleMoves(placed: Placed[Pawn]): BoardS[Seq[Action]] = ???
+  */
 }

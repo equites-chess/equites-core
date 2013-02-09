@@ -62,7 +62,7 @@ object KnightsTour {
   def isClosed(tour: Seq[Square]): Boolean =
     tour.nonEmpty && Directions.knightLike.contains(tour.last - tour.head)
 
-  private def knightOn(square: Square) = PlacedPiece(Knight(White), square)
+  private def knightOn(square: Square) = Placed(Knight(White), square)
 
   private def unvisited(from: Square, visited: Set[Square]) =
     Rules.unvisitedSquares(knightOn(from), visited)
