@@ -3,5 +3,3 @@ scala:
   - "2.10.0"
 jdk:
   - openjdk7
-notifications:
-  email: false
