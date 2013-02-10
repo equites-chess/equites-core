@@ -19,3 +19,5 @@ scalacOptions in (Compile, doc) <++= baseDirectory.map {
      "-doc-source-url", "https://github.com/fthomas/equites/tree/master€{FILE_PATH}.scala"
   )
 }
+
+initialCommands := "import eu.timepit.equites._"
