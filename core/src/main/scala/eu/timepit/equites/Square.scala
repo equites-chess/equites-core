@@ -66,6 +66,10 @@ case class Square(file: Int, rank: Int) {
   def l1Dist(that: Square): Int = (this - that).l1Length
   def lInfDist(that: Square): Int = (this - that).lInfLength
 
+  def distToBoundary: Int = math.min(
+    math.min(file - Rules.fileRange.start, Rules.fileRange.end - file),
+    math.min(rank - Rules.rankRange.start, Rules.rankRange.end - rank))
+
   def up: Square   = this + Vec(0, 1)
   def down: Square = this - Vec(0, 1)
 
