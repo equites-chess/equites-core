@@ -31,5 +31,7 @@ package object util {
     })
 
   def pickRandomImpure[A, C <% GenSeqLike[A, C]](from: C): Option[A] =
-    pickRandom(from).eval(Random)
+    eval(pickRandom(from))
+
+  def eval[A](rand: Rand[A]): A = rand.eval(Random)
 }

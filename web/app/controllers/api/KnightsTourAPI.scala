@@ -31,7 +31,7 @@ object KnightsTourAPI {
   def randomWarnsdorffTourAsJson = genericTourAsJson(randomWarnsdorffTour)
 
   def genericTourAsJson(tourFun: Square => Stream[Square]) = Action {
-    Ok(toJson(tourFun(Square.random()).map(_.toSeq)))
+    Ok(toJson(tourFun(Square.randomImpure()).map(_.toSeq)))
       .withHeaders(("Cache-Control", "no-cache"))
   }
 }

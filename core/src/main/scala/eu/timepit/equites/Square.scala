@@ -16,9 +16,9 @@
 
 package eu.timepit.equites
 
-import scala.util.Random
 import scalaz._
 
+import util._
 import util.Math._
 import util.Notation._
 
@@ -45,10 +45,11 @@ object Square {
   def l1Dist(p: Square, q: Square): Int = p.l1Dist(q)
   def lInfDist(p: Square, q: Square): Int = p.lInfDist(q)
 
-  // impure
-  def random(): Square =
-    Square(Rules.fileRange.start + Random.nextInt(Rules.fileRange.length),
-           Rules.rankRange.start + Random.nextInt(Rules.rankRange.length))
+  def random: Rand[Square] = State(rnd => (rnd,
+    Square(Rules.fileRange.start + rnd.nextInt(Rules.fileRange.length),
+           Rules.rankRange.start + rnd.nextInt(Rules.rankRange.length))))
+
+  def randomImpure(): Square = eval(random)
 }
 
 case class Square(file: Int, rank: Int) {
