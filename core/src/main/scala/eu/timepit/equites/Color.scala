@@ -17,7 +17,7 @@
 package eu.timepit.equites
 
 object Color {
-  def values: List[Color] = List(White, Black)
+  def values: Seq[Color] = Seq(White, Black)
 }
 
 sealed trait Color {

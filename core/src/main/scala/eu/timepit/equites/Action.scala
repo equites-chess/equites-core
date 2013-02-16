@@ -60,7 +60,7 @@ case class EnPassant(piece: Pawn, from: Square, to: Square, captured: Pawn,
   extends CaptureLike
 
 object Side {
-  def values: List[Side] = List(Kingside, Queenside)
+  def values: Seq[Side] = Seq(Kingside, Queenside)
 }
 
 sealed trait Side
