@@ -42,18 +42,45 @@ sealed trait PromotionLike extends MoveLike {
   def promotedTo: Piece
 }
 
+object Move {
+  def apply(placed: Placed[Piece], to: Square): Move =
+    Move(placed.piece, placed.square, to)
+}
+
 case class Move(piece: Piece, from: Square, to: Square)
   extends MoveLike
+
+object Promotion {
+  def apply(placed: Placed[Pawn], to: Square, promotedTo: Piece): Promotion =
+    Promotion(placed.piece, placed.square, to, promotedTo)
+}
 
 case class Promotion(piece: Pawn, from: Square, to: Square, promotedTo: Piece)
   extends PromotionLike
 
+object Capture {
+  def apply(placed: Placed[Piece], to: Square, captured: Piece): Capture =
+    Capture(placed.piece, placed.square, to, captured)
+}
+
 case class Capture(piece: Piece, from: Square, to: Square, captured: Piece)
   extends CaptureLike
+
+object CaptureAndPromotion {
+  def apply(placed: Placed[Pawn], to: Square, captured: Piece,
+            promotedTo: Piece): CaptureAndPromotion =
+    CaptureAndPromotion(placed.piece, placed.square, to, captured, promotedTo)
+}
 
 case class CaptureAndPromotion(piece: Pawn, from: Square, to: Square,
   captured: Piece, promotedTo: Piece)
   extends CaptureLike with PromotionLike
+
+object EnPassant {
+  def apply(placed: Placed[Pawn], to: Square, captured: Pawn,
+            capturedOn: Square): EnPassant =
+    EnPassant(placed.piece, placed.square, to, captured, capturedOn)
+}
 
 case class EnPassant(piece: Pawn, from: Square, to: Square, captured: Pawn,
   override val capturedOn: Square)
