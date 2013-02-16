@@ -45,6 +45,19 @@ object Notation {
     case _ => None
   }
 
+  def pieceFromLetter(c: Char): Option[Piece] = pieceFromAlgebraic(c).orElse {
+    c match {
+      case 'P' => Some(Pawn(White))
+      case 'k' => Some(King(Black))
+      case 'q' => Some(Queen(Black))
+      case 'r' => Some(Rook(Black))
+      case 'b' => Some(Bishop(Black))
+      case 'n' => Some(Knight(Black))
+      case 'p' => Some(Pawn(Black))
+      case _ => None
+    }
+  }
+
   def pieceFromFigurine(c: Char): Option[Piece] = c match {
     case '\u2654' => Some(King(White))
     case '\u2655' => Some(Queen(White))
@@ -59,24 +72,5 @@ object Notation {
     case '\u265E' => Some(Knight(Black))
     case '\u265F' => Some(Pawn(Black))
     case _ => None
-  }
-
-  def squareFromAlgebraic(s: String): Option[Square] = {
-    val valid = s.length == 2 &&
-      algebraicFileRange.contains(s(0)) &&
-      algebraicRankRange.contains(s(1).asDigit)
-
-    if (valid) Some(Square(s(0), s(1).asDigit)) else None
-  }
-
-  def moveFromLongFigurine(s: String): Option[Move] = {
-    for {
-      fstChar <- s.headOption
-      piece   <- pieceFromFigurine(fstChar)
-      square1 <- s.slice(1, 2).asOption
-      square2 <- s.slice(4, 5).asOption
-      from    <- squareFromAlgebraic(square1)
-      to      <- squareFromAlgebraic(square2)
-    } yield Move(piece, from, to)
   }
 }
