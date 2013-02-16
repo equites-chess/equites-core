@@ -18,6 +18,8 @@ package eu.timepit.equites
 
 import scalaz._
 
+import implicits.PlacedImplicit._
+
 object Rules {
   val fileRange = 0 to 7
   val rankRange = 0 to 7
@@ -70,7 +72,7 @@ object Rules {
     val mapping = for {
       side  <- Side.values
       color <- Color.values
-      piece <- List(King(color), Rook(color))
+      piece <- Seq(King(color), Rook(color))
     } yield (side, piece) -> castlingSquaresFor(side, piece)
     mapping.toMap
   }
@@ -129,38 +131,67 @@ object Rules {
       : Stream[Square] =
     possibleSquares(placed).filterNot(visited(_))
 
+  type BoardT[A] = State[Board, A]
 
-
-
-/*
-  def squaresInDirection(placed: PlacedPiece, direction: Vec, board: Board):
-      Stream[Square] = {
-    // does not work correctly for pawns
-    def iterate(from: Square): Stream[Square] = {
+  def movesInDirection(placed: Placed[Piece], direction: Vec)
+      : BoardT[Stream[MoveLike]] = {
+    def iterate(from: Square, board: Board): Stream[MoveLike] = {
       val next = from + direction
       board.get(next) match {
-        case Some(piece)
-          => if (piece isOpponentOf placed.piece) Stream(next) else Stream()
+        case Some(piece) if (piece isOpponentOf placed)
+          => Stream(Capture(placed, next, piece))
         case None
-          => next #:: iterate(next)
+          => Move(placed, next) #:: iterate(next, board)
+        case _
+          => Stream()
       }
     }
-    iterate(placed.position)
+    State(board => (board, iterate(placed.square, board)))
   }
 
-  def possibleSquaresOf(placed: PlacedPiece, board: Board): Stream[Square] = {
+  def genericMoves(placed: Placed[Piece]): BoardT[Stream[MoveLike]] = {
     val (directions, dist) = movementTypeOf(placed)
-    for {
+    def allMoves(board: Board) = for {
       direction <- directions.toStream
-      square <- squaresInDirection(placed, direction, board).take(dist)
-    } yield square
+      move <- movesInDirection(placed, direction).eval(board).take(dist)
+    } yield move
+    State(board => (board, allMoves(board)))
   }
 
+  def pawnMoves(placed: Placed[Pawn]): BoardT[Stream[MoveLike]] = {
+    //moves
+    //captures
+    //enPassants
+    //promotions
+    ???
+  }
 
-  type BoardS[A] = State[Board, A]
+  def kingMoves(placed: Placed[King]): BoardT[Stream[Action]] = {
+    //moves
+    //castlings
+    ???
+  }
 
-  def possibleMoves(placed: Placed[Piece]): BoardS[Seq[Action]] = ???
+  def possibleActions(placed: Placed[Piece]): BoardT[Stream[Action]] = {
+    placed.piece match {
+      case King(_) => kingMoves(placed.asInstanceOf[Placed[King]])
+      case Pawn(_) => pawnMoves(placed.asInstanceOf[Placed[Pawn]])
+      case _ => genericMoves(placed)
+    }
+    //checkmate
+  }
 
-  def possibleMoves(placed: Placed[Pawn]): BoardS[Seq[Action]] = ???
-  */
+  def isAttackedBy(square: Square, color: Color): BoardT[Boolean] = {
+    // there needs to be a piece on square
+    def xxx(board: Board) = {
+      for {
+        placed <- board.placedPieces.filter(_.color == color)
+        action <- possibleActions(placed).eval(board)
+        if action.isInstanceOf[CaptureLike]
+        capture = action.asInstanceOf[CaptureLike]
+        if capture.from == square
+      } yield capture
+    }
+    State(board => (board, xxx(board).nonEmpty))
+  }
 }
