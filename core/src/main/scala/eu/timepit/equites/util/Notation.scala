@@ -73,4 +73,15 @@ object Notation {
     case '\u265F' => Some(Pawn(Black))
     case _ => None
   }
+
+  def squareFromAlgebraic(s: String): Option[Square] =
+    if (s.length >= 2) Square(s(0), s(1).asDigit).asOption else None
+
+  def squaresFromPureCoordinate(s: String): Option[(Square, Square)] =
+    for {
+      sub1 <- s.slice(0, 2).asOption
+      sub2 <- s.slice(2, 4).asOption
+      sq1 <- squareFromAlgebraic(sub1)
+      sq2 <- squareFromAlgebraic(sub2)
+    } yield (sq1, sq2)
 }

@@ -60,6 +60,7 @@ case class Square(file: Int, rank: Int) {
   def -(that: Square): Vec = Vec(file - that.file, rank - that.rank)
 
   def isValid: Boolean = Square.validCoordinates(file, rank)
+  def asOption: Option[Square] = if (isValid) Some(this) else None
 
   def isLight: Boolean = isOdd(sum)
   def isDark: Boolean = isEven(sum)
