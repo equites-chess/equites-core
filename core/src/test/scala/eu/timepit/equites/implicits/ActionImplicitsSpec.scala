@@ -95,5 +95,22 @@ class ActionImplicitsSpec extends Specification {
       CastlingLong(White).toLongFigurine  must_== "0-0-0"
       CastlingLong(Black).toLongFigurine  must_== "0-0-0"
     }
+
+    "correctly perform toPureCoordinate" in {
+      moveWhite.toPureCoordinate must_== "a1h8"
+      moveBlack.toPureCoordinate must_== "a1h8"
+
+      promoWhite.toPureCoordinate must_== "d7d8q"
+      promoBlack.toPureCoordinate must_== "d2d1q"
+
+      captPromoWhite.toPureCoordinate must_== "a7b8q"
+      captPromoBlack.toPureCoordinate must_== "a2b1q"
+
+      CastlingShort(White).toPureCoordinate must_== "e1g1"
+      CastlingShort(Black).toPureCoordinate must_== "e8g8"
+
+      CastlingLong(White).toPureCoordinate must_== "e1c1"
+      CastlingLong(Black).toPureCoordinate must_== "e8c8"
+    }
   }
 }

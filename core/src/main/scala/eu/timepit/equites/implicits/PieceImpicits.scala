@@ -28,12 +28,12 @@ object PieceImplicits {
       case Pawn(_)   => ""
     }
 
-    private def toUpperCaseLetter: String = self match {
+    def toUpperCaseLetter: String = self match {
       case Pawn(_) => "P"
       case _ => toAlgebraic
     }
 
-    private def toLowerCaseLetter: String = toUpperCaseLetter.toLowerCase
+    def toLowerCaseLetter: String = toUpperCaseLetter.toLowerCase
 
     def toLetter: String = self.color match {
       case White => toUpperCaseLetter

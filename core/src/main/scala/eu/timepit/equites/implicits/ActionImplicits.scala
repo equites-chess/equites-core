@@ -54,5 +54,15 @@ object ActionImplicits {
       case c: Castling
         => c.kingMove.toNumeric
     }
+
+    def toPureCoordinate: String = self match {
+      case p: PromotionLike
+        => p.from.toAlgebraic + p.to.toAlgebraic +
+           p.promotedTo.toLowerCaseLetter
+      case m: MoveLike
+        => m.from.toAlgebraic + m.to.toAlgebraic
+      case c: Castling
+        => c.kingMove.toPureCoordinate
+    }
   }
 }
