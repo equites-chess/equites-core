@@ -17,10 +17,10 @@
 package eu.timepit.equites
 package implicits
 
-import RichPieceImplicit._
-import RichSquareImplicit._
+import PieceImplicits._
+import SquareImplicits._
 
-object RichActionImplicit {
+object ActionImplicits {
   implicit final class RichAction(val self: Action) extends AnyVal {
     def toLongAlgebraic: String = toLongAlgebraicImpl(_.toAlgebraic)
     def toLongFigurine:  String = toLongAlgebraicImpl(_.toFigurine)

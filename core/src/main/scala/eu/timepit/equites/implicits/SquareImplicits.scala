@@ -17,28 +17,18 @@
 package eu.timepit.equites
 package implicits
 
-import org.specs2.mutable._
+import util.Notation._
 
-import RichSquareImplicit._
-
-class RichSquareSpec extends Specification {
-  "RichSquare" should {
-    "correctly perform toAlgebraic" in {
-      Square(0, 0).toAlgebraic must_== "a1"
-      Square(1, 1).toAlgebraic must_== "b2"
-      Square(0, 7).toAlgebraic must_== "a8"
-      Square(7, 0).toAlgebraic must_== "h1"
-      Square(7, 7).toAlgebraic must_== "h8"
-      Square(3, 3).toAlgebraic must_== "d4"
+object SquareImplicits {
+  implicit final class RichSquare(val self: Square) extends AnyVal {
+    def toAlgebraic: String = {
+      algebraicFileRange(self.file).toString +
+      algebraicRankRange(self.rank).toString
     }
 
-    "correctly perform toNumeric" in {
-      Square(0, 0).toNumeric must_== "11"
-      Square(1, 1).toNumeric must_== "22"
-      Square(0, 7).toNumeric must_== "18"
-      Square(7, 0).toNumeric must_== "81"
-      Square(7, 7).toNumeric must_== "88"
-      Square(3, 3).toNumeric must_== "44"
+    def toNumeric: String = {
+      numericFileRange(self.file).toString +
+      numericRankRange(self.rank).toString
     }
   }
 }

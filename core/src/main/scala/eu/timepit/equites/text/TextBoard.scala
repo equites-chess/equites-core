@@ -17,7 +17,7 @@
 package eu.timepit.equites
 package text
 
-import implicits.RichPieceImplicit._
+import implicits.PieceImplicits._
 import util.Notation._
 
 trait AbstractRepr {

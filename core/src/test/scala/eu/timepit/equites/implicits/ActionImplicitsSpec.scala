@@ -19,9 +19,9 @@ package implicits
 
 import org.specs2.mutable._
 
-import RichActionImplicit._
+import ActionImplicits._
 
-class RichActionSpec extends Specification {
+class ActionImplicitsSpec extends Specification {
   "RichAction" should {
     val moveWhite = Move(Queen(White), Square(0, 0), Square(7, 7))
     val moveBlack = Move(Queen(Black), Square(0, 0), Square(7, 7))

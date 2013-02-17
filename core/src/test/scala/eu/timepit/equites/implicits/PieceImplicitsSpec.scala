@@ -19,9 +19,9 @@ package implicits
 
 import org.specs2.mutable._
 
-import RichPieceImplicit._
+import PieceImplicits._
 
-class RichPieceSpec extends Specification {
+class PieceImplicitsSpec extends Specification {
   "RichPiece" should {
     "correctly perform toAlgebraic" in {
       King(White).toAlgebraic   must_== "K"

@@ -18,7 +18,7 @@ package eu.timepit.equites
 
 import scalaz._
 
-import implicits.PlacedImplicit._
+import implicits.PlacedImplicits._
 
 object Rules {
   val fileRange = 0 to 7

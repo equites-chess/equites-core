@@ -17,7 +17,7 @@
 package eu.timepit.equites
 package implicits
 
-object RichPieceImplicit {
+object PieceImplicits {
   implicit final class RichPiece(val self: Piece) extends AnyVal {
     def toAlgebraic: String = self match {
       case King(_)   => "K"
