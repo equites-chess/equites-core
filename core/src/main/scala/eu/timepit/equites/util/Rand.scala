@@ -15,6 +15,24 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package eu.timepit.equites
+package util
 
-package object util {
+import scala.collection.GenSeqLike
+import scala.util.Random
+import scalaz._
+
+object Rand {
+  type Rand[A] = State[Random, A]
+
+  def eval[A](rand: Rand[A]): A = rand.eval(Random)
+
+  def pickRandom[A, C <% GenSeqLike[A, C]](from: C): Rand[Option[A]] =
+   State(rnd =>
+     from.length match {
+       case 0 => (rnd, None)
+       case x => (rnd, Some(from(rnd.nextInt(x))))
+     })
+
+  def pickRandomImpure[A, C <% GenSeqLike[A, C]](from: C): Option[A] =
+    eval(pickRandom(from))
 }

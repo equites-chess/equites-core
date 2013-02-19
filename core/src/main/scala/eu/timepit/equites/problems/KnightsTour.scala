@@ -19,6 +19,8 @@ package problems
 
 import scalaz.std.stream
 
+import util.Rand._
+
 object KnightsTour {
   type Selector = (Seq[Square], Set[Square]) => Option[Square]
 
@@ -35,7 +37,7 @@ object KnightsTour {
 
   // impure
   def randomTour(start: Square) =
-    genericTour(start, (squares, _) => util.pickRandomImpure(squares))
+    genericTour(start, (squares, _) => pickRandomImpure(squares))
 
   def warnsdorffTour(start: Square) =
     genericTour(start, leastDegreeSquare)
@@ -55,7 +57,7 @@ object KnightsTour {
     if (grouped.isEmpty) None
     else {
       val (_, ldSquares) = grouped.minBy { case (degree, _) => degree }
-      util.pickRandomImpure(ldSquares)
+      pickRandomImpure(ldSquares)
     }
   }
 

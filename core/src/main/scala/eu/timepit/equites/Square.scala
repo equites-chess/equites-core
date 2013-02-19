@@ -18,9 +18,9 @@ package eu.timepit.equites
 
 import scalaz._
 
-import util._
 import util.Math._
 import util.Notation._
+import util.Rand._
 
 trait SquareInstances {
   implicit object squareInstance extends Equal[Square] {
