@@ -18,13 +18,9 @@ package eu.timepit.equites
 package util
 
 object Math {
-  def isEven[A](i: A)(implicit integral: Integral[A]): Boolean = {
-    import integral._
-    (i % fromInt(2)) == 0
-  }
+  def isEven[A : Integral](i: A): Boolean = rem2(i) == 0
+  def isOdd [A : Integral](i: A): Boolean = rem2(i) != 0
 
-  def isOdd[A](i: A)(implicit integral: Integral[A]): Boolean = {
-    import integral._
-    (i % fromInt(2)) != 0
-  }
+  private def rem2[A](i: A)(implicit A: Integral[A]): A =
+    A.rem(i, A.fromInt(2))
 }
