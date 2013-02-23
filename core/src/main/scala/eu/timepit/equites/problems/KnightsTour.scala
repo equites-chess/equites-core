@@ -17,12 +17,14 @@
 package eu.timepit.equites
 package problems
 
+import scalaz._
+import Scalaz._
 import scalaz.std.stream
 
 import util.Rand._
 
 object KnightsTour {
-  type Selector = (Seq[Square], Set[Square]) => Option[Square]
+  type Selector = (Stream[Square], Set[Square]) => Option[Square]
 
   def genericTour(start: Square, selectNext: Selector): Stream[Square] =
     start #:: stream.unfold((start, Set[Square]())) {

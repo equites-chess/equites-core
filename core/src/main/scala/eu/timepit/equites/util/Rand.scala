@@ -17,7 +17,8 @@
 package eu.timepit.equites
 package util
 
-import scala.collection.GenSeqLike
+import scala.language.higherKinds
+
 import scala.util.Random
 import scalaz._
 
@@ -26,13 +27,15 @@ object Rand {
 
   def eval[A](rand: Rand[A]): A = rand.eval(Random)
 
-  def pickRandom[A, C <% GenSeqLike[A, C]](from: C): Rand[Option[A]] =
-   State(rnd =>
-     from.length match {
-       case 0 => (rnd, None)
-       case x => (rnd, Some(from(rnd.nextInt(x))))
-     })
+  def pickRandom[A, C[A]](from: C[A])(implicit I: Index[C], L: Length[C])
+      : Rand[Option[A]] = {
+    def impl(rnd: Random) = L.length(from) match {
+      case 0 => None
+      case x => I.index(from, rnd.nextInt(x))
+    }
+    State(rnd => (rnd, impl(rnd)))
+  }
 
-  def pickRandomImpure[A, C <% GenSeqLike[A, C]](from: C): Option[A] =
+  def pickRandomImpure[A, C[A] : Index : Length](from: C[A]): Option[A] =
     eval(pickRandom(from))
 }
