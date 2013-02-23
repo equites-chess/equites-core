@@ -17,12 +17,14 @@
 package eu.timepit.equites
 package implicits
 
-import scala.collection.{GenTraversableOnce, IterableLike}
+import scala.collection.IterableLike
+import scalaz._
+import Scalaz._
 
 object GenericImplicits {
   implicit final class CollectionOps[C](val self: C) extends AnyVal {
-    def asOption(implicit ev: C => GenTraversableOnce[_]): Option[C] =
-      if (self.isEmpty) None else Some(self)
+    def asOption(implicit C: Unapply[IsEmpty, C]): Option[C] =
+      if (C.TC.isEmpty(C(self))) None else Some(self)
 
     def dropLeftRight(n: Int)(implicit ev: C => IterableLike[_, C]): C =
       self.drop(n).dropRight(n)

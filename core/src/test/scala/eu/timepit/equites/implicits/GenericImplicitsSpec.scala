@@ -18,13 +18,15 @@ package eu.timepit.equites
 package implicits
 
 import org.specs2.mutable._
+import scalaz._
+import Scalaz._
 
 import GenericImplicits._
 
 class GenericImplicitsSpec extends Specification {
   "asOption" should {
     "return None on empty collections" in {
-      Array[Int]().asOption must beNone
+      Set[Int]().asOption must beNone
       List[Int]().asOption must beNone
       "".asOption must beNone
     }

@@ -18,6 +18,8 @@ package eu.timepit.equites
 package util
 
 import scala.collection.immutable.NumericRange
+import scalaz._
+import Scalaz._
 
 import implicits.GenericImplicits._
 
