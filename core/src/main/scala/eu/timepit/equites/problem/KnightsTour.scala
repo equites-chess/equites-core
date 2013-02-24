@@ -15,7 +15,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package eu.timepit.equites
-package problems
+package problem
 
 import scalaz._
 import Scalaz._
