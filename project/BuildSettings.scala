@@ -7,6 +7,10 @@ object BuildSettings {
   )
 
   lazy val coreSettings = basicSettings ++ seq(
-    initialCommands := "import eu.timepit.equites._"
+    initialCommands := """
+      import scalaz._
+      import Scalaz._
+      import eu.timepit.equites._
+      """
   )
 }
