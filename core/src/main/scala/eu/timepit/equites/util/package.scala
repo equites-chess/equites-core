@@ -17,4 +17,5 @@
 package eu.timepit.equites
 
 package object util {
+  def toStringOnOff(bool: Boolean): String = if (bool) "on" else "off"
 }
