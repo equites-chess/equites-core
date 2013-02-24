@@ -22,7 +22,7 @@ import play.api.mvc.Action
 import play.api.mvc.Results._
 
 import eu.timepit.equites._
-import eu.timepit.equites.problems.KnightsTour._
+import eu.timepit.equites.problem.KnightsTour._
 
 object KnightsTourAPI {
   def staticTourAsJson = genericTourAsJson(staticTour)
