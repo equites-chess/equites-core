@@ -97,20 +97,20 @@ class ActionImplicitsSpec extends Specification {
     }
 
     "correctly perform toPureCoordinate" in {
-      moveWhite.toPureCoordinate must_== "a1h8"
-      moveBlack.toPureCoordinate must_== "a1h8"
+      moveWhite.toCoordinate must_== "a1h8"
+      moveBlack.toCoordinate must_== "a1h8"
 
-      promoWhite.toPureCoordinate must_== "d7d8q"
-      promoBlack.toPureCoordinate must_== "d2d1q"
+      promoWhite.toCoordinate must_== "d7d8q"
+      promoBlack.toCoordinate must_== "d2d1q"
 
-      captPromoWhite.toPureCoordinate must_== "a7b8q"
-      captPromoBlack.toPureCoordinate must_== "a2b1q"
+      captPromoWhite.toCoordinate must_== "a7b8q"
+      captPromoBlack.toCoordinate must_== "a2b1q"
 
-      CastlingShort(White).toPureCoordinate must_== "e1g1"
-      CastlingShort(Black).toPureCoordinate must_== "e8g8"
+      CastlingShort(White).toCoordinate must_== "e1g1"
+      CastlingShort(Black).toCoordinate must_== "e8g8"
 
-      CastlingLong(White).toPureCoordinate must_== "e1c1"
-      CastlingLong(Black).toPureCoordinate must_== "e8c8"
+      CastlingLong(White).toCoordinate must_== "e1c1"
+      CastlingLong(Black).toCoordinate must_== "e8c8"
     }
   }
 }
