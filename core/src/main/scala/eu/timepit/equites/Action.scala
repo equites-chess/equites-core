@@ -98,8 +98,8 @@ sealed trait Castling extends Action {
   def color: Color
   def side: Side
 
-  def king = King(color)
-  def rook = Rook(color)
+  def king: King = King(color)
+  def rook: Rook = Rook(color)
 
   def kingMove: Move = moveOf(king)
   def rookMove: Move = moveOf(rook)
@@ -111,9 +111,9 @@ sealed trait Castling extends Action {
 }
 
 case class CastlingShort(color: Color) extends Castling {
-  def side = Kingside
+  def side: Side = Kingside
 }
 
 case class CastlingLong(color: Color) extends Castling {
-  def side = Queenside
+  def side: Side = Queenside
 }

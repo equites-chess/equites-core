@@ -29,7 +29,7 @@ object Rand {
 
   def pickRandom[A, C[A]](from: C[A])(implicit I: Index[C], L: Length[C])
       : Rand[Option[A]] = {
-    def impl(rnd: Random) = L.length(from) match {
+    def impl(rnd: Random): Option[A] = L.length(from) match {
       case 0 => None
       case x => I.index(from, rnd.nextInt(x))
     }

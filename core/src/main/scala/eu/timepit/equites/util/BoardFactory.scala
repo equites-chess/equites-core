@@ -18,34 +18,36 @@ package eu.timepit.equites
 package util
 
 object BoardFactory {
-  def apply() = new BoardFactory(Board(), Square(0, Rules.rankRange.last))
-  def |> = apply()
+  def apply(): BoardFactory =
+    new BoardFactory(Board(), Square(0, Rules.rankRange.last))
+
+  def |> : BoardFactory = apply()
 }
 
 class BoardFactory(board: Board, square: Square) {
-  def K = embattle(King(White))
-  def Q = embattle(Queen(White))
-  def R = embattle(Rook(White))
-  def B = embattle(Bishop(White))
-  def N = embattle(Knight(White))
-  def P = embattle(Pawn(White))
+  def K: BoardFactory = embattle(King(White))
+  def Q: BoardFactory = embattle(Queen(White))
+  def R: BoardFactory = embattle(Rook(White))
+  def B: BoardFactory = embattle(Bishop(White))
+  def N: BoardFactory = embattle(Knight(White))
+  def P: BoardFactory = embattle(Pawn(White))
 
-  def k = embattle(King(Black))
-  def q = embattle(Queen(Black))
-  def r = embattle(Rook(Black))
-  def b = embattle(Bishop(Black))
-  def n = embattle(Knight(Black))
-  def p = embattle(Pawn(Black))
+  def k: BoardFactory = embattle(King(Black))
+  def q: BoardFactory = embattle(Queen(Black))
+  def r: BoardFactory = embattle(Rook(Black))
+  def b: BoardFactory = embattle(Bishop(Black))
+  def n: BoardFactory = embattle(Knight(Black))
+  def p: BoardFactory = embattle(Pawn(Black))
 
-  def ♔ = K ; def ♚ = k
-  def ♕ = Q ; def ♛ = q
-  def ♖ = R ; def ♜ = r
-  def ♗ = B ; def ♝ = b
-  def ♘ = N ; def ♞ = n
-  def ♙ = P ; def ♟ = p
+  def ♔ : BoardFactory = K ; def ♚ : BoardFactory = k
+  def ♕ : BoardFactory = Q ; def ♛ : BoardFactory = q
+  def ♖ : BoardFactory = R ; def ♜ : BoardFactory = r
+  def ♗ : BoardFactory = B ; def ♝ : BoardFactory = b
+  def ♘ : BoardFactory = N ; def ♞ : BoardFactory = n
+  def ♙ : BoardFactory = P ; def ♟ : BoardFactory = p
 
-  def - = empty
-  def <| = board
+  def - : BoardFactory = empty
+  def <| : Board = board
 
   private def embattle(piece: Piece): BoardFactory =
     new BoardFactory(board + (square -> piece), nextSquare)

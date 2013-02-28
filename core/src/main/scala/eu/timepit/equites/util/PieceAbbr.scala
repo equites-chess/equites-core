@@ -18,17 +18,17 @@ package eu.timepit.equites
 package util
 
 object PieceAbbr {
-  def K = King(White)
-  def Q = Queen(White)
-  def R = Rook(White)
-  def B = Bishop(White)
-  def N = Knight(White)
-  def P = Pawn(White)
+  def K: King   = King(White)
+  def Q: Queen  = Queen(White)
+  def R: Rook   = Rook(White)
+  def B: Bishop = Bishop(White)
+  def N: Knight = Knight(White)
+  def P: Pawn   = Pawn(White)
 
-  def k = King(Black)
-  def q = Queen(Black)
-  def r = Rook(Black)
-  def b = Bishop(Black)
-  def n = Knight(Black)
-  def p = Pawn(Black)
+  def k: King   = King(Black)
+  def q: Queen  = Queen(Black)
+  def r: Rook   = Rook(Black)
+  def b: Bishop = Bishop(Black)
+  def n: Knight = Knight(Black)
+  def p: Pawn   = Pawn(Black)
 }

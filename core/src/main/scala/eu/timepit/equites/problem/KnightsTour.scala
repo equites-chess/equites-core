@@ -34,21 +34,21 @@ object KnightsTour {
       }
     }
 
-  def staticTour(start: Square) =
+  def staticTour(start: Square): Stream[Square] =
     genericTour(start, (squares, _) => squares.headOption)
 
   // impure
-  def randomTour(start: Square) =
+  def randomTour(start: Square): Stream[Square] =
     genericTour(start, (squares, _) => pickRandomImpure(squares))
 
-  def warnsdorffTour(start: Square) =
+  def warnsdorffTour(start: Square): Stream[Square] =
     genericTour(start, leastDegreeSquare)
 
   def leastDegreeSquare: Selector = (squares, visited) =>
     squares.sortBy(sq => unvisited(sq, visited).length).headOption
 
   // impure
-  def randomWarnsdorffTour(start: Square) = {
+  def randomWarnsdorffTour(start: Square): Stream[Square] = {
     Iterator.continually(genericTour(start, randomLeastDegreeSquare))
       .find(_.length == Rules.allSquares.length).get
   }
