@@ -17,5 +17,10 @@
 package eu.timepit.equites
 
 package object util {
+  def getClassName(obj: Object): String = {
+    val name = obj.getClass.getSimpleName
+    if (name.endsWith("$")) name.dropRight(1) else name
+  }
+
   def toStringOnOff(bool: Boolean): String = if (bool) "on" else "off"
 }
