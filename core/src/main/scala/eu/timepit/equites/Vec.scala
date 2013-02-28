@@ -31,8 +31,8 @@ trait VecInstances {
 case class Vec(file: Int, rank: Int) {
   def map(f: Int => Int): Vec = Vec(f(file), f(rank))
 
-  def +(that: Vec): Vec = Vec(file + that.file, rank + that.rank)
-  def -(that: Vec): Vec = this + -that
+  def + (that: Vec): Vec = Vec(file + that.file, rank + that.rank)
+  def - (that: Vec): Vec = this + -that
   def unary_- : Vec = Vec(-file, -rank)
 
   def *(n: Int): Vec = map(_ * n)

@@ -53,11 +53,11 @@ object Square {
 }
 
 case class Square(file: Int, rank: Int) {
-  def +(vec: Vec): Square = Square(file + vec.file, rank + vec.rank)
-  def -(vec: Vec): Square = Square(file - vec.file, rank - vec.rank)
+  def + (vec: Vec): Square = Square(file + vec.file, rank + vec.rank)
+  def - (vec: Vec): Square = Square(file - vec.file, rank - vec.rank)
 
-  def +(that: Square): Vec = Vec(file + that.file, rank + that.rank)
-  def -(that: Square): Vec = Vec(file - that.file, rank - that.rank)
+  def + (that: Square): Vec = Vec(file + that.file, rank + that.rank)
+  def - (that: Square): Vec = Vec(file - that.file, rank - that.rank)
 
   def isValid: Boolean = Square.validCoordinates(file, rank)
   def asOption: Option[Square] = if (isValid) Some(this) else None
