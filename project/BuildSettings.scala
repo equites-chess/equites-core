@@ -1,10 +1,14 @@
 import sbt._
 import Keys._
 
+import org.scalastyle.sbt.ScalastylePlugin
+
 object BuildSettings {
-  lazy val basicSettings = seq(
-    scalaVersion := "2.10.0"
-  )
+  lazy val basicSettings =
+    ScalastylePlugin.Settings ++
+    seq(
+      scalaVersion := "2.10.0"
+    )
 
   lazy val coreSettings = basicSettings ++ seq(
     initialCommands := """
