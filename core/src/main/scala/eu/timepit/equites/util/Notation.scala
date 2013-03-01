@@ -79,7 +79,7 @@ object Notation {
   def squareFromAlgebraic(s: String): Option[Square] =
     if (s.length >= 2) Square(s(0), s(1).asDigit).asOption else None
 
-  def squaresFromPureCoordinate(s: String): Option[(Square, Square)] =
+  def squaresFromCoordinate(s: String): Option[(Square, Square)] =
     for {
       sub1 <- s.slice(0, 2).asOption
       sub2 <- s.slice(2, 4).asOption

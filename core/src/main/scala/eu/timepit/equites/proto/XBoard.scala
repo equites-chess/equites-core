@@ -27,7 +27,7 @@ object XBoard {
 
   case object Version2 extends Version(2)
 
-  // Messages to the engine
+  // Requests to the engine:
 
   sealed trait Command extends util.TextCommand
 
@@ -115,4 +115,6 @@ object XBoard {
   // TODO: egtpath
 
   // TODO: option
+
+  // Responses from the engine:
 }
