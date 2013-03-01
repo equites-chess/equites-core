@@ -16,20 +16,11 @@
 
 package eu.timepit.equites
 
-sealed trait Result
-
-case object WhiteWon extends Result {
-  override def toString: String = "1-0"
+sealed abstract class Result(str: String) {
+  override def toString: String = str
 }
 
-case object BlackWon extends Result {
-  override def toString: String = "0-1"
-}
-
-case object Draw extends Result {
-  override def toString: String = "1/2-1/2"
-}
-
-case object Unknown extends Result {
-  override def toString: String = "*"
-}
+case object WhiteWon extends Result("1-0")
+case object BlackWon extends Result("0-1")
+case object Draw     extends Result("1/2-1/2")
+case object Unknown  extends Result("*")
