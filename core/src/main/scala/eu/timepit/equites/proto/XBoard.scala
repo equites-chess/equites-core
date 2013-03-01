@@ -27,15 +27,9 @@ object XBoard {
 
   case object Version2 extends Version(2)
 
-  sealed trait Command {
-    self: Product =>
+  // Messages to the engine
 
-    override def toString: String = {
-      val cmd = util.getClassName(this).toLowerCase
-      val args = productIterator.mkString(" ")
-      if (args.isEmpty) cmd else cmd + " " + args
-    }
-  }
+  sealed trait Command extends util.TextCommand
 
   case object XBoard extends Command
 
@@ -60,6 +54,8 @@ object XBoard {
   case class Time(centiseconds: Int) extends Command
 
   case class OTim(centiseconds: Int) extends Command
+
+  // TODO: Move
 
   case class UserMove(move: Action) extends Command {
     override def toString: String = "usermove " + move.toCoordinate

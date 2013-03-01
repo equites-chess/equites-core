@@ -23,4 +23,13 @@ package object util {
   }
 
   def toStringOnOff(bool: Boolean): String = if (bool) "on" else "off"
+
+  trait TextCommand extends Product {
+    override def toString: String = {
+      val name = getClassName(this).toLowerCase
+      val args = productIterator.mkString(" ")
+
+      if (args.isEmpty) name else name + " " + args
+    }
+  }
 }
