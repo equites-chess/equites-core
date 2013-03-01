@@ -64,8 +64,8 @@ object PGNParsers extends RegexParsers {
     (tagPair <~ comment.*).*
 
   def moveNumberIndicator: Parser[(Int, Color)] = {
-    def white = "."   ^^ (_ => White)
-    def black = "..." ^^ (_ => Black)
+    def white = "."   ^^^ White
+    def black = "..." ^^^ Black
     integer ~ (black | white) ^^ toTuple
   }
 
