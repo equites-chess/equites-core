@@ -21,7 +21,6 @@ import scalaz._
 import Scalaz._
 import scalaz.std.stream
 
-import implicits.GenericImplicits._
 import util.Rand._
 
 object KnightsTour {
