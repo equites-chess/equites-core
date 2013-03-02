@@ -21,6 +21,7 @@ import scalaz._
 import Scalaz._
 import scalaz.std.stream
 
+import implicits.GenericImplicits._
 import util.Rand._
 
 object KnightsTour {
@@ -56,8 +57,7 @@ object KnightsTour {
   // impure
   def randomLeastDegreeSquare: Selector = (squares, visited) => {
     val grouped = squares.groupBy(sq => unvisited(sq, visited).length)
-    if (grouped.isEmpty) None
-    else {
+    grouped.asOption.flatMap { _ =>
       val (_, ldSquares) = grouped.minBy { case (degree, _) => degree }
       pickRandomImpure(ldSquares)
     }
