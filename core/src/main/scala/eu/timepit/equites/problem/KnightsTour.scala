@@ -43,10 +43,7 @@ object KnightsTour {
     genericTour(start, (squares, _) => pickRandomImpure(squares))
 
   def warnsdorffTour(start: Square): Stream[Square] =
-    genericTour(start, leastDegreeSquare)
-
-  def leastDegreeSquare: Selector = (squares, visited) =>
-    squares.sortBy(sq => unvisited(sq, visited).length).headOption
+    genericTour(start, firstLeastDegreeSquare)
 
   // impure
   def randomWarnsdorffTour(start: Square): Stream[Square] = {
@@ -54,14 +51,23 @@ object KnightsTour {
       .find(_.length == Rules.allSquares.length).get
   }
 
-  // impure
-  def randomLeastDegreeSquare: Selector = (squares, visited) => {
+  def leastDegreeSquares(squares: Stream[Square], visited: Set[Square])
+      : Stream[Square] = {
     val grouped = squares.groupBy(sq => unvisited(sq, visited).length)
-    grouped.asOption.flatMap { _ =>
+    if (grouped.isEmpty) {
+      Stream.empty[Square]
+    } else {
       val (_, ldSquares) = grouped.minBy { case (degree, _) => degree }
-      pickRandomImpure(ldSquares)
+      ldSquares
     }
   }
+
+  def firstLeastDegreeSquare: Selector = (squares, visited) =>
+    leastDegreeSquares(squares, visited).headOption
+
+  // impure
+  def randomLeastDegreeSquare: Selector = (squares, visited) =>
+    pickRandomImpure(leastDegreeSquares(squares, visited))
 
   def isClosed(tour: Seq[Square]): Boolean =
     tour.nonEmpty && Directions.knightLike.contains(tour.last - tour.head)
