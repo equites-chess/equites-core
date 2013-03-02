@@ -53,11 +53,11 @@ object KnightsTour {
   def leastDegreeSquares(squares: Stream[Square], visited: Set[Square])
       : Stream[Square] = {
     val grouped = squares.groupBy(sq => unvisited(sq, visited).length)
-    if (grouped.isEmpty) {
-      Stream.empty[Square]
-    } else {
+    if (grouped.nonEmpty) {
       val (_, ldSquares) = grouped.minBy { case (degree, _) => degree }
       ldSquares
+    } else {
+      Stream.empty[Square]
     }
   }
 
@@ -71,8 +71,6 @@ object KnightsTour {
   def isClosed(tour: Seq[Square]): Boolean =
     tour.nonEmpty && Directions.knightLike.contains(tour.last - tour.head)
 
-  private def knightOn(square: Square) = Placed(Knight(White), square)
-
   private def unvisited(from: Square, visited: Set[Square]) =
-    Rules.unvisitedSquares(knightOn(from), visited)
+    Rules.unvisitedSquares(Placed(Knight(White), from), visited)
 }
