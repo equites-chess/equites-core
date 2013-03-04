@@ -25,7 +25,12 @@ import scalaz._
 object Rand {
   type Rand[A] = State[Random, A]
 
+  // impure
   def eval[A](rand: Rand[A]): A = rand.eval(Random)
+
+  // impure
+  def evalFn2[A1, A2, A](f: (A1, A2) => Rand[A]): (A1, A2) => A =
+    (x, y) => eval(f(x, y))
 
   def pickRandom[A, C[A]](from: C[A])(implicit I: Index[C], L: Length[C])
       : Rand[Option[A]] = {
