@@ -16,7 +16,22 @@
 
 package eu.timepit.equites
 
-object Color {
+import scalaz._
+
+trait ColorInstances {
+  implicit object colorInstance extends Equal[Color] with Order[Color] {
+    // Equal
+    override def equal(c1: Color, c2: Color): Boolean = c1 == c2
+    // Order
+    def order(c1: Color, c2: Color): Ordering = c1 match {
+      case _ if c1 == c2 => Ordering.EQ
+      case White         => Ordering.GT
+      case _             => Ordering.LT
+    }
+  }
+}
+
+object Color extends ColorInstances {
   def values: Seq[Color] = Seq(White, Black)
 }
 

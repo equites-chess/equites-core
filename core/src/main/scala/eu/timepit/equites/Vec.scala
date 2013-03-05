@@ -28,6 +28,8 @@ trait VecInstances {
   }
 }
 
+object Vec extends VecInstances
+
 case class Vec(file: Int, rank: Int) {
   def map(f: Int => Int): Vec = Vec(f(file), f(rank))
 

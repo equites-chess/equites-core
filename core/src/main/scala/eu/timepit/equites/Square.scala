@@ -29,7 +29,7 @@ trait SquareInstances {
   }
 }
 
-object Square {
+object Square extends SquareInstances {
   def apply(algebraicFile: Char, algebraicRank: Int): Square =
     Square(algebraicFileRange.indexOf(algebraicFile),
            algebraicRankRange.indexOf(algebraicRank))
