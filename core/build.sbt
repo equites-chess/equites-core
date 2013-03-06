@@ -9,8 +9,6 @@ libraryDependencies ++= Seq(
     "org.specs2" % "specs2_2.10" % "1.13"
 )
 
-scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature")
-
 scalacOptions in (Compile, doc) ++= Seq("-diagrams")
 
 scalacOptions in (Compile, doc) <++= baseDirectory.map {

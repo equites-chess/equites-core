@@ -7,7 +7,8 @@ object BuildSettings {
   lazy val basicSettings =
     ScalastylePlugin.Settings ++
     seq(
-      scalaVersion := "2.10.0"
+      scalaVersion := "2.10.0",
+      scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature")
     )
 
   lazy val coreSettings = basicSettings ++ seq(
