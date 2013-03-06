@@ -33,4 +33,6 @@ object UciParsers extends RegexParsers {
   def uciok: Parser[UciOk.type] = "uciok" ^^^ UciOk
 
   def readyok: Parser[ReadyOk.type] = "readyok" ^^^ ReadyOk
+
+  //def bestmove: Parser[Bestmove] = "bestmove" ~> symbol ~ ("ponder" ~> symbol).?
 }

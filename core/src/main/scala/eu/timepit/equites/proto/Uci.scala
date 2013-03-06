@@ -56,7 +56,8 @@ object Uci {
 
   case object ReadyOk extends Response
 
-  // TODO: bestmove
+  // TODO: use CoordinateMove
+  //case class Bestmove(move: MoveLike, ponder: Option[MoveLike]) extends Response
 
   // TODO: copyprotection
 

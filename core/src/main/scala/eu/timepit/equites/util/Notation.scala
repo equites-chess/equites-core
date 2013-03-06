@@ -86,4 +86,18 @@ object Notation {
       sq1 <- squareFromAlgebraic(sub1)
       sq2 <- squareFromAlgebraic(sub2)
     } yield (sq1, sq2)
+
+  def moveLikeFromCoordinate(s: String): Option[MoveLike] = {
+    val move = for {
+      (from, to) <- squaresFromCoordinate(s)
+    } yield Move(Pawn(White), from, to)
+
+    val promotion = for {
+      mv <- move
+      letter <- s.lift(5)
+      promotedTo <- pieceFromLetter(letter)
+    } yield Promotion(Pawn(White), mv.from, mv.to, promotedTo)
+
+    promotion orElse move
+  }
 }
