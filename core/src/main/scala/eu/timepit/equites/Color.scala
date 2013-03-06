@@ -23,11 +23,14 @@ trait ColorInstances {
     // Equal
     override def equal(c1: Color, c2: Color): Boolean = c1 == c2
     // Order
-    def order(c1: Color, c2: Color): Ordering = c1 match {
-      case _ if c1 == c2 => Ordering.EQ
-      case White         => Ordering.GT
-      case _             => Ordering.LT
-    }
+    def order(c1: Color, c2: Color): Ordering =
+      if (c1 == c2) {
+        Ordering.EQ
+      } else if (c1 == White) {
+        Ordering.GT
+      } else {
+        Ordering.LT
+      }
   }
 }
 
