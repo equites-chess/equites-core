@@ -2,7 +2,7 @@
 
 Equites is a bunch of chess related code mostly implemented in Scala.
 Currently there is nothing usable from a chess player's point of view.
-But it can animate random [Knight's tours][Equites]! :-)
+But it can animate random [Knight's tours][Equites]! `:-)`
 
 ## Building [![Build Status](https://travis-ci.org/fthomas/equites.png?branch=master)](https://travis-ci.org/fthomas/equites)
 
