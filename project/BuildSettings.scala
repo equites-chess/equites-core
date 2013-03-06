@@ -8,7 +8,10 @@ object BuildSettings {
     ScalastylePlugin.Settings ++
     seq(
       scalaVersion := "2.10.0",
-      scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature")
+      scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature"),
+
+      startYear := Some(2011),
+      licenses += "GPLv3" -> url("http://www.gnu.org/licenses/gpl-3.0.html")
     )
 
   lazy val coreSettings = basicSettings ++ seq(
