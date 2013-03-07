@@ -18,6 +18,9 @@ package eu.timepit.equites
 package util
 
 object Math {
+  def gcd[A](x: A, y: A)(implicit A: Integral[A]): A =
+    if (y == 0) x else gcd(y, A.rem(x, y))
+
   def isEven[A : Integral](i: A): Boolean = rem2(i) == 0
   def  isOdd[A : Integral](i: A): Boolean = rem2(i) != 0
 
