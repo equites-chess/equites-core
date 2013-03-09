@@ -16,9 +16,10 @@
 
 package eu.timepit.equites
 
+import org.specs2.matcher.DataTables
 import org.specs2.mutable._
 
-class VecSpec extends Specification {
+class VecSpec extends Specification with DataTables {
   "Vec" should {
     "correctly perform map" in {
       Vec( 0,  0).map(_ + 1) must_== Vec(1, 1)
@@ -65,14 +66,19 @@ class VecSpec extends Specification {
     }
 
     "correctly perform reduced" in {
-      Vec(0, 0).reduced must_== Vec(0, 0)
-      Vec(1, 0).reduced must_== Vec(1, 0)
-      Vec(1, 1).reduced must_== Vec(1, 1)
-      Vec(2, 1).reduced must_== Vec(2, 1)
-      Vec(2, 2).reduced must_== Vec(1, 1)
-      Vec(3, 2).reduced must_== Vec(3, 2)
-      Vec(4, 2).reduced must_== Vec(2, 1)
-      Vec(-4, 2).reduced must_== Vec(-2, 1)
+      "vec"       | "reduced"   |
+      Vec( 0,  0) ! Vec( 0,  0) |
+      Vec( 1,  0) ! Vec( 1,  0) |
+      Vec( 1,  1) ! Vec( 1,  1) |
+      Vec( 2,  1) ! Vec( 2,  1) |
+      Vec( 2,  2) ! Vec( 1,  1) |
+      Vec( 3,  2) ! Vec( 3,  2) |
+      Vec( 4,  2) ! Vec( 2,  1) |
+      Vec(-4,  2) ! Vec(-2,  1) |
+      Vec( 4, -2) ! Vec( 2, -1) |
+      Vec(-4, -2) ! Vec(-2, -1) |> {
+        (v, r) => v.reduced must_== r
+      }
     }
   }
 }
