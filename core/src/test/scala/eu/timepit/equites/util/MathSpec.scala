@@ -17,41 +17,40 @@
 package eu.timepit.equites
 package util
 
+import org.specs2.ScalaCheck
+import org.specs2.matcher.DataTables
 import org.specs2.mutable._
 
 import Math._
 
-class MathSpec extends Specification {
+class MathSpec extends Specification with DataTables with ScalaCheck {
   "isEven and isOdd" should {
     "be correct for positive numbers" in {
-      isEven(4) must beTrue
-      isOdd(5) must beTrue
-
-      isEven(5) must beFalse
-      isOdd(6) must beFalse
+      "a" | "even" |
+       0  !  true  |
+       1  !  false |
+       2  !  true  |
+       3  !  false |
+       4  !  true  |> {
+        (a, even) => isEven(a) must_== even
+      }
     }
 
-    "be correct for negative numbers" in {
-      isEven(-4) must beTrue
-      isOdd(-5) must beTrue
+    def mustBeSymmetric[A, B](f: A => B)(implicit A: Integral[A]) =
+      (a: A) => f(a) must_== f(A.negate(a))
 
-      isEven(-5) must beFalse
-      isOdd(-6) must beFalse
-    }
+    def isSymmetric[A : Integral](a: A) =
+      mustBeSymmetric(isEven[A]).apply(a) and
+      mustBeSymmetric( isOdd[A]).apply(a)
 
-    "work with Int" in {
-      isEven(2) must beTrue
-      isOdd(3) must beTrue
-    }
+    def isEvenOrOdd[A : Integral](a: A) =
+      isEven(a) must_!= isOdd(a)
 
-    "work with Long" in {
-      isEven(2: Long) must beTrue
-      isOdd(3: Long) must beTrue
-    }
+    def laws[A : Integral](a: A) =
+      isSymmetric(a) and isEvenOrOdd(a)
 
-    "work with BigInt" in {
-      isEven(BigInt(2)) must beTrue
-      isOdd(BigInt(3)) must beTrue
-    }
+    "work with Int" in check { laws(_: Int) }
+    "work with Long" in check { laws(_: Long) }
+    "work with BigInt" in check { laws(_: BigInt) }
   }
 }
