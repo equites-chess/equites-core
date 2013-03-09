@@ -25,6 +25,10 @@ import scalaz._
 object Rand {
   type Rand[A] = State[Random, A]
 
+  def rand[A](a: A): Rand[A] = State.state(a)
+
+  def nextInt(n: Int): Rand[Int] = State(rnd => (rnd, rnd.nextInt(n)))
+
   // impure
   def eval[A](rand: Rand[A]): A = rand.eval(Random)
 
@@ -33,13 +37,11 @@ object Rand {
     (x, y) => eval(f(x, y))
 
   def pickRandom[A, C[A]](from: C[A])(implicit I: Index[C], L: Length[C])
-      : Rand[Option[A]] = {
-    def impl(rnd: Random): Option[A] = L.length(from) match {
-      case 0 => None
-      case x => I.index(from, rnd.nextInt(x))
+      : Rand[Option[A]] =
+    L.length(from) match {
+      case 0 => rand(None)
+      case x => nextInt(x).map(I.index(from, _))
     }
-    State(rnd => (rnd, impl(rnd)))
-  }
 
   def pickRandomImpure[A, C[A] : Index : Length](from: C[A]): Option[A] =
     eval(pickRandom(from))
