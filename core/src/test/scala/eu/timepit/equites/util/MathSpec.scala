@@ -20,10 +20,20 @@ package util
 import org.specs2.ScalaCheck
 import org.specs2.matcher.DataTables
 import org.specs2.mutable._
+import scala.math.abs
 
 import Math._
 
 class MathSpec extends Specification with DataTables with ScalaCheck {
+  "gcd" should {
+    "be commutative" in check {
+      (a: Int, b: Int) => {
+        val (x, y) = (abs(a), abs(b))
+        gcd(x, y) must_== gcd(y, x)
+      }
+    }
+  }
+
   "isEven and isOdd" should {
     "be correct for positive numbers" in {
       "a" | "even" |
