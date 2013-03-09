@@ -129,7 +129,7 @@ object Rules {
 
   def unvisitedSquares(placed: Placed[Piece], visited: Set[Square])
       : Stream[Square] =
-    possibleSquares(placed).filterNot(visited(_))
+    possibleSquares(placed).filterNot(visited)
 
   type BoardT[A] = State[Board, A]
 
