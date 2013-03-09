@@ -63,5 +63,16 @@ class VecSpec extends Specification {
       v1.file + v1.rank must_== v1.sum
       v1.max + v1.min must_== v1.sum
     }
+
+    "correctly perform reduced" in {
+      Vec(0, 0).reduced must_== Vec(0, 0)
+      Vec(1, 0).reduced must_== Vec(1, 0)
+      Vec(1, 1).reduced must_== Vec(1, 1)
+      Vec(2, 1).reduced must_== Vec(2, 1)
+      Vec(2, 2).reduced must_== Vec(1, 1)
+      Vec(3, 2).reduced must_== Vec(3, 2)
+      Vec(4, 2).reduced must_== Vec(2, 1)
+      Vec(-4, 2).reduced must_== Vec(-2, 1)
+    }
   }
 }

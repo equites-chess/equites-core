@@ -20,7 +20,6 @@ package util
 import org.specs2.ScalaCheck
 import org.specs2.matcher.DataTables
 import org.specs2.mutable._
-import scala.math.abs
 
 import Math._
 
@@ -28,7 +27,7 @@ class MathSpec extends Specification with DataTables with ScalaCheck {
   "gcd" should {
     "be commutative" in check {
       (a: Int, b: Int) => {
-        val (x, y) = (abs(a), abs(b))
+        val (x, y) = (a.abs, b.abs)
         gcd(x, y) must_== gcd(y, x)
       }
     }
@@ -41,9 +40,7 @@ class MathSpec extends Specification with DataTables with ScalaCheck {
        1  !  false |
        2  !  true  |
        3  !  false |
-       4  !  true  |> {
-        (a, even) => isEven(a) must_== even
-      }
+       4  !  true  |> { (a, even) => isEven(a) must_== even }
     }
 
     def mustBeSymmetric[A, B](f: A => B)(implicit A: Integral[A]) =

@@ -18,6 +18,8 @@ package eu.timepit.equites
 
 import scalaz._
 
+import util.Math._
+
 trait VecInstances {
   implicit object vecInstance extends Equal[Vec] with Monoid[Vec] {
     // Equal:
@@ -46,4 +48,6 @@ case class Vec(file: Int, rank: Int) {
 
   def l1Length: Int = map(_.abs).sum
   def lInfLength: Int = map(_.abs).max
+
+  def reduced: Vec = this / math.max(1, gcd(file, rank).abs)
 }
