@@ -27,7 +27,7 @@ object KnightsTour {
   type Selector = (Stream[Square], Set[Square]) => Option[Square]
 
   def genericTour(start: Square, selectNext: Selector): Stream[Square] =
-    start #:: stream.unfold((start, Set[Square]())) {
+    start #:: stream.unfold((start, Set.empty[Square])) {
       case (from, visited) => {
         val nextOption = selectNext(unvisited(from, visited), visited)
         nextOption.map(next => (next, (next, visited + from)))
