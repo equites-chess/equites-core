@@ -37,7 +37,7 @@ case class Vec(file: Int, rank: Int) {
 
   def + (that: Vec): Vec = Vec(file + that.file, rank + that.rank)
   def - (that: Vec): Vec = this + -that
-  def unary_- : Vec = Vec(-file, -rank)
+  def unary_- : Vec = this * -1
 
   def *(n: Int): Vec = map(_ * n)
   def /(n: Int): Vec = map(_ / n)
