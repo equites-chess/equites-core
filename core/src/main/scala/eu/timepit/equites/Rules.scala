@@ -91,6 +91,9 @@ object Rules {
   def pawnRankBy(color: Color): Int =
     rankBy(rankRange.start + 1, color)
 
+  def enPassantRankBy(color: Color): Int =
+    rankBy(rankRange.start + 3, color.opposite)
+
   def rankBy(rank: Int, color: Color): Int =
     if (color == White) rank else rankRange.end - rank
 
