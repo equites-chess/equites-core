@@ -35,13 +35,13 @@ class MathSpec extends Specification with DataTables with ScalaCheck {
 
   "isEven and isOdd" should {
     "be correct for positive numbers" in {
-      "a" | "even" |
-      0   ! true   |
-      1   ! false  |
-      2   ! true   |
-      3   ! false  |
-      4   ! true   |> {
-        (a, even) => isEven(a) must_== even
+      "a" | "isEven" |
+      0   ! true     |
+      1   ! false    |
+      2   ! true     |
+      3   ! false    |
+      4   ! true     |> {
+        (a, r) => isEven(a) must_== r
       }
     }
 

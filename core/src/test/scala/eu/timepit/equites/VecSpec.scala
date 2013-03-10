@@ -16,38 +16,42 @@
 
 package eu.timepit.equites
 
+import org.specs2.ScalaCheck
 import org.specs2.matcher.DataTables
 import org.specs2.mutable._
 
-class VecSpec extends Specification with DataTables {
+class VecSpec extends Specification with DataTables with ScalaCheck {
   "Vec" should {
     "correctly perform map" in {
       Vec( 0,  0).map(_ + 1) must_== Vec(1, 1)
       Vec(-1, -1).map(_.abs) must_== Vec(1, 1)
     }
 
-    "correctly perform +(Vec) and -(Vec)" in {
-      Vec(1, 1) + Vec( 2,  2) must_== Vec( 3,  3)
-      Vec(1, 1) + Vec(-2, -2) must_== Vec(-1, -1)
-
-      Vec(1, 1) - Vec( 2,  2) must_== Vec(-1, -1)
-      Vec(1, 1) - Vec(-2, -2) must_== Vec( 3,  3) 
+    "correctly perform +(Vec)" in check {
+      (x: Int, y: Int, a: Int, b: Int) => {
+        Vec(x, y) + Vec(a, b) must_== Vec(x + a, y + b)
+      }
     }
 
-    "correctly perform unary_-" in {
-      -Vec( 1,  3) must_== Vec(-1, -3)
-      -Vec(-3, -1) must_== Vec( 3,  1)
+    "correctly perform -(Vec)" in check {
+      (x: Int, y: Int, a: Int, b: Int) => {
+        Vec(x, y) - Vec(a, b) must_== Vec(x - a, y - b)
+      }
     }
 
-    "correctly perform *(Int) and /(Int)" in {
-      Vec(1, 2) * -1 must_== Vec(-1, -2)
-      Vec(1, 2) *  0 must_== Vec( 0,  0)
-      Vec(1, 2) *  2 must_== Vec( 2,  4)
+    "correctly perform unary_-" in check {
+      (x: Int, y: Int) => -Vec(x, y) must_== Vec(-x, -y)
+    }
 
-      Vec(1, 2) / -1 must_== Vec(-1, -2)
-      Vec(1, 2) /  2 must_== Vec( 0,  1)
-      Vec(1, 2) /  3 must_== Vec( 0,  0)
-      Vec(4, 6) /  2 must_== Vec( 2,  3)
+    "correctly perform *(Int)" in check {
+      (x: Int, y: Int, z: Int) => Vec(x, y) * z must_== Vec(x * z, y * z)
+    }
+
+    "correctly perform /(Int)" in check {
+      (x: Int, y: Int, z: Int) => {
+        val divisor = if (z == 0) 1 else z
+        Vec(x, y) / divisor must_== Vec(x / divisor, y / divisor)
+      }
     }
 
     "correctly perform max, min, and sum" in {
@@ -66,7 +70,7 @@ class VecSpec extends Specification with DataTables {
     }
 
     "correctly perform reduced" in {
-      "vec"       | "reduced"   |
+      "Vec"       | "reduced"   |
       Vec( 0,  0) ! Vec( 0,  0) |
       Vec( 1,  0) ! Vec( 1,  0) |
       Vec( 1,  1) ! Vec( 1,  1) |
