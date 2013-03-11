@@ -47,8 +47,9 @@ object Directions {
     for {
       file <- -2 to 2
       rank <- -2 to 2
-      if file.abs + rank.abs == 3
-    } yield Vec(file, rank)
+      vec = Vec(file, rank)
+      if vec.l1Length == 3
+    } yield vec
   })
 }
 
