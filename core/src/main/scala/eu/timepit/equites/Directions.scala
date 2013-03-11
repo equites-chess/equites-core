@@ -45,9 +45,7 @@ object Directions {
 
   val knightLike = Directions({
     for {
-      file <- -2 to 2
-      rank <- -2 to 2
-      vec = Vec(file, rank)
+      vec <- Vec(-2, -2) to Vec(2, 2)
       if vec.l1Length == 3
     } yield vec
   })

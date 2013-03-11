@@ -50,4 +50,9 @@ case class Vec(file: Int, rank: Int) {
   def lInfLength: Int = map(_.abs).max
 
   def reduced: Vec = this / math.max(1, gcd(file, rank).abs)
+
+  def to(that: Vec): Seq[Vec] = for {
+    f <- file to that.file
+    r <- rank to that.rank
+  } yield Vec(f, r)
 }
