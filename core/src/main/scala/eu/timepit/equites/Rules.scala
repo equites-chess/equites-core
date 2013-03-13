@@ -36,18 +36,17 @@ object Rules {
   val bishopFiles = List(2, 5)
 
   val startingSquares: Map[Piece, List[Square]] = {
-    (for {
-      color <- Color.values
-      backRank = backRankBy(color)
-      pawnRank = pawnRankBy(color)
-    } yield {
+    def startingSquaresBy(color: Color): Map[Piece, List[Square]] = {
+      val backRank = backRankBy(color)
+      val pawnRank = pawnRankBy(color)
       Map(King(color)   -> List(Square(kingFile,  backRank)),
           Queen(color)  -> List(Square(queenFile, backRank)),
           Rook(color)   ->   rookFiles.map(Square(_, backRank)),
           Bishop(color) -> bishopFiles.map(Square(_, backRank)),
           Knight(color) -> knightFiles.map(Square(_, backRank)),
           Pawn(color)   ->   fileRange.map(Square(_, pawnRank)).toList)
-    }).flatten.toMap
+    }
+    Color.values.map(startingSquaresBy).reduce(_ ++ _)
   }
 
   def onStartingSquare(placed: Placed[Piece]): Boolean =
