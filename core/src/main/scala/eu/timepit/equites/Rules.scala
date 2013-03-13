@@ -98,17 +98,16 @@ object Rules {
     if (color == White) rank else rankRange.end - rank
 
   val movementTypes: Map[Piece, (Directions, Int)] = {
-    import Directions._
-    (for {
-      color <- Color.values
-    } yield {
+    def movementTypesBy(color: Color): Map[Piece, (Directions, Int)] = {
+      import Directions._
       Map(King(color)   -> (anywhere, 1),
           Queen(color)  -> (anywhere, maxLength),
           Rook(color)   -> (straight, maxLength),
           Bishop(color) -> (diagonal, maxLength),
           Knight(color) -> (knightLike, 1),
           Pawn(color)   -> (front.fromPOV(color), 1))
-    }).flatten.toMap
+    }
+    Color.values.map(movementTypesBy).reduce(_ ++ _)
   }
 
   def movementTypeOf(placed: Placed[Piece]): (Directions, Int) = {
