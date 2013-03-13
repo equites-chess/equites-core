@@ -104,7 +104,7 @@ sealed trait Castling extends Action {
   def kingMove: Move = moveOf(king)
   def rookMove: Move = moveOf(rook)
 
-  private def moveOf(piece: Piece): Move = {
+  private def moveOf(piece: CastlingPiece): Move = {
     val (from, to) = Rules.castlingSquares(side -> piece)
     Move(piece, from, to)
   }

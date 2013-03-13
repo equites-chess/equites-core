@@ -23,9 +23,11 @@ sealed trait Piece {
   def isOpponentOf(other: Piece): Boolean = color != other.color
 }
 
-case class King  (color: Color) extends Piece
+sealed trait CastlingPiece extends Piece
+
+case class King  (color: Color) extends CastlingPiece
 case class Queen (color: Color) extends Piece
-case class Rook  (color: Color) extends Piece
+case class Rook  (color: Color) extends CastlingPiece
 case class Bishop(color: Color) extends Piece
 case class Knight(color: Color) extends Piece
 case class Pawn  (color: Color) extends Piece

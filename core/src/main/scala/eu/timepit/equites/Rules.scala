@@ -53,13 +53,15 @@ object Rules {
   def onStartingSquare(placed: Placed[Piece]): Boolean =
     startingSquares(placed.piece) contains placed.square
 
-  val castlingSquares: Map[(Side, Piece), (Square, Square)] = {
-    def castlingSquaresFor(side: Side, piece: Piece): (Square, Square) = {
+  def onEnPassantRank(placed: Placed[Pawn]): Boolean =
+    enPassantRankBy(placed.color) == placed.square.rank
+
+  val castlingSquares: Map[(Side, CastlingPiece), (Square, Square)] = {
+    def castlingSquaresFor(side: Side, piece: CastlingPiece): (Square, Square) = {
       val rookFile = if (side == Kingside) rookFiles(1) else rookFiles(0)
       val (fromFile, pieceOffset) = piece match {
         case King(_) => (kingFile, 2)
         case Rook(_) => (rookFile, 1)
-        case _ => throw new IllegalArgumentException
       }
 
       val leftOrRight = if (side == Kingside) 1 else -1
@@ -145,7 +147,7 @@ object Rules {
         case None
           => Move(placed, next) #:: iterate(next, board)
         case _
-          => Stream()
+          => Stream.empty
       }
     }
     State(board => (board, iterate(placed.square, board)))
