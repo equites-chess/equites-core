@@ -27,7 +27,7 @@ object Rand {
 
   def rand[A](a: A): Rand[A] = State.state(a)
 
-  def nextInt(n: Int): Rand[Int] = State(rnd => (rnd, rnd.nextInt(n)))
+  def nextInt(n: Int): Rand[Int] = State.init.map(_.nextInt(n))
 
   // impure
   def eval[A](rand: Rand[A]): A = rand.eval(Random)
