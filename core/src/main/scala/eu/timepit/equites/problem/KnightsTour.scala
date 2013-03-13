@@ -46,8 +46,8 @@ object KnightsTour {
 
   // impure
   def randomWarnsdorffTour(start: Square): Stream[Square] = {
-    Iterator.continually(genericTour(start, evalFn2(randomLeastDegreeSquare)))
-      .find(_.length == Rules.allSquares.length).get
+    def tour = genericTour(start, evalFn2(randomLeastDegreeSquare))
+    Iterator.continually(tour).find(_.length == Rules.allSquares.length).get
   }
 
   def leastDegreeSquares(squares: Stream[Square], visited: Set[Square])
