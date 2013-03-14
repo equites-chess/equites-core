@@ -6,7 +6,12 @@ import org.scalastyle.sbt.ScalastylePlugin
 object BuildSettings {
   lazy val basicSettings = ScalastylePlugin.Settings ++ seq(
     scalaVersion := "2.10.0",
-    scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature"),
+    scalacOptions ++= Seq(
+      "-deprecation",
+      "-feature",
+      "-unchecked",
+      "-Xfatal-warnings"
+    ),
 
     version := "0.0",
     homepage := Some(url("http://equites.timepit.eu")),
