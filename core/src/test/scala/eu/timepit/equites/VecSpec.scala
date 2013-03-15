@@ -16,12 +16,29 @@
 
 package eu.timepit.equites
 
+import org.scalacheck.Arbitrary
 import org.specs2.ScalaCheck
 import org.specs2.matcher.DataTables
 import org.specs2.mutable._
+import scalaz.scalacheck.ScalazProperties
 
 class VecSpec extends Specification with DataTables with ScalaCheck {
+  implicit val arbitraryVec = Arbitrary {
+    for {
+      file <- Arbitrary.arbitrary[Int]
+      rank <- Arbitrary.arbitrary[Int]
+    } yield Vec(file, rank)
+  }
+
   "Vec" should {
+    "satisfy the Equal laws" in check {
+      ScalazProperties.equal.laws[Vec]
+    }
+
+    "satisfy the Monoid laws" in check {
+      ScalazProperties.monoid.laws[Vec]
+    }
+
     "correctly perform map" in {
       Vec( 0,  0).map(_ + 1) must_== Vec(1, 1)
       Vec(-1, -1).map(_.abs) must_== Vec(1, 1)

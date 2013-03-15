@@ -3,7 +3,8 @@ name := "Equites-core"
 scalaVersion := "2.10.0"
 
 libraryDependencies ++= Seq(
-    "org.scalaz" % "scalaz-core_2.10" % "7+"
+    "org.scalaz" % "scalaz-core_2.10" % "7+",
+    "org.scalaz" % "scalaz-scalacheck-binding_2.10" % "7+"
 )
 
 scalacOptions in (Compile, doc) ++= Seq("-diagrams")
