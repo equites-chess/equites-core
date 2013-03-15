@@ -71,19 +71,16 @@ class VecSpec extends Specification with DataTables with ScalaCheck {
       }
     }
 
-    "correctly perform max, min, and sum" in {
-      Vec(1,  2).max must_== 2
-      Vec(1, -2).max must_== 1
+    "correctly perform max" in check {
+      (x: Int, y: Int) => Vec(x, y).max must_== math.max(x, y)
+    }
 
-      Vec(1,  2).min must_==  1
-      Vec(1, -2).min must_== -2
+    "correctly perform min" in check {
+      (x: Int, y: Int) => Vec(x, y).min must_== math.min(x, y)
+    }
 
-      Vec(1,  2).sum must_==  3
-      Vec(1, -2).sum must_== -1
-
-      val v1 = Vec(1, -2)
-      v1.file + v1.rank must_== v1.sum
-      v1.max + v1.min must_== v1.sum
+    "correctly perform sum" in check {
+      (x: Int, y: Int) => Vec(x, y).sum must_== x + y
     }
 
     "correctly perform reduced" in {
