@@ -20,24 +20,18 @@ import org.scalacheck.Arbitrary
 import org.specs2.ScalaCheck
 import org.specs2.matcher.DataTables
 import org.specs2.mutable._
-import scalaz.scalacheck.ScalazProperties
+import scalaz.scalacheck.ScalazProperties._
 
 class VecSpec extends Specification with DataTables with ScalaCheck {
   implicit val arbitraryVec = Arbitrary {
     for {
-      file <- Arbitrary.arbitrary[Int]
-      rank <- Arbitrary.arbitrary[Int]
+      (file, rank) <- Arbitrary.arbitrary[(Int, Int)]
     } yield Vec(file, rank)
   }
 
   "Vec" should {
-    "satisfy the Equal laws" in check {
-      ScalazProperties.equal.laws[Vec]
-    }
-
-    "satisfy the Monoid laws" in check {
-      ScalazProperties.monoid.laws[Vec]
-    }
+    "satisfy the Equal laws" in check(equal.laws[Vec])
+    "satisfy the Monoid laws" in check(monoid.laws[Vec])
 
     "correctly perform map" in {
       Vec( 0,  0).map(_ + 1) must_== Vec(1, 1)
@@ -45,15 +39,13 @@ class VecSpec extends Specification with DataTables with ScalaCheck {
     }
 
     "correctly perform +(Vec)" in check {
-      (x: Int, y: Int, a: Int, b: Int) => {
+      (x: Int, y: Int, a: Int, b: Int) =>
         Vec(x, y) + Vec(a, b) must_== Vec(x + a, y + b)
-      }
     }
 
     "correctly perform -(Vec)" in check {
-      (x: Int, y: Int, a: Int, b: Int) => {
+      (x: Int, y: Int, a: Int, b: Int) =>
         Vec(x, y) - Vec(a, b) must_== Vec(x - a, y - b)
-      }
     }
 
     "correctly perform unary_-" in check {
@@ -65,10 +57,8 @@ class VecSpec extends Specification with DataTables with ScalaCheck {
     }
 
     "correctly perform /(Int)" in check {
-      (x: Int, y: Int, z: Int) => {
-        val divisor = if (z == 0) 1 else z
-        Vec(x, y) / divisor must_== Vec(x / divisor, y / divisor)
-      }
+      (x: Int, y: Int, z: Int) =>
+        (z != 0) ==> (Vec(x, y) / z must_== Vec(x / z, y / z))
     }
 
     "correctly perform max" in check {
