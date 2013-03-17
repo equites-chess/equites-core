@@ -44,7 +44,7 @@ sealed trait PromotionLike extends MoveLike {
 
 object Move {
   def apply(placed: Placed[Piece], to: Square): Move =
-    Move(placed.piece, placed.square, to)
+    Move(placed.elem, placed.square, to)
 }
 
 case class Move(piece: Piece, from: Square, to: Square)
@@ -52,7 +52,7 @@ case class Move(piece: Piece, from: Square, to: Square)
 
 object Promotion {
   def apply(placed: Placed[Pawn], to: Square, promotedTo: Piece): Promotion =
-    Promotion(placed.piece, placed.square, to, promotedTo)
+    Promotion(placed.elem, placed.square, to, promotedTo)
 }
 
 case class Promotion(piece: Pawn, from: Square, to: Square, promotedTo: Piece)
@@ -60,7 +60,7 @@ case class Promotion(piece: Pawn, from: Square, to: Square, promotedTo: Piece)
 
 object Capture {
   def apply(placed: Placed[Piece], to: Square, captured: Piece): Capture =
-    Capture(placed.piece, placed.square, to, captured)
+    Capture(placed.elem, placed.square, to, captured)
 }
 
 case class Capture(piece: Piece, from: Square, to: Square, captured: Piece)
@@ -69,7 +69,7 @@ case class Capture(piece: Piece, from: Square, to: Square, captured: Piece)
 object CaptureAndPromotion {
   def apply(placed: Placed[Pawn], to: Square, captured: Piece,
             promotedTo: Piece): CaptureAndPromotion =
-    CaptureAndPromotion(placed.piece, placed.square, to, captured, promotedTo)
+    CaptureAndPromotion(placed.elem, placed.square, to, captured, promotedTo)
 }
 
 case class CaptureAndPromotion(piece: Pawn, from: Square, to: Square,
@@ -79,7 +79,7 @@ case class CaptureAndPromotion(piece: Pawn, from: Square, to: Square,
 object EnPassant {
   def apply(placed: Placed[Pawn], to: Square, captured: Pawn,
             capturedOn: Square): EnPassant =
-    EnPassant(placed.piece, placed.square, to, captured, capturedOn)
+    EnPassant(placed.elem, placed.square, to, captured, capturedOn)
 }
 
 case class EnPassant(piece: Pawn, from: Square, to: Square, captured: Pawn,

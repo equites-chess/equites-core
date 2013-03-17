@@ -24,8 +24,8 @@ object Board {
 }
 
 class Board(val self: Map[Square, Piece]) extends MapProxy[Square, Piece] {
-  def getPlacedPiece(square: Square): Option[Placed[Piece]] =
-    self.get(square).map(Placed(_, square))
+  def getPlaced(square: Square): Option[Placed[Piece]] =
+    get(square).map(Placed(_, square))
 
   def isVacant(square: Square): Boolean = !isOccupied(square)
   def isOccupied(square: Square): Boolean = contains(square)
@@ -34,7 +34,7 @@ class Board(val self: Map[Square, Piece]) extends MapProxy[Square, Piece] {
     get(square).exists(_ == piece)
 
   def placedPieces: Stream[Placed[Piece]] =
-    self.toStream.map(Placed(_))
+    toStream.map { case (square, piece) => Placed(piece, square) }
 
   def processAction(action: Action): Board = action match {
     case a: CaptureAndPromotion => processCaptureAndPromotion(a)

@@ -16,9 +16,16 @@
 
 package eu.timepit.equites
 
-object Placed {
-  def apply[A <: Piece](tuple: (Square, A)): Placed[A] =
-    Placed(tuple._2, tuple._1)
+import scalaz._
+
+trait PlacedInstances {
+  implicit object placedInstance extends Functor[Placed] {
+    def map[A, B](fa: Placed[A])(f: A => B): Placed[B] = fa.map(f)
+  }
 }
 
-case class Placed[+A <: Piece](piece: A, square: Square)
+object Placed extends PlacedInstances
+
+case class Placed[+A](elem: A, square: Square) {
+  def map[B](f: A => B): Placed[B] = copy(f(elem))
+}

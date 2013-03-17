@@ -50,7 +50,7 @@ object Rules {
   }
 
   def onStartingSquare(placed: Placed[Piece]): Boolean =
-    startingSquares(placed.piece) contains placed.square
+    startingSquares(placed.elem) contains placed.square
 
   def onEnPassantRank(placed: Placed[Pawn]): Boolean =
     enPassantRankBy(placed.color) == placed.square.rank
@@ -112,8 +112,8 @@ object Rules {
   }
 
   def movementTypeOf(placed: Placed[Piece]): (Directions, Int) = {
-    val (directions, dist) = movementTypes(placed.piece)
-    placed.piece match {
+    val (directions, dist) = movementTypes(placed.elem)
+    placed.elem match {
       case Pawn(_) if onStartingSquare(placed) => (directions, 2)
       case _ => (directions, dist)
     }
@@ -176,7 +176,7 @@ object Rules {
   }
 
   def possibleActions(placed: Placed[Piece]): BoardT[Stream[Action]] = {
-    placed.piece match {
+    placed.elem match {
       case King(_) => kingMoves(placed.asInstanceOf[Placed[King]])
       case Pawn(_) => pawnMoves(placed.asInstanceOf[Placed[Pawn]])
       case _ => genericMoves(placed)
