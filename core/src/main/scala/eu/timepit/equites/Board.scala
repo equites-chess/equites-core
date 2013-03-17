@@ -27,6 +27,9 @@ class Board(val self: Map[Square, Piece]) extends MapProxy[Square, Piece] {
   def getPlaced(square: Square): Option[Placed[Piece]] =
     get(square).map(Placed(_, square))
 
+  def getPlaced(sq1: Square, sq2: Square, sqs: Square*): Seq[Placed[Piece]] =
+    (getPlaced(sq1) +: getPlaced(sq2) +: sqs.map(getPlaced)).flatten
+
   def isVacant(square: Square): Boolean = !isOccupied(square)
   def isOccupied(square: Square): Boolean = contains(square)
 
