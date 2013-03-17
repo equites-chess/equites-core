@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2011 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2011, 2013 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@ package eu.timepit.equites
 import org.specs2.mutable._
 
 import Rules._
+import util.BoardFactory._
 
 class RulesSpec extends Specification {
   "Rules" should {
@@ -50,6 +51,52 @@ class RulesSpec extends Specification {
             Square(5, 5), Square(6, 6), Square(7, 7),
             Square(0, 6), Square(1, 5), Square(2, 4), Square(4, 2),
             Square(5, 1), Square(6, 0))
+    }
+
+    "correctly perform enPassantTargets 1" in {
+      val board =
+        |>.-.-.-.-.-.-.-.-.
+           -.-.-.-.-.-.-.-.
+           -.-.-.-.-.-.-.-.
+           p.-.-.-.-.-.-.-.
+           P.p.-.-.-.-.-.-.
+           -.-.-.-.-.-.-.-.
+           -.P.-.-.-.-.-.-.
+           -.-.-.-.-.-.-.-.<|
+      val placed = Placed(Pawn(Black), Square(1, 3))
+
+      enPassantTargets(placed).eval(board).toSet must_==
+        Set((Placed(Pawn(White), Square(0, 3)), Square(0, 2)))
+    }
+
+    "correctly perform enPassantTargets 2" in {
+      val board =
+        |>.-.-.-.-.-.-.-.-.
+           -.p.-.-.-.-.-.-.
+           n.-.-.-.-.-.-.-.
+           p.P.p.-.-.-.-.-.
+           P.-.-.-.-.-.-.-.
+           -.-.-.-.-.-.-.-.
+           -.-.-.-.-.-.-.-.
+           -.-.-.-.-.-.-.-.<|
+      val placed = Placed(Pawn(White), Square(1, 4))
+
+      enPassantTargets(placed).eval(board).toSet must_==
+        Set((Placed(Pawn(Black), Square(2, 4)), Square(2, 5)))
+    }
+
+    "correctly perform enPassantTargets 3" in {
+      val board =
+        |>.-.-.-.-.-.-.-.-.
+           -.-.-.-.-.-.-.-.
+           -.-.-.-.-.-.-.-.
+           -.-.-.-.-.-.-.-.
+           p.p.p.-.-.-.-.-.
+           -.-.-.-.-.-.-.-.
+           -.P.-.-.-.-.-.-.
+           -.-.-.-.-.-.-.-.<|
+      val placed = Placed(Pawn(Black), Square(1, 3))
+      enPassantTargets(placed).eval(board).toSet must_== Set.empty
     }
   }
 }

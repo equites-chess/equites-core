@@ -57,7 +57,7 @@ object KnightsTour {
       val (_, ldSquares) = grouped.minBy { case (degree, _) => degree }
       ldSquares
     } else {
-      Stream.empty[Square]
+      Stream.empty
     }
   }
 

@@ -106,7 +106,7 @@ object Rules {
           Rook(color)   -> (straight, maxLength),
           Bishop(color) -> (diagonal, maxLength),
           Knight(color) -> (knightLike, 1),
-          Pawn(color)   -> (front.fromPOV(color), 1))
+          Pawn(color)   -> (front.fromPov(color), 1))
     }
     Color.values.map(movementTypesBy).reduce(_ ++ _)
   }
@@ -136,65 +136,19 @@ object Rules {
 
   type BoardT[A] = State[Board, A]
 
-  def movesInDirection(placed: Placed[Piece], direction: Vec)
-      : BoardT[Stream[MoveLike]] = {
-    def iterate(from: Square, board: Board): Stream[MoveLike] = {
-      val next = from + direction
-      board.get(next) match {
-        case Some(piece) if (piece isOpponentOf placed)
-          => Stream(Capture(placed, next, piece))
-        case None
-          => Move(placed, next) #:: iterate(next, board)
-        case _
-          => Stream.empty
-      }
-    }
-    State(board => (board, iterate(placed.square, board)))
-  }
-
-  def genericMoves(placed: Placed[Piece]): BoardT[Stream[MoveLike]] = {
-    val (directions, dist) = movementTypeOf(placed)
-    def allMoves(board: Board) = for {
-      direction <- directions.toStream
-      move <- movesInDirection(placed, direction).eval(board).take(dist)
-    } yield move
-    State(board => (board, allMoves(board)))
-  }
-
-  def pawnMoves(placed: Placed[Pawn]): BoardT[Stream[MoveLike]] = {
-    //moves
-    //captures
-    //enPassants
-    //promotions
-    ???
-  }
-
-  def kingMoves(placed: Placed[King]): BoardT[Stream[Action]] = {
-    //moves
-    //castlings
-    ???
-  }
-
-  def possibleActions(placed: Placed[Piece]): BoardT[Stream[Action]] = {
-    placed.elem match {
-      case King(_) => kingMoves(placed.asInstanceOf[Placed[King]])
-      case Pawn(_) => pawnMoves(placed.asInstanceOf[Placed[Pawn]])
-      case _ => genericMoves(placed)
-    }
-    //checkmate
-  }
-
-  def isAttackedBy(square: Square, color: Color): BoardT[Boolean] = {
-    // there needs to be a piece on square
-    def xxx(board: Board) = {
+  def enPassantTargets(placed: Placed[Pawn])
+      : BoardT[Seq[(Placed[Pawn], Square)]] = {
+    def targets(board: Board) =
       for {
-        placed <- board.placedPieces.filter(_.color == color)
-        action <- possibleActions(placed).eval(board)
-        if action.isInstanceOf[CaptureLike]
-        capture = action.asInstanceOf[CaptureLike]
-        if capture.from == square
-      } yield capture
+        neighbor <- board.getPlaced(placed.square.rightLeft)
+        pawn <- neighbor.toPawn
+        if pawn.isOpponentOf(placed)
+        target = neighbor.square + Directions.front.fromPov(placed).head
+        if board.isVacant(target)
+      } yield (neighbor.copy(pawn), target)
+
+    State.init.map {
+      board => if (onEnPassantRank(placed)) targets(board) else Seq.empty
     }
-    State(board => (board, xxx(board).nonEmpty))
   }
 }

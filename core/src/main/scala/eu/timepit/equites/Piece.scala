@@ -16,11 +16,27 @@
 
 package eu.timepit.equites
 
+object Piece {
+  def toKingPf:   PartialFunction[Piece, King]   = { case k: King   => k }
+  def toQueenPf:  PartialFunction[Piece, Queen]  = { case q: Queen  => q }
+  def toRookPf:   PartialFunction[Piece, Rook]   = { case r: Rook   => r }
+  def toBishopPf: PartialFunction[Piece, Bishop] = { case b: Bishop => b }
+  def toKnightPf: PartialFunction[Piece, Knight] = { case n: Knight => n }
+  def toPawnPf:   PartialFunction[Piece, Pawn]   = { case p: Pawn   => p }
+}
+
 sealed trait Piece {
   def color: Color
 
   def isFriendOf(other: Piece): Boolean = color == other.color
   def isOpponentOf(other: Piece): Boolean = color != other.color
+
+  def toKing:   Option[King]   = Piece.toKingPf   lift(this)
+  def toQueen:  Option[Queen]  = Piece.toQueenPf  lift(this)
+  def toRook:   Option[Rook]   = Piece.toRookPf   lift(this)
+  def toBishop: Option[Bishop] = Piece.toBishopPf lift(this)
+  def toKnight: Option[Knight] = Piece.toKnightPf lift(this)
+  def toPawn:   Option[Pawn]   = Piece.toPawnPf   lift(this)
 }
 
 sealed trait CastlingPiece extends Piece

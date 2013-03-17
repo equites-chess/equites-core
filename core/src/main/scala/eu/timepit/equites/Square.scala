@@ -78,6 +78,9 @@ case class Square(file: Int, rank: Int) {
   def right: Square = this + Vec(1, 0)
   def left: Square  = this - Vec(1, 0)
 
+  def upDown: Seq[Square] = Seq(up, down)
+  def rightLeft: Seq[Square] = Seq(right, left)
+
   def rightmost: Square = Square(Rules.fileRange.end, rank)
   def leftmost: Square = Square(Rules.fileRange.start, rank)
 
