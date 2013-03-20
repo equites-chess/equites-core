@@ -42,12 +42,13 @@ object Vec extends VecInstances {
   val frontLeft  = front + left  // ↖
 }
 
-case class Vec(file: Int, rank: Int) {
+case class Vec(file: Int, rank: Int) extends PlayerPerspective[Vec] {
   def map(f: Int => Int): Vec = Vec(f(file), f(rank))
 
   def + (that: Vec): Vec = Vec(file + that.file, rank + that.rank)
   def - (that: Vec): Vec = this + -that
   def unary_- : Vec = this * -1
+  def inverse: Vec = unary_-
 
   def * (n: Int): Vec = map(_ * n)
   def / (n: Int): Vec = map(_ / n)

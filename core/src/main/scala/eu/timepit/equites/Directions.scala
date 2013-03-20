@@ -51,15 +51,7 @@ object Directions {
   })
 }
 
-class Directions(val self: Set[Vec]) extends SetProxy[Vec] {
-  def inverse: Directions = Directions(map(_ * -1))
-
-  def inverseIfWhite(color: Color): Directions =
-    if (color == White) inverse else this
-
-  def inverseIfBlack(color: Color): Directions =
-    if (color == Black) inverse else this
-
-  def fromPov(color: Color): Directions = inverseIfBlack(color)
-  def fromPov(piece: Piece): Directions = fromPov(piece.color)
+class Directions(val self: Set[Vec]) extends SetProxy[Vec]
+                                     with PlayerPerspective[Directions] {
+  def inverse: Directions = Directions(map(_.inverse))
 }

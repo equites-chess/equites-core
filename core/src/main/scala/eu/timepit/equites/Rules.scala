@@ -144,7 +144,7 @@ object Rules {
         neighbor <- board.getPlaced(placed.square.rightLeft)
         pawn <- neighbor.toPawn
         if pawn.isOpponentOf(placed)
-        target = neighbor.square + Directions.front.fromPov(placed).head
+        target = neighbor.square + Vec.front.fromPov(placed.color)
         if board.isVacant(target)
       } yield (neighbor.copy(pawn), target)
 
