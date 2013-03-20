@@ -50,13 +50,14 @@ object Rules {
   }
 
   def onStartingSquare(placed: Placed[Piece]): Boolean =
-    startingSquares(placed.elem) contains placed.square
+    startingSquares(placed) contains placed.square
 
   def onEnPassantRank(placed: Placed[Pawn]): Boolean =
     enPassantRankBy(placed.color) == placed.square.rank
 
   val castlingSquares: Map[(Side, CastlingPiece), (Square, Square)] = {
-    def castlingSquaresFor(side: Side, piece: CastlingPiece): (Square, Square) = {
+    def castlingSquaresFor(side: Side, piece: CastlingPiece)
+        : (Square, Square) = {
       val rookFile = if (side == Kingside) rookFiles(1) else rookFiles(0)
       val (fromFile, pieceOffset) = piece match {
         case King(_) => (kingFile, 2)

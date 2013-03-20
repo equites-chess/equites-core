@@ -30,7 +30,17 @@ trait VecInstances {
   }
 }
 
-object Vec extends VecInstances
+object Vec extends VecInstances {
+  val front = Vec( 0,  1) // ↑
+  val right = Vec( 1,  0) // →
+  val back  = -front      // ↓
+  val left  = -right      // ←
+
+  val frontRight = front + right // ↗
+  val backRight  = back  + right // ↘
+  val backLeft   = back  + left  // ↙
+  val frontLeft  = front + left  // ↖
+}
 
 case class Vec(file: Int, rank: Int) {
   def map(f: Int => Int): Vec = Vec(f(file), f(rank))

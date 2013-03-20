@@ -23,15 +23,15 @@ object Directions {
   def apply(vectors: TraversableOnce[Vec]): Directions =
     new Directions(vectors.toSet)
 
-  val front = Directions(Vec( 0,  1)) // ↑
-  val right = Directions(Vec( 1,  0)) // →
-  val back  = Directions(Vec( 0, -1)) // ↓
-  val left  = Directions(Vec(-1,  0)) // ←
+  val front = Directions(Vec.front) // ↑
+  val right = Directions(Vec.right) // →
+  val back  = Directions(Vec.back)  // ↓
+  val left  = Directions(Vec.left)  // ←
 
-  val frontRight = Directions(Vec( 1,  1)) // ↗
-  val backRight  = Directions(Vec( 1, -1)) // ↘
-  val backLeft   = Directions(Vec(-1, -1)) // ↙
-  val frontLeft  = Directions(Vec(-1,  1)) // ↖
+  val frontRight = Directions(Vec.frontRight) // ↗
+  val backRight  = Directions(Vec.backRight)  // ↘
+  val backLeft   = Directions(Vec.backLeft)   // ↙
+  val frontLeft  = Directions(Vec.frontLeft)  // ↖
 
   val diagonalFront = Directions(frontLeft ++ frontRight) // ↖↗
   val diagonalBack  = Directions( backLeft ++  backRight) // ↙↘
@@ -39,8 +39,8 @@ object Directions {
   val forward  = Directions(diagonalFront ++ front) // ↖↑↗
   val backward = Directions(diagonalBack  ++ back)  // ↙↓↘
 
-  val straight = Directions(front ++ right ++ back ++ left)
-  val diagonal = Directions(diagonalFront ++ diagonalBack)
+  val straight = Directions(front ++ right ++ back ++ left) // ↑→↓←
+  val diagonal = Directions(diagonalFront ++ diagonalBack)  // ↖↗↙↘
   val anywhere = Directions(straight ++ diagonal)
 
   val knightLike = Directions({
