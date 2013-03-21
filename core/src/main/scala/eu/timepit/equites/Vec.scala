@@ -31,10 +31,10 @@ trait VecInstances {
 }
 
 object Vec extends VecInstances {
-  val front = Vec( 0,  1) // ↑
-  val right = Vec( 1,  0) // →
-  val back  = -front      // ↓
-  val left  = -right      // ←
+  val front = Vec(0, 1) // ↑
+  val right = Vec(1, 0) // →
+  val back  = -front    // ↓
+  val left  = -right    // ←
 
   val frontRight = front + right // ↗
   val backRight  = back  + right // ↘
@@ -61,6 +61,12 @@ case class Vec(file: Int, rank: Int) extends PlayerPerspective[Vec] {
   def lInfLength: Int = map(_.abs).max
 
   def reduced: Vec = this / math.max(1, gcd(file, rank).abs)
+
+  def fileProj: Vec = Vec(file, 0)
+  def rankProj: Vec = Vec(0, rank)
+
+  def isStraight: Boolean = file == 0 || rank == 0
+  def isDiagonal: Boolean = file.abs == rank.abs
 
   def to(that: Vec): Seq[Vec] = for {
     f <- file to that.file

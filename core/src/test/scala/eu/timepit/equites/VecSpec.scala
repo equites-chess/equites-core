@@ -88,5 +88,9 @@ class VecSpec extends Specification with DataTables with ScalaCheck {
         (v, r) => v.reduced must_== r
       }
     }
+
+    "be decomposable into component vectors" in check {
+      (v: Vec) => v must_== v.fileProj + v.rankProj
+    }
   }
 }
