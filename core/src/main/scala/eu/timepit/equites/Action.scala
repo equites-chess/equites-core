@@ -59,6 +59,9 @@ case class Promotion(piece: Pawn, from: Square, to: Square, promotedTo: Piece)
   extends PromotionLike
 
 object Capture {
+  def apply(move: Move, captured: Piece): Capture =
+    Capture(move.piece, move.from, move.to, captured)
+
   def apply(placed: Placed[Piece], to: Square, captured: Piece): Capture =
     Capture(placed.elem, placed.square, to, captured)
 }
@@ -67,6 +70,10 @@ case class Capture(piece: Piece, from: Square, to: Square, captured: Piece)
   extends CaptureLike
 
 object CaptureAndPromotion {
+  def apply(promo: Promotion, captured: Piece): CaptureAndPromotion =
+    CaptureAndPromotion(promo.piece, promo.from, promo.to, captured,
+                        promo.promotedTo)
+
   def apply(placed: Placed[Pawn], to: Square, captured: Piece,
             promotedTo: Piece): CaptureAndPromotion =
     CaptureAndPromotion(placed.elem, placed.square, to, captured, promotedTo)
