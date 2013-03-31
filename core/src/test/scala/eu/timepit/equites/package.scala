@@ -14,15 +14,27 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package eu.timepit.equites
+package eu.timepit
 
-import org.specs2.ScalaCheck
-import org.specs2.mutable._
-import scalaz.scalacheck.ScalazProperties._
+import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.Arbitrary.arbitrary
 
-class PlacedSpec extends Specification with ScalaCheck {
-  "Placed" should {
-    "satisfy the Equal laws" in check(equal.laws[Placed[Int]])
-    "satisfy the Functor laws" in check(functor.laws[Placed])
+package object equites {
+  implicit val arbitraryPlacedInt: Arbitrary[Placed[Int]] = Arbitrary {
+    for {
+      elem <- arbitrary[Int]
+      square <- arbitrary[Square]
+    } yield Placed(elem, square)
+  }
+
+  implicit val arbitrarySquare: Arbitrary[Square] = Arbitrary {
+    Gen.oneOf(Rules.allSquares)
+  }
+
+  implicit val arbitraryVec: Arbitrary[Vec] = Arbitrary {
+    for {
+      file <- arbitrary[Int]
+      rank <- arbitrary[Int]
+    } yield Vec(file, rank)
   }
 }
