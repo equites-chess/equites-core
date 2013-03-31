@@ -24,6 +24,7 @@ trait PlacedInstances {
   }
 
   implicit object placedInstance extends Functor[Placed] {
+    // Functor
     def map[A, B](fa: Placed[A])(f: A => B): Placed[B] = fa.map(f)
   }
 }

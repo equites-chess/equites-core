@@ -16,16 +16,14 @@
 
 package eu.timepit.equites
 
-import org.scalacheck.{Arbitrary, Gen}
 import org.specs2.ScalaCheck
 import org.specs2.mutable._
 import scalaz.scalacheck.ScalazProperties._
 
 class ColorSpec extends Specification with ScalaCheck {
-  implicit val arbitraryColor = Arbitrary(Gen.oneOf(Color.values))
-
   "Color" should {
     "satisfy the Equal laws" in check(equal.laws[Color])
+    "satisfy the Order laws" in check(order.laws[Color])
   }
 
   "White" should {

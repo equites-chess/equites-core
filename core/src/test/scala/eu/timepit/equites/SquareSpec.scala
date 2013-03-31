@@ -16,11 +16,13 @@
 
 package eu.timepit.equites
 
+import org.specs2.ScalaCheck
 import org.specs2.mutable._
+import scalaz.scalacheck.ScalazProperties._
 
 import Square._
 
-class SquareSpec extends Specification {
+class SquareSpec extends Specification with ScalaCheck {
   "Square companion" should {
     "correctly perform validCoordinates" in {
       validCoordinates( 4,  4) must beTrue
@@ -55,6 +57,8 @@ class SquareSpec extends Specification {
   }
 
   "Square" should {
+    "satisfy the Equal laws" in check(equal.laws[Square])
+
     "correctly perform +(Vec) and -(Vec)" in {
       Square(1, 1) + Vec( 1,  1) must_== Square(2, 2)
       Square(1, 1) - Vec(-1, -1) must_== Square(2, 2)

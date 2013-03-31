@@ -20,6 +20,9 @@ import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary.arbitrary
 
 package object equites {
+  implicit val arbitraryColor: Arbitrary[Color] =
+    Arbitrary(Gen.oneOf(Color.values))
+
   implicit val arbitraryPlacedInt: Arbitrary[Placed[Int]] = Arbitrary {
     for {
       elem <- arbitrary[Int]
@@ -27,9 +30,8 @@ package object equites {
     } yield Placed(elem, square)
   }
 
-  implicit val arbitrarySquare: Arbitrary[Square] = Arbitrary {
-    Gen.oneOf(Rules.allSquares)
-  }
+  implicit val arbitrarySquare: Arbitrary[Square] =
+    Arbitrary(Gen.oneOf(Rules.allSquares))
 
   implicit val arbitraryVec: Arbitrary[Vec] = Arbitrary {
     for {
