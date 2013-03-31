@@ -35,7 +35,7 @@ trait ColorInstances {
 }
 
 object Color extends ColorInstances {
-  def values: Seq[Color] = Seq(White, Black)
+  def values: List[Color] = List(White, Black)
 }
 
 sealed trait Color {

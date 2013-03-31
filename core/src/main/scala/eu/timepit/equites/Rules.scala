@@ -16,9 +16,10 @@
 
 package eu.timepit.equites
 
-import scalaz._
-
 import implicits.PlacedImplicits._
+
+import scalaz._
+import Scalaz._
 
 object Rules {
   val fileRange = 0 to 7
@@ -73,11 +74,13 @@ object Rules {
 
     val mapping = for {
       side  <- Side.values
-      color <- Color.values
-      piece <- Seq(King(color), Rook(color))
+      piece <- Color.values <*> List(King, Rook)
     } yield (side, piece) -> castlingSquaresFor(side, piece)
     mapping.toMap
   }
+
+  val allCastlings: List[Castling] =
+    Color.values <*> List(CastlingShort, CastlingLong)
 
   val startingBoard: Board = {
     val mapping = for {
