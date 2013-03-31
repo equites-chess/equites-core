@@ -43,12 +43,7 @@ object Directions {
   val diagonal = Directions(diagonalFront ++ diagonalBack)  // ↖↗↙↘
   val anywhere = Directions(straight ++ diagonal)
 
-  val knightLike = Directions({
-    for {
-      vec <- Vec(-2, -2) to Vec(2, 2)
-      if vec.l1Length == 3
-    } yield vec
-  })
+  val knightLike = Directions(Vec(-2, -2) to Vec(2, 2) filter(_.l1Length == 3))
 }
 
 class Directions(val self: Set[Vec]) extends SetProxy[Vec]

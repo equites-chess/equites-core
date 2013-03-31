@@ -16,20 +16,17 @@
 
 package eu.timepit.equites
 
-import scalaz._
+import org.scalacheck.Arbitrary
+import org.specs2.ScalaCheck
+import org.specs2.mutable._
+import scalaz.scalacheck.ScalazProperties._
 
-trait PlacedInstances {
-  implicit def placedEqual[A] = new Equal[Placed[A]] {
-    def equal(p1: Placed[A], p2: Placed[A]): Boolean = p1 == p2
+class PlacedSpec extends Specification with ScalaCheck {
+  implicit val arbitraryPlacedInt = Arbitrary {
+    Arbitrary.arbitrary[Int].map(Placed(_, Square(0, 0)))
   }
 
-  implicit object placedInstance extends Functor[Placed] {
-    def map[A, B](fa: Placed[A])(f: A => B): Placed[B] = fa.map(f)
+  "Placed" should {
+    "satisfy the Functor laws" in check(functor.laws[Placed])
   }
-}
-
-object Placed extends PlacedInstances
-
-case class Placed[+A](elem: A, square: Square) {
-  def map[B](f: A => B): Placed[B] = copy(f(elem))
 }
