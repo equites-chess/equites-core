@@ -21,6 +21,7 @@ import scalaz._
 import Scalaz._
 import scalaz.std.stream
 
+import implicits.GenericImplicits._
 import util.Rand._
 
 object KnightsTour {
@@ -52,13 +53,8 @@ object KnightsTour {
 
   def leastDegreeSquares(squares: Stream[Square], visited: Set[Square])
       : Stream[Square] = {
-    val grouped = squares.groupBy(sq => unvisited(sq, visited).length)
-    if (grouped.nonEmpty) {
-      val (_, ldSquares) = grouped.minBy { case (degree, _) => degree }
-      ldSquares
-    } else {
-      Stream.empty
-    }
+    def degree(sq: Square): Int = unvisited(sq, visited).length
+    squares.minGroupBy(degree)
   }
 
   def firstLeastDegreeSquare: Selector =

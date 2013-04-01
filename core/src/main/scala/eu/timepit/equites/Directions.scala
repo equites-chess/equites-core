@@ -18,10 +18,11 @@ package eu.timepit.equites
 
 import scala.collection.immutable._
 
+import implicits.GenericImplicits._
+
 object Directions {
-  def apply(vectors: Vec*): Directions = apply(vectors)
-  def apply(vectors: TraversableOnce[Vec]): Directions =
-    new Directions(vectors.toSet)
+  def apply(vs: Vec*): Directions = apply(vs)
+  def apply(vs: TraversableOnce[Vec]): Directions = new Directions(vs.toSet)
 
   val front = Directions(Vec.front) // ↑
   val right = Directions(Vec.right) // →
@@ -49,4 +50,7 @@ object Directions {
 class Directions(val self: Set[Vec]) extends SetProxy[Vec]
                                      with PlayerPerspective[Directions] {
   def inverse: Directions = Directions(map(_.inverse))
+
+  def mostSimilarTo(vec: Vec): Directions =
+    Directions(self.minGroupBy((dir: Vec) => (vec - dir).l1Length))
 }
