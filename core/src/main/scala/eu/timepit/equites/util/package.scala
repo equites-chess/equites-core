@@ -16,10 +16,20 @@
 
 package eu.timepit.equites
 
+import scala.collection.TraversableLike
+import scala.language.higherKinds
+
 package object util {
   def getClassName(obj: Object): String = {
     val name = obj.getClass.getSimpleName
     if (name.endsWith("$")) name.dropRight(1) else name
+  }
+
+  def minGroupBy[CC[A], A, B](col: CC[A])(f: A => B)
+      (implicit ev1: CC[A] => TraversableLike[A, CC[A]],
+                ev2: Ordering[B]): CC[A] = {
+    val grouped = col.groupBy(f)
+    if (grouped.nonEmpty) grouped.minBy(_._1)._2 else col
   }
 
   def toStringOnOff(bool: Boolean): String = if (bool) "on" else "off"

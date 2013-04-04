@@ -54,7 +54,7 @@ object KnightsTour {
   def leastDegreeSquares(squares: Stream[Square], visited: Set[Square])
       : Stream[Square] = {
     def degree(sq: Square): Int = unvisited(sq, visited).length
-    squares.minGroupBy(degree)
+    util.minGroupBy(squares)(degree)
   }
 
   def firstLeastDegreeSquare: Selector =

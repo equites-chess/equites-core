@@ -17,8 +17,7 @@
 package eu.timepit.equites
 package implicits
 
-import scala.collection.{IterableLike, TraversableLike}
-import scala.math.Ordering
+import scala.collection.IterableLike
 import scalaz._
 
 object GenericImplicits {
@@ -28,11 +27,5 @@ object GenericImplicits {
 
     def dropLeftRight(n: Int)(implicit ev: C => IterableLike[_, C]): C =
       self.drop(n).dropRight(n)
-
-    def minGroupBy[A, B](f: A => B)(implicit ev: C => TraversableLike[A, C],
-                                    cmp: Ordering[B]): C = {
-      val grouped = self.groupBy(f)
-      if (grouped.nonEmpty) grouped.minBy(_._1)._2 else self.take(0)
-    }
   }
 }
