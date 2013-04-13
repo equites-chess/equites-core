@@ -52,5 +52,5 @@ class Directions(val self: Set[Vec]) extends SetProxy[Vec]
   def inverse: Directions = Directions(map(_.inverse))
 
   def mostSimilarTo(vec: Vec): Directions =
-    Directions(util.minGroupBy(self)(dir => (vec - dir).l1Length))
+    Directions(self.minGroupBy((dir: Vec) => (vec - dir).l1Length))
 }
