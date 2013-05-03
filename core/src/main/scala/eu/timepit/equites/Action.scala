@@ -23,16 +23,9 @@ sealed trait MoveLike extends Action {
   def from: Square
   def to: Square
 
-  def diff: Vec = to - from
-  def l1Length: Int = diff.l1Length
-  def lInfLength: Int = diff.lInfLength
-}
-
-sealed trait CaptureLike extends MoveLike {
-  require(piece isOpponentOf captured)
-
-  def captured: Piece
-  def capturedOn: Square = to
+  def direction: Vec = to - from
+  def l1Length: Int = direction.l1Length
+  def lInfLength: Int = direction.lInfLength
 }
 
 sealed trait PromotionLike extends MoveLike {
@@ -40,6 +33,13 @@ sealed trait PromotionLike extends MoveLike {
 
   def piece: Pawn
   def promotedTo: Piece
+}
+
+sealed trait CaptureLike extends MoveLike {
+  require(piece isOpponentOf captured)
+
+  def captured: Piece
+  def capturedOn: Square = to
 }
 
 object Move {

@@ -138,21 +138,55 @@ object Rules {
       : Stream[Square] =
     possibleSquares(placed).filterNot(visited)
 
-  type BoardT[A] = State[Board, A]
 
-  def enPassantTargets(placed: Placed[Pawn])
-      : BoardT[Seq[(Placed[Pawn], Square)]] = {
-    def targets(board: Board) =
-      for {
-        neighbor <- board.getPlaced(placed.square.rightLeft)
-        pawn <- neighbor.toPawn
-        if pawn.isOpponentOf(placed)
-        target = neighbor.square + Vec.front.fromPov(placed.color)
-        if board.isVacant(target)
-      } yield (neighbor.copy(pawn), target)
 
-    State.init.map {
-      board => if (onEnPassantRank(placed)) targets(board) else Seq.empty
-    }
+
+  def xxx(board: Board): Move => Option[Capture] =
+    move => board.get(move.to).map(captured => Capture(move, captured))
+
+  def yyy(board: Board): Move => Option[EnPassant] = ???
+
+  def zzz: Move => Option[Castling] = ???
+    
+    
+  def liftToCapture(move: Option[Move], board: Board): Option[Capture] =
+    for {
+      mv <- move
+      captured <- board.get(mv.to)
+    } yield Capture(mv, captured)
+
+  def liftToEnPassant(move: Option[Move], board: Board): Option[EnPassant] =
+    for {
+      mv <- move
+      pawn <- mv.piece.toPawn
+      if mv.direction.isDiagonal
+      if board.isVacant(mv.to)
+      target = mv.from + mv.direction.fileProj
+      other <- board.get(target)
+      otherPawn <- other.toPawn
+      if otherPawn.isOpponentOf(pawn)
+    } yield EnPassant(pawn, mv.from, mv.to, otherPawn, target)
+
+  def liftToCastling(move: Option[Move]): Option[Castling] =
+    move.flatMap(mv => allCastlings.find(_.kingMove == mv))
+
+  def reconstruct(cm: util.CoordinateMove, board: Board): Option[Action] = {
+    val move = board.get(cm.from).map(piece => Move(piece, cm.from, cm.to))
+
+    lazy val promotion = for {
+      mv <- move
+      pawn <- mv.piece.toPawn
+      promotedTo <- cm.promotedTo
+    } yield Promotion(pawn, mv.from, mv.to, promotedTo)
+
+    lazy val capture = liftToCapture(move, board)
+
+    def captureAndPromotion = for {
+      capt <- capture
+      prom <- promotion
+    } yield CaptureAndPromotion(prom, capt.captured)
+
+    (liftToCastling(move) orElse liftToEnPassant(move, board) orElse
+     captureAndPromotion orElse capture orElse promotion orElse move)
   }
 }
