@@ -158,12 +158,12 @@ object Rules {
   def liftToEnPassant(move: Option[Move], board: Board): Option[EnPassant] =
     for {
       mv <- move
-      pawn <- mv.piece.toPawn
+      pawn <- mv.piece.maybePawn
       if mv.direction.isDiagonal
       if board.isVacant(mv.to)
       target = mv.from + mv.direction.fileProj
       other <- board.get(target)
-      otherPawn <- other.toPawn
+      otherPawn <- other.maybePawn
       if otherPawn.isOpponentOf(pawn)
     } yield EnPassant(pawn, mv.from, mv.to, otherPawn, target)
 
@@ -175,7 +175,7 @@ object Rules {
 
     lazy val promotion = for {
       mv <- move
-      pawn <- mv.piece.toPawn
+      pawn <- mv.piece.maybePawn
       promotedTo <- cm.promotedTo
     } yield Promotion(pawn, mv.from, mv.to, promotedTo)
 
