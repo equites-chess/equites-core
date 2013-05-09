@@ -33,10 +33,11 @@ sealed trait Piece {
 }
 
 sealed trait CastlingPiece extends Piece
+sealed trait PromotedPiece extends Piece
 
 case class King  (color: Color) extends CastlingPiece
-case class Queen (color: Color) extends Piece
-case class Rook  (color: Color) extends CastlingPiece
-case class Bishop(color: Color) extends Piece
-case class Knight(color: Color) extends Piece
+case class Queen (color: Color) extends PromotedPiece
+case class Rook  (color: Color) extends CastlingPiece with PromotedPiece
+case class Bishop(color: Color) extends PromotedPiece
+case class Knight(color: Color) extends PromotedPiece
 case class Pawn  (color: Color) extends Piece

@@ -31,4 +31,5 @@ object CoordinateMove {
 /**
  * Represents a move in coordinate notation.
  */
-case class CoordinateMove(from: Square, to: Square, promotedTo: Option[Piece])
+case class CoordinateMove(from: Square, to: Square,
+  promotedTo: Option[PromotedPiece])
