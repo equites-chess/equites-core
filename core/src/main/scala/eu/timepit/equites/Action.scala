@@ -18,14 +18,17 @@ package eu.timepit.equites
 
 sealed trait Action
 
-sealed trait MoveLike extends Action {
-  def piece: Piece
+trait DrawLike {
   def from: Square
   def to: Square
 
   def direction: Vec = to - from
   def l1Length: Int = direction.l1Length
   def lInfLength: Int = direction.lInfLength
+}
+
+sealed trait MoveLike extends Action with DrawLike {
+  def piece: Piece
 }
 
 sealed trait PromotionLike extends MoveLike {
@@ -64,7 +67,7 @@ case class Promotion(piece: Pawn, from: Square, to: Square,
   extends PromotionLike
 
 object Capture {
-  def apply(move: Move, captured: Piece): Capture =
+  def apply(move: MoveLike, captured: Piece): Capture =
     Capture(move.piece, move.from, move.to, captured)
 
   def apply(placed: Placed[Piece], to: Square, captured: Piece): Capture =
@@ -75,7 +78,7 @@ case class Capture(piece: Piece, from: Square, to: Square, captured: Piece)
   extends CaptureLike
 
 object CaptureAndPromotion {
-  def apply(promo: Promotion, captured: Piece): CaptureAndPromotion =
+  def apply(promo: PromotionLike, captured: Piece): CaptureAndPromotion =
     CaptureAndPromotion(promo.piece, promo.from, promo.to, captured,
                         promo.promotedTo)
 

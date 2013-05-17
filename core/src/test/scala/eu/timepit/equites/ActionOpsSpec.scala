@@ -15,21 +15,29 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package eu.timepit.equites
-package util
 
-object CoordinateMove {
-  def apply(action: Action): CoordinateMove = action match {
-    case p: PromotionLike
-      => CoordinateMove(p.from, p.to, Some(p.promotedTo))
-    case m: MoveLike
-      => CoordinateMove(m.from, m.to, None)
-    case c: Castling
-      => CoordinateMove(c.kingMove)
+import org.specs2.mutable._
+
+import ActionOps._
+import util.BoardFactory._
+import util.PieceAbbr._
+
+class ActionOpsSpec extends Specification {
+  "ActionOps" should {
+    "" in {
+      val board =
+        |>.b.-.-.-.-.-.-.-.
+           -.-.-.-.-.-.-.-.
+           -.-.-.-.-.-.-.-.
+           -.-.-.-.-.-.-.-.
+           -.-.-.-.-.-.-.-.
+           -.-.-.-.-.-.-.-.
+           -.-.-.-.-.-.-.-.
+           R.-.-.-.-.-.-.-.<|
+      val move = Move(R, Square(0, 0), Square(0, 7))
+      val capture = Capture(R, Square(0, 0), Square(0, 7), b)
+
+      moveAsCapture(board)(move) must beSome(capture)
+    }
   }
 }
-
-/**
- * Represents a move in coordinate notation.
- */
-case class CoordinateMove(from: Square, to: Square,
-  promotedTo: Option[PromotedPiece]) extends DrawLike
