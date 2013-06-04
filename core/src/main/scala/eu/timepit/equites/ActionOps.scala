@@ -21,7 +21,10 @@ object ActionOps {
     board.get(draw.from).map(piece => Move(piece, draw.from, draw.to))
 
   def moveAsCapture(board: Board)(move: MoveLike): Option[Capture] =
-    board.get(move.to).map(captured => Capture(move, captured))
+    for {
+      captured <- board.get(move.to)
+      if captured.isOpponentOf(move.piece)
+    } yield Capture(move, captured)
 
   def moveAsEnPassant(board: Board)(move: MoveLike): Option[EnPassant] =
     for {
