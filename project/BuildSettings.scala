@@ -5,7 +5,7 @@ import org.scalastyle.sbt.ScalastylePlugin
 
 object BuildSettings {
   lazy val basicSettings = ScalastylePlugin.Settings ++ seq(
-    scalaVersion := "2.10.0",
+    scalaVersion := "2.10.1",
     scalacOptions ++= Seq(
       "-deprecation",
       "-feature",
