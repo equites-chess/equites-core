@@ -36,8 +36,12 @@ object ActionOps {
       if otherPawn.isOpponentOf(pawn)
     } yield EnPassant(pawn, move.from, move.to, otherPawn, target)
 
-  def moveAsCastling(move: MoveLike): Option[Castling] =
-    Rules.allCastlings.find(_.kingMove == move)
+  def moveAsCastling(board: Board)(move: MoveLike): Option[Castling] =
+    for {
+      castling <- Rules.allCastlings.find(_.kingMove == move)
+      if drawAsMove(board)(castling.kingMove).isDefined
+      if drawAsMove(board)(castling.rookMove).isDefined
+    } yield castling
 
   def cmAsAction(board: Board)(cm: util.CoordinateMove): Option[Action] = {
     val optMove = drawAsMove(board)(cm)
@@ -56,7 +60,7 @@ object ActionOps {
           promotion <- optPromotion
         } yield CaptureAndPromotion(promotion, capture.captured)
 
-      moveAsCastling(move)
+      moveAsCastling(board)(move)
         .orElse(moveAsEnPassant(board)(move))
         .orElse(optCaptureAndPromotion)
         .orElse(optCapture)

@@ -31,4 +31,18 @@ object PieceAbbr {
   def b: Bishop = Bishop(Black)
   def n: Knight = Knight(Black)
   def p: Pawn   = Pawn(Black)
+
+  def kl: King   = K
+  def ql: Queen  = Q
+  def rl: Rook   = R
+  def bl: Bishop = B
+  def nl: Knight = N
+  def pl: Pawn   = P
+
+  def kd: King   = k
+  def qd: Queen  = q
+  def rd: Rook   = r
+  def bd: Bishop = b
+  def nd: Knight = n
+  def pd: Pawn   = p
 }

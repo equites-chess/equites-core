@@ -32,4 +32,4 @@ object CoordinateMove {
  * Represents a move in coordinate notation.
  */
 case class CoordinateMove(from: Square, to: Square,
-  promotedTo: Option[PromotedPiece]) extends DrawLike
+  promotedTo: Option[PromotedPiece] = None) extends DrawLike
