@@ -56,8 +56,12 @@ object Uci {
 
   case object ReadyOk extends Response
 
-  // TODO: use CoordinateMove
-  //case class Bestmove(move: MoveLike, ponder: Option[MoveLike]) extends Response
+  case class Bestmove(move: util.CoordinateMove,
+    ponder: Option[util.CoordinateMove] = None) extends Response {
+
+    override def toString: String = "bestmove " + move.toString +
+      ponder.map(" ponder " + _.toString).getOrElse("")
+  }
 
   // TODO: copyprotection
 

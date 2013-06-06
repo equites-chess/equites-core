@@ -17,6 +17,9 @@
 package eu.timepit.equites
 package util
 
+import implicits.PieceImplicits._
+import implicits.SquareImplicits._
+
 object CoordinateMove {
   def apply(action: Action): CoordinateMove = action match {
     case p: PromotionLike
@@ -32,4 +35,8 @@ object CoordinateMove {
  * Represents a move in coordinate notation.
  */
 case class CoordinateMove(from: Square, to: Square,
-  promotedTo: Option[PromotedPiece] = None) extends DrawLike
+  promotedTo: Option[PromotedPiece] = None) extends DrawLike {
+
+  override def toString: String = from.toAlgebraic + to.toAlgebraic +
+    promotedTo.map(_.toLowerCaseLetter).getOrElse("")
+}
