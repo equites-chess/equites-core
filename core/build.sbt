@@ -11,6 +11,6 @@ scalacOptions in (Compile, doc) ++= Seq("-diagrams")
 scalacOptions in (Compile, doc) <++= baseDirectory.map {
   (bd: File) => Seq[String](
      "-sourcepath", bd.getAbsolutePath,
-     "-doc-source-url", "https://github.com/fthomas/equites/tree/master€{FILE_PATH}.scala"
+     "-doc-source-url", "https://github.com/fthomas/equites/tree/master/core€{FILE_PATH}.scala"
   )
 }

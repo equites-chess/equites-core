@@ -25,16 +25,17 @@ import util.CoordinateMove
 class UciSpec extends Specification {
   "Uci.Bestmove" should {
     "produce the correct string representation for a move" in {
-      val move = CoordinateMove(Square(4, 1), Square(4, 3))
+      val move = CoordinateMove(Square('e', 2), Square('e', 4))
       Bestmove(move).toString must_== "bestmove e2e4"
     }
     "produce the correct string representation for a promotion" in {
-      val move = CoordinateMove(Square(4, 6), Square(4, 7), Some(Queen(White)))
+      val move =
+        CoordinateMove(Square('e', 7), Square('e', 8), Some(Queen(White)))
       Bestmove(move).toString must_== "bestmove e7e8q"
     }
     "produce the correct string representation for a move and a ponder" in {
-      val move = CoordinateMove(Square(6, 0), Square(5, 2))
-      val ponder = Some(CoordinateMove(Square(3, 7), Square(5, 5)))
+      val move = CoordinateMove(Square('g', 1), Square('f', 3))
+      val ponder = Some(CoordinateMove(Square('d', 8), Square('f', 6)))
       Bestmove(move, ponder).toString must_== "bestmove g1f3 ponder d8f6"
     }
   }

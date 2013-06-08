@@ -20,7 +20,9 @@ sealed abstract class Result(str: String) {
   override def toString: String = str
 }
 
-case object WhiteWon extends Result("1-0")
-case object BlackWon extends Result("0-1")
-case object Draw     extends Result("1/2-1/2")
-case object Unknown  extends Result("*")
+object Result {
+  case object WhiteWon extends Result("1-0")
+  case object BlackWon extends Result("0-1")
+  case object Draw     extends Result("1/2-1/2")
+  case object Unknown  extends Result("*")
+}
