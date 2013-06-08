@@ -17,19 +17,11 @@
 package eu.timepit.equites
 
 package object util {
-  def getClassName(obj: Object): String = {
-    val name = obj.getClass.getSimpleName
-    if (name.endsWith("$")) name.dropRight(1) else name
-  }
-
   def toStringOnOff(bool: Boolean): String = if (bool) "on" else "off"
 
   trait TextCommand extends Product {
-    override def toString: String = {
-      val name = getClassName(this).toLowerCase
-      val args = productIterator.mkString(" ")
-
-      if (args.isEmpty) name else name + " " + args
-    }
+    def cmdName: String = productPrefix.toLowerCase
+    def cmdArgs: Seq[String] = productIterator.toSeq.map(_.toString)
+    override def toString: String = cmdName + cmdArgs.map(" " + _).mkString
   }
 }

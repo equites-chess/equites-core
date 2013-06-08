@@ -27,7 +27,7 @@ object Uci {
   case object Uci extends Request
 
   case class Debug(on: Boolean) extends Request {
-    override def toString: String = "debug " + util.toStringOnOff(on)
+    override def toString: String = cmdName + " " + util.toStringOnOff(on)
   }
 
   case object IsReady extends Request
@@ -59,7 +59,7 @@ object Uci {
   case class Bestmove(move: util.CoordinateMove,
     ponder: Option[util.CoordinateMove] = None) extends Response {
 
-    override def toString: String = "bestmove " + move.toString +
+    override def toString: String = cmdName + " " + move.toString +
       ponder.map(" ponder " + _.toString).getOrElse("")
   }
 
