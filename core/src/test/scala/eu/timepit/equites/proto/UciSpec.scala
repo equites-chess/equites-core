@@ -23,17 +23,23 @@ import Uci._
 import util.CoordinateMove
 
 class UciSpec extends Specification {
+  "Uci.Id" should {
+    "correctly perform toString" in {
+      Id("author", "John Doe").toString must_== "id author John Doe"
+    }
+  }
+
   "Uci.Bestmove" should {
-    "produce the correct string representation for a move" in {
+    "correctly perform toString for a move" in {
       val move = CoordinateMove(Square('e', 2), Square('e', 4))
       Bestmove(move).toString must_== "bestmove e2e4"
     }
-    "produce the correct string representation for a promotion" in {
+    "correctly perform toString for a promotion" in {
       val move =
         CoordinateMove(Square('e', 7), Square('e', 8), Some(Queen(White)))
       Bestmove(move).toString must_== "bestmove e7e8q"
     }
-    "produce the correct string representation for a move and a ponder" in {
+    "correctly perform toString for a move and a ponder" in {
       val move = CoordinateMove(Square('g', 1), Square('f', 3))
       val ponder = Some(CoordinateMove(Square('d', 8), Square('f', 6)))
       Bestmove(move, ponder).toString must_== "bestmove g1f3 ponder d8f6"
