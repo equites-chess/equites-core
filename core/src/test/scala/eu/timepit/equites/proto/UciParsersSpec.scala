@@ -17,14 +17,41 @@
 package eu.timepit.equites
 package proto
 
+import org.specs2.ScalaCheck
 import org.specs2.mutable._
 import org.specs2.matcher.ParserMatchers
 
 import Uci._
+import implicits.SquareImplicits._
+import util.CoordinateMove
+import util.PieceAbbr._
 
-class UciParsersSpec extends Specification with ParserMatchers  {
+class UciParsersSpec extends Specification with ParserMatchers with ScalaCheck {
   val parsers = UciParsers
   import parsers._
+
+  "square" should {
+    "succeed on random algebraic squares" in check {
+      (s: Square) => square should succeedOn(s.toAlgebraic).withResult(s)
+    }
+  }
+
+  "coordinateMove" should {
+    "succeed on a move" in {
+      coordinateMove should succeedOn("e2e4")
+        .withResult(CoordinateMove(Square('e', 2), Square('e', 4)))
+    }
+    "succeed on a white promotion" in {
+      val promotion = CoordinateMove(Square('e', 7), Square('e', 8), Some(Q))
+      coordinateMove should succeedOn("e7e8q")
+        .withResult(promotion)
+    }
+    "succeed on a black promotion" in {
+      val promotion = CoordinateMove(Square('e', 2), Square('e', 1), Some(q))
+      coordinateMove should succeedOn("e2e1q")
+        .withResult(promotion)
+    }
+  }
 
   "id" should {
     "succeed on valid input" in {
@@ -38,6 +65,25 @@ class UciParsersSpec extends Specification with ParserMatchers  {
     }
     "fail on missing key" in {
       id should failOn("id")
+    }
+  }
+
+  "bestmove" should {
+    "succeed on a move" in {
+      val move = CoordinateMove(Square('e', 2), Square('e', 4))
+      bestmove should succeedOn("bestmove e2e4")
+        .withResult(Bestmove(move))
+    }
+    "succeed on a promotion" in {
+      val move = CoordinateMove(Square('e', 2), Square('e', 4), Some(Q))
+      bestmove should succeedOn("bestmove e7e8q")
+        .withResult(Bestmove(move))
+    }
+    "succeed on a move and a ponder" in {
+      val move = CoordinateMove(Square('g', 1), Square('f', 3))
+      val ponder = Some(CoordinateMove(Square('d', 8), Square('f', 6)))
+      bestmove should succeedOn("bestmove g1f3 ponder d8f6")
+        .withResult(Bestmove(move, ponder))
     }
   }
 }

@@ -20,11 +20,24 @@ package proto
 import scala.util.parsing.combinator._
 
 import Uci._
+import util.Notation._
 
 object UciParsers extends RegexParsers {
   def symbol: Parser[String] = """\p{Alnum}+""".r
 
   def string: Parser[String] = """.*""".r
+
+  val algebraicFile: Parser[Char] = oneOf(algebraicFileRange) ^^ (_.charAt(0))
+
+  val algebraicRank: Parser[Int] = oneOf(algebraicRankRange) ^^ (_.toInt)
+
+  def square: Parser[Square] = algebraicFile ~ algebraicRank  ^^ {
+    case file ~ rank => Square(file, rank)
+  }
+
+  def coordinateMove: Parser[util.CoordinateMove] = square ~ square ^^ {
+    case from ~ to => util.CoordinateMove(from, to)
+  }
 
   def id: Parser[Id] = "id" ~> symbol ~ string ^^ {
     case key ~ value => Id(key, value)
@@ -34,5 +47,10 @@ object UciParsers extends RegexParsers {
 
   def readyok: Parser[ReadyOk.type] = "readyok" ^^^ ReadyOk
 
-  //def bestmove: Parser[Bestmove] = "bestmove" ~> symbol ~ ("ponder" ~> symbol).?
+  def bestmove: Parser[Bestmove] =
+    "bestmove" ~> coordinateMove ~ ("ponder" ~> coordinateMove).? ^^ {
+      case move ~ ponder => Bestmove(move, ponder)
+    }
+
+  private def oneOf[A](seq: Seq[A]): Parser[String] = seq.mkString("|").r
 }
