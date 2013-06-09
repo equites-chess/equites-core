@@ -35,9 +35,16 @@ object UciParsers extends RegexParsers {
     case file ~ rank => Square(file, rank)
   }
 
-  def coordinateMove: Parser[util.CoordinateMove] = square ~ square ^^ {
-    case from ~ to => util.CoordinateMove(from, to)
-  }
+  def promotedPiece: Parser[PromotedPiece] =
+    ("q" ^^^ Queen(White))  |
+    ("r" ^^^ Rook(White))   |
+    ("b" ^^^ Bishop(White)) |
+    ("n" ^^^ Knight(White))
+
+  def coordinateMove: Parser[util.CoordinateMove] =
+    square ~ square ~ promotedPiece.? ^^ {
+      case from ~ to ~ piece => util.CoordinateMove(from, to, piece)
+    }
 
   def id: Parser[Id] = "id" ~> symbol ~ string ^^ {
     case key ~ value => Id(key, value)
@@ -52,5 +59,5 @@ object UciParsers extends RegexParsers {
       case move ~ ponder => Bestmove(move, ponder)
     }
 
-  private def oneOf[A](seq: Seq[A]): Parser[String] = seq.mkString("|").r
+  private def oneOf[A](as: Seq[A]): Parser[String] = as.mkString("|").r
 }

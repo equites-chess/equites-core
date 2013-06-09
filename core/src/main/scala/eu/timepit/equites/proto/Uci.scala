@@ -59,8 +59,8 @@ object Uci {
   case class Bestmove(move: util.CoordinateMove,
     ponder: Option[util.CoordinateMove] = None) extends Response {
 
-    override def toString: String = cmdName + " " + move.toString +
-      ponder.map(" ponder " + _.toString).getOrElse("")
+    override def toString: String = cmdName + " " + move.toAlgebraic +
+      ponder.map(" ponder " + _.toAlgebraic).getOrElse("")
   }
 
   // TODO: copyprotection

@@ -37,6 +37,6 @@ object CoordinateMove {
 case class CoordinateMove(from: Square, to: Square,
   promotedTo: Option[PromotedPiece] = None) extends DrawLike {
 
-  override def toString: String = from.toAlgebraic + to.toAlgebraic +
+  def toAlgebraic: String = from.toAlgebraic + to.toAlgebraic +
     promotedTo.map(_.toLowerCaseLetter).getOrElse("")
 }
