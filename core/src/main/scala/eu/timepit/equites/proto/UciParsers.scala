@@ -44,8 +44,10 @@ object UciParsers extends RegexParsers {
   def coordinateMove: Parser[util.CoordinateMove] =
     square ~ square ~ promotedPieceF.? ^^ {
       case from ~ to ~ pieceF => {
-        val color = Color.guessFrom(to - from)
-        val piece = pieceF.map(_(color))
+        val piece = pieceF.map {
+          val color = Color.guessFrom(to - from)
+          _(color)
+        }
         util.CoordinateMove(from, to, piece)
       }
     }
