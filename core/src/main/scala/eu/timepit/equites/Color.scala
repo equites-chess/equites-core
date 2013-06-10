@@ -36,6 +36,9 @@ trait ColorInstances {
 
 object Color extends ColorInstances {
   def values: List[Color] = List(White, Black)
+
+  def guessFrom(direction: Vec): Color =
+    if (direction.rankProj.reduced == Vec.back) Black else White
 }
 
 sealed trait Color {
