@@ -23,6 +23,16 @@ import Uci._
 import util.CoordinateMove
 
 class UciSpec extends Specification {
+  "Uci.SetOption" should {
+    "correctly perform toString with a name and a value" in {
+      SetOption("Style", Some("Risky")).toString must_==
+        "setoption name Style value Risky"
+    }
+    "correctly perform toString with a name only" in {
+      SetOption("Clear Hash").toString must_== "setoption name Clear Hash"
+    }
+  }
+
   "Uci.Id" should {
     "correctly perform toString" in {
       Id("author", "John Doe").toString must_== "id author John Doe"

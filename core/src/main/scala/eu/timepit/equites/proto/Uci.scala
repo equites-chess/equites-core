@@ -32,7 +32,12 @@ object Uci {
 
   case object IsReady extends Request
 
-  // TODO: setoption
+  case class SetOption(name: String, value: Option[String] = None)
+    extends Request {
+
+    override def toString: String = cmdName + " name " + name +
+      value.map(" value " + _).getOrElse("")
+  }
 
   // TODO: register
 
