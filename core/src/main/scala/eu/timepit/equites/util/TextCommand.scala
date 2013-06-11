@@ -15,7 +15,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package eu.timepit.equites
+package util
 
-package object util {
-  def toStringOnOff(bool: Boolean): String = if (bool) "on" else "off"
+trait TextCommand extends Product {
+  def cmdName: String = productPrefix.toLowerCase
+  def cmdArgs: Seq[String] = productIterator.toSeq.map(_.toString)
+  override def toString: String = cmdName + cmdArgs.map(" " + _).mkString
 }

@@ -105,12 +105,12 @@ object Rules {
   val movementTypes: Map[Piece, (Directions, Int)] = {
     def movementTypesBy(color: Color): Map[Piece, (Directions, Int)] = {
       import Directions._
-      Map(King(color)   -> (anywhere, 1),
-          Queen(color)  -> (anywhere, maxLength),
-          Rook(color)   -> (straight, maxLength),
-          Bishop(color) -> (diagonal, maxLength),
-          Knight(color) -> (knightLike, 1),
-          Pawn(color)   -> (front.fromPov(color), 1))
+      Map(King(color)   -> ((anywhere, 1)),
+          Queen(color)  -> ((anywhere, maxLength)),
+          Rook(color)   -> ((straight, maxLength)),
+          Bishop(color) -> ((diagonal, maxLength)),
+          Knight(color) -> ((knightLike, 1)),
+          Pawn(color)   -> ((front.fromPov(color), 1)))
     }
     Color.values.map(movementTypesBy).reduce(_ ++ _)
   }
