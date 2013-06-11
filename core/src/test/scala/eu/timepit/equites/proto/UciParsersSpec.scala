@@ -56,6 +56,11 @@ class UciParsersSpec extends Specification with ParserMatchers with ScalaCheck {
       coordinateMove should succeedOn("e2e1q")
         .withResult(promotion)
     }
+    "succeed on a black knight promotion" in {
+      val promotion = CoordinateMove(Square('e', 2), Square('e', 1), Some(n))
+      coordinateMove should succeedOn("e2e1n")
+        .withResult(promotion)
+    }
   }
 
   "id" should {
