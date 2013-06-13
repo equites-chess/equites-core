@@ -32,6 +32,8 @@ trait ColorInstances {
         Ordering.LT
       }
   }
+
+  implicit val scalaOrdering = Order[Color].toScalaOrdering
 }
 
 object Color extends ColorInstances {

@@ -58,6 +58,7 @@ class SquareSpec extends Specification with ScalaCheck {
 
   "Square" should {
     "satisfy the Equal laws" in check(equal.laws[Square])
+    "satisfy the Order laws" in check(order.laws[Square])
 
     "correctly perform +(Vec) and -(Vec)" in {
       Square(1, 1) + Vec( 1,  1) must_== Square(2, 2)

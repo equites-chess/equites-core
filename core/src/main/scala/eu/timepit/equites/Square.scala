@@ -23,10 +23,17 @@ import util.Notation._
 import util.Rand._
 
 trait SquareInstances {
-  implicit object squareInstance extends Equal[Square] {
+  implicit object squareInstance extends Equal[Square] with Order[Square] {
     // Equal
-    def equal(s1: Square, s2: Square): Boolean = s1 == s2
+    override def equal(s1: Square, s2: Square): Boolean = s1 == s2
+    // Order
+    def order(s1: Square, s2: Square): Ordering = {
+      val ord = Order[Int].order(s1.rank, s2.rank)
+      if (ord == Ordering.EQ) Order[Int].order(s1.file, s2.file) else ord
+    }
   }
+
+  implicit val scalaOrdering = Order[Square].toScalaOrdering
 }
 
 object Square extends SquareInstances {
