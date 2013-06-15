@@ -22,14 +22,16 @@ import implicits.PieceImplicits._
 object BoardImplicits {
   implicit final class RichBoard(val self: Board) extends AnyVal {
     def toFenPlacement: String = {
-      val ones = "1{2,}".r
+      def replaceOnes(target: String): String =
+        "1{2,}".r.replaceAllIn(target, m => m.toString.length.toString)
+
       Rules.rankRange.reverse.map { rank =>
         val rankStr = Rules.fileRange.map { file =>
           val square = Square(file, rank)
           val optPiece = self.get(square)
           optPiece.map(_.toLetter).getOrElse("1")
         }.mkString
-        ones.replaceAllIn(rankStr, m => m.toString.length.toString)
+        replaceOnes(rankStr)
       }.mkString("/")
     }
   }
