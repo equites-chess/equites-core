@@ -22,6 +22,9 @@ import scala.util.parsing.combinator._
 import Uci._
 import util.Notation._
 
+/**
+ * Parsers for the Universal Chess Interface (UCI).
+ */
 object UciParsers extends RegexParsers {
   def symbol: Parser[String] = """\p{Alnum}+""".r
 
