@@ -71,4 +71,17 @@ object Notation {
     case '\u265F' => Some(Pawn(Black))
     case _ => None
   }
+
+  def boardFromFen(placement: String): Board = {
+    def expandDigits(target: String): String =
+      """\d""".r.replaceAllIn(target, "1" * _.toString.toInt)
+
+    val mapping = for {
+      (rankStr, rank) <- placement.split("/").reverse.zipWithIndex
+      (pieceChar, file) <- expandDigits(rankStr).zipWithIndex
+      piece <- pieceFromLetter(pieceChar)
+    } yield (Square(file, rank), piece)
+
+    Board(mapping: _*)
+  }
 }

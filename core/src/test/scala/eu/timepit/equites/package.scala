@@ -20,6 +20,16 @@ import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary.arbitrary
 
 package object equites {
+  implicit val arbitraryBoard: Arbitrary[Board] = Arbitrary {
+    val genSquarePiece = for {
+      square <- arbitrary[Square]
+      piece <- arbitrary[Piece]
+    } yield (square, piece)
+
+    Gen.containerOf[List, (Square, Piece)](genSquarePiece)
+      .map(seq => Board(seq: _*))
+  }
+
   implicit val arbitraryColor: Arbitrary[Color] =
     Arbitrary(Gen.oneOf(Color.values))
 
@@ -30,6 +40,13 @@ package object equites {
         square <- arbitrary[Square]
       } yield Placed(elem, square)
     }
+
+  implicit val arbitraryPiece: Arbitrary[Piece] = Arbitrary {
+    for {
+      color <- arbitrary[Color]
+      piece <- Gen.oneOf(King, Queen, Rook, Bishop, Knight, Pawn)
+    } yield piece(color)
+  }
 
   implicit val arbitrarySquare: Arbitrary[Square] =
     Arbitrary(Gen.oneOf(Rules.allSquares))
