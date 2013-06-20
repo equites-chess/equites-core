@@ -34,26 +34,20 @@ object Notation {
 
   def numericRankRange: Range = algebraicRankRange
 
-  def pieceFromAlgebraic(c: Char): Option[Piece] = c match {
+  def pieceFromLetter(c: Char): Option[Piece] = c match {
     case 'K' => Some(King(White))
     case 'Q' => Some(Queen(White))
     case 'R' => Some(Rook(White))
     case 'B' => Some(Bishop(White))
     case 'N' => Some(Knight(White))
+    case 'P' => Some(Pawn(White))
+    case 'k' => Some(King(Black))
+    case 'q' => Some(Queen(Black))
+    case 'r' => Some(Rook(Black))
+    case 'b' => Some(Bishop(Black))
+    case 'n' => Some(Knight(Black))
+    case 'p' => Some(Pawn(Black))
     case _   => None
-  }
-
-  def pieceFromLetter(c: Char): Option[Piece] = pieceFromAlgebraic(c).orElse {
-    c match {
-      case 'P' => Some(Pawn(White))
-      case 'k' => Some(King(Black))
-      case 'q' => Some(Queen(Black))
-      case 'r' => Some(Rook(Black))
-      case 'b' => Some(Bishop(Black))
-      case 'n' => Some(Knight(Black))
-      case 'p' => Some(Pawn(Black))
-      case _   => None
-    }
   }
 
   def pieceFromFigurine(c: Char): Option[Piece] = c match {

@@ -21,9 +21,24 @@ import org.specs2.ScalaCheck
 import org.specs2.mutable._
 
 import implicits.BoardImplicits._
+import implicits.PieceImplicits._
 import Notation._
 
 class NotationSpec extends Specification with ScalaCheck {
+  "pieceFromLetter" should {
+    "be the inverse of RichPiece.toLetter" in check {
+      (piece: Piece) =>
+        pieceFromLetter(piece.toLetter.charAt(0)) must beSome(piece)
+    }
+  }
+
+  "pieceFromFigurine" should {
+    "be the inverse of RichPiece.toFigurine" in check {
+      (piece: Piece) =>
+        pieceFromFigurine(piece.toFigurine.charAt(0)) must beSome(piece)
+    }
+  }
+
   "boardFromFen" should {
     "be the inverse of RichBoard.toFenPlacement" in check {
       (board: Board) => boardFromFen(board.toFenPlacement) must_== board
