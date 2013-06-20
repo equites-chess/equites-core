@@ -23,7 +23,7 @@ object BoardImplicits {
   implicit final class RichBoard(val self: Board) extends AnyVal {
     def toFenPlacement: String = {
       def replaceOnes(target: String): String =
-        "1{2,}".r.replaceAllIn(target, m => m.toString.length.toString)
+        "1{2,}".r.replaceAllIn(target, _.toString.length.toString)
 
       Rules.rankRange.reverse.map { rank =>
         val rankStr = Rules.fileRange.map { file =>
