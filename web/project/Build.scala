@@ -8,8 +8,7 @@ object EquitesWebBuild extends Build {
   val appName         = "Equites-web"
   val appVersion      = "0.0"
 
-  val appDependencies = Seq(
-  )
+  val appDependencies = Seq()
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
   ).dependsOn(equites)

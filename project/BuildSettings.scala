@@ -5,6 +5,13 @@ import org.scalastyle.sbt.ScalastylePlugin
 
 object BuildSettings {
   lazy val basicSettings = ScalastylePlugin.Settings ++ seq(
+    version := "0.0",
+    homepage := Some(url("http://equites.timepit.eu")),
+    startYear := Some(2011),
+    licenses += "GPLv3" -> url("http://www.gnu.org/licenses/gpl-3.0.html"),
+    scmInfo := Some(ScmInfo(url("https://github.com/fthomas/equites"),
+                    "git@github.com:fthomas/equites.git")),
+
     scalaVersion := "2.10.1",
     scalacOptions ++= Seq(
       "-deprecation",
@@ -12,11 +19,13 @@ object BuildSettings {
       "-unchecked",
       "-Xfatal-warnings"
     ),
-
-    version := "0.0",
-    homepage := Some(url("http://equites.timepit.eu")),
-    startYear := Some(2011),
-    licenses += "GPLv3" -> url("http://www.gnu.org/licenses/gpl-3.0.html")
+    scalacOptions in (Compile, doc) ++= Seq(
+      "-diagrams"
+    ),
+    scalacOptions in (Compile, doc) <++= (baseDirectory, scmInfo).map { (bd, scm) =>
+      Seq("-sourcepath", bd.getParent,
+          "-doc-source-url", scm.get.browseUrl + "/tree/master€{FILE_PATH}.scala")
+    }
   )
 
   lazy val coreSettings = basicSettings ++ seq(
