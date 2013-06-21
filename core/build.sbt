@@ -14,5 +14,3 @@ scalacOptions in (Compile, doc) <++= baseDirectory.map {
      "-doc-source-url", "https://github.com/fthomas/equites/tree/master/core€{FILE_PATH}.scala"
   )
 }
-
-seq(ScctPlugin.instrumentSettings : _*)
