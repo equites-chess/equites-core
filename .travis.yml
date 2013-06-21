@@ -3,3 +3,4 @@ scala:
   - "2.10.1"
 jdk:
   - openjdk7
+script: "sbt coveralls"
