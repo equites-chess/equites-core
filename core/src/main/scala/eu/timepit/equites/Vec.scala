@@ -65,8 +65,11 @@ case class Vec(file: Int, rank: Int) extends PlayerPerspective[Vec] {
   def fileProj: Vec = Vec(file, 0)
   def rankProj: Vec = Vec(0, rank)
 
-  def isStraight: Boolean = file == 0 || rank == 0
-  def isDiagonal: Boolean = file.abs == rank.abs
+  def isZero: Boolean = this == Monoid[Vec].zero
+  def notZero: Boolean = !isZero
+
+  def isStraight: Boolean = notZero && (file == 0 || rank == 0)
+  def isDiagonal: Boolean = notZero && (file.abs == rank.abs)
 
   def to(that: Vec): Seq[Vec] = for {
     f <- file to that.file

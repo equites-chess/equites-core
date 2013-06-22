@@ -85,5 +85,11 @@ class VecSpec extends Specification with DataTables with ScalaCheck {
     "be decomposable into component vectors" in check {
       (v: Vec) => v must_== v.fileProj + v.rankProj
     }
+
+    "not be straight and diagonal" in check {
+      (v: Vec) => (v.isStraight || v.isDiagonal) ==> {
+        v.isStraight must_!= v.isDiagonal
+      }
+    }
   }
 }
