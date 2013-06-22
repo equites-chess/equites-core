@@ -110,6 +110,10 @@ class SquareSpec extends Specification with ScalaCheck {
       Square(3, 0).isLight must beTrue
     }
 
+    "correctly calculate the distance to the board boundary" in check {
+      (sq: Square) => sq.distToBoundary must beBetween(0, 3)
+    }
+
     "accept algebraic arguments" in {
       Square(0, 0) must_== Square('a', 1)
       Square(7, 7) must_== Square('h', 8)
