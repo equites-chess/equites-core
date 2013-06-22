@@ -22,10 +22,11 @@ object BuildSettings {
     scalacOptions in (Compile, doc) ++= Seq(
       "-diagrams"
     ),
-    scalacOptions in (Compile, doc) <++= (baseDirectory, scmInfo).map { (bd, scm) =>
-      Seq("-sourcepath", bd.getParent,
-          "-doc-source-url", scm.get.browseUrl + "/tree/master€{FILE_PATH}.scala")
-    }
+    scalacOptions in (Compile, doc) <++=
+      (baseDirectory in LocalProject("root"), scmInfo).map { (bd, scm) =>
+        Seq("-sourcepath", bd.getAbsolutePath,
+            "-doc-source-url", scm.get.browseUrl + "/tree/master€{FILE_PATH}.scala")
+      }
   )
 
   lazy val coreSettings = basicSettings ++ seq(
