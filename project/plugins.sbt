@@ -2,7 +2,7 @@ resolvers ++= Seq(
   "scct-github-repository" at "http://mtkopone.github.com/scct/maven-repo"
 )
 
-addSbtPlugin("com.github.theon" %% "xsbt-coveralls-plugin" % "0.0.2")
+addSbtPlugin("com.github.theon" %% "xsbt-coveralls-plugin" % "0.0.3-SNAPSHOT")
 
 addSbtPlugin("com.orrsella" %% "sbt-stats" % "1.0.2")
 
