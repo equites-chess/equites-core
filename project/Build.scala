@@ -8,6 +8,7 @@ object EquitesBuild extends Build {
     .aggregate(core)
     .settings(basicSettings: _*)
     .settings(ScctPlugin.mergeReportSettings: _*)
+    .settings(com.github.theon.coveralls.CoverallsPlugin.coverallsSettings: _*)
 
   lazy val core = Project(id = "core", base = file("core"))
     .settings(coreSettings: _*)
