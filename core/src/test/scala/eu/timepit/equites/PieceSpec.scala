@@ -16,9 +16,10 @@
 
 package eu.timepit.equites
 
+import org.specs2.ScalaCheck
 import org.specs2.mutable._
 
-class PieceSpec extends Specification {
+class PieceSpec extends Specification with ScalaCheck {
   "Piece" should {
     "correctly perform isFriendOf and isOpponentOf" in {
       King(White) isFriendOf Queen(White) must beTrue
@@ -26,6 +27,15 @@ class PieceSpec extends Specification {
 
       King(White) isOpponentOf Queen(White) must beFalse
       King(White) isOpponentOf Queen(Black) must beTrue
+    }
+
+    "be one of the six subtypes" in check {
+      (p: Piece) => p.maybeKing   orElse
+                    p.maybeQueen  orElse
+                    p.maybeRook   orElse
+                    p.maybeBishop orElse
+                    p.maybeKnight orElse
+                    p.maybePawn   must beSome(p)
     }
   }
 }
