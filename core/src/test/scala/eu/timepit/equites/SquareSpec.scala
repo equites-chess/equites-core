@@ -114,6 +114,10 @@ class SquareSpec extends Specification with ScalaCheck {
       (sq: Square) => sq.distToBoundary must beBetween(0, 3)
     }
 
+    "up.right.down.left must be the identity" in check {
+      (sq: Square) => sq.up.right.down.left must_== sq
+    }
+
     "accept algebraic arguments" in {
       Square(0, 0) must_== Square('a', 1)
       Square(7, 7) must_== Square('h', 8)

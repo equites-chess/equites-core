@@ -33,7 +33,3 @@ source tree.
 [free software]: http://www.gnu.org/philosophy/free-sw.html
 [GPLv3]: http://www.gnu.org/licenses/gpl-3.0.html
 [COPYING]: https://github.com/fthomas/equites/blob/master/COPYING
-
-## Author
-
-Equites was written by Frank S. Thomas <<frank@timepit.eu>>
