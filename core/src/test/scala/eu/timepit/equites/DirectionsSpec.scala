@@ -53,5 +53,10 @@ class DirectionsSpec extends Specification {
       anywhere.self equals anywhere must beTrue
       anywhere diff diagonal must_== straight
     }
+
+    "correctly perform mostSimilarTo" in {
+      diagonal.mostSimilarTo(Vec.front) must_== diagonalFront
+      diagonal.mostSimilarTo(Vec.back)  must_== diagonalBack
+    }
   }
 }
