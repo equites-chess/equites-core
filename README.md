@@ -37,4 +37,3 @@ source tree.
 ## Author
 
 Equites was written by Frank S. Thomas <<frank@timepit.eu>>
-
