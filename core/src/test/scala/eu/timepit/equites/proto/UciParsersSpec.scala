@@ -78,6 +78,18 @@ class UciParsersSpec extends Specification with ParserMatchers with ScalaCheck {
     }
   }
 
+  "uciok" should {
+    "succeed on valid input" in {
+      uciok should succeedOn("uciok")
+    }
+  }
+
+  "readyok" should {
+    "succeed on valid input" in {
+      readyok should succeedOn("readyok")
+    }
+  }
+
   "bestmove" should {
     "succeed on a move" in {
       val move = CoordinateMove(Square('e', 2), Square('e', 4))
