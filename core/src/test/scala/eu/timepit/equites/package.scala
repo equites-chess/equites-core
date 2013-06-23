@@ -48,6 +48,13 @@ package object equites {
     } yield piece(color)
   }
 
+  implicit val arbitraryPromotedPiece: Arbitrary[PromotedPiece] = Arbitrary {
+    for {
+      color <- arbitrary[Color]
+      piece <- Gen.oneOf(Queen, Rook, Bishop, Knight)
+    } yield piece(color)
+  }
+
   implicit val arbitrarySquare: Arbitrary[Square] =
     Arbitrary(Gen.oneOf(Rules.allSquares))
 

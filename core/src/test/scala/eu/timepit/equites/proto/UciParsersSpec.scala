@@ -41,25 +41,17 @@ class UciParsersSpec extends Specification with ParserMatchers with ScalaCheck {
       coordinateMove should succeedOn("e2e4")
         .withResult(CoordinateMove(Square('e', 2), Square('e', 4)))
     }
-    "succeed on a white queen promotion" in {
-      val promotion = CoordinateMove(Square('e', 7), Square('e', 8), Some(Q))
-      coordinateMove should succeedOn("e7e8q")
-        .withResult(promotion)
+    "succeed on white promotions" in check {
+      (p: PromotedPiece) => (p.color == White) ==> {
+        val cm = CoordinateMove(Square('e', 7), Square('e', 8), Some(p))
+        coordinateMove should succeedOn(cm.toAlgebraic).withResult(cm)
+      }
     }
-    "succeed on a white knight promotion" in {
-      val promotion = CoordinateMove(Square('e', 7), Square('e', 8), Some(N))
-      coordinateMove should succeedOn("e7e8n")
-        .withResult(promotion)
-    }
-    "succeed on a black queen promotion" in {
-      val promotion = CoordinateMove(Square('e', 2), Square('e', 1), Some(q))
-      coordinateMove should succeedOn("e2e1q")
-        .withResult(promotion)
-    }
-    "succeed on a black knight promotion" in {
-      val promotion = CoordinateMove(Square('e', 2), Square('e', 1), Some(n))
-      coordinateMove should succeedOn("e2e1n")
-        .withResult(promotion)
+    "succeed on black promotions" in check {
+      (p: PromotedPiece) => (p.color == Black) ==> {
+        val cm = CoordinateMove(Square('e', 2), Square('e', 1), Some(p))
+        coordinateMove should succeedOn(cm.toAlgebraic).withResult(cm)
+      }
     }
   }
 
