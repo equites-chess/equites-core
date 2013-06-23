@@ -30,6 +30,13 @@ sealed trait Piece {
   def maybeBishop: Option[Bishop] = condOpt(this) { case b: Bishop => b }
   def maybeKnight: Option[Knight] = condOpt(this) { case n: Knight => n }
   def maybePawn:   Option[Pawn]   = condOpt(this) { case p: Pawn   => p }
+
+  def isKing:   Boolean = maybeKing.isDefined
+  def isQueen:  Boolean = maybeQueen.isDefined
+  def isRook:   Boolean = maybeRook.isDefined
+  def isBishop: Boolean = maybeBishop.isDefined
+  def isKnight: Boolean = maybeKnight.isDefined
+  def isPawn:   Boolean = maybePawn.isDefined
 }
 
 sealed trait CastlingPiece extends Piece

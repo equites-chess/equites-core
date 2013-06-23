@@ -29,13 +29,22 @@ class PieceSpec extends Specification with ScalaCheck {
       King(White) isOpponentOf Queen(Black) must beTrue
     }
 
-    "be one of the six subtypes" in check {
+    "be one of the six subtypes (maybe<Type>)" in check {
       (p: Piece) => p.maybeKing   orElse
                     p.maybeQueen  orElse
                     p.maybeRook   orElse
                     p.maybeBishop orElse
                     p.maybeKnight orElse
                     p.maybePawn   must beSome(p)
+    }
+
+    "be one of the six subtypes (is<Type>)" in check {
+      (p: Piece) => p.isKing   ||
+                    p.isQueen  ||
+                    p.isRook   ||
+                    p.isBishop ||
+                    p.isKnight ||
+                    p.isPawn   must beTrue
     }
   }
 }
