@@ -68,4 +68,10 @@ object ActionOps {
         .orElse(optMove)
     }
   }
+
+  def isCaptureOrPawnMove(action: Action): Boolean = action match {
+    case _: CaptureLike => true
+    case move: MoveLike => move.piece.maybePawn.isDefined
+    case _ => false
+  }
 }

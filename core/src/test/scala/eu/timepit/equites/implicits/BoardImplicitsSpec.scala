@@ -29,7 +29,7 @@ class BoardImplicitsSpec extends Specification {
       board0.toFenPlacement must_==
         "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
 
-      val move1 = Move(P, Square('e', 2), Square('e', 4))
+      val move1 = Move(pl, Square('e', 2), Square('e', 4))
       val board1 = board0.processMove(move1)
       board1.toFenPlacement must_==
         "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR"
@@ -39,7 +39,7 @@ class BoardImplicitsSpec extends Specification {
       board2.toFenPlacement must_==
         "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR"
 
-      val move3 = Move(N, Square('g', 1), Square('f', 3))
+      val move3 = Move(nl, Square('g', 1), Square('f', 3))
       val board3 = board2.processMove(move3)
       board3.toFenPlacement must_==
         "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R"
