@@ -97,5 +97,22 @@ class ActionOpsSpec extends Specification {
       cmAsAction(board)(CoordinateMove(Square(4, 0), Square(2, 0))) must
         beSome(CastlingLong(White))
     }
+
+    "correctly perform isCaptureOrPawnMove for a non-pawn move" in {
+      val move = Move(Q, Square(5, 4), Square(6, 5))
+      isCaptureOrPawnMove(move) must beFalse
+    }
+    "correctly perform isCaptureOrPawnMove for a pawn move" in {
+      val move = Move(P, Square(5, 4), Square(6, 5))
+      isCaptureOrPawnMove(move) must beTrue
+    }
+    "correctly perform isCaptureOrPawnMove for a capture" in {
+      val capture = Capture(R, Square(0, 0), Square(0, 7), b)
+      isCaptureOrPawnMove(capture) must beTrue
+    }
+    "correctly perform isCaptureOrPawnMove for a castling" in {
+      val castling = CastlingLong(White)
+      isCaptureOrPawnMove(castling) must beFalse
+    }
   }
 }
