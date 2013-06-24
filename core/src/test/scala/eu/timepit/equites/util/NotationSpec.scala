@@ -30,12 +30,18 @@ class NotationSpec extends Specification with ScalaCheck {
       (piece: Piece) =>
         pieceFromLetter(piece.toLetter.charAt(0)) must beSome(piece)
     }
+    "yield None on invalid input" in {
+      pieceFromLetter('0') must beNone
+    }
   }
 
   "pieceFromFigurine" should {
     "be the inverse of RichPiece.toFigurine" in check {
       (piece: Piece) =>
         pieceFromFigurine(piece.toFigurine.charAt(0)) must beSome(piece)
+    }
+    "yield None on invalid input" in {
+      pieceFromFigurine('0') must beNone
     }
   }
 
