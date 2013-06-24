@@ -38,6 +38,9 @@ class DirectionsSpec extends Specification {
       knightLike.inverse must_== knightLike
     }
 
+    "all straight directions are straight" in { straight.forall(_.isStraight) }
+    "all diagonal directions are diagonal" in { diagonal.forall(_.isDiagonal) }
+
     "correctly perform inverseIfWhite" in {
       front.inverseIfWhite(White) must_== back
       front.inverseIfWhite(Black) must_== front
