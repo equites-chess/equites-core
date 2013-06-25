@@ -1,10 +1,8 @@
 import sbt._
 import Keys._
 
-import org.scalastyle.sbt.ScalastylePlugin
-
 object BuildSettings {
-  lazy val basicSettings = ScalastylePlugin.Settings ++ seq(
+  lazy val basicSettings = seq(
     version := "0.0",
     homepage := Some(url("http://equites.timepit.eu")),
     startYear := Some(2011),
