@@ -3,13 +3,8 @@ import Keys._
 import play.Project._
 
 object EquitesWebBuild extends Build {
-  lazy val equites = RootProject(file("../core"))
+  lazy val core = RootProject(file("../core"))
 
-  val appName         = "Equites-web"
-  val appVersion      = "0.0"
-
-  val appDependencies = Seq()
-
-  val main = play.Project(appName, appVersion, appDependencies).settings(
-  ).dependsOn(equites)
+  lazy val web = play.Project("equites-web")
+    .dependsOn(core)
 }

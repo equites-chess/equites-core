@@ -4,13 +4,13 @@ import Keys._
 object EquitesBuild extends Build {
   import BuildSettings._
 
-  lazy val root = Project("root", file("."))
+  lazy val root = Project(id = "root", base = file("."))
     .aggregate(core)
     .settings(basicSettings: _*)
     .settings(ScctPlugin.mergeReportSettings: _*)
     .settings(com.github.theon.coveralls.CoverallsPlugin.coverallsSettings: _*)
 
-  lazy val core = Project("core", file("core"))
+  lazy val core = Project(id = "core", base = file("core"))
     .settings(coreSettings: _*)
     .settings(ScctPlugin.instrumentSettings: _*)
 }
