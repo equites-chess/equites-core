@@ -107,7 +107,7 @@ class PGNParsersSpec extends Specification with ParserMatchers {
         ("White", "Fischer, Robert J."),
         ("Black", "Spassky, Boris V."),
         ("Result", "1/2-1/2"))
-      tagSection must succeedOn(section).withResult(result)
+      tagSection must succeedOn(section).withResult(equalTo(result))
     }
     "succeed on valid input with trailing comments" in {
       val section =
@@ -118,7 +118,7 @@ class PGNParsersSpec extends Specification with ParserMatchers {
         ("name1", "value1"),
         ("name2", "value2"),
         ("name3", "value3"))
-      tagSection must succeedOn(section).withResult(result)
+      tagSection must succeedOn(section).withResult(equalTo(result))
     }
   }
 
@@ -187,7 +187,7 @@ class PGNParsersSpec extends Specification with ParserMatchers {
         (3, White), "Bb5", Comment("This opening is called the Ruy Lopez."),
         (3, Black), "a6")
 
-      moveTextSeq must succeedOn(text).withResult(result)
+      moveTextSeq must succeedOn(text).withResult(equalTo(result))
     }
   }
 

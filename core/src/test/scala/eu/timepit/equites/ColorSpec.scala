@@ -16,25 +16,22 @@
 
 package eu.timepit.equites
 
-import org.specs2.ScalaCheck
-import org.specs2.mutable._
+import org.specs2._
 import scalaz.scalacheck.ScalazProperties._
 
 class ColorSpec extends Specification with ScalaCheck {
-  "Color" should {
-    "satisfy the Equal laws" in check(equal.laws[Color])
-    "satisfy the Order laws" in check(order.laws[Color])
-  }
+  def is = s2"""
+  Color should
+    satisfy the Equal laws $e1
+    satisfy the Order laws $e2
 
-  "White" should {
-    "return Black as opposite Color" in {
-      White.opposite must_== Black
-    }
-  }
+  Black should be the opposite of White $e3
+  White should be the opposite of Black $e4
+  """
 
-  "Black" should {
-    "return White as opposite Color" in {
-      Black.opposite must_== White
-    }
-  }
+  def e1 = check(equal.laws[Color])
+  def e2 = check(order.laws[Color])
+
+  def e3 = White.opposite must_== Black
+  def e4 = Black.opposite must_== White
 }

@@ -40,7 +40,7 @@ class BoardSpec extends Specification {
       board.isOccupiedBy(Square(1, 0), Pawn(Black)) must beFalse
     }
 
-    def checkAction(before: Board, after: Board, action: Action) {
+    def checkAction(before: Board, after: Board, action: Action) = {
       before.processAction(action) must_!= before
       before.processAction(action) must_== after
 
