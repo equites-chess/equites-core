@@ -77,4 +77,16 @@ class UciSpec extends Specification {
       Bestmove(move, ponder).toString must_== "bestmove g1f3 ponder d8f6"
     }
   }
+
+  "Uci.UciNewGame" >> {
+    "toString should return 'ucinewgame'" in {
+      UciNewGame.toString must_== "ucinewgame"
+    }
+  }
+
+  "Uci.Stop" >> {
+    "toString should return 'stop'" in {
+      Stop.toString must_== "stop"
+    }
+  }
 }

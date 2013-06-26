@@ -38,18 +38,18 @@ object UciParsers extends RegexParsers {
     case file ~ rank => Square(file, rank)
   }
 
-  def promotedPieceF: Parser[Color => PromotedPiece] =
+  def promotedPieceFn: Parser[Color => PromotedPiece] =
     "q" ^^^ (Queen(_))  |
     "r" ^^^ (Rook(_))   |
     "b" ^^^ (Bishop(_)) |
     "n" ^^^ (Knight(_))
 
   def coordinateMove: Parser[util.CoordinateMove] =
-    square ~ square ~ promotedPieceF.? ^^ {
-      case from ~ to ~ pieceF => {
-        val piece = pieceF.map {
+    square ~ square ~ promotedPieceFn.? ^^ {
+      case from ~ to ~ pieceFn => {
+        val piece = pieceFn.map { piece =>
           val color = Color.guessFrom(to - from)
-          _(color)
+          piece(color)
         }
         util.CoordinateMove(from, to, piece)
       }
