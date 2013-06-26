@@ -21,35 +21,57 @@ import org.specs2.mutable._
 
 import Uci._
 import util.CoordinateMove
+import util.PieceAbbr._
 
 class UciSpec extends Specification {
-  "Uci.SetOption" should {
-    "correctly perform toString with a name and a value" in {
-      SetOption("Style", Some("Risky")).toString must_==
-        "setoption name Style value Risky"
-    }
-    "correctly perform toString with a name only" in {
-      SetOption("Clear Hash").toString must_== "setoption name Clear Hash"
+  "Uci.Uci" >> {
+    "toString should return 'uci'" in {
+      Uci.Uci.toString must_== "uci"
     }
   }
 
-  "Uci.Id" should {
-    "correctly perform toString" in {
+  "Uci.Debug" >> {
+    "toString should return 'debug on' if on is true" in {
+      Debug(true).toString must_== "debug on"
+    }
+    "toString should return 'debug off' if on is false" in {
+      Debug(false).toString must_== "debug off"
+    }
+  }
+
+  "Uci.IsReady" >> {
+    "toString should return 'isready'" in {
+      IsReady.toString must_== "isready"
+    }
+  }
+
+  "Uci.SetOption" >> {
+    "toString should exclude value if it is empty" in {
+      SetOption("Clear Hash").toString must_==
+        "setoption name Clear Hash"
+    }
+    "toString should include value if it is not empty" in {
+      SetOption("Style", Some("Risky")).toString must_==
+        "setoption name Style value Risky"
+    }
+  }
+
+  "Uci.Id" >> {
+    "toString should return the expected result" in {
       Id("author", "John Doe").toString must_== "id author John Doe"
     }
   }
 
-  "Uci.Bestmove" should {
-    "correctly perform toString for a move" in {
+  "Uci.Bestmove" >> {
+    "toString should return the expected result on a move" in {
       val move = CoordinateMove(Square('e', 2), Square('e', 4))
       Bestmove(move).toString must_== "bestmove e2e4"
     }
-    "correctly perform toString for a promotion" in {
-      val move =
-        CoordinateMove(Square('e', 7), Square('e', 8), Some(Queen(White)))
+    "toString should return the expected result on a promotion" in {
+      val move = CoordinateMove(Square('e', 7), Square('e', 8), Some(Q))
       Bestmove(move).toString must_== "bestmove e7e8q"
     }
-    "correctly perform toString for a move and a ponder" in {
+    "toString should return the expected result on a move and a ponder" in {
       val move = CoordinateMove(Square('g', 1), Square('f', 3))
       val ponder = Some(CoordinateMove(Square('d', 8), Square('f', 6)))
       Bestmove(move, ponder).toString must_== "bestmove g1f3 ponder d8f6"
