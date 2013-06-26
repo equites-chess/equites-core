@@ -21,30 +21,34 @@ import org.specs2.mutable._
 
 class PieceSpec extends Specification with ScalaCheck {
   "Piece" should {
-    "correctly perform isFriendOf and isOpponentOf" in {
-      King(White) isFriendOf Queen(White) must beTrue
-      King(White) isFriendOf Queen(Black) must beFalse
-
-      King(White) isOpponentOf Queen(White) must beFalse
-      King(White) isOpponentOf Queen(Black) must beTrue
+    "be convertible to one of its subtypes" in check {
+      (p: Piece) => p.maybeKing   orElse p.maybeQueen  orElse
+                    p.maybeRook   orElse p.maybeBishop orElse
+                    p.maybeKnight orElse p.maybePawn   must beSome(p)
     }
-
-    "be one of the six subtypes (maybe<Type>)" in check {
-      (p: Piece) => p.maybeKing   orElse
-                    p.maybeQueen  orElse
-                    p.maybeRook   orElse
-                    p.maybeBishop orElse
-                    p.maybeKnight orElse
-                    p.maybePawn   must beSome(p)
+    "be one of its subtypes" in check {
+      (p: Piece) => p.isKing   || p.isQueen  || p.isRook ||
+                    p.isBishop || p.isKnight || p.isPawn must beTrue
     }
+  }
 
-    "be one of the six subtypes (is<Type>)" in check {
-      (p: Piece) => p.isKing   ||
-                    p.isQueen  ||
-                    p.isRook   ||
-                    p.isBishop ||
-                    p.isKnight ||
-                    p.isPawn   must beTrue
-    }
+  "isFriendOf should return true on friendly pieces" in check {
+    (c: Color, p1: Color => Piece, p2: Color => Piece) =>
+      p1(c) isFriendOf p2(c) must beTrue
+  }
+
+  "isFriendOf should return false on opposing pieces" in check {
+    (c: Color, p1: Color => Piece, p2: Color => Piece) =>
+      p1(c) isFriendOf p2(c.opposite) must beFalse
+  }
+
+  "isOpponentOf should return true on opposing pieces" in check {
+    (c: Color, p1: Color => Piece, p2: Color => Piece) =>
+      p1(c) isOpponentOf p2(c.opposite) must beTrue
+  }
+
+  "isOpponentOf should return false on friendly pieces" in check {
+    (c: Color, p1: Color => Piece, p2: Color => Piece) =>
+      p1(c) isOpponentOf p2(c) must beFalse
   }
 }

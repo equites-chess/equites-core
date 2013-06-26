@@ -27,7 +27,7 @@ class ColorSpec extends Specification with ScalaCheck {
   }
 
   "White should return Black as opposite Color" in {
-      White.opposite must_== Black
+    White.opposite must_== Black
   }
   "Black should return White as opposite Color" in {
     Black.opposite must_== White
