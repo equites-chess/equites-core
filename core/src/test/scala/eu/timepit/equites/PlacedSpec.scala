@@ -22,7 +22,7 @@ import scalaz.scalacheck.ScalazProperties._
 
 class PlacedSpec extends Specification with ScalaCheck {
   "Placed" should {
-    "satisfy the Equal laws" in check(equal.laws[Placed[Int]])
+    "satisfy the Equal laws" in check(equal.laws[Placed[Piece]])
     "satisfy the Functor laws" in check(functor.laws[Placed])
   }
 }

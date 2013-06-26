@@ -41,10 +41,13 @@ package object equites {
       } yield Placed(elem, square)
     }
 
+  implicit val arbitraryPieceFn: Arbitrary[Color => Piece] =
+    Arbitrary(Gen.oneOf(King, Queen, Rook, Bishop, Knight, Pawn))
+
   implicit val arbitraryPiece: Arbitrary[Piece] = Arbitrary {
     for {
+      piece <- arbitrary[Color => Piece]
       color <- arbitrary[Color]
-      piece <- Gen.oneOf(King, Queen, Rook, Bishop, Knight, Pawn)
     } yield piece(color)
   }
 

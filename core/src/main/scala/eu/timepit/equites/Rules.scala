@@ -79,8 +79,11 @@ object Rules {
     mapping.toMap
   }
 
+  def castlingsBy(color: Color): List[Castling] =
+    List(CastlingShort(color), CastlingLong(color))
+
   val allCastlings: List[Castling] =
-    Color.values <*> List(CastlingShort, CastlingLong)
+    castlingsBy(White) ::: castlingsBy(Black)
 
   val startingBoard: Board = {
     val mapping = for {

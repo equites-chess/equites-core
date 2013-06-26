@@ -51,53 +51,5 @@ class RulesSpec extends Specification {
             Square(0, 6), Square(1, 5), Square(2, 4), Square(4, 2),
             Square(5, 1), Square(6, 0))
     }
-
-    /*
-    "correctly perform enPassantTargets 1" in {
-      val board =
-        |>.-.-.-.-.-.-.-.-.
-           -.-.-.-.-.-.-.-.
-           -.-.-.-.-.-.-.-.
-           p.-.-.-.-.-.-.-.
-           P.p.-.-.-.-.-.-.
-           -.-.-.-.-.-.-.-.
-           -.P.-.-.-.-.-.-.
-           -.-.-.-.-.-.-.-.<|
-      val placed = Placed(Pawn(Black), Square(1, 3))
-
-      enPassantTargets(placed).eval(board).toSet must_==
-        Set((Placed(Pawn(White), Square(0, 3)), Square(0, 2)))
-    }
-
-    "correctly perform enPassantTargets 2" in {
-      val board =
-        |>.-.-.-.-.-.-.-.-.
-           -.p.-.-.-.-.-.-.
-           n.-.-.-.-.-.-.-.
-           p.P.p.-.-.-.-.-.
-           P.-.-.-.-.-.-.-.
-           -.-.-.-.-.-.-.-.
-           -.-.-.-.-.-.-.-.
-           -.-.-.-.-.-.-.-.<|
-      val placed = Placed(Pawn(White), Square(1, 4))
-
-      enPassantTargets(placed).eval(board).toSet must_==
-        Set((Placed(Pawn(Black), Square(2, 4)), Square(2, 5)))
-    }
-
-    "correctly perform enPassantTargets 3" in {
-      val board =
-        |>.-.-.-.-.-.-.-.-.
-           -.-.-.-.-.-.-.-.
-           -.-.-.-.-.-.-.-.
-           -.-.-.-.-.-.-.-.
-           p.p.p.-.-.-.-.-.
-           -.-.-.-.-.-.-.-.
-           -.P.-.-.-.-.-.-.
-           -.-.-.-.-.-.-.-.<|
-      val placed = Placed(Pawn(Black), Square(1, 3))
-      enPassantTargets(placed).eval(board).toSet must_== Set.empty
-    }
-    */
   }
 }
