@@ -24,12 +24,21 @@ import KnightsTour._
 class KnightsTourSpec extends Specification {
   val squares = Rules.allSquares.toSet
 
-  "warnsdorffTour" should {
+  def alwaysVisitAllSquares(tourFn: Square => Stream[Square]) = {
     "visit all squares from all starting squares" in {
-      squares.forall(sq => warnsdorffTour(sq).toSet == squares) must beTrue
+      squares.forall(sq => tourFn(sq).toSet == squares) must beTrue
     }
+  }
+
+  "warnsdorffTour" should {
+    alwaysVisitAllSquares(warnsdorffTour)
+
     "produce at least one closed tour" in {
       squares.exists(sq => isClosed(warnsdorffTour(sq))) must beTrue
     }
+  }
+
+  "randomWarnsdorffTour" should {
+    alwaysVisitAllSquares(randomWarnsdorffTour)
   }
 }
