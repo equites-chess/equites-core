@@ -23,7 +23,7 @@ import BoardFactory._
 
 class BoardFactorySpec extends Specification {
   "BoardFactory" should {
-    "correctly construct empty boards" in {
+    "construct empty boards" in {
       |>.<| must_== Board()
       |>.-.-.-.-.-.-.-.-.
          -.-.-.-.-.-.-.-.
@@ -34,7 +34,7 @@ class BoardFactorySpec extends Specification {
          -.-.-.-.-.-.-.-.
          -.-.-.-.-.-.-.-.<| must_== Board()
     }
-    "correctly construct non-empty boards" in {
+    "construct non-empty boards" in {
       |>.r.n.b.q.k.b.n.r.
          p.p.p.p.p.p.p.p.
          -.-.-.-.-.-.-.-.

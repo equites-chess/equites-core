@@ -23,14 +23,6 @@ class TextBoardSpec extends Specification {
   "TextBoard" should {
     val board = Rules.startingBoard
 
-    "produce only whitespace with the AbstractRepr" in {
-      val tb = new TextBoard with AbstractRepr {
-        def pieceToString(piece: Piece) = ""
-      }
-
-      tb.mkUnlabeled(board).trim must_== ""
-    }
-
     "make (un)labeled boards with letters" in {
       val tb = new TextBoard with LetterRepr
 
@@ -171,6 +163,21 @@ class TextBoardSpec extends Specification {
         "2 |  |  |  |  |  |  |  |  |=\n" +
         "1 |  |  |  |  |  |  |  |  |=\n" +
         "   a  b  c  d  e  f  g  h \n"
+    }
+
+    "make numeric labeled boards" in {
+      val tb = new TextBoard with FigurineRepr with NumericLabels
+      tb.mkLabeled(board) must_==
+        "♜ ♞ ♝ ♛ ♚ ♝ ♞ ♜│ 8\n" +
+        "♟ ♟ ♟ ♟ ♟ ♟ ♟ ♟│ 7\n" +
+        "· · · · · · · ·│ 6\n" +
+        "· · · · · · · ·│ 5\n" +
+        "· · · · · · · ·│ 4\n" +
+        "· · · · · · · ·│ 3\n" +
+        "♙ ♙ ♙ ♙ ♙ ♙ ♙ ♙│ 2\n" +
+        "♖ ♘ ♗ ♕ ♔ ♗ ♘ ♖│ 1\n" +
+        "───────────────┘\n" +
+        "1 2 3 4 5 6 7 8 \n"
     }
   }
 }

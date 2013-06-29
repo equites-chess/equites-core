@@ -23,19 +23,21 @@ import util.Notation._
 trait AbstractRepr {
   def pieceToString(piece: Piece): String
   def tileStart: String       = ""
-  def tileEmpty: String       = ""
+  def tileEmpty: String
   def tileEnd: String         = ""
   def rankBegin: String       = ""
   def rankSep: String         = ""
   def rankEnd: String         = ""
   def horizontalBar: String   = ""
-  def verticalBar: String     = ""
+  def verticalBar: String
   def corner: String          = ""
   def fileLabelsStart: String = ""
   def fileLabelsSep: String   = " "
   def fileLabelsEnd: String   = " "
 
   def rankLabelsRight: Boolean = true
+  val rankLabels: Seq[String] = algebraicRankRange.map(_.toString)
+  val fileLabels: Seq[String] = algebraicFileRange.map(_.toString)
 }
 
 trait LetterRepr extends AbstractRepr {
@@ -68,6 +70,11 @@ trait WikiRepr extends AbstractRepr {
   override def rankLabelsRight = false
 }
 
+trait NumericLabels extends AbstractRepr {
+  override val rankLabels: Seq[String] = numericRankRange.map(_.toString)
+  override val fileLabels: Seq[String] = numericFileRange.map(_.toString)
+}
+
 trait TextBoard {
   self: AbstractRepr =>
 
@@ -84,14 +91,13 @@ trait TextBoard {
   }
 
   def mkLabeled(board: Board): String = {
-    def addRankLabel(r: Int): String =
+    def addRankLabel(r: String): String =
       if (rankLabelsRight) s"${verticalBar}${r}" else s"${r}${verticalBar}"
 
     def boardWithRankLabels: String = {
       val lines = mkUnlabeled(board).split("\n").toSeq
-      val labels = algebraicRankRange.reverse.map(addRankLabel)
-      val zipped =
-        if (rankLabelsRight) lines.zip(labels) else labels.zip(lines)
+      val labels = rankLabels.reverse.map(addRankLabel)
+      val zipped = if (rankLabelsRight) lines.zip(labels) else labels.zip(lines)
 
       zipped.map(_.productIterator.mkString("", "", "\n")).mkString
     }
@@ -99,10 +105,10 @@ trait TextBoard {
     def bottomBorder: String = {
       val barWidth = Rules.fileRange.length * 2 - 1
       val border = (horizontalBar * barWidth) + corner
-      if (border.isEmpty()) "" else border + "\n"
+      if (border.isEmpty) "" else border + "\n"
     }
 
-    boardWithRankLabels + bottomBorder + algebraicFileRange.mkString(
+    boardWithRankLabels + bottomBorder + fileLabels.mkString(
       fileLabelsStart, fileLabelsSep, fileLabelsEnd + "\n")
   }
 }
