@@ -42,7 +42,7 @@ class PieceAbbrSpec extends Specification with Tables {
       }
     }
 
-    "contain all wikipedia abbreviations" in {
+    "contain all MediaWiki abbreviations" in {
       "abbr" | "letters" |
       kl     ! "kl"      |
       ql     ! "ql"      |

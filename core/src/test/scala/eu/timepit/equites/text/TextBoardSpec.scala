@@ -21,8 +21,17 @@ import org.specs2.mutable._
 
 class TextBoardSpec extends Specification {
   "TextBoard" should {
+    val board = Rules.startingBoard
+
+    "produce only whitespace with the AbstractRepr" in {
+      val tb = new TextBoard with AbstractRepr {
+        def pieceToString(piece: Piece) = ""
+      }
+
+      tb.mkUnlabeled(board).trim must_== ""
+    }
+
     "make (un)labeled boards with letters" in {
-      val board = Rules.startingBoard
       val tb = new TextBoard with LetterRepr
 
       tb.mkUnlabeled(board) must_==
@@ -47,7 +56,7 @@ class TextBoardSpec extends Specification {
         " \n" +
         "a b c d e f g h \n"
 
-      tb.mkUnlabeled(Board()) must_==
+      tb.mkUnlabeled(Board.empty) must_==
         ". . . . . . . .\n" +
         ". . . . . . . .\n" +
         ". . . . . . . .\n" +
@@ -57,7 +66,7 @@ class TextBoardSpec extends Specification {
         ". . . . . . . .\n" +
         ". . . . . . . .\n"
 
-      tb.mkLabeled(Board()) must_==
+      tb.mkLabeled(Board.empty) must_==
         ". . . . . . . .  8\n" +
         ". . . . . . . .  7\n" +
         ". . . . . . . .  6\n" +
@@ -71,7 +80,6 @@ class TextBoardSpec extends Specification {
     }
 
     "make (un)labeled boards with figurines" in {
-      val board = Rules.startingBoard
       val tb = new TextBoard with FigurineRepr
 
       tb.mkUnlabeled(board) must_==
@@ -96,7 +104,7 @@ class TextBoardSpec extends Specification {
         "───────────────┘\n" +
         "a b c d e f g h \n"
 
-      tb.mkUnlabeled(Board()) must_==
+      tb.mkUnlabeled(Board.empty) must_==
         "· · · · · · · ·\n" +
         "· · · · · · · ·\n" +
         "· · · · · · · ·\n" +
@@ -106,7 +114,7 @@ class TextBoardSpec extends Specification {
         "· · · · · · · ·\n" +
         "· · · · · · · ·\n"
 
-      tb.mkLabeled(Board()) must_==
+      tb.mkLabeled(Board.empty) must_==
         "· · · · · · · ·│ 8\n" +
         "· · · · · · · ·│ 7\n" +
         "· · · · · · · ·│ 6\n" +
@@ -120,7 +128,6 @@ class TextBoardSpec extends Specification {
     }
 
     "make (un)labeled boards as MediaWiki diagram" in {
-      val board = Rules.startingBoard
       val tb = new TextBoard with WikiRepr
 
       tb.mkUnlabeled(board) must_==
@@ -144,7 +151,7 @@ class TextBoardSpec extends Specification {
         "1 |rl|nl|bl|ql|kl|bl|nl|rl|=\n" +
         "   a  b  c  d  e  f  g  h \n"
 
-      tb.mkUnlabeled(Board()) must_==
+      tb.mkUnlabeled(Board.empty) must_==
         "|  |  |  |  |  |  |  |  |=\n" +
         "|  |  |  |  |  |  |  |  |=\n" +
         "|  |  |  |  |  |  |  |  |=\n" +
@@ -154,7 +161,7 @@ class TextBoardSpec extends Specification {
         "|  |  |  |  |  |  |  |  |=\n" +
         "|  |  |  |  |  |  |  |  |=\n"
 
-      tb.mkLabeled(Board()) must_==
+      tb.mkLabeled(Board.empty) must_==
         "8 |  |  |  |  |  |  |  |  |=\n" +
         "7 |  |  |  |  |  |  |  |  |=\n" +
         "6 |  |  |  |  |  |  |  |  |=\n" +

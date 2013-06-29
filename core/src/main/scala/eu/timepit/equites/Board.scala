@@ -21,6 +21,7 @@ import scala.collection.immutable.MapProxy
 object Board {
   def apply(mapping: Map[Square, Piece]): Board = new Board(mapping)
   def apply(kvs: (Square, Piece)*): Board = new Board(kvs.toMap)
+  val empty: Board = Board()
 }
 
 class Board(val self: Map[Square, Piece]) extends MapProxy[Square, Piece] {
