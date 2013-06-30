@@ -18,20 +18,40 @@ package eu.timepit.equites
 
 object GameState {
   def init: GameState = GameState(board = Rules.startingBoard,
-    lastAction = None, color = White, moveNumber = 1, halfmoveClock = 0)
+    lastAction = None, color = White, moveNumber = 1, halfmoveClock = 0,
+    availableCastlings = Rules.allCastlings.toSet)
 }
 
 case class GameState(board: Board, lastAction: Option[Action],
-  color: Color, moveNumber: Int, halfmoveClock: Int) {
+  color: Color, moveNumber: Int, halfmoveClock: Int,
+  availableCastlings: Set[Castling]) {
 
-  def applyAction(action: Action): GameState = copy(
+  def updated(action: Action): GameState = copy(
     board = board.processAction(action), lastAction = Some(action),
-    color = color.opposite, moveNumber = nextMoveNumber,
-    halfmoveClock = nextHalfmoveClock(action))
+    color = color.opposite, moveNumber = updatedMoveNumber,
+    halfmoveClock = updatedHalfmoveClock(action),
+    availableCastlings = updatedAvailableCastlings(action))
 
-  private[this] def nextMoveNumber: Int =
+  private[this] def updatedMoveNumber: Int =
     moveNumber + (if (color == Black) 1 else 0)
 
-  private[this] def nextHalfmoveClock(action: Action): Int =
+  private[this] def updatedHalfmoveClock(action: Action): Int =
     if (ActionOps.isCaptureOrPawnMove(action)) 0 else halfmoveClock + 1
+
+  private[this] def updatedAvailableCastlings(action: Action): Set[Castling] = {
+    def unavailableCastlings: Seq[Castling] = action match {
+      case castling: Castling => Seq(castling)
+      case capture: CaptureLike =>
+        Rules.associatedCastlings(capture.placedPiece) ++
+        Rules.associatedCastlings(capture.placedCaptured)
+      case move: MoveLike =>
+        Rules.associatedCastlings(move.placedPiece)
+    }
+
+    if (availableCastlings.nonEmpty) {
+      availableCastlings -- unavailableCastlings
+    } else {
+      Set.empty
+    }
+  }
 }

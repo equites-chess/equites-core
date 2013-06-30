@@ -17,45 +17,73 @@
 package eu.timepit.equites
 
 import org.specs2.mutable._
+import scalaz.std.stream
 
-import implicits.SquareImplicits._
+import implicits.ActionImplicits._
 import util.PieceAbbr._
 
 class GameStateSpec extends Specification {
   "GameState" should {
-    val state0 = GameState.init
+    val actions = Vector(
+        Move(pl, Square('e', 2), Square('e', 4)),
+        Move(pd, Square('c', 7), Square('c', 5)),
+        Move(nl, Square('g', 1), Square('f', 3)),
+        Move(pd, Square('d', 7), Square('d', 6)),
+        Move(bl, Square('f', 1), Square('a', 6)),
+        Capture(nd, Square('b', 8), Square('a', 6), bl),
+        CastlingShort(White))
 
-    val move1 = Move(pl, Square('e', 2), Square('e', 4))
-    val state1 = state0.applyAction(move1)
-
-    val move2 = Move(pd, Square('c', 7), Square('c', 5))
-    val state2 = state1.applyAction(move2)
-
-    val move3 = Move(nl, Square('g', 1), Square('f', 3))
-    val state3 = state2.applyAction(move3)
-
-    "correctly record move1" in {
-      state1.board must_== state0.board.processAction(move1)
-      state1.lastAction must beSome(move1)
-      state1.color must_== Black
-      state1.moveNumber must_== 1
-      state1.halfmoveClock must_== 0
+    val states = GameState.init #:: stream.unfold((GameState.init, actions)) {
+      case (state, actions) => actions.headOption.map { action =>
+        val updated = state.updated(action)
+        (updated, (updated, actions.tail))
+      }
     }
 
-    "correctly record move2" in {
-      state2.board must_== state1.board.processAction(move2)
-      state2.lastAction must beSome(move2)
-      state2.color must_== White
-      state2.moveNumber must_== 2
-      state2.halfmoveClock must_== 0
+    "record " + actions(0).toLongFigurine in {
+      states(1).board must_== states(0).board.processAction(actions(0))
+      states(1).lastAction must beSome(actions(0))
+      states(1).color must_== Black
+      states(1).moveNumber must_== 1
+      states(1).halfmoveClock must_== 0
+      states(1).availableCastlings must_== Rules.allCastlings.toSet
     }
 
-    "correctly record move3" in {
-      state3.board must_== state2.board.processAction(move3)
-      state3.lastAction must beSome(move3)
-      state3.color must_== Black
-      state3.moveNumber must_== 2
-      state3.halfmoveClock must_== 1
+    "record " + actions(1).toLongFigurine in {
+      states(2).board must_== states(1).board.processAction(actions(1))
+      states(2).lastAction must beSome(actions(1))
+      states(2).color must_== White
+      states(2).moveNumber must_== 2
+      states(2).halfmoveClock must_== 0
+      states(2).availableCastlings must_== Rules.allCastlings.toSet
+    }
+
+    "record " + actions(2).toLongFigurine in {
+      states(3).board must_== states(2).board.processAction(actions(2))
+      states(3).lastAction must beSome(actions(2))
+      states(3).color must_== Black
+      states(3).moveNumber must_== 2
+      states(3).halfmoveClock must_== 1
+      states(3).availableCastlings must_== Rules.allCastlings.toSet
+    }
+
+    "record " + actions(5).toLongFigurine in {
+      states(6).board must_== states(5).board.processAction(actions(5))
+      states(6).lastAction must beSome(actions(5))
+      states(6).color must_== White
+      states(6).moveNumber must_== 4
+      states(6).halfmoveClock must_== 0
+      states(6).availableCastlings must_== Rules.allCastlings.toSet
+    }
+
+    "record " + actions(6).toLongFigurine in {
+      states(7).board must_== states(6).board.processAction(actions(6))
+      states(7).lastAction must beSome(actions(6))
+      states(7).color must_== Black
+      states(7).moveNumber must_== 4
+      states(7).halfmoveClock must_== 1
+      states(7).availableCastlings must_==
+        Set(CastlingLong(White), CastlingShort(Black), CastlingLong(Black))
     }
   }
 }

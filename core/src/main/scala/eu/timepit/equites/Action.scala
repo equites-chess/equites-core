@@ -29,6 +29,7 @@ trait DrawLike {
 
 sealed trait MoveLike extends Action with DrawLike {
   def piece: Piece
+  def placedPiece: Placed[Piece] = Placed(piece, from)
 }
 
 sealed trait PromotionLike extends MoveLike {
@@ -43,6 +44,7 @@ sealed trait CaptureLike extends MoveLike {
 
   def captured: Piece
   def capturedOn: Square = to
+  def placedCaptured: Placed[Piece] = Placed(captured, capturedOn)
 }
 
 object Move {
