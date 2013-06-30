@@ -62,6 +62,8 @@ class RulesSpec extends Specification {
         Seq(CastlingShort(Black))
       associatedCastlings(Placed(kd, Square(4, 2))) must_==
         Seq(CastlingShort(Black), CastlingLong(Black))
+      associatedCastlings(Placed(ql, Square(0, 0))) must_==
+        Seq.empty
     }
   }
 }
