@@ -19,21 +19,20 @@ package util
 
 import org.specs2.mutable._
 
-class CoordinateMoveSpec extends Specification {
-  "CoordinateMove companion" should {
-    "correctly apply promotions" in {
-      val promotion =
-        Promotion(Pawn(White), Square(0, 6), Square(0, 7), Rook(White))
-      CoordinateMove(promotion) must_==
-        CoordinateMove(Square(0, 6), Square(0, 7), Some(Rook(White)))
-    }
+import util.PieceAbbr._
 
-    "correctly apply moves" in {
-      val move = Move(Queen(White), Square(0, 0), Square(3, 3))
+class CoordinateMoveSpec extends Specification {
+  "CoordinateMove" should {
+    "apply promotions" in {
+      val promotion = Promotion(pl, Square(0, 6), Square(0, 7), rl)
+      CoordinateMove(promotion) must_==
+        CoordinateMove(Square(0, 6), Square(0, 7), Some(rl))
+    }
+    "apply moves" in {
+      val move = Move(ql, Square(0, 0), Square(3, 3))
       CoordinateMove(move) must_== CoordinateMove(Square(0, 0), Square(3, 3))
     }
-
-    "correctly apply castlings" in {
+    "apply castlings" in {
       val castling = CastlingLong(White)
       CoordinateMove(castling) must_== CoordinateMove(castling.kingMove)
     }

@@ -85,6 +85,15 @@ object Rules {
   val allCastlings: List[Castling] =
     castlingsBy(White) ::: castlingsBy(Black)
 
+  def associatedCastlings(placed: Placed[Piece]): List[Castling] =
+    placed.elem match {
+      case King(color) =>
+        castlingsBy(color)
+      case Rook(color) =>
+        castlingsBy(color).filter(_.rookMove.from == placed.square)
+      case _ => Nil
+    }
+
   val startingBoard: Board = {
     val mapping = for {
       (piece, squares) <- startingSquares

@@ -18,6 +18,7 @@ package eu.timepit.equites
 
 import org.specs2.mutable._
 
+import util.PieceAbbr._
 import Rules._
 
 class RulesSpec extends Specification {
@@ -32,24 +33,35 @@ class RulesSpec extends Specification {
     }
 
     "correctly perform possibleSquares" in {
-      possibleSquares(Placed(King(White), Square(3, 2))).toSet must_==
+      possibleSquares(Placed(kl, Square(3, 2))).toSet must_==
         Set(Square(3, 3), Square(4, 3), Square(4, 2), Square(4, 1),
             Square(3, 1), Square(2, 1), Square(2, 2), Square(2, 3))
 
-      possibleSquares(Placed(Pawn(White), Square(3, 3))).toSet must_==
+      possibleSquares(Placed(pl, Square(3, 3))).toSet must_==
         Set(Square(3, 4))
-      possibleSquares(Placed(Pawn(White), Square(0, 1))).toSet must_==
+      possibleSquares(Placed(pl, Square(0, 1))).toSet must_==
         Set(Square(0, 2), Square(0, 3))
-      possibleSquares(Placed(Pawn(Black), Square(0, 6))).toSet must_==
+      possibleSquares(Placed(pd, Square(0, 6))).toSet must_==
         Set(Square(0, 5), Square(0, 4))
     }
 
     "correctly perform possibleSquares for Bishop" in {
-      possibleSquares(Placed(Bishop(White), Square(3, 3))).toSet must_==
+      possibleSquares(Placed(bl, Square(3, 3))).toSet must_==
         Set(Square(0, 0), Square(1, 1), Square(2, 2), Square(4, 4),
             Square(5, 5), Square(6, 6), Square(7, 7),
             Square(0, 6), Square(1, 5), Square(2, 4), Square(4, 2),
             Square(5, 1), Square(6, 0))
+    }
+
+    "determine associated castlings for placed pieces" in {
+      associatedCastlings(Placed(rl, Square(0, 0))) must_==
+        Seq(CastlingLong(White))
+      associatedCastlings(Placed(rl, Square(3, 5))) must_==
+        Seq.empty
+      associatedCastlings(Placed(rd, Square(7, 7))) must_==
+        Seq(CastlingShort(Black))
+      associatedCastlings(Placed(kd, Square(4, 2))) must_==
+        Seq(CastlingShort(Black), CastlingLong(Black))
     }
   }
 }
