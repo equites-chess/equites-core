@@ -18,61 +18,87 @@ package eu.timepit.equites
 
 import org.specs2.mutable._
 
+import util.PieceAbbr._
+
 class BoardSpec extends Specification {
   "Board" should {
-    "report occupied squares" in {
-      val board = Board(Square(0, 0) -> Pawn(White),
-                        Square(1, 1) -> Pawn(Black))
+    val board = Board(Square(0, 0) -> pl, Square(1, 1) -> pd)
 
+    "return placed pieces" in {
+      board.getPlaced(Square(0, 0)) must beSome(Placed(pl, Square(0, 0)))
+      board.getPlaced(Square(1, 0)) must beNone
+    }
+
+    "return sequences of placed pieces" in {
+      board.getPlaced(Seq(Square(0, 0), Square(1, 1))) must_==
+        Seq(Placed(pl, Square(0, 0)), Placed(pd, Square(1, 1)))
+    }
+
+    "report occupied and vacant squares" in {
       board.isOccupied(Square(0, 0)) must beTrue
-      board.isOccupied(Square(1, 1)) must beTrue
+      board.isVacant(Square(0, 0))   must beFalse
 
+      board.isVacant(Square(1, 0))   must beTrue
       board.isOccupied(Square(1, 0)) must beFalse
-      board.isOccupied(Square(0, 1)) must beFalse
+    }
 
-      board.isOccupiedBy(Square(0, 0), Pawn(White)) must beTrue
-      board.isOccupiedBy(Square(1, 1), Pawn(White)) must beFalse
+    "report occupied squares by piece" in {
+      board.isOccupiedBy(Square(0, 0), pl) must beTrue
+      board.isOccupiedBy(Square(0, 0), pd) must beFalse
 
-      board.isOccupiedBy(Square(0, 0), Pawn(Black)) must beFalse
-      board.isOccupiedBy(Square(1, 1), Pawn(Black)) must beTrue
+      board.isOccupiedBy(Square(1, 0), pl) must beFalse
+    }
 
-      board.isOccupiedBy(Square(0, 1), Pawn(White)) must beFalse
-      board.isOccupiedBy(Square(1, 0), Pawn(Black)) must beFalse
+    "return all placed pieces" in {
+      board.placedPieces.toSeq must_==
+        Seq(Placed(pl, Square(0, 0)), Placed(pd, Square(1, 1)))
     }
 
     def checkAction(before: Board, after: Board, action: Action) = {
-      before.processAction(action) must_!= before
-      before.processAction(action) must_== after
+      val processed = before.processAction(action)
+      val reversed = processed.reverseAction(action)
 
-      before.processAction(action).reverseAction(action) must_== before
-      before.processAction(action).reverseAction(action) must_!= after
+      processed must_!= before
+      processed must_== after
+      reversed  must_== before
+      reversed  must_!= after
     }
 
-    "correctly process/reverse Moves" in {
-      val before = Board(Square(0, 0) -> Queen(White))
-      val after  = Board(Square(7, 7) -> Queen(White))
-      val action = Move(Queen(White), Square(0, 0), Square(7, 7))
-
+    "process and reverse moves" in {
+      val before = Board(Square(0, 0) -> ql)
+      val after  = Board(Square(7, 7) -> ql)
+      val action = Move(ql, Square(0, 0), Square(7, 7))
       checkAction(before, after, action)
     }
 
-    "correctly process/reverse Promotions" in {
-      val before = Board(Square(0, 6) -> Pawn(White))
-      val after  = Board(Square(0, 7) -> Queen(White))
-      val action =
-        Promotion(Pawn(White), Square(0, 6), Square(0, 7), Queen(White))
-
+    "process and reverse promotions" in {
+      val before = Board(Square(0, 6) -> pl)
+      val after  = Board(Square(0, 7) -> ql)
+      val action = Promotion(pl, Square(0, 6), Square(0, 7), ql)
       checkAction(before, after, action)
     }
 
-    "correctly process/reverse Captures" in {
-      val before = Board(Square(0, 0) -> Queen(White),
-                         Square(7, 7) -> Pawn(Black))
-      val after  = Board(Square(7, 7) -> Queen(White))
-      val action =
-        Capture(Queen(White), Square(0, 0), Square(7, 7), Pawn(Black))
-
+    "process and reverse captures" in {
+      val before = Board(Square(0, 0) -> ql,Square(7, 7) -> pd)
+      val after  = Board(Square(7, 7) -> ql)
+      val action = Capture(ql, Square(0, 0), Square(7, 7), pd)
       checkAction(before, after, action)
+    }
+
+    "process and reverse captures and promotions" in {
+      val before = Board(Square(0, 6) -> pl, Square(1, 7) -> nd)
+      val after  = Board(Square(1, 7) -> ql)
+      val action = CaptureAndPromotion(pl, Square(0, 6), Square(1, 7), nd, ql)
+      checkAction(before, after, action)
+    }
+
+    "process and reverse castlings" in {
+      val castling = CastlingLong(White)
+      val before   = Board(castling.kingMove.from -> castling.king,
+                           castling.rookMove.from -> castling.rook)
+      val after    = Board(castling.kingMove.to -> castling.king,
+                           castling.rookMove.to -> castling.rook)
+      checkAction(before, after, castling)
     }
   }
 }

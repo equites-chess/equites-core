@@ -42,15 +42,15 @@ trait AbstractRepr {
 
 trait LetterRepr extends AbstractRepr {
   def pieceToString(piece: Piece) = piece.toLetter
-  override def tileEmpty   = "."
+  def tileEmpty            = "."
   override def rankSep     = " "
-  override def verticalBar = "  "
+  def verticalBar          = "  "
   override def corner      = " "
 }
 
 trait FigurineRepr extends AbstractRepr {
   def pieceToString(piece: Piece) = piece.toFigurine
-  override def tileEmpty     = "\u00B7"  // ·
+  def tileEmpty              = "\u00B7"  // ·
   override def rankSep       = " "
   override def horizontalBar = "\u2500"  // ─
   override def verticalBar   = "\u2502 " // │
@@ -60,10 +60,10 @@ trait FigurineRepr extends AbstractRepr {
 trait WikiRepr extends AbstractRepr {
   def pieceToString(piece: Piece) = piece.toWikiLetters
   override def tileStart       = "|"
-  override def tileEmpty       = "  "
+  def tileEmpty                = "  "
   override def tileEnd         = ""
   override def rankEnd         = "|="
-  override def verticalBar     = " "
+  def verticalBar              = " "
   override def fileLabelsStart = "   "
   override def fileLabelsSep   = "  "
   override def fileLabelsEnd   = " "
@@ -80,12 +80,12 @@ trait TextBoard {
 
   def mkUnlabeled(board: Board): String = {
     def squareToString(square: Square): String =
-      board.get(square).map(pieceToString).getOrElse(tileEmpty).mkString(
-        tileStart, "", tileEnd)
+      board.get(square).map(pieceToString).getOrElse(tileEmpty)
+        .mkString(tileStart, "", tileEnd)
 
     def rowToString(rank: Int): String =
-      Rules.rankSquares(rank).map(squareToString).mkString(
-        rankBegin, rankSep, rankEnd + "\n")
+      Rules.rankSquares(rank).map(squareToString)
+        .mkString(rankBegin, rankSep, rankEnd + "\n")
 
     Rules.rankRange.reverse.map(rowToString).mkString
   }
@@ -108,7 +108,9 @@ trait TextBoard {
       if (border.isEmpty) "" else border + "\n"
     }
 
-    boardWithRankLabels + bottomBorder + fileLabels.mkString(
-      fileLabelsStart, fileLabelsSep, fileLabelsEnd + "\n")
+    def fileLabelsLine: String =
+      fileLabels.mkString(fileLabelsStart, fileLabelsSep, fileLabelsEnd + "\n")
+
+    boardWithRankLabels + bottomBorder + fileLabelsLine
   }
 }
