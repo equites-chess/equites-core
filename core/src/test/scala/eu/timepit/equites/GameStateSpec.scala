@@ -83,7 +83,7 @@ class GameStateSpec extends Specification {
       states(7).moveNumber must_== 4
       states(7).halfmoveClock must_== 1
       states(7).availableCastlings must_==
-        Set(CastlingLong(White), CastlingShort(Black), CastlingLong(Black))
+        Set(CastlingShort(Black), CastlingLong(Black))
     }
   }
 }

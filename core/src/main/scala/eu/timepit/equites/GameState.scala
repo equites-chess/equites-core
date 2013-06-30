@@ -40,7 +40,7 @@ case class GameState(board: Board, lastAction: Option[Action],
 
   private[this] def updatedAvailableCastlings(action: Action): Set[Castling] = {
     def unavailableCastlings: Seq[Castling] = action match {
-      case castling: Castling => Seq(castling)
+      case castling: Castling => Rules.castlingsBy(castling.color)
       case capture: CaptureLike =>
         Rules.associatedCastlings(capture.placedPiece) ++
         Rules.associatedCastlings(capture.placedCaptured)
