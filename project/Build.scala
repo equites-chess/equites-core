@@ -13,5 +13,6 @@ object EquitesBuild extends Build {
   lazy val core = Project(id = "core", base = file("core"))
     .settings(coreSettings: _*)
     .settings(ScctPlugin.instrumentSettings: _*)
+    .settings(com.typesafe.sbt.SbtScalariform.defaultScalariformSettings: _*)
     .settings(org.scalastyle.sbt.ScalastylePlugin.Settings: _*)
 }
