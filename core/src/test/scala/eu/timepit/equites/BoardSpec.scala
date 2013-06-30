@@ -30,7 +30,7 @@ class BoardSpec extends Specification {
     }
 
     "return sequences of placed pieces" in {
-      board.getPlaced(Seq(Square(0, 0), Square(1, 1))) must_==
+      board.getPlaced(Seq(Square(0, 0), Square(1, 0), Square(1, 1))) must_==
         Seq(Placed(pl, Square(0, 0)), Placed(pd, Square(1, 1)))
     }
 
@@ -50,8 +50,8 @@ class BoardSpec extends Specification {
     }
 
     "return all placed pieces" in {
-      board.placedPieces.toSeq must_==
-        Seq(Placed(pl, Square(0, 0)), Placed(pd, Square(1, 1)))
+      board.placedPieces.toSet must_==
+        Set(Placed(pl, Square(0, 0)), Placed(pd, Square(1, 1)))
     }
 
     def checkAction(before: Board, after: Board, action: Action) = {
