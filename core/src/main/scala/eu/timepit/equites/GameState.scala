@@ -16,10 +16,20 @@
 
 package eu.timepit.equites
 
+import scalaz.std.stream
+
 object GameState {
   def init: GameState = GameState(board = Rules.startingBoard,
     lastAction = None, color = White, moveNumber = 1, halfmoveClock = 0,
     availableCastlings = Rules.allCastlings.toSet)
+
+  def unfold(actions: Seq[Action], first: GameState = init): Stream[GameState] =
+    first #:: stream.unfold((first, actions)) {
+      case (state, actions) => actions.headOption.map { action =>
+        val updated = state.updated(action)
+        (updated, (updated, actions.tail))
+      }
+    }
 }
 
 case class GameState(board: Board, lastAction: Option[Action],

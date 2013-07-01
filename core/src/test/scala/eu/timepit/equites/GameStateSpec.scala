@@ -17,7 +17,6 @@
 package eu.timepit.equites
 
 import org.specs2.mutable._
-import scalaz.std.stream
 
 import implicits.ActionImplicits._
 import util.PieceAbbr._
@@ -33,12 +32,7 @@ class GameStateSpec extends Specification {
         Capture(nd, Square('b', 8), Square('a', 6), bl),
         CastlingShort(White))
 
-    val states = GameState.init #:: stream.unfold((GameState.init, actions)) {
-      case (state, actions) => actions.headOption.map { action =>
-        val updated = state.updated(action)
-        (updated, (updated, actions.tail))
-      }
-    }
+    val states = GameState.unfold(actions)
 
     "record " + actions(0).toLongFigurine in {
       states(1).board must_== states(0).board.processAction(actions(0))
