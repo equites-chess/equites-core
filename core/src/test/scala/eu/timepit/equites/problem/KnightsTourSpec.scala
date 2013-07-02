@@ -30,6 +30,12 @@ class KnightsTourSpec extends Specification {
     }
   }
 
+  "staticTour" should {
+    "not visit all squares" in {
+      staticTour(Square(0, 0)).toSet must_!= squares
+    }
+  }
+
   "warnsdorffTour" should {
     alwaysVisitAllSquares(warnsdorffTour)
 
