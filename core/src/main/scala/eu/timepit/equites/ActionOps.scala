@@ -74,4 +74,12 @@ object ActionOps {
     case move: MoveLike => move.piece.isPawn
     case _ => false
   }
+
+  def enPassantTarget(move: Move): Option[Square] =
+    for {
+      pawn <- move.piece.maybePawn
+      if move.l1Length == 2
+      file = move.from.file
+      rank = Rules.enPassantTargetRankBy(pawn.color)
+    } yield Square(file, rank)
 }

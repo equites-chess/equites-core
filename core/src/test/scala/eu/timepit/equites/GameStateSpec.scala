@@ -19,6 +19,7 @@ package eu.timepit.equites
 import org.specs2.mutable._
 
 import implicits.ActionImplicits._
+import implicits.GameStateImplicits._
 import util.PieceAbbr._
 
 class GameStateSpec extends Specification {
@@ -34,6 +35,17 @@ class GameStateSpec extends Specification {
 
     val states = GameState.unfold(actions)
 
+    "record the starting position" in {
+      states(0).board must_== Rules.startingBoard
+      states(0).lastAction must beNone
+      states(0).color must_== White
+      states(0).moveNumber must_== 1
+      states(0).halfmoveClock must_== 0
+      states(0).availableCastlings must_== Rules.allCastlings.toSet
+      states(0).toFen must_==
+        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+    }
+
     "record " + actions(0).toLongFigurine in {
       states(1).board must_== states(0).board.processAction(actions(0))
       states(1).lastAction must beSome(actions(0))
@@ -41,6 +53,8 @@ class GameStateSpec extends Specification {
       states(1).moveNumber must_== 1
       states(1).halfmoveClock must_== 0
       states(1).availableCastlings must_== Rules.allCastlings.toSet
+      states(1).toFen must_==
+        "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1"
     }
 
     "record " + actions(1).toLongFigurine in {
@@ -50,6 +64,8 @@ class GameStateSpec extends Specification {
       states(2).moveNumber must_== 2
       states(2).halfmoveClock must_== 0
       states(2).availableCastlings must_== Rules.allCastlings.toSet
+      states(2).toFen must_==
+        "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2"
     }
 
     "record " + actions(2).toLongFigurine in {
@@ -59,6 +75,8 @@ class GameStateSpec extends Specification {
       states(3).moveNumber must_== 2
       states(3).halfmoveClock must_== 1
       states(3).availableCastlings must_== Rules.allCastlings.toSet
+      states(3).toFen must_==
+        "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
     }
 
     "record " + actions(5).toLongFigurine in {
@@ -68,6 +86,8 @@ class GameStateSpec extends Specification {
       states(6).moveNumber must_== 4
       states(6).halfmoveClock must_== 0
       states(6).availableCastlings must_== Rules.allCastlings.toSet
+      states(6).toFen must_==
+        "r1bqkbnr/pp2pppp/n2p4/2p5/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4"
     }
 
     "record " + actions(6).toLongFigurine in {
@@ -76,8 +96,9 @@ class GameStateSpec extends Specification {
       states(7).color must_== Black
       states(7).moveNumber must_== 4
       states(7).halfmoveClock must_== 1
-      states(7).availableCastlings must_==
-        Set(CastlingShort(Black), CastlingLong(Black))
+      states(7).availableCastlings must_== Rules.castlingsBy(Black).toSet
+      states(7).toFen must_==
+        "r1bqkbnr/pp2pppp/n2p4/2p5/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 4"
     }
   }
 }

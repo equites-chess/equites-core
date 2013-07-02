@@ -111,6 +111,9 @@ object Rules {
   def enPassantRankBy(color: Color): Int =
     rankBy(rankRange.start + 3, color.opposite)
 
+  def enPassantTargetRankBy(color: Color): Int =
+    rankBy(rankRange.start + 2, color)
+
   def rankBy(rank: Int, color: Color): Int =
     if (color == White) rank else rankRange.end - rank
 
