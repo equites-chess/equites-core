@@ -46,5 +46,8 @@ object GameStateImplicits {
       s"${self.board.toFenPlacement} ${color} ${castlings} ${enPassantTarget}" +
         s" ${self.halfmoveClock} ${self.moveNumber}"
     }
+
+    def moveNumberIndicator: String =
+      self.moveNumber.toString + (if (self.color == White) "." else "...")
   }
 }

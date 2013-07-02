@@ -35,6 +35,9 @@ class GameStateSpec extends Specification {
 
     val states = GameState.unfold(actions)
 
+    def moveIndicator(i: Int): String =
+      states(i).moveNumberIndicator + " " + actions(i).toLongFigurine
+
     "record the starting position" in {
       states(0).board must_== Rules.startingBoard
       states(0).lastAction must beNone
@@ -46,7 +49,7 @@ class GameStateSpec extends Specification {
         "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     }
 
-    "record " + actions(0).toLongFigurine in {
+    "record " + moveIndicator(0) in {
       states(1).board must_== states(0).board.processAction(actions(0))
       states(1).lastAction must beSome(actions(0))
       states(1).color must_== Black
@@ -57,7 +60,7 @@ class GameStateSpec extends Specification {
         "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1"
     }
 
-    "record " + actions(1).toLongFigurine in {
+    "record " + moveIndicator(1) in {
       states(2).board must_== states(1).board.processAction(actions(1))
       states(2).lastAction must beSome(actions(1))
       states(2).color must_== White
@@ -68,7 +71,7 @@ class GameStateSpec extends Specification {
         "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2"
     }
 
-    "record " + actions(2).toLongFigurine in {
+    "record " + moveIndicator(2) in {
       states(3).board must_== states(2).board.processAction(actions(2))
       states(3).lastAction must beSome(actions(2))
       states(3).color must_== Black
@@ -79,7 +82,7 @@ class GameStateSpec extends Specification {
         "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
     }
 
-    "record " + actions(5).toLongFigurine in {
+    "record " + moveIndicator(5) in {
       states(6).board must_== states(5).board.processAction(actions(5))
       states(6).lastAction must beSome(actions(5))
       states(6).color must_== White
@@ -90,7 +93,7 @@ class GameStateSpec extends Specification {
         "r1bqkbnr/pp2pppp/n2p4/2p5/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4"
     }
 
-    "record " + actions(6).toLongFigurine in {
+    "record " + moveIndicator(6) in {
       states(7).board must_== states(6).board.processAction(actions(6))
       states(7).lastAction must beSome(actions(6))
       states(7).color must_== Black
