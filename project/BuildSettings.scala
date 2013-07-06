@@ -15,7 +15,8 @@ object BuildSettings {
       "-deprecation",
       "-feature",
       "-unchecked",
-      "-Xfatal-warnings"
+      "-Xfatal-warnings",
+      "-Ywarn-all"
     ),
     scalacOptions in (Compile, doc) ++= Seq(
       "-diagrams"

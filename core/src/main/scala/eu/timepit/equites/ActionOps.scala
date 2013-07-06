@@ -80,10 +80,15 @@ object ActionOps {
     * given move allows it.
     */
   def enPassantTarget(move: Move): Option[Square] =
-    for {
-      pawn <- move.piece.maybePawn
-      if move.l1Length == 2
-      file = move.from.file
-      rank = Rules.enPassantTargetRankBy(pawn.color)
-    } yield Square(file, rank)
+    if (allowsEnPassant(move)) {
+      val file = move.from.file
+      val rank = Rules.enPassantTargetRankBy(move.piece.color)
+      Some(Square(file, rank))
+    } else {
+      None
+    }
+
+  /** Returns true if the given move allows an en passant capture. */
+  def allowsEnPassant(move: Move): Boolean =
+    move.piece.isPawn && move.l1Length == 2 && move.direction.isStraight
 }
