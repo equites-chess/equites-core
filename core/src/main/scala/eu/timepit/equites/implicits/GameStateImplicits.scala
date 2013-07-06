@@ -23,10 +23,7 @@ import SquareImplicits._
 object GameStateImplicits {
   implicit final class RichGameState(val self: GameState) extends AnyVal {
     def toFen: String = {
-      val color = self.color match {
-        case White => "w"
-        case Black => "b"
-      }
+      val color = self.color.toString.charAt(0).toLower
 
       val castlings = {
         val letters = self.availableCastlings.map {

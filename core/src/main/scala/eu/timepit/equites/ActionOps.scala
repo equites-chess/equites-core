@@ -69,12 +69,16 @@ object ActionOps {
     }
   }
 
+  /** Returns true if the given action is a capture or a pawn move. */
   def isCaptureOrPawnMove(action: Action): Boolean = action match {
     case _: CaptureLike => true
     case move: MoveLike => move.piece.isPawn
     case _ => false
   }
 
+  /** Returns the square where a pawn can be captured via an en passant if the
+    * given move allows it.
+    */
   def enPassantTarget(move: Move): Option[Square] =
     for {
       pawn <- move.piece.maybePawn
