@@ -16,4 +16,5 @@ object EquitesBuild extends Build {
     .settings(ourScalariformSettings: _*)
     .settings(ScctPlugin.instrumentSettings: _*)
     .settings(org.scalastyle.sbt.ScalastylePlugin.Settings: _*)
+    .settings(de.johoop.cpd4sbt.CopyPasteDetector.cpdSettings: _*)
 }
