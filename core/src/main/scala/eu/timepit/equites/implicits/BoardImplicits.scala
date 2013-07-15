@@ -29,7 +29,7 @@ object BoardImplicits {
         val rankStr = Rules.fileRange.map { file =>
           val square = Square(file, rank)
           val optPiece = self.get(square)
-          optPiece.map(_.toLetter).getOrElse("1")
+          optPiece.fold("1")(_.toLetter)
         }.mkString
         replaceOnes(rankStr)
       }.mkString("/")

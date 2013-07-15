@@ -36,7 +36,7 @@ object Uci {
     extends Request {
 
     override def toString: String = cmdName + " name " + name +
-      value.map(" value " + _).getOrElse("")
+      value.fold("")(" value " + _)
   }
 
   // TODO: register
@@ -65,7 +65,7 @@ object Uci {
     ponder: Option[util.CoordinateMove] = None) extends Response {
 
     override def toString: String = cmdName + " " + move.toAlgebraic +
-      ponder.map(" ponder " + _.toAlgebraic).getOrElse("")
+      ponder.fold("")(" ponder " + _.toAlgebraic)
   }
 
   // TODO: copyprotection

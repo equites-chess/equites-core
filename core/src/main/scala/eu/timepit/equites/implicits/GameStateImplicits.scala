@@ -36,9 +36,9 @@ object GameStateImplicits {
       }
 
       val enPassantTarget = self.lastAction.flatMap {
-        case move: Move => ActionOps.enPassantTarget(move).map(_.toAlgebraic)
+        case move: Move => ActionOps.enPassantTarget(move)
         case _          => None
-      }.getOrElse("-")
+      }.fold("-")(_.toAlgebraic)
 
       s"${self.board.toFenPlacement} ${color} ${castlings} ${enPassantTarget}" +
         s" ${self.halfmoveClock} ${self.moveNumber}"

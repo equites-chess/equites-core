@@ -80,7 +80,7 @@ trait TextBoard {
 
   def mkUnlabeled(board: Board): String = {
     def squareToString(square: Square): String =
-      board.get(square).map(pieceToString).getOrElse(tileEmpty)
+      board.get(square).fold(tileEmpty)(pieceToString)
         .mkString(tileStart, "", tileEnd)
 
     def rowToString(rank: Int): String =
