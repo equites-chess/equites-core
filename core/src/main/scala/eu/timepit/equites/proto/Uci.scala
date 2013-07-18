@@ -27,7 +27,7 @@ object Uci {
   case object Uci extends Request
 
   case class Debug(on: Boolean) extends Request {
-    override def toString: String = cmdName + " " + util.toStringOnOff(on)
+    override def cmdArgs: Seq[String] = Seq(util.toStringOnOff(on))
   }
 
   case object IsReady extends Request
@@ -35,8 +35,8 @@ object Uci {
   case class SetOption(name: String, value: Option[String] = None)
     extends Request {
 
-    override def toString: String = cmdName + " name " + name +
-      value.fold("")(" value " + _)
+    override def cmdArgs: Seq[String] =
+      Seq("name", name) ++ value.map("value " + _)
   }
 
   // TODO: register
@@ -64,8 +64,8 @@ object Uci {
   case class Bestmove(move: util.CoordinateMove,
     ponder: Option[util.CoordinateMove] = None) extends Response {
 
-    override def toString: String = cmdName + " " + move.toAlgebraic +
-      ponder.fold("")(" ponder " + _.toAlgebraic)
+    override def cmdArgs: Seq[String] =
+      Seq(move.toAlgebraic) ++ ponder.map("ponder " + _.toAlgebraic)
   }
 
   // TODO: copyprotection
