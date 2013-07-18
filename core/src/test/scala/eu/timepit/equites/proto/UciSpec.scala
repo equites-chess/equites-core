@@ -20,6 +20,7 @@ package proto
 import org.specs2.mutable._
 
 import Uci._
+import implicits.GameStateImplicits._
 import util.CoordinateMove
 import util.PieceAbbr._
 
@@ -56,6 +57,43 @@ class UciSpec extends Specification {
     }
   }
 
+  "Uci.UciNewGame" >> {
+    "toString should return 'ucinewgame'" in {
+      UciNewGame.toString must_== "ucinewgame"
+    }
+  }
+
+  "Uci.Position" >> {
+    "toString should return 'position startpos moves' if history is empty" in {
+      Position(Seq.empty).toString must_== "position startpos moves"
+    }
+    "toString should return no moves if history contains only the initial state" in {
+      Position(Seq(GameState.init)).toString must_==
+        "position " + GameState.init.toFen + " moves"
+    }
+    "toString should return one move if history contains one move" in {
+      val actions = Seq(Move(pl, Square('e', 2), Square('e', 4)))
+      val history = GameState.unfold(actions, GameState.init)
+
+      Position(history).toString must_==
+        "position " + GameState.init.toFen + " moves e2e4"
+    }
+    "toString should return two moves if history contains two moves" in {
+      val actions = Seq(Move(pl, Square('e', 2), Square('e', 4)),
+                        Move(nd, Square('g', 8), Square('f', 6)))
+      val history = GameState.unfold(actions, GameState.init)
+
+      Position(history).toString must_==
+        "position " + GameState.init.toFen + " moves e2e4 g8f6"
+    }
+  }
+
+  "Uci.Stop" >> {
+    "toString should return 'stop'" in {
+      Stop.toString must_== "stop"
+    }
+  }
+
   "Uci.Id" >> {
     "toString should return the expected result" in {
       Id("author", "John Doe").toString must_== "id author John Doe"
@@ -75,18 +113,6 @@ class UciSpec extends Specification {
       val move = CoordinateMove(Square('g', 1), Square('f', 3))
       val ponder = Some(CoordinateMove(Square('d', 8), Square('f', 6)))
       Bestmove(move, ponder).toString must_== "bestmove g1f3 ponder d8f6"
-    }
-  }
-
-  "Uci.UciNewGame" >> {
-    "toString should return 'ucinewgame'" in {
-      UciNewGame.toString must_== "ucinewgame"
-    }
-  }
-
-  "Uci.Stop" >> {
-    "toString should return 'stop'" in {
-      Stop.toString must_== "stop"
     }
   }
 }

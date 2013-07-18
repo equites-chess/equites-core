@@ -17,6 +17,9 @@
 package eu.timepit.equites
 package proto
 
+import implicits.ActionImplicits._
+import implicits.GameStateImplicits._
+
 object Uci {
   sealed trait Command extends util.TextCommand
   sealed trait Request extends Command
@@ -43,7 +46,15 @@ object Uci {
 
   case object UciNewGame extends Request
 
-  // TODO: position
+  case class Position(history: Seq[GameState]) extends Request {
+    override def cmdArgs: Seq[String] =
+      if (history.isEmpty) {
+        Seq("startpos", "moves")
+      } else {
+        val moves = history.tail.flatMap(_.lastAction).map(_.toCoordinate)
+        Seq(history.head.toFen, "moves") ++ moves
+      }
+  }
 
   // TODO: go
 
