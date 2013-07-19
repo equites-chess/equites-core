@@ -73,7 +73,7 @@ class UciSpec extends Specification {
     }
     "toString should return one move if history contains one move" in {
       val actions = Seq(Move(pl, Square('e', 2), Square('e', 4)))
-      val history = GameState.unfold(actions, GameState.init)
+      val history = GameState.unfold(actions)
 
       Position(history).toString must_==
         "position " + GameState.init.toFen + " moves e2e4"
@@ -81,7 +81,7 @@ class UciSpec extends Specification {
     "toString should return two moves if history contains two moves" in {
       val actions = Seq(Move(pl, Square('e', 2), Square('e', 4)),
                         Move(nd, Square('g', 8), Square('f', 6)))
-      val history = GameState.unfold(actions, GameState.init)
+      val history = GameState.unfold(actions)
 
       Position(history).toString must_==
         "position " + GameState.init.toFen + " moves e2e4 g8f6"
