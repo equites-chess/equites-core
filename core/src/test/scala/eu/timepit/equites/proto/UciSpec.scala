@@ -69,14 +69,14 @@ class UciSpec extends Specification {
     }
     "toString should return no moves if history contains only the initial state" in {
       Position(Seq(GameState.init)).toString must_==
-        "position " + GameState.init.toFen + " moves"
+        s"position ${GameState.init.toFen} moves"
     }
     "toString should return one move if history contains one move" in {
       val actions = Seq(Move(pl, Square('e', 2), Square('e', 4)))
       val history = GameState.unfold(actions)
 
       Position(history).toString must_==
-        "position " + GameState.init.toFen + " moves e2e4"
+        s"position ${GameState.init.toFen} moves e2e4"
     }
     "toString should return two moves if history contains two moves" in {
       val actions = Seq(Move(pl, Square('e', 2), Square('e', 4)),
@@ -84,7 +84,27 @@ class UciSpec extends Specification {
       val history = GameState.unfold(actions)
 
       Position(history).toString must_==
-        "position " + GameState.init.toFen + " moves e2e4 g8f6"
+        s"position ${GameState.init.toFen} moves e2e4 g8f6"
+    }
+  }
+
+  "Uci.Go" >> {
+    import Go._
+
+    "toString should return 'go ponder'" in {
+      Go(Ponder).toString must_== "go ponder"
+    }
+    "toString should return 'go depth ...'" in {
+      Go(Depth(5)).toString must_== "go depth 5"
+    }
+    "toString should return 'go movetime ...'" in {
+      Go(Movetime(100)).toString must_== "go movetime 100"
+    }
+    "toString should return 'go infinite'" in {
+      Go(Infinite).toString must_== "go infinite"
+    }
+    "toString should return the expected result on multiple arguments" in {
+      Go(Ponder, Infinite).toString must_== "go ponder infinite"
     }
   }
 

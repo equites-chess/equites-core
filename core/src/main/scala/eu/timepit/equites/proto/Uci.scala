@@ -56,7 +56,37 @@ object Uci {
       }
   }
 
-  // TODO: go
+  object Go {
+    sealed trait Argument extends Command
+
+    // TODO: searchmoves
+
+    case object Ponder extends Argument
+
+    // TODO: wtime
+
+    // TODO: btime
+
+    // TODO: winc
+
+    // TODO: binc
+
+    // TODO: movestogo
+
+    case class Depth(plies: Int) extends Argument
+
+    // TODO: nodes
+
+    // TODO: mate
+
+    case class Movetime(milliseconds: Int) extends Argument
+
+    case object Infinite extends Argument
+  }
+
+  case class Go(args: Go.Argument*) extends Request {
+    override def cmdArgs: Seq[String] = args.map(_.toString)
+  }
 
   case object Stop extends Request
 
