@@ -57,7 +57,7 @@ object Uci {
   }
 
   object Go {
-    sealed trait Argument extends Command
+    sealed trait Argument extends util.TextCommand
 
     // TODO: searchmoves
 
