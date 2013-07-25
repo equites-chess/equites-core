@@ -25,9 +25,11 @@ import implicits.GenericImplicits._
 import util.Rand._
 
 object KnightsTour {
+  type Tour = Stream[Square]
   type Selector = (Stream[Square], Set[Square]) => Option[Square]
+  type RandSelector = (Stream[Square], Set[Square]) => Rand[Option[Square]]
 
-  def genericTour(start: Square, selectNext: Selector): Stream[Square] =
+  def genericTour(start: Square, selectNext: Selector): Tour =
     start #:: stream.unfold((start, Set.empty[Square])) {
       case (from, visited) => {
         val nextOption = selectNext(unvisited(from, visited), visited)
@@ -35,18 +37,18 @@ object KnightsTour {
       }
     }
 
-  def staticTour(start: Square): Stream[Square] =
+  def staticTour(start: Square): Tour =
     genericTour(start, (squares, _) => squares.headOption)
 
   // impure
-  def randomTour(start: Square): Stream[Square] =
+  def randomTour(start: Square): Tour =
     genericTour(start, (squares, _) => pickRandomImpure(squares))
 
-  def warnsdorffTour(start: Square): Stream[Square] =
+  def warnsdorffTour(start: Square): Tour =
     genericTour(start, firstLeastDegreeSquare)
 
   // impure
-  def randomWarnsdorffTour(start: Square): Stream[Square] = {
+  def randomWarnsdorffTour(start: Square): Tour = {
     def tour = genericTour(start, evalFn2(randomLeastDegreeSquare))
     Iterator.continually(tour).find(_.length == Rules.allSquares.length).get
   }
@@ -60,11 +62,10 @@ object KnightsTour {
   def firstLeastDegreeSquare: Selector =
     (squares, visited) => leastDegreeSquares(squares, visited).headOption
 
-  def randomLeastDegreeSquare(squares: Stream[Square], visited: Set[Square])
-      : Rand[Option[Square]] =
-    pickRandom(leastDegreeSquares(squares, visited))
+  def randomLeastDegreeSquare: RandSelector =
+    (squares, visited) => pickRandom(leastDegreeSquares(squares, visited))
 
-  def isClosed(tour: Seq[Square]): Boolean =
+  def isClosed(tour: Tour): Boolean =
     tour.nonEmpty && Directions.knightLike.contains(tour.last - tour.head)
 
   private def unvisited(from: Square, visited: Set[Square]) =
