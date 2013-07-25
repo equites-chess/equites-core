@@ -50,7 +50,7 @@ object KnightsTour {
   // impure
   def randomWarnsdorffTour(start: Square): Tour = {
     def tour = genericTour(start, evalFn2(randomLeastDegreeSquare))
-    Iterator.continually(tour).find(_.length == Rules.allSquares.length).get
+    Iterator.continually(tour).find(isComplete).get
   }
 
   def leastDegreeSquares(squares: Stream[Square], visited: Set[Square])
@@ -65,9 +65,12 @@ object KnightsTour {
   def randomLeastDegreeSquare: RandSelector =
     (squares, visited) => pickRandom(leastDegreeSquares(squares, visited))
 
+  def isComplete(tour: Tour): Boolean =
+    tour.toSet == Rules.allSquaresSet
+
   def isClosed(tour: Tour): Boolean =
     tour.nonEmpty && Directions.knightLike.contains(tour.last - tour.head)
 
-  private def unvisited(from: Square, visited: Set[Square]) =
+  private def unvisited(from: Square, visited: Set[Square]): Stream[Square] =
     Rules.unvisitedSquares(Placed(Knight(White), from), visited)
 }

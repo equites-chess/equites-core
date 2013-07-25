@@ -22,29 +22,31 @@ import org.specs2.mutable._
 import KnightsTour._
 
 class KnightsTourSpec extends Specification {
-  val squares = Rules.allSquares.toSet
-
-  def alwaysVisitAllSquares(tourFn: Square => Stream[Square]) = {
+  def alwaysVisitAllSquares(tourFn: Square => Tour) = {
     "visit all squares from all starting squares" in {
-      squares.forall(sq => tourFn(sq).toSet == squares) must beTrue
+      Rules.allSquaresSet.forall(sq => isComplete(tourFn(sq))) must beTrue
+    }
+  }
+
+  def produceOneClosedTour(tourFn: Square => Tour) = {
+    "produce at least one closed tour" in {
+      Rules.allSquaresSet.exists(sq => isClosed(tourFn(sq))) must beTrue
     }
   }
 
   "staticTour" should {
-    "not visit all squares" in {
-      staticTour(Square(0, 0)).toSet must_!= squares
+    "not generate complete tours" in {
+      isComplete(staticTour(Square(0, 0))) must beFalse
     }
   }
 
   "warnsdorffTour" should {
     alwaysVisitAllSquares(warnsdorffTour)
-
-    "produce at least one closed tour" in {
-      squares.exists(sq => isClosed(warnsdorffTour(sq))) must beTrue
-    }
+    produceOneClosedTour(warnsdorffTour)
   }
 
   "randomWarnsdorffTour" should {
     alwaysVisitAllSquares(randomWarnsdorffTour)
+    produceOneClosedTour(randomWarnsdorffTour)
   }
 }

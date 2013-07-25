@@ -28,7 +28,9 @@ object Rules {
 
   def fileSquares(file: Int): Seq[Square] = rankRange.map(Square(file, _))
   def rankSquares(rank: Int): Seq[Square] = fileRange.map(Square(_, rank))
-  def allSquares: Seq[Square] = rankRange.flatMap(rankSquares)
+
+  val allSquaresSeq: Seq[Square] = rankRange.flatMap(rankSquares)
+  val allSquaresSet: Set[Square] = allSquaresSeq.toSet
 
   val kingFile  = 4
   val queenFile = 3

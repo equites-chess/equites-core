@@ -59,7 +59,7 @@ package object equites {
   }
 
   implicit val arbitrarySquare: Arbitrary[Square] =
-    Arbitrary(Gen.oneOf(Rules.allSquares))
+    Arbitrary(Gen.oneOf(Rules.allSquaresSeq))
 
   implicit val arbitraryVec: Arbitrary[Vec] = Arbitrary {
     for {
