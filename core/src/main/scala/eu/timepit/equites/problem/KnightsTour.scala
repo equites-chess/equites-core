@@ -37,6 +37,16 @@ object KnightsTour {
       }
     }
 
+  def allTours(start: Square): Stream[Tour] = {
+    def nextPaths(path: Tour): Stream[Tour] = {
+      val nextSquares = path.headOption.toStream.flatMap {
+        from => unvisited(from, path.tail.toSet)
+      }
+      nextSquares.map(_ #:: path)
+    }
+    util.backtracking(Stream(start), nextPaths, isComplete)
+  }
+
   def staticTour(start: Square): Tour =
     genericTour(start, (squares, _) => squares.headOption)
 

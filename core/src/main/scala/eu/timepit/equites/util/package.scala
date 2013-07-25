@@ -17,5 +17,11 @@
 package eu.timepit.equites
 
 package object util {
+  def backtracking[A](c: A, next: A => Stream[A], accept: A => Boolean)
+      : Stream[A] =
+    next(c).flatMap { pc =>
+      if (accept(pc)) Stream(pc) else backtracking(pc, next, accept)
+    }
+
   def toStringOnOff(bool: Boolean): String = if (bool) "on" else "off"
 }
