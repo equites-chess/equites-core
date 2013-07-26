@@ -15,13 +15,18 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package eu.timepit.equites
+package util
 
-package object util {
-  def backtracking[A](c: A)(next: A => Stream[A], accept: A => Boolean)
-      : Stream[A] =
-    next(c).flatMap { pc =>
-      if (accept(pc)) Stream(pc) else backtracking(pc)(next, accept)
+import org.specs2.ScalaCheck
+import org.specs2.mutable._
+
+class PackageSpec extends Specification {
+  "backtracking" should {
+    "generate all 'binary' strings of length three" in {
+      backtracking("")(
+          c => Stream("0", "1").map(c + _),
+          _.length == 3).toSet must_==
+        Set("000", "001", "010", "011", "100", "101", "110", "111")
     }
-
-  def toStringOnOff(bool: Boolean): String = if (bool) "on" else "off"
+  }
 }

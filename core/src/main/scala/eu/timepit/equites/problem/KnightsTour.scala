@@ -44,7 +44,7 @@ object KnightsTour {
       }
       nextSquares.map(_ #:: path)
     }
-    util.backtracking(Stream(start), nextPaths, isComplete)
+    util.backtracking(Stream(start))(nextPaths, isComplete)
   }
 
   def staticTour(start: Square): Tour =
