@@ -23,9 +23,15 @@ import org.specs2.mutable._
 class PackageSpec extends Specification {
   "backtracking" should {
     "generate all 'binary' strings of length three" in {
-      backtracking("")(c => Stream("0", "1").map(c + _), _.length == 3)
+      backtracking("")(c => Stream("0", "1").map(_ + c), _.length == 3)
           .toSet must_==
         Set("000", "001", "010", "011", "100", "101", "110", "111")
+    }
+
+    "generate all odd 'binary' strings of length three" in {
+      backtracking("1")(c => Stream("0", "1").map(_ + c), _.length == 3)
+          .toSet must_==
+        Set("001", "011", "101", "111")
     }
   }
 }
