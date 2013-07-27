@@ -17,7 +17,6 @@
 package eu.timepit.equites
 package util
 
-import org.specs2.ScalaCheck
 import org.specs2.mutable._
 
 class PackageSpec extends Specification {
