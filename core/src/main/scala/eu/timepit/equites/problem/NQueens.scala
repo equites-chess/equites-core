@@ -19,17 +19,18 @@ package problem
 
 object NQueens {
   def allBoards: Stream[Board] = {
-    def nextBoards(cand: (Board, Set[Square])): Stream[(Board, Set[Square])] = {
-      val (board, available) = cand
-      available.toStream.map { sq =>
+    case class Candidate(board: Board, available: Set[Square])
+
+    def nextBoards(c: Candidate): Stream[Candidate] = {
+      c.available.toStream.map { sq =>
         val placed = Placed(Queen(White), sq)
-        (board + placed, available -- Rules.possibleSquares(placed) - sq)
+        val reachable = Rules.possibleSquares(placed)
+        Candidate(c.board + placed, c.available -- reachable - sq)
       }
     }
 
-    val first = (Board.empty, Rules.allSquaresSet)
+    val first = Candidate(Board.empty, Rules.allSquaresSet)
     val n = math.sqrt(Rules.allSquaresSeq.length).toInt
-
-    util.backtracking(first)(nextBoards, cand => cand._1.size >= n).map(_._1)
+    util.backtracking(first)(nextBoards, _.board.size >= n).map(_.board)
   }
 }

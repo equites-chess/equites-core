@@ -38,16 +38,17 @@ object KnightsTour {
     }
 
   def allTours(start: Square): Stream[Tour] = {
-    def nextPaths(cand: (Tour, Set[Square])): Stream[(Tour, Set[Square])] = {
-      val (path, visited) = cand
-      val nextSquares = path.headOption.toStream.flatMap {
-        from => unvisited(from, visited)
+    case class Candidate(path: Tour, visited: Set[Square])
+
+    def nextPaths(c: Candidate): Stream[Candidate] = {
+      val nextSquares = c.path.headOption.toStream.flatMap {
+        from => unvisited(from, c.visited)
       }
-      nextSquares.map(sq => (sq #:: path, visited + sq))
+      nextSquares.map(sq => Candidate(sq #:: c.path, c.visited + sq))
     }
 
-    val first = (Stream(start), Set(start))
-    util.backtracking(first)(nextPaths, cand => isComplete(cand._1)).map(_._1)
+    val first = Candidate(Stream(start), Set(start))
+    util.backtracking(first)(nextPaths, c => isComplete(c.path)).map(_.path)
   }
 
   def staticTour(start: Square): Tour =
