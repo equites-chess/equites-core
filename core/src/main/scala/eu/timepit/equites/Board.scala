@@ -88,6 +88,12 @@ class Board(val self: Map[Square, Piece]) extends MapProxy[Square, Piece] {
   def reverseCastling(castling: Castling): Board =
     reverseMove(castling.kingMove).reverseMove(castling.rookMove)
 
-  def + (kv: (Square, Piece)): Board = Board(self + kv)
-  override def - (square: Square): Board = Board(self - square)
+  def + (kv: (Square, Piece)): Board =
+    Board(self + kv)
+
+  def + (placed: Placed[Piece]): Board =
+    Board(self + (placed.square -> placed.elem))
+
+  override def - (square: Square): Board =
+    Board(self - square)
 }
