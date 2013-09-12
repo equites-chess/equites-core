@@ -17,32 +17,41 @@
 package eu.timepit.equites
 package util
 
-object PieceAbbr {
-  def K: King   = King(White)
-  def Q: Queen  = Queen(White)
-  def R: Rook   = Rook(White)
-  def B: Bishop = Bishop(White)
-  def N: Knight = Knight(White)
-  def P: Pawn   = Pawn(White)
+trait AlgebraicAbbr {
+    def K: King   = King(White)
+    def Q: Queen  = Queen(White)
+    def R: Rook   = Rook(White)
+    def B: Bishop = Bishop(White)
+    def N: Knight = Knight(White)
+    def P: Pawn   = Pawn(White)
 
-  def k: King   = King(Black)
-  def q: Queen  = Queen(Black)
-  def r: Rook   = Rook(Black)
-  def b: Bishop = Bishop(Black)
-  def n: Knight = Knight(Black)
-  def p: Pawn   = Pawn(Black)
+    def k: King   = King(Black)
+    def q: Queen  = Queen(Black)
+    def r: Rook   = Rook(Black)
+    def b: Bishop = Bishop(Black)
+    def n: Knight = Knight(Black)
+    def p: Pawn   = Pawn(Black)
+}
 
-  def kl: King   = K
-  def ql: Queen  = Q
-  def rl: Rook   = R
-  def bl: Bishop = B
-  def nl: Knight = N
-  def pl: Pawn   = P
+trait WikiAbbr {
+    import PieceAbbr.Algebraic._
 
-  def kd: King   = k
-  def qd: Queen  = q
-  def rd: Rook   = r
-  def bd: Bishop = b
-  def nd: Knight = n
-  def pd: Pawn   = p
+    def kl: King   = K
+    def ql: Queen  = Q
+    def rl: Rook   = R
+    def bl: Bishop = B
+    def nl: Knight = N
+    def pl: Pawn   = P
+
+    def kd: King   = k
+    def qd: Queen  = q
+    def rd: Rook   = r
+    def bd: Bishop = b
+    def nd: Knight = n
+    def pd: Pawn   = p
+}
+
+object PieceAbbr extends AlgebraicAbbr with WikiAbbr {
+  object Algebraic extends AlgebraicAbbr
+  object Wiki extends WikiAbbr
 }

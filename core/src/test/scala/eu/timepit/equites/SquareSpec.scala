@@ -118,7 +118,7 @@ class SquareSpec extends Specification with ScalaCheck {
       (sq: Square) => sq.up.right.down.left must_== sq
     }
 
-    "be constructable with algebraic arguments" in {
+    "be constructible with algebraic arguments" in {
       Square(0, 0) must_== Square('a', 1)
       Square(7, 7) must_== Square('h', 8)
 

@@ -21,7 +21,7 @@ import org.specs2.mutable._
 import ActionOps._
 import util.BoardFactory._
 import util.CoordinateMove
-import util.PieceAbbr._
+import util.PieceAbbr.Wiki._
 
 class ActionOpsSpec extends Specification {
   "ActionOps" should {
@@ -36,62 +36,62 @@ class ActionOpsSpec extends Specification {
          R.N.-.-.K.-.-.-.<|
 
     "reconstruct a capture" in {
-      val move = Move(R, Square(0, 0), Square(0, 7))
-      val capture = Capture(move, b)
+      val move = Move(rl, Square(0, 0), Square(0, 7))
+      val capture = Capture(move, bd)
       moveAsCapture(board)(move) must beSome(capture)
     }
     "not reconstruct a move as capture" in {
-      val move = Move(R, Square(0, 0), Square(0, 6))
+      val move = Move(rl, Square(0, 0), Square(0, 6))
       moveAsCapture(board)(move) must beNone
     }
     "not reconstruct an invalid capture" in {
-      val move = Move(R, Square(0, 0), Square(1, 0))
+      val move = Move(rl, Square(0, 0), Square(1, 0))
       moveAsCapture(board)(move) must beNone
     }
 
     "reconstruct a white en passant" in {
-      val move = Move(P, Square(5, 4), Square(6, 5))
-      val enPassant = EnPassant(P, Square(5, 4), Square(6, 5), pd, Square(6, 4))
+      val move = Move(pl, Square(5, 4), Square(6, 5))
+      val enPassant = EnPassant(pl, Square(5, 4), Square(6, 5), pd, Square(6, 4))
       moveAsEnPassant(board)(move) must beSome(enPassant)
     }
     "reconstruct a black en passant" in {
-      val move = Move(Pawn(Black), Square(2, 3), Square(3, 2))
-      val enPassant = EnPassant(pd, Square(2, 3), Square(3, 2), P, Square(3, 3))
+      val move = Move(pd, Square(2, 3), Square(3, 2))
+      val enPassant = EnPassant(pd, Square(2, 3), Square(3, 2), pl, Square(3, 3))
       moveAsEnPassant(board)(move) must beSome(enPassant)
     }
     "not reconstruct a capture as en passant" in {
-      val capture = Capture(P, Square(7, 3), Square(6, 4), pd)
+      val capture = Capture(pl, Square(7, 3), Square(6, 4), pd)
       moveAsEnPassant(board)(capture) must beNone
     }
 
     "reconstruct a long castling" in {
-      val move = Move(K, Square(4, 0), Square(2, 0))
+      val move = Move(kl, Square(4, 0), Square(2, 0))
       moveAsCastling(board)(move) must beSome(CastlingLong(White))
     }
     "not reconstruct an invalid short castling" in {
-      val move = Move(K, Square(4, 0), Square(6, 0))
+      val move = Move(kl, Square(4, 0), Square(6, 0))
       moveAsCastling(board)(move) must beNone
     }
 
     "reconstruct a cm as move" in {
       cmAsAction(board)(CoordinateMove(Square(0, 0), Square(0, 6))) must
-        beSome(Move(R, Square(0, 0), Square(0, 6)))
+        beSome(Move(rl, Square(0, 0), Square(0, 6)))
     }
     "reconstruct a cm as promotion" in {
-      cmAsAction(board)(CoordinateMove(Square(4, 6), Square(4, 7), Some(Q))) must
-        beSome(Promotion(P, Square(4, 6), Square(4, 7), Q))
+      cmAsAction(board)(CoordinateMove(Square(4, 6), Square(4, 7), Some(ql))) must
+        beSome(Promotion(pl, Square(4, 6), Square(4, 7), ql))
     }
     "reconstruct a cm as capture" in {
       cmAsAction(board)(CoordinateMove(Square(0, 0), Square(0, 7))) must
-        beSome(Capture(R, Square(0, 0), Square(0, 7), b))
+        beSome(Capture(rl, Square(0, 0), Square(0, 7), bd))
     }
     "reconstruct a cm as capture and promotion" in {
-      cmAsAction(board)(CoordinateMove(Square(1, 6), Square(0, 7), Some(Q))) must
-        beSome(CaptureAndPromotion(P, Square(1, 6), Square(0, 7), b, Q))
+      cmAsAction(board)(CoordinateMove(Square(1, 6), Square(0, 7), Some(ql))) must
+        beSome(CaptureAndPromotion(pl, Square(1, 6), Square(0, 7), bd, ql))
     }
     "reconstruct a cm as en passant" in {
       cmAsAction(board)(CoordinateMove(Square(5, 4), Square(6, 5))) must
-        beSome(EnPassant(P, Square(5, 4), Square(6, 5), pd, Square(6, 4)))
+        beSome(EnPassant(pl, Square(5, 4), Square(6, 5), pd, Square(6, 4)))
     }
     "reconstruct a cm as long castling" in {
       cmAsAction(board)(CoordinateMove(Square(4, 0), Square(2, 0))) must
@@ -99,15 +99,15 @@ class ActionOpsSpec extends Specification {
     }
 
     "correctly perform isCaptureOrPawnMove for a non-pawn move" in {
-      val move = Move(Q, Square(5, 4), Square(6, 5))
+      val move = Move(ql, Square(5, 4), Square(6, 5))
       isCaptureOrPawnMove(move) must beFalse
     }
     "correctly perform isCaptureOrPawnMove for a pawn move" in {
-      val move = Move(P, Square(5, 4), Square(6, 5))
+      val move = Move(pl, Square(5, 4), Square(6, 5))
       isCaptureOrPawnMove(move) must beTrue
     }
     "correctly perform isCaptureOrPawnMove for a capture" in {
-      val capture = Capture(R, Square(0, 0), Square(0, 7), b)
+      val capture = Capture(rl, Square(0, 0), Square(0, 7), bd)
       isCaptureOrPawnMove(capture) must beTrue
     }
     "correctly perform isCaptureOrPawnMove for a castling" in {
