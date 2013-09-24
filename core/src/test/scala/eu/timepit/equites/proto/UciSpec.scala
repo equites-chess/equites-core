@@ -135,4 +135,18 @@ class UciSpec extends Specification {
       Bestmove(move, ponder).toString must_== "bestmove g1f3 ponder d8f6"
     }
   }
+
+  "Uci.UciOption" >> {
+    import UciOption._
+
+    "toString should return 'option ... type button'" in {
+      UciOption("Ponder", Check(true)).toString must_==
+        "option name Ponder type check default true"
+    }
+
+    "toString should return 'option ... type button'" in {
+      UciOption("Clear Hash", Button).toString must_==
+        "option name Clear Hash type button"
+    }
+  }
 }

@@ -115,5 +115,28 @@ object Uci {
 
   // TODO: info
 
-  // TODO: option
+  object UciOption {
+    sealed trait Type extends util.TextCommand
+
+    case class Check(default: Boolean) extends Type {
+      override def cmdArgs: Seq[String] = Seq("default", default.toString)
+    }
+
+    // TODO: spin
+
+    // TODO: combo
+
+    case object Button extends Type
+
+    // TODO: string
+  }
+
+  case class UciOption(name: String, optionType: UciOption.Type)
+    extends Response {
+
+    override def cmdName: String = "option"
+
+    override def cmdArgs: Seq[String] =
+      Seq("name", name, "type", optionType.toString)
+  }
 }
