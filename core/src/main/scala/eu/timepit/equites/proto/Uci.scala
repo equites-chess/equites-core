@@ -122,20 +122,27 @@ object Uci {
       override def cmdArgs: Seq[String] = Seq("default", default.toString)
     }
 
-    // TODO: spin
+    case class Spin(default: Int, min: Int, max: Int) extends Type {
+      override def cmdArgs: Seq[String] =
+        Seq("default", default.toString,
+            "min", min.toString,
+            "max", max.toString)
+    }
 
     // TODO: combo
 
     case object Button extends Type
 
-    // TODO: string
+    case class StringType(default: String) extends Type {
+      override def cmdName: String = "string"
+      override def cmdArgs: Seq[String] = Seq("default", default)
+    }
   }
 
   case class UciOption(name: String, optionType: UciOption.Type)
     extends Response {
 
     override def cmdName: String = "option"
-
     override def cmdArgs: Seq[String] =
       Seq("name", name, "type", optionType.toString)
   }
