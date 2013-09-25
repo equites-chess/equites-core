@@ -72,13 +72,13 @@ class UciParsersSpec extends Specification with ParserMatchers with ScalaCheck {
 
   "uciok" should {
     "succeed on valid input" in {
-      uciok should succeedOn("uciok")
+      uciok should succeedOn("uciok").withResult(UciOk)
     }
   }
 
   "readyok" should {
     "succeed on valid input" in {
-      readyok should succeedOn("readyok")
+      readyok should succeedOn("readyok").withResult(ReadyOk)
     }
   }
 
@@ -98,6 +98,15 @@ class UciParsersSpec extends Specification with ParserMatchers with ScalaCheck {
       val ponder = Some(CoordinateMove(Square('d', 8), Square('f', 6)))
       bestmove should succeedOn("bestmove g1f3 ponder d8f6")
         .withResult(Bestmove(move, ponder))
+    }
+  }
+
+  "response" should {
+    "succeed on id" in {
+      response should succeedOn("id author John Doe")
+      response should succeedOn("uciok")
+      response should succeedOn("readyok")
+      response should succeedOn("bestmove e2e4")
     }
   }
 }

@@ -68,5 +68,7 @@ object UciParsers extends RegexParsers {
       case move ~ ponder => Bestmove(move, ponder)
     }
 
+  def response: Parser[Response] = id | uciok | readyok | bestmove
+
   private def oneOf[A](as: Seq[A]): Parser[String] = as.mkString("|").r
 }
