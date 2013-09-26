@@ -103,5 +103,15 @@ class GameStateSpec extends Specification {
       states(7).toFen must_==
         "r1bqkbnr/pp2pppp/n2p4/2p5/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 4"
     }
+
+    "handle valid coordinate moves" in {
+      val move = Move(pl, Square('e', 2), Square('e', 4))
+      val cm = util.CoordinateMove(Square('e', 2), Square('e', 4))
+      GameState.init.updated(cm) must beSome(GameState.init.updated(move))
+    }
+    "handle invalid coordinate moves" in {
+      val cm = util.CoordinateMove(Square('a', 3), Square('a', 4))
+      GameState.init.updated(cm) must beNone
+    }
   }
 }
