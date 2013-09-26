@@ -82,6 +82,7 @@ object UciParsers extends RegexParsers {
   def optionType: Parser[UciOption.Type] = "type" ~>
     ( optionTypeCheck  |
       optionTypeSpin   |
+      optionTypeCombo  |
       optionTypeButton |
       optionTypeString )
 
@@ -93,13 +94,18 @@ object UciParsers extends RegexParsers {
       case default ~ min ~ max => UciOption.Spin(default, min, max)
     }
 
+  def optionTypeCombo: Parser[UciOption.Combo] =
+    "combo" ~> "default" ~> symbol ~ ("var" ~> symbol).* ^^ {
+      case default ~ values => UciOption.Combo(default, values)
+    }
+
   def optionTypeButton: Parser[UciOption.Button.type] =
     "button" ^^^ UciOption.Button
 
   def optionTypeString: Parser[UciOption.StringType] =
     "string" ~> "default" ~> string ^^ (UciOption.StringType(_))
 
-  def response: Parser[Response] = id | uciok | readyok | bestmove
+  def response: Parser[Response] = id | uciok | readyok | bestmove | option
 
   private def oneOf[A](as: Seq[A]): Parser[String] = as.mkString("|").r
 }

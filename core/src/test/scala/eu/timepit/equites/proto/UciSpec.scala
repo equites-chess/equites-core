@@ -143,17 +143,18 @@ class UciSpec extends Specification {
       UciOption("Ponder", Check(true)).toString must_==
         "option name Ponder type check default true"
     }
-
     "toString should return 'option ... type spin ...'" in {
       UciOption("Hash", Spin(32, 4, 4096)).toString must_==
         "option name Hash type spin default 32 min 4 max 4096"
     }
-
+    "toString should return 'option ... type combo ...'" in {
+      UciOption("Style", Combo("Normal", Seq("Solid", "Normal", "Risky"))).toString must_==
+      "option name Style type combo default Normal var Solid var Normal var Risky"
+    }
     "toString should return 'option ... type button'" in {
       UciOption("Clear Hash", Button).toString must_==
         "option name Clear Hash type button"
     }
-
     "toString should return 'option ... type string ...'" in {
       UciOption("Book File", StringType("book.bin")).toString must_==
         "option name Book File type string default book.bin"

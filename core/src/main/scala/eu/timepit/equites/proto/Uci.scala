@@ -129,7 +129,10 @@ object Uci {
             "max", max.toString)
     }
 
-    // TODO: combo
+    case class Combo(default: String, values: Seq[String]) extends Type {
+      override def cmdArgs: Seq[String] =
+        Seq("default", default) ++ values.map("var " + _)
+    }
 
     case object Button extends Type
 

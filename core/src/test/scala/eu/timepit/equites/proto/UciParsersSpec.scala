@@ -113,6 +113,11 @@ class UciParsersSpec extends Specification with ParserMatchers with ScalaCheck {
       option should succeedOn(str)
         .withResult(UciOption("Hash", Spin(32, 4, 4096)))
     }
+    "suceed on type combo" in {
+      val str = "option name Style type combo default Normal var Solid var Normal var Risky"
+      option should succeedOn(str)
+        .withResult(UciOption("Style", Combo("Normal", Seq("Solid", "Normal", "Risky"))))
+    }
     "succeed on type button" in {
       option should succeedOn("option name Clear Hash type button")
         .withResult(UciOption("Clear Hash", Button))
@@ -130,6 +135,7 @@ class UciParsersSpec extends Specification with ParserMatchers with ScalaCheck {
       response should succeedOn("uciok")
       response should succeedOn("readyok")
       response should succeedOn("bestmove e2e4")
+      response should succeedOn("option name Clear Hash type button")
     }
   }
 }
