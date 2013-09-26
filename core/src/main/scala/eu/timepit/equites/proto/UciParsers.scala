@@ -24,6 +24,8 @@ import util.Notation._
 
 /**
  * Parsers for the Universal Chess Interface (UCI).
+ *
+ * @see [[http://www.shredderchess.com/chess-info/features/uci-universal-chess-interface.html UCI Protocol]]
  */
 object UciParsers extends RegexParsers {
   def symbol: Parser[String] = """\p{Alnum}+""".r
