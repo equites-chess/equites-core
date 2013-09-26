@@ -106,7 +106,7 @@ class GameStateSpec extends Specification {
 
     "handle valid coordinate moves" in {
       val move = Move(pl, Square('e', 2), Square('e', 4))
-      val cm = util.CoordinateMove(Square('e', 2), Square('e', 4))
+      val cm = util.CoordinateMove(move)
       GameState.init.updated(cm) must beSome(GameState.init.updated(move))
     }
     "handle invalid coordinate moves" in {
