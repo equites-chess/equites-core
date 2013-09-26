@@ -101,6 +101,29 @@ class UciParsersSpec extends Specification with ParserMatchers with ScalaCheck {
     }
   }
 
+  "option" should {
+    import UciOption._
+
+    "succeed on type check" in {
+      option should succeedOn("option name Ponder type check default true")
+        .withResult(UciOption("Ponder", Check(true)))
+    }
+    "suceed on type spin" in {
+      val str = "option name Hash type spin default 32 min 4 max 4096"
+      option should succeedOn(str)
+        .withResult(UciOption("Hash", Spin(32, 4, 4096)))
+    }
+    "succeed on type button" in {
+      option should succeedOn("option name Clear Hash type button")
+        .withResult(UciOption("Clear Hash", Button))
+    }
+    "succeed on type string" in {
+      val str = "option name Book File type string default book.bin"
+      option should succeedOn(str)
+        .withResult(UciOption("Book File", StringType("book.bin")))
+    }
+  }
+
   "response" should {
     "succeed on id" in {
       response should succeedOn("id author John Doe")

@@ -30,11 +30,15 @@ object UciParsers extends RegexParsers {
 
   def string: Parser[String] = """.*""".r
 
+  def boolean: Parser[Boolean] = "true" ^^^ true | "false" ^^^ false
+
+  def int: Parser[Int] = """-?\d+""".r ^^ (_.toInt)
+
   val algebraicFile: Parser[Char] = oneOf(algebraicFileRange) ^^ (_.charAt(0))
 
   val algebraicRank: Parser[Int] = oneOf(algebraicRankRange) ^^ (_.toInt)
 
-  def square: Parser[Square] = algebraicFile ~ algebraicRank  ^^ {
+  def square: Parser[Square] = algebraicFile ~ algebraicRank ^^ {
     case file ~ rank => Square(file, rank)
   }
 
@@ -67,6 +71,33 @@ object UciParsers extends RegexParsers {
     "bestmove" ~> coordinateMove ~ ("ponder" ~> coordinateMove).? ^^ {
       case move ~ ponder => Bestmove(move, ponder)
     }
+
+  def option: Parser[UciOption] =
+    "option" ~> "name" ~> optionName ~ optionType ^^ {
+      case name ~ optType => UciOption(name, optType)
+    }
+
+  def optionName: Parser[String] = """.*(?=\s+type)""".r
+
+  def optionType: Parser[UciOption.Type] = "type" ~>
+    ( optionTypeCheck  |
+      optionTypeSpin   |
+      optionTypeButton |
+      optionTypeString )
+
+  def optionTypeCheck: Parser[UciOption.Check] =
+    "check" ~> "default" ~> boolean ^^ (UciOption.Check(_))
+
+  def optionTypeSpin: Parser[UciOption.Spin] =
+    "spin" ~> "default" ~> int ~ ("min" ~> int) ~ ("max" ~> int) ^^ {
+      case default ~ min ~ max => UciOption.Spin(default, min, max)
+    }
+
+  def optionTypeButton: Parser[UciOption.Button.type] =
+    "button" ^^^ UciOption.Button
+
+  def optionTypeString: Parser[UciOption.StringType] =
+    "string" ~> "default" ~> string ^^ (UciOption.StringType(_))
 
   def response: Parser[Response] = id | uciok | readyok | bestmove
 
