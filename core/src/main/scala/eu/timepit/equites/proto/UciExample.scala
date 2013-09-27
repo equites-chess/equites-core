@@ -15,24 +15,23 @@ object UciExample extends App {
   val tb = new text.TextBoard with text.FigurineRepr
   var history = Vector(GameState.init)
 
-  def go(): Unit = {
+  def requestNextMove(): Unit = {
     write(Uci.Position(history))
     write(Uci.Go(Uci.Go.Movetime(100)))
   }
 
   def reactOn(cmd: Uci.Response) = cmd match {
-    case Uci.ReadyOk => go()
+    case Uci.ReadyOk => requestNextMove()
     case Uci.Bestmove(cm, _) => {
       val last = history.last
-      val action = ActionOps.cmAsAction(last.board)(cm)
-
       println(tb.mkLabeled(last.board))
 
-      if (action.isEmpty) {
-        write(Uci.Quit)
+      val newState = last.updated(cm)
+      if (newState.nonEmpty) {
+        history = history :+ newState.get
+        requestNextMove()
       } else {
-        history = history :+ last.updated(action.get)
-        go()
+        write(Uci.Quit)
       }
     }
     case _ => ()

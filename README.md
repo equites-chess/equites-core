@@ -4,9 +4,12 @@
 
 Equites is a bunch of chess related code mostly implemented in Scala.
 Currently there is nothing usable from a chess player's point of view.
-But it can animate random [Knight's tours][Equites]! :-)
+But it can animate random [Knight's tours][Equites] :-) and [talk with
+chess engines][UciExample] via the [Universal Chess Interface (UCI)][UCI].
 
 [Equites]: http://equites.timepit.eu/
+[UCI]: http://en.wikipedia.org/wiki/Universal_Chess_Interface
+[UciExample]: https://github.com/fthomas/equites/blob/master/core/src/main/scala/eu/timepit/equites/proto/UciExample.scala
 
 ## Download
 
