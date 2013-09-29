@@ -29,6 +29,9 @@ class UciSpec extends Specification {
     "toString should return 'uci'" in {
       Uci.Uci.toString must_== "uci"
     }
+    "toUtf8 should only consist of ASCII characters" in {
+      Uci.Uci.toUtf8 must_== Uci.Uci.toString.getBytes("ASCII")
+    }
   }
 
   "Uci.Debug" >> {
