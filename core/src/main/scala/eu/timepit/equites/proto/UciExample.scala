@@ -7,7 +7,7 @@ object UciExample extends App {
   val procOut = scala.io.Source.fromInputStream(proc.getInputStream)
 
   def write(cmd: Uci.Command): Unit = {
-    procIn.write(cmd.toUtf8)
+    procIn.write(util.toUtf8(cmd))
     procIn.write("\n".getBytes)
     procIn.flush
   }

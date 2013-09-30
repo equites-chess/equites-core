@@ -16,6 +16,8 @@
 
 package eu.timepit.equites
 
+import java.nio.charset.Charset
+
 package object util {
   def backtracking[C](firstCandidate: C)
       (nextCandidates: C => Stream[C], accept: C => Boolean): Stream[C] = {
@@ -26,4 +28,7 @@ package object util {
   }
 
   def toStringOnOff(bool: Boolean): String = if (bool) "on" else "off"
+
+  def toUtf8[A](a: A): Array[Byte] = a.toString.getBytes(utf8Charset)
+  private val utf8Charset: Charset = Charset.forName("UTF-8")
 }

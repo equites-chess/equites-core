@@ -33,4 +33,17 @@ class PackageSpec extends Specification {
         Set("001", "011", "101", "111")
     }
   }
+
+  "toUtf8" should {
+    "return byte sequences of right length" in {
+      toUtf8(0x0000.toChar).length must_== 1
+      toUtf8(0x007F.toChar).length must_== 1
+
+      toUtf8(0x0080.toChar).length must_== 2
+      toUtf8(0x07FF.toChar).length must_== 2
+
+      toUtf8(0x0800.toChar).length must_== 3
+      toUtf8(0xFFFF.toChar).length must_== 3
+    }
+  }
 }

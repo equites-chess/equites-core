@@ -17,13 +17,8 @@
 package eu.timepit.equites
 package util
 
-import java.nio.charset.Charset
-
 trait TextCommand extends Product {
   def cmdName: String = productPrefix.toLowerCase
   def cmdArgs: Seq[String] = productIterator.toSeq.map(_.toString)
   override def toString: String = cmdName + cmdArgs.map(" " + _).mkString
-
-  def toUtf8: Array[Byte] = toString.getBytes(utf8Charset)
-  private val utf8Charset: Charset = Charset.forName("UTF-8")
 }
