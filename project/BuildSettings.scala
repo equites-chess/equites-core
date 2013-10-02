@@ -32,7 +32,7 @@ object BuildSettings {
     libraryDependencies ++= Seq(
       "org.scalacheck" %% "scalacheck" % "1.10.1" % "test",
       "org.scalaz" %% "scalaz-scalacheck-binding" % "7.0.3" % "test",
-      "org.specs2" %% "specs2" % "2.2" % "test"
+      "org.specs2" %% "specs2" % "2.2.2" % "test"
     ),
 
     initialCommands := """
