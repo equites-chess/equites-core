@@ -44,4 +44,7 @@ object BuildSettings {
       import eu.timepit.equites._
       """
   )
+
+  lazy val webSettings = basicSettings ++ seq(
+  )
 }

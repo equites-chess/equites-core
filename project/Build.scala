@@ -20,6 +20,7 @@ object EquitesBuild extends Build {
     .settings(de.johoop.cpd4sbt.CopyPasteDetector.cpdSettings: _*)
 
   lazy val web = Project(id = "equites-web", base = file("web"))
+    .settings(webSettings: _*)
     .settings(play.Project.playScalaSettings: _*)
     .dependsOn(core)
 }
