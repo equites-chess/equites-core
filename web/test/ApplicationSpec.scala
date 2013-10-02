@@ -19,7 +19,8 @@ class ApplicationSpec extends Specification {
         route(FakeRequest(GET, "/boum")) must beNone        
       }
     }
-    
+
+    /*
     "render the index page" in {
       running(FakeApplication()) {
         val home = route(FakeRequest(GET, "/")).get
@@ -29,5 +30,6 @@ class ApplicationSpec extends Specification {
         contentAsString(home) must contain ("Your new application is ready.")
       }
     }
+    */
   }
 }
