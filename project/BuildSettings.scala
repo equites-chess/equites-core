@@ -2,6 +2,8 @@ import sbt._
 import Keys._
 
 object BuildSettings {
+  import Dependencies._
+
   lazy val basicSettings = seq(
     version := "0.0",
     homepage := Some(url("http://equites.timepit.eu")),
@@ -22,7 +24,7 @@ object BuildSettings {
       "-diagrams"
     ),
     scalacOptions in (Compile, doc) <++=
-      (baseDirectory in LocalProject("root"), scmInfo).map { (bd, scm) =>
+      (baseDirectory in LocalProject("equites-root"), scmInfo).map { (bd, scm) =>
         Seq("-sourcepath", bd.getAbsolutePath,
             "-doc-source-url", scm.get.browseUrl + "/tree/master€{FILE_PATH}.scala")
       }
@@ -30,9 +32,10 @@ object BuildSettings {
 
   lazy val coreSettings = basicSettings ++ seq(
     libraryDependencies ++= Seq(
-      "org.scalacheck" %% "scalacheck" % "1.10.1" % "test",
-      "org.scalaz" %% "scalaz-scalacheck-binding" % "7.0.3" % "test",
-      "org.specs2" %% "specs2" % "2.2.2" % "test"
+      scalazCore,
+      scalacheck % "test",
+      scalazScalaCheckBinding % "test",
+      specs2 % "test"
     ),
 
     initialCommands := """
