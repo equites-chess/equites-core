@@ -1,1 +1,1 @@
-addSbtPlugin("com.github.theon" %% "xsbt-coveralls-plugin" % "0.0.4")
+//addSbtPlugin("com.github.theon" %% "xsbt-coveralls-plugin" % "0.0.4")

@@ -8,13 +8,13 @@ object EquitesBuild extends Build {
   lazy val root = Project(id = "root", base = file("."))
     .aggregate(core)
     .settings(basicSettings: _*)
-    .settings(ScctPlugin.mergeReportSettings: _*)
-    .settings(com.github.theon.coveralls.CoverallsPlugin.coverallsSettings: _*)
+    .settings(scct.ScctPlugin.mergeReportSettings: _*)
+    //.settings(com.github.theon.coveralls.CoverallsPlugin.coverallsSettings: _*)
 
   lazy val core = Project(id = "core", base = file("core"))
     .settings(coreSettings: _*)
     .settings(ourScalariformSettings: _*)
-    .settings(ScctPlugin.instrumentSettings: _*)
+    .settings(scct.ScctPlugin.instrumentSettings: _*)
     .settings(org.scalastyle.sbt.ScalastylePlugin.Settings: _*)
     .settings(de.johoop.cpd4sbt.CopyPasteDetector.cpdSettings: _*)
 }
