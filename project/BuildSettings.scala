@@ -41,6 +41,9 @@ object BuildSettings {
     scct.ScctPlugin.mergeReportSettings ++
     commonSettings
 
+  lazy val cliSettings =
+    commonSettings
+
   lazy val coreSettings =
     de.johoop.cpd4sbt.CopyPasteDetector.cpdSettings ++
     org.scalastyle.sbt.ScalastylePlugin.Settings ++

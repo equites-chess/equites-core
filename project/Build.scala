@@ -8,6 +8,10 @@ object EquitesBuild extends Build {
     .settings(rootSettings: _*)
     .aggregate(core, web)
 
+  lazy val cli = Project(id = "equites-cli", base = file("cli"))
+    .settings(cliSettings: _*)
+    .dependsOn(core)
+
   lazy val core = Project(id = "equites-core", base = file("core"))
     .settings(coreSettings: _*)
 

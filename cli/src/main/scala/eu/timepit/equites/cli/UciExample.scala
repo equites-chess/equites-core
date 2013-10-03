@@ -1,8 +1,10 @@
 package eu.timepit.equites
-package proto
+package cli
+
+import proto._
 
 object UciExample extends App {
-  val proc = new java.lang.ProcessBuilder("gnuchess", "-u").start
+  val proc = (new java.lang.ProcessBuilder("gnuchess", "-u")).start
   val procIn = proc.getOutputStream
   val procOut = scala.io.Source.fromInputStream(proc.getInputStream)
 

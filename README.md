@@ -9,7 +9,7 @@ chess engines][UciExample] via the [Universal Chess Interface (UCI)][UCI].
 
 [Equites]: http://equites.timepit.eu/
 [UCI]: http://en.wikipedia.org/wiki/Universal_Chess_Interface
-[UciExample]: https://github.com/fthomas/equites/blob/master/core/src/main/scala/eu/timepit/equites/proto/UciExample.scala
+[UciExample]: https://github.com/fthomas/equites/blob/master/cli/src/main/scala/eu/timepit/equites/cli/UciExample.scala
 
 ## Download
 
