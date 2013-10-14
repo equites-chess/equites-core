@@ -41,18 +41,18 @@ object PieceImplicits {
     }
 
     def toFigurine: String = self match {
-      case King(White)   => "\u2654" // ♔
-      case Queen(White)  => "\u2655" // ♕
-      case Rook(White)   => "\u2656" // ♖
-      case Bishop(White) => "\u2657" // ♗
-      case Knight(White) => "\u2658" // ♘
-      case Pawn(White)   => "\u2659" // ♙
-      case King(Black)   => "\u265A" // ♚
-      case Queen(Black)  => "\u265B" // ♛
-      case Rook(Black)   => "\u265C" // ♜
-      case Bishop(Black) => "\u265D" // ♝
-      case Knight(Black) => "\u265E" // ♞
-      case Pawn(Black)   => "\u265F" // ♟
+      case King(White)   => "♔"
+      case Queen(White)  => "♕"
+      case Rook(White)   => "♖"
+      case Bishop(White) => "♗"
+      case Knight(White) => "♘"
+      case Pawn(White)   => "♙"
+      case King(Black)   => "♚"
+      case Queen(Black)  => "♛"
+      case Rook(Black)   => "♜"
+      case Bishop(Black) => "♝"
+      case Knight(Black) => "♞"
+      case Pawn(Black)   => "♟"
     }
 
     def toWikiLetters: String = toLowerCaseLetter + (self.color match {

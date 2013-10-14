@@ -20,7 +20,7 @@ import org.specs2.mutable._
 
 import implicits.ActionImplicits._
 import implicits.GameStateImplicits._
-import util.PieceAbbr._
+import util.PieceAbbr.Wiki._
 
 class GameStateSpec extends Specification {
   "GameState" should {

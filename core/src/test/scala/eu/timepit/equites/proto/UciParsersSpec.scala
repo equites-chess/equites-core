@@ -24,7 +24,7 @@ import org.specs2.matcher.ParserMatchers
 import Uci._
 import implicits.SquareImplicits._
 import util.CoordinateMove
-import util.PieceAbbr._
+import util.PieceAbbr.Wiki._
 
 class UciParsersSpec extends Specification with ParserMatchers with ScalaCheck {
   val parsers = UciParsers
@@ -89,7 +89,7 @@ class UciParsersSpec extends Specification with ParserMatchers with ScalaCheck {
         .withResult(Bestmove(move))
     }
     "succeed on a promotion" in {
-      val move = CoordinateMove(Square('e', 7), Square('e', 8), Some(Q))
+      val move = CoordinateMove(Square('e', 7), Square('e', 8), Some(ql))
       bestmove should succeedOn("bestmove e7e8q")
         .withResult(Bestmove(move))
     }

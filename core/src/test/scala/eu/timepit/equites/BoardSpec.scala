@@ -18,7 +18,7 @@ package eu.timepit.equites
 
 import org.specs2.mutable._
 
-import util.PieceAbbr._
+import util.PieceAbbr.Wiki._
 
 class BoardSpec extends Specification {
   "Board" should {

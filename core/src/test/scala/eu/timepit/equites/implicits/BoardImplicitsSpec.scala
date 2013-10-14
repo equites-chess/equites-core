@@ -20,7 +20,7 @@ package implicits
 import org.specs2.mutable._
 
 import BoardImplicits._
-import util.PieceAbbr._
+import util.PieceAbbr.Wiki._
 
 class BoardImplicitsSpec extends Specification {
   "RichBoard" should {

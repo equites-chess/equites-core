@@ -22,7 +22,7 @@ import org.specs2.mutable._
 import Uci._
 import implicits.GameStateImplicits._
 import util.CoordinateMove
-import util.PieceAbbr._
+import util.PieceAbbr.Wiki._
 
 class UciSpec extends Specification {
   "Uci.Uci" >> {
@@ -126,7 +126,7 @@ class UciSpec extends Specification {
       Bestmove(move).toString must_== "bestmove e2e4"
     }
     "toString should return the expected result on a promotion" in {
-      val move = CoordinateMove(Square('e', 7), Square('e', 8), Some(Q))
+      val move = CoordinateMove(Square('e', 7), Square('e', 8), Some(ql))
       Bestmove(move).toString must_== "bestmove e7e8q"
     }
     "toString should return the expected result on a move and a ponder" in {

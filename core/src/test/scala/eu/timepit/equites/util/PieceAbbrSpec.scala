@@ -20,7 +20,9 @@ package util
 import org.specs2.mutable._
 
 import implicits.PieceImplicits._
-import PieceAbbr._
+import PieceAbbr.Algebraic._
+import PieceAbbr.Figurine._
+import PieceAbbr.Wiki._
 
 class PieceAbbrSpec extends Specification with Tables {
   "PieceAbbr" should {
@@ -37,8 +39,26 @@ class PieceAbbrSpec extends Specification with Tables {
       r      ! "r"      |
       b      ! "b"      |
       n      ! "n"      |
-      PieceAbbr.p ! "p" |> {
+      PieceAbbr.Algebraic.p ! "p" |> {
         (piece, string) => piece.toLetter must_== string
+      }
+    }
+
+    "contain all figurine abbreviations" in {
+      "abbr" | "figurine" |
+      ♔      ! "♔"        |
+      ♕      ! "♕"        |
+      ♖      ! "♖"        |
+      ♗      ! "♗"        |
+      ♘      ! "♘"        |
+      ♙      ! "♙"        |
+      ♚      ! "♚"        |
+      ♛      ! "♛"        |
+      ♜      ! "♜"        |
+      ♝      ! "♝"        |
+      ♞      ! "♞"        |
+      ♟      ! "♟"        |> {
+        (piece, string) => piece.toFigurine must_== string
       }
     }
 

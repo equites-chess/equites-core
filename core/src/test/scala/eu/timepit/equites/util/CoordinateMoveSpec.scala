@@ -19,7 +19,7 @@ package util
 
 import org.specs2.mutable._
 
-import util.PieceAbbr._
+import util.PieceAbbr.Wiki._
 
 class CoordinateMoveSpec extends Specification {
   "CoordinateMove" should {

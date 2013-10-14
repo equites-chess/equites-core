@@ -19,6 +19,9 @@ package util
 
 import scala.collection.immutable.NumericRange
 
+import PieceAbbr.Algebraic._
+import PieceAbbr.Figurine._
+
 object Notation {
   val algebraicFileRange: NumericRange[Char] =
     (Rules.fileRange.start + 'a').toChar to
@@ -35,34 +38,34 @@ object Notation {
   def numericRankRange: Range = algebraicRankRange
 
   def pieceFromLetter(c: Char): Option[Piece] = c match {
-    case 'K' => Some(King(White))
-    case 'Q' => Some(Queen(White))
-    case 'R' => Some(Rook(White))
-    case 'B' => Some(Bishop(White))
-    case 'N' => Some(Knight(White))
-    case 'P' => Some(Pawn(White))
-    case 'k' => Some(King(Black))
-    case 'q' => Some(Queen(Black))
-    case 'r' => Some(Rook(Black))
-    case 'b' => Some(Bishop(Black))
-    case 'n' => Some(Knight(Black))
-    case 'p' => Some(Pawn(Black))
+    case 'K' => Some(K)
+    case 'Q' => Some(Q)
+    case 'R' => Some(R)
+    case 'B' => Some(B)
+    case 'N' => Some(N)
+    case 'P' => Some(P)
+    case 'k' => Some(k)
+    case 'q' => Some(q)
+    case 'r' => Some(r)
+    case 'b' => Some(b)
+    case 'n' => Some(n)
+    case 'p' => Some(p)
     case _   => None
   }
 
   def pieceFromFigurine(c: Char): Option[Piece] = c match {
-    case '\u2654' => Some(King(White))
-    case '\u2655' => Some(Queen(White))
-    case '\u2656' => Some(Rook(White))
-    case '\u2657' => Some(Bishop(White))
-    case '\u2658' => Some(Knight(White))
-    case '\u2659' => Some(Pawn(White))
-    case '\u265A' => Some(King(Black))
-    case '\u265B' => Some(Queen(Black))
-    case '\u265C' => Some(Rook(Black))
-    case '\u265D' => Some(Bishop(Black))
-    case '\u265E' => Some(Knight(Black))
-    case '\u265F' => Some(Pawn(Black))
+    case '♔' => Some(♔)
+    case '♕' => Some(♕)
+    case '♖' => Some(♖)
+    case '♗' => Some(♗)
+    case '♘' => Some(♘)
+    case '♙' => Some(♙)
+    case '♚' => Some(♚)
+    case '♛' => Some(♛)
+    case '♜' => Some(♜)
+    case '♝' => Some(♝)
+    case '♞' => Some(♞)
+    case '♟' => Some(♟)
     case _ => None
   }
 

@@ -20,7 +20,9 @@ package implicits
 import org.specs2.mutable._
 
 import PieceImplicits._
-import util.PieceAbbr._
+import util.PieceAbbr.Algebraic._
+import util.PieceAbbr.Figurine._
+import util.PieceAbbr.Wiki._
 
 class PieceImplicitsSpec extends Specification {
   "RichPiece" should {
@@ -55,33 +57,33 @@ class PieceImplicitsSpec extends Specification {
     }
 
     "correctly perform toFigurine" in {
-      K.toFigurine must_== "♔"
-      k.toFigurine must_== "♚"
-      Q.toFigurine must_== "♕"
-      q.toFigurine must_== "♛"
-      R.toFigurine must_== "♖"
-      r.toFigurine must_== "♜"
-      B.toFigurine must_== "♗"
-      b.toFigurine must_== "♝"
-      N.toFigurine must_== "♘"
-      n.toFigurine must_== "♞"
-      P.toFigurine must_== "♙"
-      Pawn(Black).toFigurine must_== "♟"
+      ♔.toFigurine must_== "♔"
+      ♚.toFigurine must_== "♚"
+      ♕.toFigurine must_== "♕"
+      ♛.toFigurine must_== "♛"
+      ♖.toFigurine must_== "♖"
+      ♜.toFigurine must_== "♜"
+      ♗.toFigurine must_== "♗"
+      ♝.toFigurine must_== "♝"
+      ♘.toFigurine must_== "♘"
+      ♞.toFigurine must_== "♞"
+      ♙.toFigurine must_== "♙"
+      ♟.toFigurine must_== "♟"
     }
 
     "correctly perform toWikiLetters" in {
-      K.toWikiLetters must_== "kl"
-      k.toWikiLetters must_== "kd"
-      Q.toWikiLetters must_== "ql"
-      q.toWikiLetters must_== "qd"
-      R.toWikiLetters must_== "rl"
-      r.toWikiLetters must_== "rd"
-      B.toWikiLetters must_== "bl"
-      b.toWikiLetters must_== "bd"
-      N.toWikiLetters must_== "nl"
-      n.toWikiLetters must_== "nd"
-      P.toWikiLetters must_== "pl"
-      Pawn(Black).toWikiLetters must_== "pd"
+      kl.toWikiLetters must_== "kl"
+      kd.toWikiLetters must_== "kd"
+      ql.toWikiLetters must_== "ql"
+      qd.toWikiLetters must_== "qd"
+      rl.toWikiLetters must_== "rl"
+      rd.toWikiLetters must_== "rd"
+      bl.toWikiLetters must_== "bl"
+      bd.toWikiLetters must_== "bd"
+      nl.toWikiLetters must_== "nl"
+      nd.toWikiLetters must_== "nd"
+      pl.toWikiLetters must_== "pl"
+      pd.toWikiLetters must_== "pd"
     }
 
     "correctly perform toNumeric" in {
