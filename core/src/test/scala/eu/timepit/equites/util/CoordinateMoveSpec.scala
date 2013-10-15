@@ -20,17 +20,17 @@ package util
 import org.specs2.mutable._
 
 import util.PieceAbbr.Wiki._
+import util.SquareAbbr._
 
 class CoordinateMoveSpec extends Specification {
   "CoordinateMove" should {
     "apply promotions" in {
-      val promotion = Promotion(pl, Square(0, 6), Square(0, 7), rl)
-      CoordinateMove(promotion) must_==
-        CoordinateMove(Square(0, 6), Square(0, 7), Some(rl))
+      val promotion = Promotion(pl, a7, a8, rl)
+      CoordinateMove(promotion) must_== CoordinateMove(a7, a8, Some(rl))
     }
     "apply moves" in {
-      val move = Move(ql, Square(0, 0), Square(3, 3))
-      CoordinateMove(move) must_== CoordinateMove(Square(0, 0), Square(3, 3))
+      val move = Move(ql, a1, d4)
+      CoordinateMove(move) must_== CoordinateMove(a1, d4)
     }
     "apply castlings" in {
       val castling = CastlingLong(White)
