@@ -5,7 +5,7 @@ import com.typesafe.sbt.SbtScalariform._
 import scalariform.formatter.preferences._
 
 object ScalariformSettings {
-  lazy val ourScalariformSettings = defaultScalariformSettings ++ seq(
+  lazy val ourScalariformSettings = defaultScalariformSettings ++ Seq(
     ScalariformKeys.preferences := FormattingPreferences()
       .setPreference(AlignParameters, true)
       .setPreference(AlignSingleLineCaseStatements, true)

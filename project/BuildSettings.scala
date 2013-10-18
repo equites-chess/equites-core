@@ -5,7 +5,7 @@ object BuildSettings {
   import Dependencies._
   import ScalariformSettings._
 
-  lazy val commonSettings = seq(
+  lazy val commonSettings = Seq(
     version := "0.0.0",
 
     homepage := Some(url("http://equites.timepit.eu")),
@@ -50,7 +50,7 @@ object BuildSettings {
     scct.ScctPlugin.instrumentSettings ++
     ourScalariformSettings ++
     commonSettings ++
-    seq(
+    Seq(
       libraryDependencies ++= Seq(
         scalazCore,
         scalacheck % "test",
