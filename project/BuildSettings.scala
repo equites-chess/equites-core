@@ -6,7 +6,7 @@ object BuildSettings {
   import ScalariformSettings._
 
   lazy val commonSettings = seq(
-    version := "0.0",
+    version := "0.0.0",
 
     homepage := Some(url("http://equites.timepit.eu")),
 

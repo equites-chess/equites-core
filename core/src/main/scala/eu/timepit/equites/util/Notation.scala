@@ -77,7 +77,7 @@ object Notation {
       (rankStr, rank) <- placement.split("/").reverse.zipWithIndex
       (pieceChar, file) <- expandDigits(rankStr).zipWithIndex
       piece <- pieceFromLetter(pieceChar)
-    } yield (Square(file, rank), piece)
+    } yield Square(file, rank) -> piece
 
     Board(mapping: _*)
   }
