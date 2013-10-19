@@ -42,7 +42,12 @@ object BuildSettings {
     commonSettings
 
   lazy val cliSettings =
-    commonSettings
+    commonSettings ++
+    Seq(
+      libraryDependencies ++= Seq(
+        scalazStream
+      )
+    )
 
   lazy val coreSettings =
     de.johoop.cpd4sbt.CopyPasteDetector.cpdSettings ++
