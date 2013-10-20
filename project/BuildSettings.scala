@@ -52,7 +52,10 @@ object BuildSettings {
   lazy val rootSettings =
     play.Project.playScalaSettings ++
     //scct.ScctPlugin.mergeReportSettings ++
-    commonSettings
+    commonSettings ++
+    Seq(
+      publishArtifact := false
+    )
 
   lazy val cliSettings =
     commonSettings ++
