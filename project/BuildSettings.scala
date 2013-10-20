@@ -36,13 +36,27 @@ object BuildSettings {
     autoAPIMappings := true
   )
 
+  lazy val childSettings =
+    de.johoop.cpd4sbt.CopyPasteDetector.cpdSettings ++
+    org.scalastyle.sbt.ScalastylePlugin.Settings ++
+    //scct.ScctPlugin.instrumentSettings ++
+    ourScalariformSettings ++
+    Seq(
+      initialCommands := """
+        import scalaz._
+        import Scalaz._
+        import eu.timepit.equites._
+      """
+    )
+
   lazy val rootSettings =
     play.Project.playScalaSettings ++
-    scct.ScctPlugin.mergeReportSettings ++
+    //scct.ScctPlugin.mergeReportSettings ++
     commonSettings
 
   lazy val cliSettings =
     commonSettings ++
+    childSettings ++
     Seq(
       libraryDependencies ++= Seq(
         scalazStream
@@ -50,27 +64,19 @@ object BuildSettings {
     )
 
   lazy val coreSettings =
-    de.johoop.cpd4sbt.CopyPasteDetector.cpdSettings ++
-    org.scalastyle.sbt.ScalastylePlugin.Settings ++
-    scct.ScctPlugin.instrumentSettings ++
-    ourScalariformSettings ++
     commonSettings ++
+    childSettings ++
     Seq(
       libraryDependencies ++= Seq(
         scalazCore,
         scalacheck % "test",
         scalazScalacheckBinding % "test",
         specs2 % "test"
-      ),
-
-      initialCommands := """
-        import scalaz._
-        import Scalaz._
-        import eu.timepit.equites._
-        """
+      )
     )
 
   lazy val webSettings =
     play.Project.playScalaSettings ++
-    commonSettings
+    commonSettings ++
+    childSettings
 }
