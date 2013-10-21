@@ -21,10 +21,12 @@ import org.specs2.ScalaCheck
 import org.specs2.mutable._
 import org.specs2.matcher.ParserMatchers
 
-import Uci._
 import implicits.SquareImplicits._
 import util.CoordinateMove
 import util.PieceAbbr.Wiki._
+import Uci._
+
+import ArbitraryInstances._
 
 class UciParsersSpec extends Specification with ParserMatchers with ScalaCheck {
   val parsers = UciParsers

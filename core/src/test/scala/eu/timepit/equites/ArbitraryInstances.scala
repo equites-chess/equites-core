@@ -14,12 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package eu.timepit
+package eu.timepit.equites
 
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary.arbitrary
 
-package object equites {
+object ArbitraryInstances {
   implicit val arbitraryBoard: Arbitrary[Board] = Arbitrary {
     val genSquarePiece = for {
       square <- arbitrary[Square]

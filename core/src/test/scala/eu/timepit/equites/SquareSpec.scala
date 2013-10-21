@@ -22,6 +22,8 @@ import scalaz.scalacheck.ScalazProperties._
 
 import Square._
 
+import ArbitraryInstances._
+
 class SquareSpec extends Specification with ScalaCheck {
   "Square companion" should {
     "correctly perform validCoordinates" in {

@@ -19,6 +19,8 @@ package eu.timepit.equites
 import org.specs2.ScalaCheck
 import org.specs2.mutable._
 
+import ArbitraryInstances._
+
 class PieceSpec extends Specification with ScalaCheck {
   "Piece" should {
     "be convertible to one of its subtypes" in check {

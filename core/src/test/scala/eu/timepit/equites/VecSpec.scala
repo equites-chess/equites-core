@@ -21,6 +21,8 @@ import org.specs2.matcher.DataTables
 import org.specs2.mutable._
 import scalaz.scalacheck.ScalazProperties._
 
+import ArbitraryInstances._
+
 class VecSpec extends Specification with DataTables with ScalaCheck {
   "Vec" should {
     "satisfy the Equal laws" in check(equal.laws[Vec])

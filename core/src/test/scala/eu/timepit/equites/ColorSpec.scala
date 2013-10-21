@@ -20,6 +20,8 @@ import org.specs2.ScalaCheck
 import org.specs2.mutable._
 import scalaz.scalacheck.ScalazProperties._
 
+import ArbitraryInstances._
+
 class ColorSpec extends Specification with ScalaCheck {
   "Color" should {
     "satisfy the Equal laws" in check(equal.laws[Color])

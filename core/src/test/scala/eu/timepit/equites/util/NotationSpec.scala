@@ -24,6 +24,8 @@ import implicits.BoardImplicits._
 import implicits.PieceImplicits._
 import Notation._
 
+import ArbitraryInstances._
+
 class NotationSpec extends Specification with ScalaCheck {
   "pieceFromLetter" should {
     "be the inverse of RichPiece.toLetter" in check {
