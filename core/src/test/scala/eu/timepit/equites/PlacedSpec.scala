@@ -17,10 +17,12 @@
 package eu.timepit.equites
 
 import org.specs2._
+import scalaz.scalacheck.ScalazProperties._
 
 import ArbitraryInstances._
 
-class PlacedSpec extends Specification with ScalazLaws { def is =
+class PlacedSpec extends Specification with ScalaCheck { def is =
   "Placed should" ^
-    satisfyAllLaws1[Placed]
+    "satisfy all Equal laws" ! check(equal.laws[Placed[Piece]]) ^
+    "satisfy all Functor laws" ! check(functor.laws[Placed])
 }
