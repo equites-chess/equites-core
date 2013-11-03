@@ -17,49 +17,54 @@
 package eu.timepit.equites
 package util
 
+import org.scalacheck.Arbitrary
 import org.specs2.ScalaCheck
 import org.specs2.matcher.DataTables
-import org.specs2.mutable._
+import org.specs2._
+import scala.reflect._
 
 import Math._
 
-class MathSpec extends Specification with DataTables with ScalaCheck {
-  "gcd" should {
-    "be commutative" in check {
-      (a: Int, b: Int) => {
-        val (x, y) = (a.abs, b.abs)
-        gcd(x, y) must_== gcd(y, x)
-      }
-    }
-  }
-
-  "isEven and isOdd" should {
-    "be correct for positive numbers" in {
+class MathSpec extends Specification with DataTables with ScalaCheck { def is =
+  "gcd should" ^
+    "be symmetric in its arguments" ! check {
+      (a: Int, b: Int) => (a >= 0 && b >= 0) ==> (gcd(a, b) must_== gcd(b, a))
+    } ^
+  p ^
+  "isEven and isOdd should" ^
+    "yield correct results for some positive numbers" ! {
       "a" | "isEven" |
       0   ! true     |
       1   ! false    |
       2   ! true     |
       3   ! false    |
       4   ! true     |> {
-        (a, r) => isEven(a) must_== r
+        (a, r) => (isEven(a) must_== r) and (isOdd(a) must_!= r)
       }
+    } ^
+    br ^
+    workWith[Byte]  ^ p ^
+    workWith[Short] ^ p ^
+    workWith[Int]   ^ p ^
+    workWith[Long]  ^ p ^
+    workWith[BigInt]
+
+  def workWith[A : Arbitrary : Integral : ClassTag] =
+    s"work with ${classTag[A]}" ^
+      eitherEvenOrOdd[A] ^
+      beEvenFunctions[A]
+
+  def eitherEvenOrOdd[A : Arbitrary : Integral] =
+    "yield different results for the same input" ! check {
+      (a: A) => isEven(a) must_!= isOdd(a)
     }
 
-    def mustBeSymmetric[A, B](f: A => B)(implicit A: Integral[A]) =
-      (a: A) => f(a) must_== f(A.negate(a))
+  def beEvenFunctions[A : Arbitrary : Integral] =
+    "be even functions" ! check {
+      (a: A) => beEvenFunction(isEven[A]).apply(a) and
+                beEvenFunction(isOdd[A]).apply(a)
+    }
 
-    def isSymmetric[A : Integral](a: A) =
-      mustBeSymmetric(isEven[A]).apply(a) and
-      mustBeSymmetric( isOdd[A]).apply(a)
-
-    def isEvenOrOdd[A : Integral](a: A) =
-      isEven(a) must_!= isOdd(a)
-
-    def laws[A : Integral](a: A) =
-      isSymmetric(a) and isEvenOrOdd(a)
-
-    "work with Int" in check { laws(_: Int) }
-    "work with Long" in check { laws(_: Long) }
-    "work with BigInt" in check { laws(_: BigInt) }
-  }
+  def beEvenFunction[A, B](f: A => B)(implicit A: Numeric[A]) =
+    (a: A) => f(a) must_== f(A.negate(a))
 }
