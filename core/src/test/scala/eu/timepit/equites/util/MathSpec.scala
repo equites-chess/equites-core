@@ -39,20 +39,21 @@ class MathSpec extends Specification with DataTables with ScalaCheck { def is =
       2   ! true     |
       3   ! false    |
       4   ! true     |> {
-        (a, r) => (isEven(a) must_== r) and (isOdd(a) must_!= r)
+        (a, r) => (isEven(a) must_== r) and (isOdd(a) must_== !r)
       }
     } ^
     br ^
-    workWith[Byte]  ^ p ^
-    workWith[Short] ^ p ^
-    workWith[Int]   ^ p ^
-    workWith[Long]  ^ p ^
+    workWith[Byte] ^
+    workWith[Short] ^
+    workWith[Int] ^
+    workWith[Long] ^
     workWith[BigInt]
 
   def workWith[A : Arbitrary : Integral : ClassTag] =
     s"work with ${classTag[A]}" ^
       eitherEvenOrOdd[A] ^
-      beEvenFunctions[A]
+      beEvenFunctions[A] ^
+      p
 
   def eitherEvenOrOdd[A : Arbitrary : Integral] =
     "yield different results for the same input" ! check {
