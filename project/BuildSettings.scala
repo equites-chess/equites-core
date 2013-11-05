@@ -59,12 +59,7 @@ object BuildSettings {
 
   lazy val cliSettings =
     commonSettings ++
-    childSettings ++
-    Seq(
-      libraryDependencies ++= Seq(
-        scalazStream
-      )
-    )
+    childSettings
 
   lazy val coreSettings =
     commonSettings ++
@@ -72,6 +67,7 @@ object BuildSettings {
     Seq(
       libraryDependencies ++= Seq(
         scalazCore,
+        scalazStream,
         scalacheck % "test",
         scalazScalacheckBinding % "test",
         specs2 % "test"

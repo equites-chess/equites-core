@@ -21,8 +21,12 @@ import scalaz.scalacheck.ScalazProperties._
 
 import ArbitraryInstances._
 
-class PlacedSpec extends Specification with ScalaCheck { def is =
-  "Placed should" ^
-    "satisfy the Equal laws" ! check(equal.laws[Placed[Piece]]) ^
-    "satisfy the Functor laws" ! check(functor.laws[Placed])
+class PlacedSpec extends Specification with ScalaCheck { def is = s2"""
+  Placed should
+    satisfy the Equal laws   $e1
+    satisfy the Functor laws $e2
+  """
+
+  def e1 = check(equal.laws[Placed[Piece]])
+  def e2 = check(functor.laws[Placed])
 }

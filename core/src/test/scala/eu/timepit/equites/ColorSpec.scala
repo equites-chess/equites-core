@@ -21,15 +21,18 @@ import scalaz.scalacheck.ScalazProperties._
 
 import ArbitraryInstances._
 
-class ColorSpec extends Specification with ScalaCheck { def is =
-  "Color should" ^
-    "satisfy the Equal laws" ! check(equal.laws[Color]) ^
-    "satisfy the Order laws" ! check(order.laws[Color]) ^
-  p ^
-  "Black should be the opposite of White" ! {
-    White.opposite must_== Black
-  } ^
-  "White should be the opposite of Black" ! {
-    Black.opposite must_== White
-  }
+class ColorSpec extends Specification with ScalaCheck { def is = s2"""
+  Color should
+    satisfy the Equal laws $e1
+    satisfy the Order laws $e2
+
+  Black should be the opposite of White $e3
+  White should be the opposite of Black $e4
+  """
+
+  def e1 = check(equal.laws[Color])
+  def e2 = check(order.laws[Color])
+
+  def e3 = White.opposite must_== Black
+  def e4 = Black.opposite must_== White
 }
