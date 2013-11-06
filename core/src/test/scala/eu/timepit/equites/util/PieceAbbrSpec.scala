@@ -17,67 +17,72 @@
 package eu.timepit.equites
 package util
 
-import org.specs2.mutable._
+import org.specs2._
 
 import implicits.PieceImplicits._
 import PieceAbbr.Algebraic._
 import PieceAbbr.Figurine._
 import PieceAbbr.Wiki._
 
-class PieceAbbrSpec extends Specification with Tables {
-  "PieceAbbr" should {
-    "contain all single letter abbreviations" in {
-      "abbr" | "letter" |
-      K      ! "K"      |
-      Q      ! "Q"      |
-      R      ! "R"      |
-      B      ! "B"      |
-      N      ! "N"      |
-      P      ! "P"      |
-      k      ! "k"      |
-      q      ! "q"      |
-      r      ! "r"      |
-      b      ! "b"      |
-      n      ! "n"      |
-      PieceAbbr.Algebraic.p ! "p" |> {
-        (piece, string) => piece.toLetter must_== string
-      }
+class PieceAbbrSpec extends Specification with matcher.DataTables { def is = s2"""
+  PieceAbbr.Algebraic should
+    contain abbreviations for all pieces $e1
+
+  PieceAbbr.Figurine should
+    contain abbreviations for all pieces $e2
+
+  PieceAbbr.Wiki should
+    contain abbreviations for all pieces $e3
+  """
+
+  def e1 =
+    "abbr" | "letter" |
+    K      ! "K"      |
+    Q      ! "Q"      |
+    R      ! "R"      |
+    B      ! "B"      |
+    N      ! "N"      |
+    P      ! "P"      |
+    k      ! "k"      |
+    q      ! "q"      |
+    r      ! "r"      |
+    b      ! "b"      |
+    n      ! "n"      |
+    PieceAbbr.Algebraic.p ! "p" |> {
+      (piece, string) => piece.toLetter must_== string
     }
 
-    "contain all figurine abbreviations" in {
-      "abbr" | "figurine" |
-      ♔      ! "♔"        |
-      ♕      ! "♕"        |
-      ♖      ! "♖"        |
-      ♗      ! "♗"        |
-      ♘      ! "♘"        |
-      ♙      ! "♙"        |
-      ♚      ! "♚"        |
-      ♛      ! "♛"        |
-      ♜      ! "♜"        |
-      ♝      ! "♝"        |
-      ♞      ! "♞"        |
-      ♟      ! "♟"        |> {
-        (piece, string) => piece.toFigurine must_== string
-      }
+  def e2 =
+    "abbr" | "figurine" |
+    ♔      ! "♔"        |
+    ♕      ! "♕"        |
+    ♖      ! "♖"        |
+    ♗      ! "♗"        |
+    ♘      ! "♘"        |
+    ♙      ! "♙"        |
+    ♚      ! "♚"        |
+    ♛      ! "♛"        |
+    ♜      ! "♜"        |
+    ♝      ! "♝"        |
+    ♞      ! "♞"        |
+    ♟      ! "♟"        |> {
+      (piece, string) => piece.toFigurine must_== string
     }
 
-    "contain all MediaWiki abbreviations" in {
-      "abbr" | "letters" |
-      kl     ! "kl"      |
-      ql     ! "ql"      |
-      rl     ! "rl"      |
-      bl     ! "bl"      |
-      nl     ! "nl"      |
-      pl     ! "pl"      |
-      kd     ! "kd"      |
-      qd     ! "qd"      |
-      rd     ! "rd"      |
-      bd     ! "bd"      |
-      nd     ! "nd"      |
-      pd     ! "pd"      |> {
-        (piece, string) => piece.toWikiLetters must_== string
-      }
+  def e3 =
+    "abbr" | "letters" |
+    kl     ! "kl"      |
+    ql     ! "ql"      |
+    rl     ! "rl"      |
+    bl     ! "bl"      |
+    nl     ! "nl"      |
+    pl     ! "pl"      |
+    kd     ! "kd"      |
+    qd     ! "qd"      |
+    rd     ! "rd"      |
+    bd     ! "bd"      |
+    nd     ! "nd"      |
+    pd     ! "pd"      |> {
+      (piece, string) => piece.toWikiLetters must_== string
     }
-  }
 }
