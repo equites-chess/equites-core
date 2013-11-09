@@ -16,6 +16,8 @@
 
 package eu.timepit.equites
 
+import scalaz.syntax.std.boolean._
+
 object ActionOps {
   def drawAsMove(board: Board)(draw: DrawLike): Option[Move] =
     board.get(draw.from).map(piece => Move(piece, draw.from, draw.to))
@@ -80,12 +82,10 @@ object ActionOps {
     * given move allows it.
     */
   def enPassantTarget(move: Move): Option[Square] =
-    if (allowsEnPassant(move)) {
+    allowsEnPassant(move).option {
       val file = move.from.file
       val rank = Rules.enPassantTargetRankBy(move.piece.color)
-      Some(Square(file, rank))
-    } else {
-      None
+      Square(file, rank)
     }
 
   /** Returns true if the given move allows an en passant capture. */
