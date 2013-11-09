@@ -55,6 +55,8 @@ case class Vec(file: Int, rank: Int) extends PlayerPerspective[Vec] {
 
   def max: Int = math.max(file, rank)
   def min: Int = math.min(file, rank)
+
+  /** Returns the sum of this Vec's components. */
   def sum: Int = file + rank
 
   /** Returns the [[http://en.wikipedia.org/wiki/Manhattan_distance L<sub>1</sub> length]]
