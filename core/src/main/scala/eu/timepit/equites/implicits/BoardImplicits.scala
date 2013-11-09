@@ -21,6 +21,10 @@ import implicits.PieceImplicits._
 
 object BoardImplicits {
   implicit final class RichBoard(val self: Board) extends AnyVal {
+
+    /** Returns the piece placement of the [[Board]] in
+      * [[http://en.wikipedia.org/wiki/Forsyth–Edwards_Notation Forsyth–Edwards Notation (FEN)]].
+      */
     def toFenPlacement: String = {
       def replaceOnes(target: String): String =
         "1{2,}".r.replaceAllIn(target, _.toString.length.toString)
