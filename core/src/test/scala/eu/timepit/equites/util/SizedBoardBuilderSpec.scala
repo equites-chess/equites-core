@@ -44,7 +44,7 @@ class SizedBoardBuilderSpec extends Specification { def is = s2"""
        |>(♙, ♙, ♙, ♙, ♙, ♙, ♙, ♙),
        |>(♖, ♘, ♗, ♕, ♔, ♗, ♘, ♖)).board8x8 must_== Rules.startingBoard
 
-  // Board is not symmetric
+  // Board is not square
   illTyped("""
     |>(|>(R, N),
        |>(P)).board""")

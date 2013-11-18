@@ -61,13 +61,14 @@ object SizedBoardBuilder {
     def board8x8(implicit ev: _8 =:= N) = buildBoard(self)
   }
 
-  private def buildBoard[N <: Nat](sb: SizedBoard[N]): Board = {
+  private def buildBoard(sb: SizedBoard[_ <: Nat]): Board = {
     val maxRank = sb.length - 1
     val mapping = for {
-      (rank, r) <- sb.zipWithIndex
-      (pieceOpt, f) <- rank.zipWithIndex
+      (sizedRank, rank) <- sb.zipWithIndex
+      (pieceOpt, file) <- sizedRank.zipWithIndex
       piece <- pieceOpt
-    } yield Square(f, maxRank - r) -> piece
+      square = Square(file, maxRank - rank)
+    } yield square -> piece
     Board(mapping.toMap)
   }
 }
