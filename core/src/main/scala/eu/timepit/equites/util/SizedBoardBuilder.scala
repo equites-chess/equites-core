@@ -51,11 +51,11 @@ object SizedBoardBuilder {
 
   def |> = Sized
 
-  implicit final class RichSizedBoard[N <: Nat](val self: SizedBoard[N]) {
-    def toBoard[M](implicit ev:  M =:= N): Board = buildBoard(self)
-    def toBoard8x8(implicit ev: _8 =:= N): Board = buildBoard(self)
+  implicit final class RichSizedBoard[N <: Nat](val sb: SizedBoard[N]) {
+    def toBoard[M](implicit ev:  M =:= N): Board = buildBoard
+    def toBoard8x8(implicit ev: _8 =:= N): Board = buildBoard
 
-    private def buildBoard(sb: SizedBoard[_ <: Nat]): Board = {
+    private def buildBoard: Board = {
       val maxRank = sb.length - 1
       val mapping = for {
         (sizedRank, rank) <- sb.zipWithIndex
