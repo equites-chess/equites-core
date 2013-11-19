@@ -17,41 +17,48 @@
 package eu.timepit.equites
 package util
 
-import org.specs2.mutable._
+import org.specs2._
 
 import BoardBuilder._
 
-class BoardBuilderSpec extends Specification {
-  "BoardBuilder" should {
-    "construct empty boards" in {
-      |>.<| must_== Board()
-      |>././././././././.
-         /./././././././.
-         /./././././././.
-         /./././././././.
-         /./././././././.
-         /./././././././.
-         /./././././././.
-         /./././././././.<| must_== Board()
-    }
-    "construct non-empty boards" in {
-      |>.r.n.b.q.k.b.n.r.
-         p.p.p.p.p.p.p.p.
-         /./././././././.
-         /./././././././.
-         /./././././././.
-         /./././././././.
-         P.P.P.P.P.P.P.P.
-         R.N.B.Q.K.B.N.R.<| must_== Rules.startingBoard
+class BoardBuilderSpec extends Specification { def is = s2"""
+  BoardBuilder should
+    build empty boards without using empty squares $e1
+    build empty boards with using empty squares    $e2
+    build non-empty boards using algebraic pieces  $e3
+    build non-empty boards using figurine pieces   $e4
+  """
 
-      |>.♜.♞.♝.♛.♚.♝.♞.♜.
-         ♟.♟.♟.♟.♟.♟.♟.♟.
-         /./././././././.
-         /./././././././.
-         /./././././././.
-         /./././././././.
-         ♙.♙.♙.♙.♙.♙.♙.♙.
-         ♖.♘.♗.♕.♔.♗.♘.♖.<| must_== Rules.startingBoard
-    }
-  }
+  def e1 =
+    |>.<| must_== Board.empty
+
+  def e2 =
+    |>././././././././.
+       /./././././././.
+       /./././././././.
+       /./././././././.
+       /./././././././.
+       /./././././././.
+       /./././././././.
+       /./././././././.<| must_== Board.empty
+
+  def e3 =
+    |>.r.n.b.q.k.b.n.r.
+       p.p.p.p.p.p.p.p.
+       /./././././././.
+       /./././././././.
+       /./././././././.
+       /./././././././.
+       P.P.P.P.P.P.P.P.
+       R.N.B.Q.K.B.N.R.<| must_== Rules.startingBoard
+
+  def e4 =
+    |>.♜.♞.♝.♛.♚.♝.♞.♜.
+       ♟.♟.♟.♟.♟.♟.♟.♟.
+       /./././././././.
+       /./././././././.
+       /./././././././.
+       /./././././././.
+       ♙.♙.♙.♙.♙.♙.♙.♙.
+       ♖.♘.♗.♕.♔.♗.♘.♖.<| must_== Rules.startingBoard
 }
