@@ -19,37 +19,37 @@ package util
 
 import org.specs2.mutable._
 
-import BoardFactory._
+import BoardBuilder._
 
-class BoardFactorySpec extends Specification {
-  "BoardFactory" should {
+class BoardBuilderSpec extends Specification {
+  "BoardBuilder" should {
     "construct empty boards" in {
       |>.<| must_== Board()
-      |>.-.-.-.-.-.-.-.-.
-         -.-.-.-.-.-.-.-.
-         -.-.-.-.-.-.-.-.
-         -.-.-.-.-.-.-.-.
-         -.-.-.-.-.-.-.-.
-         -.-.-.-.-.-.-.-.
-         -.-.-.-.-.-.-.-.
-         -.-.-.-.-.-.-.-.<| must_== Board()
+      |>././././././././.
+         /./././././././.
+         /./././././././.
+         /./././././././.
+         /./././././././.
+         /./././././././.
+         /./././././././.
+         /./././././././.<| must_== Board()
     }
     "construct non-empty boards" in {
       |>.r.n.b.q.k.b.n.r.
          p.p.p.p.p.p.p.p.
-         -.-.-.-.-.-.-.-.
-         -.-.-.-.-.-.-.-.
-         -.-.-.-.-.-.-.-.
-         -.-.-.-.-.-.-.-.
+         /./././././././.
+         /./././././././.
+         /./././././././.
+         /./././././././.
          P.P.P.P.P.P.P.P.
          R.N.B.Q.K.B.N.R.<| must_== Rules.startingBoard
 
       |>.♜.♞.♝.♛.♚.♝.♞.♜.
          ♟.♟.♟.♟.♟.♟.♟.♟.
-         -.-.-.-.-.-.-.-.
-         -.-.-.-.-.-.-.-.
-         -.-.-.-.-.-.-.-.
-         -.-.-.-.-.-.-.-.
+         /./././././././.
+         /./././././././.
+         /./././././././.
+         /./././././././.
          ♙.♙.♙.♙.♙.♙.♙.♙.
          ♖.♘.♗.♕.♔.♗.♘.♖.<| must_== Rules.startingBoard
     }
