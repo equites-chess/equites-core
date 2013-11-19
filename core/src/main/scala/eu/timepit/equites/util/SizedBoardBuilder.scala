@@ -44,9 +44,7 @@ object SizedBoardBuilder {
   def ♘ = N ; def ♞ = n
   def ♙ = P ; def ♟ = p
 
-  def empty: Option[Piece] = None
-  def * = empty
-  def ☐ = empty
+  def / : Option[Piece] = None
 
   type SizedRank[N <: Nat] = Sized[Seq[Option[Piece]], N]
   type SizedBoard[N <: Nat] = Sized[Seq[SizedRank[N]], N]
@@ -54,21 +52,18 @@ object SizedBoardBuilder {
   def |> = Sized
 
   implicit final class RichSizedBoard[N <: Nat](val self: SizedBoard[N]) {
-    // Typechecks if self is square or the given type parameter equals N.
-    def board[M](implicit ev:  M =:= N) = buildBoard(self)
+    def toBoard[M](implicit ev:  M =:= N): Board = buildBoard(self)
+    def toBoard8x8(implicit ev: _8 =:= N): Board = buildBoard(self)
 
-    // Typechecks if self has size 8x8.
-    def board8x8(implicit ev: _8 =:= N) = buildBoard(self)
-  }
-
-  private def buildBoard(sb: SizedBoard[_ <: Nat]): Board = {
-    val maxRank = sb.length - 1
-    val mapping = for {
-      (sizedRank, rank) <- sb.zipWithIndex
-      (pieceOpt, file) <- sizedRank.zipWithIndex
-      piece <- pieceOpt
-      square = Square(file, maxRank - rank)
-    } yield square -> piece
-    Board(mapping.toMap)
+    private def buildBoard(sb: SizedBoard[_ <: Nat]): Board = {
+      val maxRank = sb.length - 1
+      val mapping = for {
+        (sizedRank, rank) <- sb.zipWithIndex
+        (pieceOpt, file) <- sizedRank.zipWithIndex
+        piece <- pieceOpt
+        square = Square(file, maxRank - rank)
+      } yield square -> piece
+      Board(mapping.toMap)
+    }
   }
 }

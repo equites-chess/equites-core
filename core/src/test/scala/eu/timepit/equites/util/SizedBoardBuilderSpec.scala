@@ -25,42 +25,65 @@ import SizedBoardBuilder._
 
 class SizedBoardBuilderSpec extends Specification { def is = s2"""
   SizedBoardBuilder should
-    build empty square boards of size n     $e1
-    build non-empty square boards of size 8 $e2
+    build empty boards with 1x1 empty squares $e1
+    build empty boards with 8x8 empty squares $e2
+    build non-empty boards of size 8x8 using algebraic pieces $e3
+    build non-empty boards of size 8x8 using figurine pieces  $e4
   """
 
   def e1 =
-    |>(|>(☐, ☐, ☐),
-       |>(☐, ☐, ☐),
-       |>(☐, ☐, ☐)).board must_== Board.empty
+    |>(|>(/)).toBoard must_== Board.empty
 
   def e2 =
+    |>(|>(/, /, /, /, /, /, /, /),
+       |>(/, /, /, /, /, /, /, /),
+       |>(/, /, /, /, /, /, /, /),
+       |>(/, /, /, /, /, /, /, /),
+       |>(/, /, /, /, /, /, /, /),
+       |>(/, /, /, /, /, /, /, /),
+       |>(/, /, /, /, /, /, /, /),
+       |>(/, /, /, /, /, /, /, /)).toBoard8x8 must_== Board.empty
+
+  def e3 =
+    |>(|>(r, n, b, q, k, b, n, r),
+       |>(♟, ♟, ♟, ♟, ♟, ♟, ♟, ♟),
+       |>(/, /, /, /, /, /, /, /),
+       |>(/, /, /, /, /, /, /, /),
+       |>(/, /, /, /, /, /, /, /),
+       |>(/, /, /, /, /, /, /, /),
+       |>(P, P, P, P, P, P, P, P),
+       |>(R, N, B, Q, K, B, N, R)).toBoard8x8 must_== Rules.startingBoard
+
+  def e4 =
     |>(|>(♜, ♞, ♝, ♛, ♚, ♝, ♞, ♜),
        |>(♟, ♟, ♟, ♟, ♟, ♟, ♟, ♟),
-       |>(☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐),
-       |>(☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐),
-       |>(☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐),
-       |>(☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐),
+       |>(/, /, /, /, /, /, /, /),
+       |>(/, /, /, /, /, /, /, /),
+       |>(/, /, /, /, /, /, /, /),
+       |>(/, /, /, /, /, /, /, /),
        |>(♙, ♙, ♙, ♙, ♙, ♙, ♙, ♙),
-       |>(♖, ♘, ♗, ♕, ♔, ♗, ♘, ♖)).board8x8 must_== Rules.startingBoard
+       |>(♖, ♘, ♗, ♕, ♔, ♗, ♘, ♖)).toBoard8x8 must_== Rules.startingBoard
 
   // Board is not square
   illTyped("""
-    |>(|>(R, N),
-       |>(P)).board""")
+    |>(|>(♜, ♞),
+       |>(♟)).toBoard
+    """)
 
-  // Board is not of size 3x3
+  // Board is square but not of size 3x3
   illTyped("""
-    |>(|>(R, N),
-       |>(P, P)).board[_3]""")
+    |>(|>(♜, ♞),
+       |>(♟, ♟)).toBoard[_3]
+    """)
 
   // Board is not of size 8x8
   illTyped("""
     |>(|>(♜, ♞, ♝, ♛, ♚, ♝, ♞, ♜),
        |>(♟, ♟, ♟, ♟, ♟, ♟, ♟, ♟),
-       |>(☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐),
-       |>(☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐),
-       |>(☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐),
+       |>(/, /, /, /, /, /, /, /),
+       |>(/, /, /, /, /, /, /, /),
+       |>(/, /, /, /, /, /, /, /),
        |>(♙, ♙, ♙, ♙, ♙, ♙, ♙, ♙),
-       |>(♖, ♘, ♗, ♕, ♔, ♗, ♘, ♖)).board8x8""")
+       |>(♖, ♘, ♗, ♕, ♔, ♗, ♘, ♖)).toBoard8x8
+    """)
 }
