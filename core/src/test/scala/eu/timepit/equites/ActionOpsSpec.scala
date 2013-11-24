@@ -26,14 +26,14 @@ import util.PieceAbbr.Wiki._
 class ActionOpsSpec extends Specification {
   "ActionOps" should {
     val board =
-      |>.b./././././././.
-         /.P././.P./././.
-         /./././././././.
-         /././././.P.p./.
-         /./.p.P./././.P.
-         /./././././././.
-         /./././././././.
-         R.N././.K./././.<|
+      >>.b.|.|.|.|.|.|.|.
+         |.P.|.|.P.|.|.|.
+         |.|.|.|.|.|.|.|.
+         |.|.|.|.|.P.p.|.
+         |.|.p.P.|.|.|.P.
+         |.|.|.|.|.|.|.|.
+         |.|.|.|.|.|.|.|.
+         R.N.|.|.K.|.|.|.<<
 
     "reconstruct a capture" in {
       val move = Move(rl, Square(0, 0), Square(0, 7))

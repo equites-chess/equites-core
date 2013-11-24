@@ -21,7 +21,7 @@ object BoardBuilder {
   def apply(): BoardBuilder =
     new BoardBuilder(Board.empty, Square(0, Rules.rankRange.last))
 
-  def |> : BoardBuilder = apply()
+  def >> : BoardBuilder = apply()
 }
 
 class BoardBuilder(board: Board, square: Square) {
@@ -48,9 +48,9 @@ class BoardBuilder(board: Board, square: Square) {
   def ♘ : BoardBuilder = N ; def ♞ : BoardBuilder = n
   def ♙ : BoardBuilder = P ; def ♟ : BoardBuilder = p
 
-  def / : BoardBuilder = empty
+  def | : BoardBuilder = empty
 
-  def <| : Board = board
+  def << : Board = board
 
   private def embattle(piece: Piece): BoardBuilder =
     new BoardBuilder(board + (square -> piece), nextSquare)

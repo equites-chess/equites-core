@@ -44,12 +44,12 @@ object SizedBoardBuilder {
   def ♘ = N ; def ♞ = n
   def ♙ = P ; def ♟ = p
 
-  def / : Option[Piece] = None
+  def | : Option[Piece] = None
+
+  def >> = Sized
 
   type SizedRank[N <: Nat] = Sized[Seq[Option[Piece]], N]
   type SizedBoard[N <: Nat] = Sized[Seq[SizedRank[N]], N]
-
-  def |> = Sized
 
   implicit final class RichSizedBoard[N <: Nat](val sb: SizedBoard[N]) {
     def toBoard[M](implicit ev:  M =:= N): Board = buildBoard
