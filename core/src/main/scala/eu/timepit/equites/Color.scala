@@ -44,13 +44,19 @@ object Color extends ColorInstances {
 }
 
 sealed trait Color {
-  def opposite: Color
+  type Opposite <: Color
+
+  def opposite: Opposite
 }
 
 case object White extends Color {
-  override def opposite: Color = Black
+  override type Opposite = Black.type
+
+  override def opposite: Opposite = Black
 }
 
 case object Black extends Color {
-  override def opposite: Color = White
+  override type Opposite = White.type
+
+  override def opposite: Opposite = White
 }

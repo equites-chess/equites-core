@@ -18,6 +18,7 @@ package eu.timepit.equites
 
 import org.specs2._
 import scalaz.scalacheck.ScalazProperties._
+import shapeless.test.illTyped
 
 import ArbitraryInstances._
 
@@ -35,4 +36,14 @@ class ColorSpec extends Specification with ScalaCheck { def is = s2"""
 
   def e3 = White.opposite must_== Black
   def e4 = Black.opposite must_== White
+
+  def testOppositeType(): Unit = {
+    def unequal(fst: Color)(snd: fst.Opposite) = ()
+
+    unequal(White)(Black)
+    unequal(Black)(White)
+
+    illTyped("unequal(White)(White)")
+    illTyped("unequal(Black)(Black)")
+  }
 }
