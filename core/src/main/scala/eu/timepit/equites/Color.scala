@@ -39,24 +39,25 @@ trait ColorInstances {
 object Color extends ColorInstances {
   def values: List[Color] = List(White, Black)
 
-  def guessFrom(direction: Vec): Color =
-    if (direction.rankProj.reduced == Vec.back) Black else White
+  def guessFrom(direction: Vec): Option[Color] =
+    direction.rankProj.reduced match {
+      case Vec.front => Some(White)
+      case Vec.back  => Some(Black)
+      case _ => None
+    }
 }
 
 sealed trait Color {
   type Opposite <: Color
-
   def opposite: Opposite
 }
 
 case object White extends Color {
   override type Opposite = Black.type
-
   override def opposite: Opposite = Black
 }
 
 case object Black extends Color {
   override type Opposite = White.type
-
   override def opposite: Opposite = White
 }
