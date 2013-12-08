@@ -1,35 +1,35 @@
+// Equites, a Scala chess playground
+// Copyright © 2013 Frank S. Thomas <frank@timepit.eu>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 package eu.timepit.equites
 package proto
 
-import org.specs2.mutable._
-import scalaz.concurrent.Task
+import org.specs2._
 import scalaz.stream._
 
-import util.SquareAbbr._
 import UciProcesses._
 
-class UciProcessesSpec extends Specification {
-  "???" >> {
-    "???" in {
-      val x: Process[Task, String] = Process("uciok\n", "foo bar\r\n", "id author John")
-      x.pipe(filterResponses).runLog.run.toList must_== List(Uci.UciOk, Uci.Id("author", "John"))
-    }
+class UciProcessesSpec extends Specification { def is = s2"""
+  UciProcesses
+    collectResponses should parse and filter Uci.Response $e1
+  """
 
-    "???" in {
-      val cm = util.CoordinateMove(e2, e4)
-      val history = Vector(GameState.init)
-      //val x: Process[Task, (SimpleHistory, Uci.Bestmove)] = Process((history, Uci.Bestmove(util.CoordinateMove(e2, e4))))
-      val x = Process((history, Uci.Bestmove(util.CoordinateMove(e2, e4))))
-      x.toSource.pipe(appendMove).runLog.run.toList must_== List(history :+ history.last.updated(cm).get)
-    }
-    
-    "???" in {
-      val cm = util.CoordinateMove(e2, e4)
-      val cm2 = util.CoordinateMove(Square(-1,-1), Square(-1,-1))
-      val history = Vector(GameState.init)
-      //val x: Process[Task, (SimpleHistory, Uci.Bestmove)] = Process((history, Uci.Bestmove(util.CoordinateMove(e2, e4))))
-      val x = Process((history, Uci.Bestmove(cm2)))
-      x.toSource.pipe(appendMove).runLog.run.toList must_!= List(history)
-    }
+  def e1 = {
+    val input = Process("uciok", "foo bar", "id author John", "baz")
+    val result = List(Uci.UciOk, Uci.Id("author", "John"))
+    input.pipe(collectResponses).toList must_== result
   }
 }

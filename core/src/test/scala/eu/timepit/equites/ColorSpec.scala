@@ -38,12 +38,12 @@ class ColorSpec extends Specification with ScalaCheck { def is = s2"""
   def e4 = Black.opposite must_== White
 
   def testOppositeType(): Unit = {
-    def unequal(fst: Color)(snd: fst.Opposite) = ()
+    def isOpposite(color: Color)(opposite: color.Opposite): Unit = ()
 
-    unequal(White)(Black)
-    unequal(Black)(White)
+    isOpposite(White)(Black)
+    isOpposite(Black)(White)
 
-    illTyped("unequal(White)(White)")
-    illTyped("unequal(Black)(Black)")
+    illTyped("isOpposite(White)(White)")
+    illTyped("isOpposite(Black)(Black)")
   }
 }
