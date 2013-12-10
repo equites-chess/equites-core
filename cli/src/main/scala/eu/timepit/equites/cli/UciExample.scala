@@ -5,17 +5,63 @@ import proto._
 
 import scalaz.stream._
 import scalaz.concurrent.Task
+import UciProcesses._
+
+import ProgramProcesses._
 
 object UciExample extends App {
-  /*
-  def linesR(in: java.io.InputStream): Process[Task,String] =
-    io.resource(Task.delay(scala.io.Source.fromInputStream(in)))(
-             x => Task.delay(())) { src =>
-      lazy val lines = src.getLines // A stateful iterator
-      Task.delay { if (lines.hasNext) lines.next else throw Process.End }
-  }*/
 
+  def toByteArray[A](a: A): Array[Byte] = util.toUtf8(a.toString + "\n")
+
+  val tb = new text.TextBoard with text.FigurineRepr
+
+  type SimpleHistory = collection.mutable.ListBuffer[GameState]
+  var history: SimpleHistory = collection.mutable.ListBuffer(GameState.init)
+
+  val (proc, write, read) = system("gnuchess", "-u")
+
+  val start = Process(Uci.Uci, Uci.UciNewGame, Uci.IsReady).map(toByteArray).toSource
+  val writeStart = start.through(write)
+  def writeHistory2 = { println(history.length); Process(Uci.Position(history)).map(toByteArray).toSource.through(write) }
+  def writeHistory = { Process.await(Task.delay(Uci.Position(history)))(x => Process(x)).map(toByteArray).through(write) }
+  def writeGo = Process(Uci.Go(Uci.Go.Movetime(200))).map(toByteArray).toSource.through(write)
+
+  def readResponses = read.pipe(collectResponses)
+  def readUntilReady = readResponses.dropWhile(_ != Uci.ReadyOk).take(1)
+  def readUntilBestmove = readResponses.collect { case Uci.Bestmove(move, ponder) => move }.take(1)
+  def appendMove = Process.await1[util.CoordinateMove].flatMap {
+    case move =>
+      val last = history.last
+      println(tb.mkLabeled(last.board))
+      println(move)
+
+      val state = last.updated(move)
+      state.map(s => { history += s; Process(history) }).getOrElse(Process.halt)
+  }
+
+  val quit = Process(Uci.Quit).map(toByteArray).toSource.through(write)
+
+  def move = writeHistory
+    .append(writeGo)
+    .append(readUntilBestmove.pipe(appendMove))
+
+  writeStart
+    .append(readUntilReady)
+    .append(move.repeat)
+    .append(quit).runLog.run.last
+
+  proc.destroy
   
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  /*
   type SimpleHistory = Vector[GameState]
   def toByteArray[A](a: A): Array[Byte] = util.toUtf8(a.toString + "\n")
 
@@ -51,13 +97,13 @@ object UciExample extends App {
     .map(x => {println("I: "+ x); UciParsers.parseAll(UciParsers.response, x) } )
     .collect { case UciParsers.Success(result, _) => println("R: " + result); result }
     //.repeat
-
+*/
   /*def read2: Process[Task, Uci.Response] =
     linesR(proc.getInputStream)
     .map(x => UciParsers.parseAll(UciParsers.response, x))
     .collect { case UciParsers.Success(result, _) => println("R: " + result); result }
   */
-  
+  /*
   // process that takes a history and outputs Uci.Position and Go
   val toGo: Process1[SimpleHistory, Uci.Request] = for {
     hist <- process1.id[SimpleHistory]
@@ -74,7 +120,7 @@ object UciExample extends App {
       case (history, bestmove) =>
         val state = history.last.updated(bestmove.move)
         state.map(s => Process(history :+ s)).getOrElse(Process.halt)
-      }
+      }*/
 /*
   
   loop: (History, Bestmove) -> new History -> (write new History and transfer it)
@@ -86,7 +132,7 @@ object UciExample extends App {
 
  
   
- 
+ /*
   val p: Process[Task, Uci.Command] =
     start.observe(write)
     .append(read)
@@ -96,14 +142,14 @@ object UciExample extends App {
     println(p.runLog.run)
   
   
-
+*/
 
   
   //val in = start.append(read)
 
   //println(in.observe(write).runLog.run)
 
-  proc.destroy
+  //proc.destroy
 }
 
 /*
