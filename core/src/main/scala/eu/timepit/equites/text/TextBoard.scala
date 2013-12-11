@@ -22,30 +22,29 @@ import util.Notation._
 
 trait AbstractRepr {
   def pieceToString(piece: Piece): String
-  def tileStart: String       = ""
+  def tileStart: String        = ""
   def tileEmpty: String
-  def tileEnd: String         = ""
-  def rankBegin: String       = ""
-  def rankSep: String         = ""
-  def rankEnd: String         = ""
-  def horizontalBar: String   = ""
+  def tileEnd: String          = ""
+  def rankBegin: String        = ""
+  def rankSep: String          = ""
+  def rankEnd: String          = ""
+  def horizontalBar: String    = ""
   def verticalBar: String
-  def corner: String          = ""
-  def fileLabelsStart: String = ""
-  def fileLabelsSep: String   = " "
-  def fileLabelsEnd: String   = " "
-
+  def corner: String           = ""
+  def fileLabelsStart: String  = ""
+  def fileLabelsSep: String    = " "
+  def fileLabelsEnd: String    = " "
   def rankLabelsRight: Boolean = true
-  val rankLabels: Seq[String] = algebraicRankRange.map(_.toString)
-  val fileLabels: Seq[String] = algebraicFileRange.map(_.toString)
+  val rankLabels: Seq[String]  = algebraicRankRange.map(_.toString)
+  val fileLabels: Seq[String]  = algebraicFileRange.map(_.toString)
 }
 
 trait LetterRepr extends AbstractRepr {
   def pieceToString(piece: Piece) = piece.toLetter
-  def tileEmpty            = "."
-  override def rankSep     = " "
-  def verticalBar          = "  "
-  override def corner      = " "
+  def tileEmpty        = "."
+  override def rankSep = " "
+  def verticalBar      = "  "
+  override def corner  = " "
 }
 
 trait FigurineRepr extends AbstractRepr {
@@ -114,3 +113,7 @@ trait TextBoard {
     boardWithRankLabels + bottomBorder + fileLabelsLine
   }
 }
+
+object LetterTextBoard extends TextBoard with LetterRepr
+object FigurineTextBoard extends TextBoard with FigurineRepr
+object WikiTextBoard extends TextBoard with WikiRepr

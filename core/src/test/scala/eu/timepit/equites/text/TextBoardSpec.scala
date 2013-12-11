@@ -24,7 +24,7 @@ class TextBoardSpec extends Specification {
     val board = Rules.startingBoard
 
     "make (un)labeled boards with letters" in {
-      val tb = new TextBoard with LetterRepr
+      val tb = LetterTextBoard
 
       tb.mkUnlabeled(board) must_==
         "r n b q k b n r\n" +
@@ -72,7 +72,7 @@ class TextBoardSpec extends Specification {
     }
 
     "make (un)labeled boards with figurines" in {
-      val tb = new TextBoard with FigurineRepr
+      val tb = FigurineTextBoard
 
       tb.mkUnlabeled(board) must_==
         "♜ ♞ ♝ ♛ ♚ ♝ ♞ ♜\n" +
@@ -120,7 +120,7 @@ class TextBoardSpec extends Specification {
     }
 
     "make (un)labeled boards as MediaWiki diagram" in {
-      val tb = new TextBoard with WikiRepr
+      val tb = WikiTextBoard
 
       tb.mkUnlabeled(board) must_==
         "|rd|nd|bd|qd|kd|bd|nd|rd|=\n" +

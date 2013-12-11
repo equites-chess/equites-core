@@ -11,7 +11,7 @@ import ProgramProcesses._
 
 object UciExample extends App {
 
-  val tb = new text.TextBoard with text.FigurineRepr
+  val tb = text.FigurineTextBoard
 
   type SimpleHistory = collection.mutable.ListBuffer[GameState]
   var history: SimpleHistory = collection.mutable.ListBuffer(GameState.init)
