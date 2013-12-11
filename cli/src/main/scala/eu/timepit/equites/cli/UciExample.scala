@@ -11,8 +11,6 @@ import ProgramProcesses._
 
 object UciExample extends App {
 
-  def toByteArray[A](a: A): Array[Byte] = util.toUtf8(a.toString + "\n")
-
   val tb = new text.TextBoard with text.FigurineRepr
 
   type SimpleHistory = collection.mutable.ListBuffer[GameState]
@@ -20,11 +18,10 @@ object UciExample extends App {
 
   val (proc, write, read) = system("gnuchess", "-u")
 
-  val start = Process(Uci.Uci, Uci.UciNewGame, Uci.IsReady).map(toByteArray).toSource
+  val start = toRawCommands(Uci.Uci, Uci.UciNewGame, Uci.IsReady)
   val writeStart = start.through(write)
-  def writeHistory2 = { println(history.length); Process(Uci.Position(history)).map(toByteArray).toSource.through(write) }
-  def writeHistory = { Process.await(Task.delay(Uci.Position(history)))(x => Process(x)).map(toByteArray).through(write) }
-  def writeGo = Process(Uci.Go(Uci.Go.Movetime(200))).map(toByteArray).toSource.through(write)
+  def writeHistory = { Process.await(Task.delay(Uci.Position(history)))(x => Process(x)).map(util.toUtf8Ln).through(write) }
+  def writeGo = toRawCommands(Uci.Go(Uci.Go.Movetime(200))).through(write)
 
   def readResponses = read.pipe(collectResponses)
   def readUntilReady = readResponses.dropWhile(_ != Uci.ReadyOk).take(1)
@@ -39,7 +36,7 @@ object UciExample extends App {
       state.map(s => { history += s; Process(history) }).getOrElse(Process.halt)
   }
 
-  val quit = Process(Uci.Quit).map(toByteArray).toSource.through(write)
+  val quit = toRawCommands(Uci.Quit).through(write)
 
   def move = writeHistory
     .append(writeGo)
@@ -51,105 +48,7 @@ object UciExample extends App {
     .append(quit).runLog.run.last
 
   proc.destroy
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  /*
-  type SimpleHistory = Vector[GameState]
-  def toByteArray[A](a: A): Array[Byte] = util.toUtf8(a.toString + "\n")
 
-  val proc = (new java.lang.ProcessBuilder("gnuchess", "-u")).start
-
-  val start: Process[Task, Uci.Command] =
-    Process(Uci.Uci, Uci.UciNewGame, Uci.IsReady)
-
-  var history: SimpleHistory = Vector(GameState.init)
-
-  // Sink that writes uci commands to the engine
-  def write: Sink[Task, Uci.Command] =
-    io.chunkW(proc.getOutputStream)
-    .map(f => {
-      (i: Uci.Command) => {
-        println("W: " + i)
-        f(toByteArray(i)).onFinish(_ => Task(proc.getOutputStream.flush()))
-      }
-    })
-
-  val in = io.chunkR(proc.getInputStream)
-    
-  // process that reads responses from the engine
-  val read: Process[Task, Uci.Response] =
-    Process(4096)
-    .toSource
-    //.through(in)
-    .through(io.chunkR(proc.getInputStream()))
-    .when(Process.eval(Task.delay { Thread.sleep(100); println("Checking input stream " + proc.getInputStream().available()); proc.getInputStream.available > 0 }))
-    .map(new String(_))
-    .map(_.split("\n"))
-    .flatMap(Process.emitAll(_))
-    .map(x => {println("I: "+ x); UciParsers.parseAll(UciParsers.response, x) } )
-    .collect { case UciParsers.Success(result, _) => println("R: " + result); result }
-    //.repeat
-*/
-  /*def read2: Process[Task, Uci.Response] =
-    linesR(proc.getInputStream)
-    .map(x => UciParsers.parseAll(UciParsers.response, x))
-    .collect { case UciParsers.Success(result, _) => println("R: " + result); result }
-  */
-  /*
-  // process that takes a history and outputs Uci.Position and Go
-  val toGo: Process1[SimpleHistory, Uci.Request] = for {
-    hist <- process1.id[SimpleHistory]
-    cmds <- Process.emitAll(Seq(Uci.Position(hist), Uci.Go(Uci.Go.Movetime(100)))) 
-  } yield cmds
-
-  val toGo2: Process1[SimpleHistory, Uci.Request] = for {
-    hist <- Process.await1[SimpleHistory]
-    cmds <- Process.emitAll(Seq(Uci.Position(hist), Uci.Go(Uci.Go.Movetime(100))))
-  } yield cmds
-
-  val appendMove: Process1[(SimpleHistory, Uci.Bestmove), SimpleHistory] =
-    process1.id[(SimpleHistory, Uci.Bestmove)].flatMap {    
-      case (history, bestmove) =>
-        val state = history.last.updated(bestmove.move)
-        state.map(s => Process(history :+ s)).getOrElse(Process.halt)
-      }*/
-/*
-  
-  loop: (History, Bestmove) -> new History -> (write new History and transfer it)
-        -> transfer History read responses
-  
- 
- */
-
-
- 
-  
- /*
-  val p: Process[Task, Uci.Command] =
-    start.observe(write)
-    .append(read)
-    .append( Process(history).toSource.pipe(toGo).observe(write))
-    .append( read)
-
-    println(p.runLog.run)
-  
-  
-*/
-
-  
-  //val in = start.append(read)
-
-  //println(in.observe(write).runLog.run)
-
-  //proc.destroy
 }
 
 /*
