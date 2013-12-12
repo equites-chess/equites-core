@@ -28,7 +28,7 @@ case class Comment(text: String)
  *
  * @see [[http://www.chessclub.com/help/PGN-spec Portable Game Notation Specification and Implementation Guide]]
  */
-object PGNParsers extends RegexParsers {
+object PgnParsers extends RegexParsers {
   def integer: Parser[Int] =
     """\d+""".r ^^ (_.toInt)
 

@@ -20,8 +20,8 @@ package util
 import org.specs2.mutable._
 import org.specs2.matcher.ParserMatchers
 
-class PGNParsersSpec extends Specification with ParserMatchers {
-  val parsers = PGNParsers
+class PgnParsersSpec extends Specification with ParserMatchers {
+  val parsers = PgnParsers
   import parsers._
 
   "string" should {
