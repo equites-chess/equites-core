@@ -51,14 +51,14 @@ object SizedBoardBuilder {
   type SizedRank[N <: Nat] = Sized[Seq[Option[Piece]], N]
   type SizedBoard[N <: Nat] = Sized[Seq[SizedRank[N]], N]
 
-  implicit final class RichSizedBoard[N <: Nat](val sb: SizedBoard[N]) {
+  implicit final class RichSizedBoard[N <: Nat](val sizedBoard: SizedBoard[N]) {
     def toBoard[M](implicit ev:  M =:= N): Board = buildBoard
     def toBoard8x8(implicit ev: _8 =:= N): Board = buildBoard
 
     private def buildBoard: Board = {
-      val maxRank = sb.length - 1
+      val maxRank = sizedBoard.length - 1
       val mapping = for {
-        (sizedRank, rank) <- sb.zipWithIndex
+        (sizedRank, rank) <- sizedBoard.zipWithIndex
         (pieceOpt, file) <- sizedRank.zipWithIndex
         piece <- pieceOpt
         square = Square(file, maxRank - rank)
