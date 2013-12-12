@@ -17,33 +17,33 @@
 package eu.timepit.equites
 package util
 
-import org.specs2.mutable._
+import org.specs2._
 
-class PackageSpec extends Specification {
-  "backtracking" should {
-    "generate all 'binary' strings of length three" in {
-      backtracking("")(c => Stream("0", "1").map(_ + c), _.length == 3)
-          .toSet must_==
-        Set("000", "001", "010", "011", "100", "101", "110", "111")
-    }
+class PackageSpec extends Specification { def is = s2"""
+  util.backtracking should
+    generate all 'binary' strings of length three     $e1
+    generate all odd 'binary' strings of length three $e2
 
-    "generate all odd 'binary' strings of length three" in {
-      backtracking("1")(c => Stream("0", "1").map(_ + c), _.length == 3)
-          .toSet must_==
-        Set("001", "011", "101", "111")
-    }
-  }
+  util.toUtf8Bytes should
+    return byte sequences of right length $e3
+  """
 
-  "toUtf8" should {
-    "return byte sequences of right length" in {
-      toUtf8(0x0000.toChar).length must_== 1
-      toUtf8(0x007F.toChar).length must_== 1
+  def nextBinary(c: String): Stream[String] = Stream("0", "1").map(_ + c)
 
-      toUtf8(0x0080.toChar).length must_== 2
-      toUtf8(0x07FF.toChar).length must_== 2
+  def e1 = backtracking("")(nextBinary, _.length == 3).toSet must_==
+    Set("000", "001", "010", "011", "100", "101", "110", "111")
 
-      toUtf8(0x0800.toChar).length must_== 3
-      toUtf8(0xFFFF.toChar).length must_== 3
-    }
-  }
+  def e2 = backtracking("1")(nextBinary, _.length == 3).toSet must_==
+    Set("001", "011", "101", "111")
+
+  def e3 = (
+    (toUtf8Bytes(0x0000.toChar).length must_== 1) and
+    (toUtf8Bytes(0x007F.toChar).length must_== 1) and
+
+    (toUtf8Bytes(0x0080.toChar).length must_== 2) and
+    (toUtf8Bytes(0x07FF.toChar).length must_== 2) and
+
+    (toUtf8Bytes(0x0800.toChar).length must_== 3) and
+    (toUtf8Bytes(0xFFFF.toChar).length must_== 3)
+  )
 }

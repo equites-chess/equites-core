@@ -20,12 +20,12 @@ object UciExample extends App {
 
   val start = toRawCommands(Uci.Uci, Uci.UciNewGame, Uci.IsReady)
   val writeStart = start.through(write)
-  def writeHistory = { Process.await(Task.delay(Uci.Position(history)))(x => Process(x)).map(util.toUtf8Ln).through(write) }
-  def writeGo = toRawCommands(Uci.Go(Uci.Go.Movetime(200))).through(write)
+  def writeHistory = { Process.await(Task.delay(Uci.Position(history)))(x => Process(x)).map(util.toUtf8BytesLf).through(write) }
+  def writeGo = toRawCommands(Uci.Go(Uci.Go.Movetime(400))).through(write)
 
   def readResponses = read.pipe(collectResponses)
-  def readUntilReady = readResponses.dropWhile(_ != Uci.ReadyOk).take(1)
-  def readUntilBestmove = readResponses.collect { case Uci.Bestmove(move, ponder) => move }.take(1)
+  def readUntilReady = readResponses |> collectFirst { case ok@Uci.ReadyOk => ok }
+  def readUntilBestmove = readResponses |> collectFirst { case Uci.Bestmove(move, ponder) => move }
   def appendMove = Process.await1[util.CoordinateMove].flatMap {
     case move =>
       val last = history.last

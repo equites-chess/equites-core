@@ -29,8 +29,8 @@ package object util {
 
   def toStringOnOff(bool: Boolean): String = if (bool) "on" else "off"
 
-  def toUtf8[A](a: A): Array[Byte] = a.toString.getBytes(utf8Charset)
-  def toUtf8Ln[A](a: A): Array[Byte] = toUtf8(a.toString + "\n")
+  def toUtf8Bytes[A](a: A): Array[Byte] = a.toString.getBytes(utf8Charset)
+  def toUtf8BytesLf[A](a: A): Array[Byte] = toUtf8Bytes(a.toString + "\n")
 
   private val utf8Charset: Charset = Charset.forName("UTF-8")
 }
