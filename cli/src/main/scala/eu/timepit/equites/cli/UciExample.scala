@@ -13,14 +13,11 @@ import ProgramProcesses._
 object UciExample extends App {
 
   type SimpleHistory = Vector[GameState]
-  val history: SimpleHistory = Vector(GameState.init)
 
   val (proc, write, read) = system("gnuchess", "-u")
 
-  val start = toRawCommands(Uci.Uci, Uci.UciNewGame, Uci.IsReady)
-  val writeStart = start.through(write)
-  def writeHistory = { Process.await(Task.delay(Uci.Position(history)))(x => Process(x)).map(util.toUtf8BytesLf).through(write) }
-  def writeGo = toRawCommands(Uci.Go(Uci.Go.Movetime(750))).through(write)
+  val writeStart = newGameCommands.through(write)
+  def writeGo = toRawCommands(Uci.Go(Uci.Go.Movetime(350))).through(write)
 
   def readResponses = read.pipe(collectResponses)
   def readUntilReady = readResponses.find(_ == Uci.ReadyOk)
@@ -33,7 +30,7 @@ object UciExample extends App {
       println(text.FigurineTextBoard.mkLabeled(last.board))
 
       val state = last.updated(move)
-      state.map(s => Process(hist ++ Seq(s))).getOrElse(Process.halt)
+      state.map(s => Process(hist :+ s)).getOrElse(Process.halt)
   }
 
   val quit = toRawCommands(Uci.Quit).through(write)
@@ -48,7 +45,7 @@ object UciExample extends App {
 
   writeStart
     .append(readUntilReady)
-    .append(playGame(history))
+    .append(playGame(Vector(GameState.init)))
     .append(quit).runLog.run.last
 
   proc.destroy
