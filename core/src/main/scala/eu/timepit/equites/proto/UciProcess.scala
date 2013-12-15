@@ -17,19 +17,12 @@
 package eu.timepit.equites
 package proto
 
-import scalaz.concurrent.Task
 import scalaz.stream._
 
 import Uci._
 import UciParsers._
 
-object UciProcesses {
-  def toRawCommands[A](as: A*): Process[Task, Array[Byte]] =
-    Process(as: _*).map(util.toUtf8BytesLf)
-
-  def collectFirst[I, I2](pf: PartialFunction[I, I2]): Process1[I, I2] =
-    process1.collect(pf).take(1)
-
+object UciProcess {
   def collectResponses: Process1[String, Response] =
     process1
     .lift((s: String) => parseAll(response, s))

@@ -15,21 +15,15 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package eu.timepit.equites
-package proto
+package util
 
-import org.specs2._
+import scalaz.concurrent.Task
 import scalaz.stream._
 
-import UciProcess._
+object ScalazProcess {
+  def collectFirst[I, I2](pf: PartialFunction[I, I2]): Process1[I, I2] =
+    process1.collect(pf).take(1)
 
-class UciProcessesSpec extends Specification { def is = s2"""
-  UciProcesses
-    collectResponses should parse and filter Uci.Response $e1
-  """
-
-  def e1 = {
-    val input = Process("uciok", "foo bar", "id author John", "baz")
-    val result = List(Uci.UciOk, Uci.Id("author", "John"))
-    input.pipe(collectResponses).toList must_== result
-  }
+  def toRawCommands[A](as: A*): Process[Task, Array[Byte]] =
+    Process(as: _*).map(util.toUtf8BytesLf)
 }
