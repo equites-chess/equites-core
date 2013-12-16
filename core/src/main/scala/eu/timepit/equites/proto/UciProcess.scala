@@ -27,9 +27,16 @@ import util.ScalazProcess._
 object UciProcess {
   def collectResponses: Process1[String, Response] =
     process1
-    .lift((s: String) => parseAll(response, s))
+    .lift((str: String) => parseAll(response, str))
     .collect { case Success(result, _) => result }
 
   def newGameCommands: Process[Task, Array[Byte]] =
     toRawCommands(Uci, UciNewGame, IsReady)
+
+  def stdOutLastBoard: Sink[Task, Seq[GameState]] = {
+    val tb = text.FigurineTextBoard
+    io.stdOutLines.contramap { (history: Seq[GameState]) =>
+      history.lastOption.fold("")(state => tb.mkLabeled(state.board))
+    }
+  }
 }

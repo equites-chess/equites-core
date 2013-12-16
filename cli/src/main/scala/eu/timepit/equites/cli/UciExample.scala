@@ -2,19 +2,16 @@ package eu.timepit.equites
 package cli
 
 import proto._
-
 import scalaz.stream._
 import scalaz.concurrent.Task
 import UciProcess._
 import util.ScalazProcess._
 
-import ProgramProcesses._
-
 object UciExample extends App {
 
   type SimpleHistory = Vector[GameState]
 
-  val (proc, write, read) = system("gnuchess", "-u")
+  val (proc, write, read) = ProgramProcesses.system("gnuchess", "-u")
 
   val writeStart = newGameCommands.through(write)
   def writeGo = toRawCommands(Uci.Go(Uci.Go.Movetime(350))).through(write)
@@ -26,10 +23,7 @@ object UciExample extends App {
   def appendMove2(hist: SimpleHistory): Process1[util.CoordinateMove, SimpleHistory] =
     Process.await1[util.CoordinateMove].flatMap {
     case move =>
-      val last = hist.last
-      println(text.FigurineTextBoard.mkLabeled(last.board))
-
-      val state = last.updated(move)
+      val state = hist.last.updated(move)
       state.map(s => Process(hist :+ s)).getOrElse(Process.halt)
   }
 
@@ -40,7 +34,8 @@ object UciExample extends App {
     .append(writeGo)
     .append(readUntilBestmove.pipe(appendMove2(hist)))
     .collect { case x: SimpleHistory => x }
-    .flatMap(x => playGame(x))
+    .observe(stdOutLastBoard)
+    .flatMap(playGame)
   }
 
   writeStart
