@@ -39,7 +39,7 @@ object UciProcess {
     .collect { case Success(result, _) => result }
 
   def newGameCommands: Process[Task, Array[Byte]] =
-    toRawCommands(Uci, UciNewGame, IsReady)
+    toRawCommands(Uci.Uci, UciNewGame, IsReady)
 
   def stdOutLastBoard: Sink[Task, Seq[GameState]] = {
     val tb = text.FigurineTextBoard

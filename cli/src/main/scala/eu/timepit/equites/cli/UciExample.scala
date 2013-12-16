@@ -28,6 +28,7 @@ object UciExample extends App {
   type SimpleHistory = Vector[GameState]
 
   val (proc, write, read) = ProgramProcesses.system("gnuchess", "-u")
+  //val (proc, write, read) = ProgramProcesses.system("fruit")
 
   def writeGo = toRawCommands(Uci.Go(Uci.Go.Movetime(350))).through(write)
 

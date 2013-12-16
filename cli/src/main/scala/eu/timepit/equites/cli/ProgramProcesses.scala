@@ -13,6 +13,7 @@ object ProgramProcesses {
     def write(out: java.io.OutputStream) = {
       io.channel {
         (bytes: Array[Byte]) => Task.delay {
+          //println(new String(bytes))
           out.write(bytes)
           out.flush
         }
