@@ -1,19 +1,34 @@
+// Equites, a Scala chess playground
+// Copyright © 2013 Frank S. Thomas <frank@timepit.eu>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 package eu.timepit.equites
 package cli
 
-import proto._
-import scalaz.stream._
 import scalaz.concurrent.Task
+import scalaz.stream._
+
+import proto._
 import UciProcess._
 import util.ScalazProcess._
 
 object UciExample extends App {
-
   type SimpleHistory = Vector[GameState]
 
   val (proc, write, read) = ProgramProcesses.system("gnuchess", "-u")
 
-  val writeStart = newGameCommands.through(write)
   def writeGo = toRawCommands(Uci.Go(Uci.Go.Movetime(350))).through(write)
 
   def readResponses = read.pipe(collectResponses)
@@ -27,8 +42,6 @@ object UciExample extends App {
       state.map(s => Process(hist :+ s)).getOrElse(Process.halt)
   }
 
-  val quit = toRawCommands(Uci.Quit).through(write)
-
   def playGame(hist: SimpleHistory): Process[Task, SimpleHistory] = {
     toRawCommands(Uci.Position(hist)).through(write)
     .append(writeGo)
@@ -38,10 +51,11 @@ object UciExample extends App {
     .flatMap(playGame)
   }
 
-  writeStart
+  newGameCommands.through(write)
     .append(readUntilReady)
     .append(playGame(Vector(GameState.init)))
-    .append(quit).runLog.run.last
+    .append(toRawCommands(Uci.Quit).through(write))
+    .run.run
 
   proc.destroy
 }
