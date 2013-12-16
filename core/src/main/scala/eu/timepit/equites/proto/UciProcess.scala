@@ -25,6 +25,14 @@ import UciParsers._
 import util.ScalazProcess._
 
 object UciProcess {
+  def appendMove: Process1[(Seq[GameState], Bestmove), Seq[GameState]] =
+    Process.await1[(Seq[GameState], Bestmove)].flatMap {
+      case (history, bestmove) => {
+        val state = history.lastOption.flatMap(_.updated(bestmove.move))
+        state.map(s => Process(history :+ s)).getOrElse(Process.halt)
+      }
+    }
+
   def collectResponses: Process1[String, Response] =
     process1
     .lift((str: String) => parseAll(response, str))

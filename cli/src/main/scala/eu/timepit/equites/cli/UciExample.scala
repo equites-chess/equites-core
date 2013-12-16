@@ -33,19 +33,12 @@ object UciExample extends App {
 
   def readResponses = read.pipe(collectResponses)
   def readUntilReady = readResponses.find(_ == Uci.ReadyOk)
-  def readUntilBestmove = readResponses |> collectFirst { case Uci.Bestmove(move, ponder) => move }
-
-  def appendMove2(hist: SimpleHistory): Process1[util.CoordinateMove, SimpleHistory] =
-    Process.await1[util.CoordinateMove].flatMap {
-    case move =>
-      val state = hist.last.updated(move)
-      state.map(s => Process(hist :+ s)).getOrElse(Process.halt)
-  }
+  def readUntilBestmove = readResponses |> collectFirst { case x:Uci.Bestmove => x }
 
   def playGame(hist: SimpleHistory): Process[Task, SimpleHistory] = {
     toRawCommands(Uci.Position(hist)).through(write)
     .append(writeGo)
-    .append(readUntilBestmove.pipe(appendMove2(hist)))
+    .append(Process.emit(hist).zip(readUntilBestmove).pipe(appendMove))
     .collect { case x: SimpleHistory => x }
     .observe(stdOutLastBoard)
     .flatMap(playGame)
