@@ -6,13 +6,15 @@ object BuildSettings {
   import ScalariformSettings._
 
   lazy val commonSettings = Seq(
+    organization := "eu.timepit",
+
     version := "0.0.0",
 
     homepage := Some(url("http://equites.timepit.eu")),
 
     startYear := Some(2011),
 
-    licenses += "GPLv3" -> url("http://www.gnu.org/licenses/gpl-3.0.html"),
+    licenses += "GPL-3.0" -> url("http://www.gnu.org/licenses/gpl-3.0.html"),
 
     scmInfo := Some(ScmInfo(url("https://github.com/fthomas/equites"),
                     "git@github.com:fthomas/equites.git")),
@@ -37,6 +39,7 @@ object BuildSettings {
   )
 
   lazy val childSettings =
+    bintray.Plugin.bintraySettings ++
     de.johoop.cpd4sbt.CopyPasteDetector.cpdSettings ++
     org.scalastyle.sbt.ScalastylePlugin.Settings ++
     //scct.ScctPlugin.instrumentSettings ++

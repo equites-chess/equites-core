@@ -20,24 +20,24 @@ package cli
 import scalaz.concurrent.Task
 import scalaz.stream._
 
-import proto._
-import UciProcess._
+import proto.Uci._
+import proto.UciProcess._
 import util.ScalazProcess._
 
 object UciEngineVsItself extends App {
+
   type SimpleHistory = Vector[GameState]
 
   val (proc, write, read) = ProgramProcesses.system("gnuchess", "-u")
   //val (proc, write, read) = ProgramProcesses.system("fruit")
 
-  def writeGo = toRawCommands(Uci.Go(Uci.Go.Movetime(350))).through(write)
-
+  def writeGo = toRawCommands(Go(Go.Movetime(350))).through(write)
   def readResponses = read.pipe(collectResponses)
-  def readUntilReady = readResponses.find(_ == Uci.ReadyOk)
-  def readUntilBestmove = readResponses |> collectFirst { case x:Uci.Bestmove => x }
+  def readUntilReady = readResponses.find(_ == ReadyOk)
+  def readUntilBestmove = readResponses |> collectFirst { case x:Bestmove => x }
 
-  def playGame(hist: SimpleHistory): Process[Task, SimpleHistory] = {
-    toRawCommands(Uci.Position(hist)).through(write)
+  def playGame(hist: Seq[GameState]): Process[Task, Seq[GameState]] = {
+    toRawCommands(Position(hist)).through(write)
     .append(writeGo)
     .append(Process.emit(hist).zip(readUntilBestmove).pipe(appendMove))
     .collect { case x: SimpleHistory => x }
@@ -48,8 +48,9 @@ object UciEngineVsItself extends App {
   newGameCommands.through(write)
     .append(readUntilReady)
     .append(playGame(Vector(GameState.init)))
-  .append(toRawCommands(Uci.Quit).through(write))
-  .run.run
+    .append(toRawCommands(Quit).through(write))
+    .run.run
 
   proc.destroy
+
 }
