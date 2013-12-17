@@ -24,7 +24,7 @@ import proto._
 import UciProcess._
 import util.ScalazProcess._
 
-object UciExample extends App {
+object UciEngineVsItself extends App {
   type SimpleHistory = Vector[GameState]
 
   val (proc, write, read) = ProgramProcesses.system("gnuchess", "-u")
@@ -48,8 +48,8 @@ object UciExample extends App {
   newGameCommands.through(write)
     .append(readUntilReady)
     .append(playGame(Vector(GameState.init)))
-    .append(toRawCommands(Uci.Quit).through(write))
-    .run.run
+  .append(toRawCommands(Uci.Quit).through(write))
+  .run.run
 
   proc.destroy
 }
