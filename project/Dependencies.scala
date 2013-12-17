@@ -2,7 +2,7 @@ import sbt._
 import Keys._
 
 object Dependencies {
-  val scalazVersion = "7.0.4"
+  val scalazVersion = "7.0.5"
 
   val scalacheck =
     "org.scalacheck" %% "scalacheck" % "1.10.1"
