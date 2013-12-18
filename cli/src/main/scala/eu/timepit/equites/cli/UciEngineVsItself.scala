@@ -25,26 +25,36 @@ import proto.UciProcess._
 import util.ScalazProcess._
 
 object UciEngineVsItself extends App {
-  type SimpleHistory = Vector[GameState]
+  val game = Subprocess.popen("gnuchess", "-u").flatMap { engine =>
+    val readResponses =
+      engine.output.pipe(collectResponses)
 
-  Subprocess.popen("gnuchess", "-u").flatMap { engine =>
-    def writeGo = toRawCommands(Go(Go.Movetime(50))).through(engine.input)
-    def readResponses = engine.output.pipe(collectResponses)
-    def readUntilReady = readResponses.find(_ == ReadyOk)
-    def readUntilBestmove = readResponses |> collectFirst { case bm: Bestmove => bm }
+    val readFirstBestmove =
+      readResponses |> collectFirst { case bm: Bestmove => bm }
 
-    def playGame(hist: Seq[GameState]): Process[Task, Seq[GameState]] = {
-      toRawCommands(Position(hist)).through(engine.input)
-      .append(writeGo)
-      .append(Process(hist).zip(readUntilBestmove).pipe(appendMove))
-      .collect { case x: SimpleHistory => x }
-      .observe(stdOutLastBoard)
-      .flatMap(playGame)
-    }
+    def writePositionCommand(history: Seq[GameState]) =
+      toRawCommands(Position(history)).through(engine.input)
 
-    (newGameCommands.through(engine.input)
-      .append(readUntilReady)
-      .append(playGame(Vector(GameState.init))))
-      .onComplete(toRawCommands(Quit).through(engine.input))
-  }.run.run
+    val writeGoCommand =
+      toRawCommands(Go(Go.Movetime(100))).through(engine.input)
+
+    val prepareGame =
+      newGameCommands.through(engine.input) ++ readResponses.find(_ == ReadyOk)
+
+    val quitEngine =
+      toRawCommands(Quit).through(engine.input)
+
+    def gameLoop(history: Seq[GameState]): Process[Task, Seq[GameState]] =
+      writePositionCommand(history)
+        .append(writeGoCommand)
+        .drain
+        .append(Process(history).zip(readFirstBestmove).pipe(appendMove))
+        .observe(stdOutLastBoard)
+        .flatMap(gameLoop)
+
+    val initialPosition = Vector(GameState.init)
+
+    (prepareGame ++ gameLoop(initialPosition)).onComplete(quitEngine)
+  }
+  game.run.run
 }
