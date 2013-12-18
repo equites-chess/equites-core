@@ -41,10 +41,14 @@ object UciProcess {
   def newGameCommands: Process[Task, Array[Byte]] =
     toRawCommands(Uci.Uci, UciNewGame, IsReady)
 
+  /** Returns a `Sink` that prints the last board of a given sequence of
+    * `GameState`s to standard output.
+    */
   def stdOutLastBoard: Sink[Task, Seq[GameState]] = {
     val tb = text.FigurineTextBoard
-    io.stdOutLines.contramap { (history: Seq[GameState]) =>
-      history.lastOption.fold("")(state => tb.mkLabeled(state.board))
+    io.stdOutLines.contramap {
+      (history: Seq[GameState]) =>
+        history.lastOption.fold("")(state => tb.mkLabeled(state.board))
     }
   }
 }
