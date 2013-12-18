@@ -28,19 +28,14 @@ object UciEngineVsItself extends App {
   val game = Subprocess.popen("gnuchess", "-u").flatMap { engine =>
     val readResponses =
       engine.output.pipe(collectResponses)
-
     val readFirstBestmove =
       readResponses |> collectFirst { case bm: Bestmove => bm }
-
     def writePositionCommand(history: Seq[GameState]) =
       toRawCommands(Position(history)).through(engine.input)
-
     val writeGoCommand =
       toRawCommands(Go(Go.Movetime(100))).through(engine.input)
-
     val prepareGame =
       newGameCommands.through(engine.input) ++ readResponses.find(_ == ReadyOk)
-
     val quitEngine =
       toRawCommands(Quit).through(engine.input)
 
@@ -48,12 +43,11 @@ object UciEngineVsItself extends App {
       writePositionCommand(history)
         .append(writeGoCommand)
         .drain
-        .append(Process(history).zip(readFirstBestmove).pipe(appendMove))
+        .append(Process(history).zip(readFirstBestmove) |> appendMove)
         .observe(stdOutLastBoard)
         .flatMap(gameLoop)
 
     val initialPosition = Vector(GameState.init)
-
     (prepareGame ++ gameLoop(initialPosition)).onComplete(quitEngine)
   }
   game.run.run
