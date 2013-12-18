@@ -28,29 +28,42 @@ object UciEngineVsItself extends App {
 
   type SimpleHistory = Vector[GameState]
 
+  /* TODO
+   * - better names for read write
+   * - inputPipe
+   * - outputPipe
+   * - errorPipe
+   * - proc.input
+   * - proc.output
+   * - proc.error
+   * Subprocess
+   * popen
+  */
+  
   val (proc, write, read) = ProgramProcesses.system("gnuchess", "-u")
   //val (proc, write, read) = ProgramProcesses.system("fruit")
 
   def writeGo = toRawCommands(Go(Go.Movetime(350))).through(write)
   def readResponses = read.pipe(collectResponses)
   def readUntilReady = readResponses.find(_ == ReadyOk)
-  def readUntilBestmove = readResponses |> collectFirst { case x:Bestmove => x }
+  def readUntilBestmove = readResponses |> collectFirst { case bm: Bestmove => bm }
 
   def playGame(hist: Seq[GameState]): Process[Task, Seq[GameState]] = {
     toRawCommands(Position(hist)).through(write)
     .append(writeGo)
-    .append(Process.emit(hist).zip(readUntilBestmove).pipe(appendMove))
+    .append(Process(hist).zip(readUntilBestmove).pipe(appendMove))
     .collect { case x: SimpleHistory => x }
     .observe(stdOutLastBoard)
     .flatMap(playGame)
   }
 
-  newGameCommands.through(write)
+  (newGameCommands.through(write)
     .append(readUntilReady)
-    .append(playGame(Vector(GameState.init)))
-    .append(toRawCommands(Quit).through(write))
+    .append(playGame(Vector(GameState.init))))
+    .onComplete(toRawCommands(Quit).through(write))
     .run.run
 
   proc.destroy
 
 }
+ 
