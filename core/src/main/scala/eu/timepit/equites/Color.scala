@@ -43,7 +43,7 @@ object Color extends ColorInstances {
     direction.rankProj.reduced match {
       case Vec.front => Some(White)
       case Vec.back  => Some(Black)
-      case _ => None
+      case _         => None
     }
 }
 

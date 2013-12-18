@@ -22,12 +22,9 @@ import implicits.SquareImplicits._
 
 object CoordinateMove {
   def apply(action: Action): CoordinateMove = action match {
-    case p: PromotionLike
-      => CoordinateMove(p.from, p.to, Some(p.promotedTo))
-    case m: MoveLike
-      => CoordinateMove(m.from, m.to, None)
-    case c: Castling
-      => CoordinateMove(c.kingMove)
+    case p: PromotionLike => CoordinateMove(p.from, p.to, Some(p.promotedTo))
+    case m: MoveLike      => CoordinateMove(m.from, m.to, None)
+    case c: Castling      => CoordinateMove(c.kingMove)
   }
 }
 

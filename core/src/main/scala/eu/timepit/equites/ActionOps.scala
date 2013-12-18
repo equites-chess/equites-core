@@ -76,12 +76,13 @@ object ActionOps {
     action match {
       case _: CaptureLike => true
       case move: MoveLike => move.piece.isPawn
-      case _ => false
+      case _              => false
     }
 
-  /** Returns the square where a pawn can be captured via an en passant if the
-    * given move allows it.
-    */
+  /**
+   * Returns the square where a pawn can be captured via an en passant if the
+   * given move allows it.
+   */
   def enPassantTarget(move: Move): Option[Square] =
     allowsEnPassant(move).option {
       val file = move.from.file

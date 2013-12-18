@@ -30,7 +30,7 @@ object PieceImplicits {
 
     def toUpperCaseLetter: String = self match {
       case Pawn(_) => "P"
-      case _ => toAlgebraic
+      case _       => toAlgebraic
     }
 
     def toLowerCaseLetter: String = toUpperCaseLetter.toLowerCase

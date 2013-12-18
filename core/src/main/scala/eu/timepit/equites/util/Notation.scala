@@ -66,7 +66,7 @@ object Notation {
     case '♝' => Some(♝)
     case '♞' => Some(♞)
     case '♟' => Some(♟)
-    case _ => None
+    case _   => None
   }
 
   def boardFromFen(placement: String): Board = {

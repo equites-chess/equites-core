@@ -35,15 +35,16 @@ object UciProcess {
 
   def collectResponses: Process1[String, Response] =
     process1
-    .lift((str: String) => parseAll(response, str))
-    .collect { case Success(result, _) => result }
+      .lift((str: String) => parseAll(response, str))
+      .collect { case Success(result, _) => result }
 
   def newGameCommands: Process[Task, Array[Byte]] =
     toRawCommands(Uci.Uci, UciNewGame, IsReady)
 
-  /** Returns a `Sink` that prints the last board of a given sequence of
-    * `GameState`s to standard output.
-    */
+  /**
+   * Returns a `Sink` that prints the last board of a given sequence of
+   * `GameState`s to standard output.
+   */
   def stdOutLastBoard: Sink[Task, Seq[GameState]] = {
     val tb = text.FigurineTextBoard
     io.stdOutLines.contramap {

@@ -21,8 +21,8 @@ object Math {
   def gcd[A](x: A, y: A)(implicit A: Integral[A]): A =
     if (y == 0) x else gcd(y, A.rem(x, y))
 
-  def isEven[A : Integral](i: A): Boolean = rem2(i) == 0
-  def  isOdd[A : Integral](i: A): Boolean = rem2(i) != 0
+  def isEven[A: Integral](i: A): Boolean = rem2(i) == 0
+  def isOdd[A: Integral](i: A): Boolean = rem2(i) != 0
 
   private def rem2[A](i: A)(implicit A: Integral[A]): A =
     A.rem(i, A.fromInt(2))

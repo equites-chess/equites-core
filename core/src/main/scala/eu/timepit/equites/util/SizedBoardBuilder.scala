@@ -37,12 +37,12 @@ object SizedBoardBuilder {
   def n = Some(Algebraic.n)
   def p = Some(Algebraic.p)
 
-  def ♔ = K ; def ♚ = k
-  def ♕ = Q ; def ♛ = q
-  def ♖ = R ; def ♜ = r
-  def ♗ = B ; def ♝ = b
-  def ♘ = N ; def ♞ = n
-  def ♙ = P ; def ♟ = p
+  def ♔ = K; def ♚ = k
+  def ♕ = Q; def ♛ = q
+  def ♖ = R; def ♜ = r
+  def ♗ = B; def ♝ = b
+  def ♘ = N; def ♞ = n
+  def ♙ = P; def ♟ = p
 
   def | : Option[Piece] = None
 
@@ -52,7 +52,7 @@ object SizedBoardBuilder {
   type SizedBoard[N <: Nat] = Sized[Seq[SizedRank[N]], N]
 
   implicit final class RichSizedBoard[N <: Nat](val sizedBoard: SizedBoard[N]) {
-    def toBoard[M](implicit ev:  M =:= N): Board = buildBoard
+    def toBoard[M](implicit ev: M =:= N): Board = buildBoard
     def toBoard8x8(implicit ev: _8 =:= N): Board = buildBoard
 
     private def buildBoard: Board = {

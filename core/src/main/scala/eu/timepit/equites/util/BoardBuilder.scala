@@ -41,12 +41,12 @@ class BoardBuilder(board: Board, square: Square) {
   def n: BoardBuilder = embattle(Algebraic.n)
   def p: BoardBuilder = embattle(Algebraic.p)
 
-  def ♔ : BoardBuilder = K ; def ♚ : BoardBuilder = k
-  def ♕ : BoardBuilder = Q ; def ♛ : BoardBuilder = q
-  def ♖ : BoardBuilder = R ; def ♜ : BoardBuilder = r
-  def ♗ : BoardBuilder = B ; def ♝ : BoardBuilder = b
-  def ♘ : BoardBuilder = N ; def ♞ : BoardBuilder = n
-  def ♙ : BoardBuilder = P ; def ♟ : BoardBuilder = p
+  def ♔ : BoardBuilder = K; def ♚ : BoardBuilder = k
+  def ♕ : BoardBuilder = Q; def ♛ : BoardBuilder = q
+  def ♖ : BoardBuilder = R; def ♜ : BoardBuilder = r
+  def ♗ : BoardBuilder = B; def ♝ : BoardBuilder = b
+  def ♘ : BoardBuilder = N; def ♞ : BoardBuilder = n
+  def ♙ : BoardBuilder = P; def ♟ : BoardBuilder = p
 
   def | : BoardBuilder = empty
 
