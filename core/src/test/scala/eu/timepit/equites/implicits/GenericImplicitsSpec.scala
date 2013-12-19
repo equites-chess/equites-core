@@ -17,33 +17,35 @@
 package eu.timepit.equites
 package implicits
 
-import org.specs2.mutable._
+import org.specs2._
 import scalaz._
 import Scalaz._
 
 import GenericImplicits._
 
-class GenericImplicitsSpec extends Specification {
-  "asOption" should {
-    "return None on empty collections" in {
-      Set[Int]().asOption must beNone
-      List[Int]().asOption must beNone
-      "".asOption must beNone
-    }
-    "return Some(...) on non-empty collections" in {
-      List(1,2,3).asOption must beSome(List(1,2,3))
-      "Hello".asOption must beSome("Hello")
-    }
-  }
+class GenericImplicitsSpec extends Specification { def is = s2"""
+  asOption should
+    return None on empty collections          $e1
+    return Some(x) on non-empty collections x $e2
 
-  "dropLeftRight" should {
-    "work on empty collections" in {
-      "".dropLeftRight(1) must_== ""
-      List().dropLeftRight(1) must_== List()
-    }
-    "work on non-empty collections" in {
-      "12345".dropLeftRight(2) must_== "3"
-      List(1,2,3,4).dropLeftRight(1) must_== List(2,3)
-    }
-  }
+  dropLeftRight should
+    be the identity on empty collections   $e3
+    drop elements on non-empty collections $e4
+  """
+
+  def e1 =
+    (List.empty[Int].asOption must beNone) and
+    ("".asOption must beNone)
+
+  def e2 =
+    (List(1, 2, 3).asOption must beSome(List(1, 2, 3))) and
+    ("Hello".asOption must beSome("Hello"))
+
+  def e3 =
+    (List.empty[Int].dropLeftRight(1) must_== List.empty[Int]) and
+    ("".dropLeftRight(1) must_== "")
+
+  def e4 =
+    (List(1, 2, 3, 4).dropLeftRight(1) must_== List(2, 3)) and
+    ("1234".dropLeftRight(1) must_== "23")
 }
