@@ -52,7 +52,7 @@ object Uci {
         Seq("startpos", "moves")
       } else {
         val moves = history.tail.flatMap(_.lastAction).map(_.toCoordinate)
-        Seq(history.head.toFen, "moves") ++ moves
+        Seq("fen", history.head.toFen, "moves") ++ moves
       }
   }
 
