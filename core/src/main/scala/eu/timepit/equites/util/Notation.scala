@@ -25,15 +25,15 @@ import PieceAbbr.Figurine._
 object Notation {
   val algebraicFileRange: NumericRange[Char] =
     (Rules.fileRange.start + 'a').toChar to
-    (Rules.fileRange.end   + 'a').toChar
+      (Rules.fileRange.end + 'a').toChar
 
   val algebraicRankRange: Range =
     (Rules.rankRange.start + 1) to
-    (Rules.rankRange.end   + 1)
+      (Rules.rankRange.end + 1)
 
   val numericFileRange: Range =
     (Rules.fileRange.start + 1) to
-    (Rules.fileRange.end   + 1)
+      (Rules.fileRange.end + 1)
 
   def numericRankRange: Range = algebraicRankRange
 

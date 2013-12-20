@@ -21,14 +21,12 @@ import util.Notation._
 
 object SquareImplicits {
   implicit final class RichSquare(val self: Square) extends AnyVal {
-    def toAlgebraic: String = {
+    def toAlgebraic: String =
       algebraicFileRange(self.file).toString +
-      algebraicRankRange(self.rank).toString
-    }
+        algebraicRankRange(self.rank).toString
 
-    def toNumeric: String = {
+    def toNumeric: String =
       numericFileRange(self.file).toString +
-      numericRankRange(self.rank).toString
-    }
+        numericRankRange(self.rank).toString
   }
 }
