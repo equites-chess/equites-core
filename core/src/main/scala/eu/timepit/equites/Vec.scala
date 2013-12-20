@@ -45,13 +45,13 @@ object Vec extends VecInstances {
 case class Vec(file: Int, rank: Int) extends PlayerPerspective[Vec] {
   def map(f: Int => Int): Vec = Vec(f(file), f(rank))
 
-  def + (that: Vec): Vec = Vec(file + that.file, rank + that.rank)
-  def - (that: Vec): Vec = this + -that
+  def +(that: Vec): Vec = Vec(file + that.file, rank + that.rank)
+  def -(that: Vec): Vec = this + -that
   def unary_- : Vec = this * -1
   def inverse: Vec = unary_-
 
-  def * (n: Int): Vec = map(_ * n)
-  def / (n: Int): Vec = map(_ / n)
+  def *(n: Int): Vec = map(_ * n)
+  def /(n: Int): Vec = map(_ / n)
 
   def max: Int = math.max(file, rank)
   def min: Int = math.min(file, rank)
@@ -59,14 +59,16 @@ case class Vec(file: Int, rank: Int) extends PlayerPerspective[Vec] {
   /** Returns the sum of this Vec's components. */
   def sum: Int = file + rank
 
-  /** Returns the [[http://en.wikipedia.org/wiki/Manhattan_distance L<sub>1</sub> length]]
-    * of this Vec.
-    */
+  /**
+   * Returns the [[http://en.wikipedia.org/wiki/Manhattan_distance L<sub>1</sub> length]]
+   * of this Vec.
+   */
   def l1Length: Int = map(_.abs).sum
 
-  /** Returns the [[http://en.wikipedia.org/wiki/Chebyshev_distance L<sub>∞</sub> length]]
-    * of this Vec.
-    */
+  /**
+   * Returns the [[http://en.wikipedia.org/wiki/Chebyshev_distance L<sub>∞</sub> length]]
+   * of this Vec.
+   */
   def lInfLength: Int = map(_.abs).max
 
   def reduced: Vec = this / math.max(1, gcd(file, rank).abs)

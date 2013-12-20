@@ -43,7 +43,7 @@ object UciEngineVsItself extends App {
       writePositionCommand(history)
         .append(writeGoCommand)
         .drain
-        .append(Process(history).zip(readFirstBestmove) |> appendMove)
+        .append(Process(history).zip(readFirstBestmove) |> appendBestmove)
         .observe(stdOutLastBoard)
         .flatMap(gameLoop)
 

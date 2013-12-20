@@ -24,6 +24,9 @@ object ScalazProcess {
   def collectFirst[I, I2](pf: PartialFunction[I, I2]): Process1[I, I2] =
     process1.collect(pf).take(1)
 
+  def stdInLines: Process[Task, String] =
+    Process.repeatEval(Task.delay { Option(readLine()).getOrElse(throw Process.End) })
+
   def toRawCommands[A](as: A*): Process[Task, Array[Byte]] =
     Process(as: _*).map(util.toUtf8BytesLf)
 }

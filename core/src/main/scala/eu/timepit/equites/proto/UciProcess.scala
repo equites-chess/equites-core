@@ -22,13 +22,21 @@ import scalaz.stream._
 
 import Uci._
 import UciParsers._
+import util.CoordinateMove
 import util.ScalazProcess._
 
 object UciProcess {
-  def appendMove: Process1[(Seq[GameState], Bestmove), Seq[GameState]] =
-    Process.await1[(Seq[GameState], Bestmove)].flatMap {
-      case (history, bestmove) => {
-        val state = history.lastOption.flatMap(_.updated(bestmove.move))
+  type HistoryTransformer[A] = Process1[(Seq[GameState], A), Seq[GameState]]
+
+  def appendBestmove: HistoryTransformer[Bestmove] =
+    Process.await1[(Seq[GameState], Bestmove)].map {
+      case (history, bestmove) => (history, bestmove.move)
+    } |> appendCoordinateMove
+
+  def appendCoordinateMove: HistoryTransformer[CoordinateMove] =
+    Process.await1[(Seq[GameState], CoordinateMove)].flatMap {
+      case (history, move) => {
+        val state = history.lastOption.flatMap(_.updated(move))
         state.map(s => Process(history :+ s)).getOrElse(Process.halt)
       }
     }
