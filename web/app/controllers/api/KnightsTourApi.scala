@@ -24,7 +24,7 @@ import play.api.mvc.Results._
 import eu.timepit.equites._
 import eu.timepit.equites.problem.KnightsTour._
 
-object KnightsTourAPI {
+object KnightsTourApi {
   def staticTourAsJson = genericTourAsJson(staticTour)
   def randomTourAsJson = genericTourAsJson(randomTour)
   def warnsdorffTourAsJson = genericTourAsJson(warnsdorffTour)
