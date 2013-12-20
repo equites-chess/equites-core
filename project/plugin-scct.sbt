@@ -1,1 +1,1 @@
-//addSbtPlugin("com.github.scct" % "sbt-scct" % "0.2")
+addSbtPlugin("com.sqality.scct" % "sbt-scct" % "0.2.2")

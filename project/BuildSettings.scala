@@ -26,6 +26,7 @@ object BuildSettings {
       "-feature",
       "-unchecked",
       "-Xfatal-warnings",
+      //"-Xlint",
       "-Ywarn-all"
     ),
 
@@ -42,7 +43,7 @@ object BuildSettings {
     bintray.Plugin.bintraySettings ++
     de.johoop.cpd4sbt.CopyPasteDetector.cpdSettings ++
     org.scalastyle.sbt.ScalastylePlugin.Settings ++
-    //scct.ScctPlugin.instrumentSettings ++
+    ScctPlugin.instrumentSettings ++
     ourScalariformSettings ++
     Seq(
       initialCommands := """
@@ -54,7 +55,7 @@ object BuildSettings {
 
   lazy val rootSettings =
     play.Project.playScalaSettings ++
-    //scct.ScctPlugin.mergeReportSettings ++
+    ScctPlugin.mergeReportSettings ++
     commonSettings ++
     Seq(
       publishArtifact := false
