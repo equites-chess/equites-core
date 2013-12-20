@@ -3,7 +3,7 @@
 <!--[![Coverage Status](https://coveralls.io/repos/fthomas/equites/badge.png?branch=master)](https://coveralls.io/r/fthomas/equites)-->
 
 Equites is a bunch of chess related code mostly implemented in Scala.
-Currently there is nothing usable from a chess player's point of view.
+Currently there is little usable from a chess player's point of view.
 But it can animate random [Knight's tours][Equites] :-) and [talk with
 chess engines][UciEngineVsItself] via the [Universal Chess Interface (UCI)][UCI].
 
