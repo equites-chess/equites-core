@@ -18,15 +18,20 @@ package eu.timepit.equites
 package controllers
 package api
 
+import com.wordnik.swagger.annotations._
+import com.wordnik.swagger.core._
 import play.api.mvc.Action
 import play.api.mvc.Results.Ok
 
+@Api(value = "/api/fen", description = "Operations about user")
 object FenApi {
+  @ApiOperation(value = "Get user by user name", httpMethod = "GET")
   def toTextRepr(placement: String, textBoard: text.TextBoard) = Action {
-    val board = util.Notation.boardFromFen(placement)
+    val board = eu.timepit.equites.util.Notation.boardFromFen(placement)
     Ok(textBoard.mkLabeled(board))
   }
 
+  @ApiOperation(value = "Get user by user name", httpMethod = "GET")
   def toFigurineBoard(placement: String) =
     toTextRepr(placement, text.FigurineTextBoard)
 

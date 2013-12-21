@@ -82,5 +82,10 @@ object BuildSettings {
   lazy val webSettings =
     play.Project.playScalaSettings ++
     commonSettings ++
-    childSettings
+    childSettings ++
+    Seq(
+      libraryDependencies ++= Seq(
+        swaggerPlay
+      )
+    )
 }
