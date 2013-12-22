@@ -76,5 +76,8 @@ object PieceImplicits {
       case Knight(_) => 300
       case Pawn(_)   => 100
     }
+
+    def toThemeId: String =
+      self.color.toString + self.getClass.getSimpleName
   }
 }
