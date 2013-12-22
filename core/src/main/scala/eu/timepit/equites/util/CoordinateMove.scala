@@ -32,7 +32,8 @@ object CoordinateMove {
  * Represents a move in coordinate notation.
  */
 case class CoordinateMove(from: Square, to: Square,
-  promotedTo: Option[PromotedPiece] = None) extends DrawLike {
+                          promotedTo: Option[PromotedPiece] = None)
+    extends DrawLike {
 
   def toAlgebraic: String = from.toAlgebraic + to.toAlgebraic +
     promotedTo.fold("")(_.toLowerCaseLetter)

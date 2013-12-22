@@ -36,7 +36,7 @@ object Uci {
   case object IsReady extends Request
 
   case class SetOption(name: String, value: Option[String] = None)
-    extends Request {
+      extends Request {
 
     override def cmdArgs: Seq[String] =
       Seq("name", name) ++ value.map("value " + _)
@@ -103,7 +103,8 @@ object Uci {
   case object ReadyOk extends Response
 
   case class Bestmove(move: util.CoordinateMove,
-    ponder: Option[util.CoordinateMove] = None) extends Response {
+                      ponder: Option[util.CoordinateMove] = None)
+      extends Response {
 
     override def cmdArgs: Seq[String] =
       Seq(move.toAlgebraic) ++ ponder.map("ponder " + _.toAlgebraic)
@@ -124,9 +125,10 @@ object Uci {
 
     case class Spin(default: Int, min: Int, max: Int) extends Type {
       override def cmdArgs: Seq[String] =
-        Seq("default", default.toString,
-            "min", min.toString,
-            "max", max.toString)
+        Seq(
+          "default", default.toString,
+          "min", min.toString,
+          "max", max.toString)
     }
 
     case class Combo(default: String, values: Seq[String]) extends Type {
@@ -143,7 +145,7 @@ object Uci {
   }
 
   case class UciOption(name: String, optionType: UciOption.Type)
-    extends Response {
+      extends Response {
 
     override def cmdName: String = "option"
     override def cmdArgs: Seq[String] =
