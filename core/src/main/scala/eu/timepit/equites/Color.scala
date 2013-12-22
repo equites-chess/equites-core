@@ -37,7 +37,7 @@ trait ColorInstances {
 }
 
 object Color extends ColorInstances {
-  def values: List[Color] = List(White, Black)
+  def all: List[Color] = List(White, Black)
 
   def guessFrom(direction: Vec): Option[Color] =
     direction.rankProj.reduced match {

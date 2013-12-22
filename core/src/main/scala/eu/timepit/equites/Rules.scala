@@ -49,7 +49,7 @@ object Rules {
           Knight(color) -> knightFiles.map(Square(_, backRank)),
           Pawn(color)   ->   fileRange.map(Square(_, pawnRank)).toList)
     }
-    Color.values.map(startingSquaresBy).reduce(_ ++ _)
+    Color.all.map(startingSquaresBy).reduce(_ ++ _)
   }
 
   def onStartingSquare(placed: Placed[Piece]): Boolean =
@@ -75,8 +75,8 @@ object Rules {
     }
 
     val mapping = for {
-      side  <- Side.values
-      piece <- Color.values <*> List(King, Rook)
+      side  <- Side.all
+      piece <- Color.all <*> List(King, Rook)
     } yield (side, piece) -> castlingSquaresFor(side, piece)
     mapping.toMap
   }
@@ -129,7 +129,7 @@ object Rules {
           Knight(color) -> ((knightLike, 1)),
           Pawn(color)   -> ((front.fromPov(color), 1)))
     }
-    Color.values.map(movementTypesBy).reduce(_ ++ _)
+    Color.all.map(movementTypesBy).reduce(_ ++ _)
   }
 
   def movementTypeOf(placed: Placed[Piece]): (Directions, Int) = {
