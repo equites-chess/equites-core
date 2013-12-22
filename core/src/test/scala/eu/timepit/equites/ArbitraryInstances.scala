@@ -31,7 +31,7 @@ object ArbitraryInstances {
   }
 
   implicit val arbitraryColor: Arbitrary[Color] =
-    Arbitrary(Gen.oneOf(Color.values))
+    Arbitrary(Gen.oneOf(Color.all))
 
   implicit def arbitraryPlaced[A : Arbitrary]: Arbitrary[Placed[A]] =
     Arbitrary {
