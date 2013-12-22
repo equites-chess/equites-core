@@ -45,10 +45,10 @@ object UciParsers extends RegexParsers {
   }
 
   def promotedPieceFn: Parser[Color => PromotedPiece] =
-    "q" ^^^ (Queen(_))  |
-    "r" ^^^ (Rook(_))   |
-    "b" ^^^ (Bishop(_)) |
-    "n" ^^^ (Knight(_))
+    "q" ^^^ (Queen)  |
+    "r" ^^^ (Rook)   |
+    "b" ^^^ (Bishop) |
+    "n" ^^^ (Knight)
 
   def coordinateMove: Parser[util.CoordinateMove] =
     square ~ square ~ promotedPieceFn.? ^^ {
@@ -89,7 +89,7 @@ object UciParsers extends RegexParsers {
       optionTypeString )
 
   def optionTypeCheck: Parser[UciOption.Check] =
-    "check" ~> "default" ~> boolean ^^ (UciOption.Check(_))
+    "check" ~> "default" ~> boolean ^^ (UciOption.Check)
 
   def optionTypeSpin: Parser[UciOption.Spin] =
     "spin" ~> "default" ~> int ~ ("min" ~> int) ~ ("max" ~> int) ^^ {
@@ -105,7 +105,7 @@ object UciParsers extends RegexParsers {
     "button" ^^^ UciOption.Button
 
   def optionTypeString: Parser[UciOption.StringType] =
-    "string" ~> "default" ~> string ^^ (UciOption.StringType(_))
+    "string" ~> "default" ~> string ^^ (UciOption.StringType)
 
   def response: Parser[Response] = id | uciok | readyok | bestmove | option
 
