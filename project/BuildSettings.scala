@@ -79,6 +79,10 @@ object BuildSettings {
       )
     )
 
+  lazy val gfxSettings =
+    commonSettings ++
+    childSettings
+
   lazy val webSettings =
     play.Project.playScalaSettings ++
     commonSettings ++

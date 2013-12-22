@@ -15,6 +15,10 @@ object EquitesBuild extends Build {
   lazy val core = Project(id = "equites-core", base = file("core"))
     .settings(coreSettings: _*)
 
+  lazy val gfx = Project(id = "equites-gfx", base = file("gfx"))
+    .settings(gfxSettings: _*)
+    .dependsOn(core)
+
   lazy val web = Project(id = "equites-web", base = file("web"))
     .settings(webSettings: _*)
     .dependsOn(core)
