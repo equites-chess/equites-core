@@ -52,6 +52,31 @@ trait FigurineAbbr {
   def ♟ : BlackPawn   = p
 }
 
+trait TextualAbbr {
+  import PieceAbbr.Algebraic._
+
+  def king  (color: Color): AnyKing   = Piece(color, King)
+  def queen (color: Color): AnyQueen  = Piece(color, Queen)
+  def rook  (color: Color): AnyRook   = Piece(color, Rook)
+  def bishop(color: Color): AnyBishop = Piece(color, Bishop)
+  def knight(color: Color): AnyKnight = Piece(color, Knight)
+  def pawn  (color: Color): AnyPawn   = Piece(color, Pawn)
+
+  def whiteKing:   WhiteKing   = K
+  def whiteQueen:  WhiteQueen  = Q
+  def whiteRook:   WhiteRook   = R
+  def whiteBishop: WhiteBishop = B
+  def whiteKnight: WhiteKnight = N
+  def whitePawn:   WhitePawn   = P
+
+  def blackKing:   BlackKing   = k
+  def blackQueen:  BlackQueen  = q
+  def blackRook:   BlackRook   = r
+  def blackBishop: BlackBishop = b
+  def blackKnight: BlackKnight = n
+  def blackPawn:   BlackPawn   = p
+}
+
 trait WikiAbbr {
   import PieceAbbr.Algebraic._
 
@@ -74,5 +99,6 @@ trait WikiAbbr {
 object PieceAbbr {
   object Algebraic extends AlgebraicAbbr
   object Figurine extends FigurineAbbr
+  object Textual extends TextualAbbr
   object Wiki extends WikiAbbr
 }

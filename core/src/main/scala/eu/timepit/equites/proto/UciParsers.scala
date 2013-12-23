@@ -21,6 +21,7 @@ import scala.util.parsing.combinator._
 
 import Uci._
 import util.Notation._
+import util.PieceAbbr.Textual._
 
 /**
  * Parsers for the Universal Chess Interface (UCI).
@@ -44,11 +45,8 @@ object UciParsers extends RegexParsers {
     case file ~ rank => Square(file, rank)
   }
 
-  def promotedPieceType: Parser[PromotedPieceType] =
-    "q" ^^^ Queen | "r" ^^^ Rook | "b" ^^^ Bishop | "n" ^^^ Knight
-
   def promotedPieceFn: Parser[Color => PromotedPiece] =
-    promotedPieceType ^^ (t => (c: Color) => Piece(c, t))
+    "q" ^^^ queen _ | "r" ^^^ rook _ | "b" ^^^ bishop _ | "n" ^^^ knight _
 
   def coordinateMove: Parser[util.CoordinateMove] =
     square ~ square ~ promotedPieceFn.? ^^ {
