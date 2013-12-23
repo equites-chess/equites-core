@@ -18,31 +18,32 @@ package eu.timepit
 
 package object equites {
   type AnyPiece = Piece[Color, PieceType]
-
   type CastlingPiece = Piece[Color, CastlingPieceType]
   type PromotedPiece = Piece[Color, PromotedPieceType]
-
-  type AnyKing = Piece[Color, King.type]
-  type AnyQueen = Piece[Color, Queen.type]
-  type AnyRook = Piece[Color, Rook.type]
-  type AnyBishop = Piece[Color, Bishop.type]
-  type AnyKnight = Piece[Color, Knight.type]
-  type AnyPawn = Piece[Color, Pawn.type]
 
   type WhitePiece[T <: PieceType] = Piece[White.type, T]
   type BlackPiece[T <: PieceType] = Piece[Black.type, T]
 
-  type WhiteKing = WhitePiece[King.type]
-  type WhiteQueen = WhitePiece[Queen.type]
-  type WhiteRook = WhitePiece[Rook.type]
+  // format: OFF
+  type AnyKing   = Piece[Color, King.type]
+  type AnyQueen  = Piece[Color, Queen.type]
+  type AnyRook   = Piece[Color, Rook.type]
+  type AnyBishop = Piece[Color, Bishop.type]
+  type AnyKnight = Piece[Color, Knight.type]
+  type AnyPawn   = Piece[Color, Pawn.type]
+
+  type WhiteKing   = WhitePiece[King.type]
+  type WhiteQueen  = WhitePiece[Queen.type]
+  type WhiteRook   = WhitePiece[Rook.type]
   type WhiteBishop = WhitePiece[Bishop.type]
   type WhiteKnight = WhitePiece[Knight.type]
-  type WhitePawn = WhitePiece[Pawn.type]
+  type WhitePawn   = WhitePiece[Pawn.type]
 
-  type BlackKing = BlackPiece[King.type]
-  type BlackQueen = BlackPiece[Queen.type]
-  type BlackRook = BlackPiece[Rook.type]
+  type BlackKing   = BlackPiece[King.type]
+  type BlackQueen  = BlackPiece[Queen.type]
+  type BlackRook   = BlackPiece[Rook.type]
   type BlackBishop = BlackPiece[Bishop.type]
   type BlackKnight = BlackPiece[Knight.type]
-  type BlackPawn = BlackPiece[Pawn.type]
+  type BlackPawn   = BlackPiece[Pawn.type]
+  // format: ON
 }

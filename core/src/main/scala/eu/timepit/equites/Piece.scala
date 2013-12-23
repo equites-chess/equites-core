@@ -23,12 +23,14 @@ sealed trait PieceType
 sealed trait CastlingPieceType extends PieceType
 sealed trait PromotedPieceType extends PieceType
 
-case object King extends CastlingPieceType
-case object Queen extends PromotedPieceType
-case object Rook extends CastlingPieceType with PromotedPieceType
+// format: OFF
+case object King   extends CastlingPieceType
+case object Queen  extends PromotedPieceType
+case object Rook   extends CastlingPieceType with PromotedPieceType
 case object Bishop extends PromotedPieceType
 case object Knight extends PromotedPieceType
-case object Pawn extends PieceType
+case object Pawn   extends PieceType
+// format: ON
 
 object Piece {
   def allTypes: List[PieceType] =
@@ -44,7 +46,7 @@ object Piece {
   def allCastling: List[CastlingPiece] = genAllPieces(allCastlingTypes)
   def allPromoted: List[PromotedPiece] = genAllPieces(allPromotedTypes)
 
-  private def genAllPieces[T <: PieceType](pieceTypes: List[T]) =
+  private def genAllPieces[T <: PieceType](pieceTypes: List[T]): List[Piece[Color, T]] =
     (Color.all |@| pieceTypes) { Piece.apply }
 }
 
@@ -52,21 +54,23 @@ case class Piece[+C <: Color, +T <: PieceType](color: C, pieceType: T) {
   def isFriendOf(other: AnyPiece): Boolean = color == other.color
   def isOpponentOf(other: AnyPiece): Boolean = color != other.color
 
-  def isKing: Boolean = is(King)
-  def isQueen: Boolean = is(Queen)
-  def isRook: Boolean = is(Rook)
-  def isBishop: Boolean = is(Bishop)
-  def isKnight: Boolean = is(Knight)
-  def isPawn: Boolean = is(Pawn)
+  // format: OFF
+  def isKing   = is(King)
+  def isQueen  = is(Queen)
+  def isRook   = is(Rook)
+  def isBishop = is(Bishop)
+  def isKnight = is(Knight)
+  def isPawn   = is(Pawn)
 
-  private[this] def is(pType: PieceType): Boolean = pieceType == pType
-
-  def maybeKing = maybe(King)
-  def maybeQueen = maybe(Queen)
-  def maybeRook = maybe(Rook)
+  def maybeKing   = maybe(King)
+  def maybeQueen  = maybe(Queen)
+  def maybeRook   = maybe(Rook)
   def maybeBishop = maybe(Bishop)
   def maybeKnight = maybe(Knight)
-  def maybePawn = maybe(Pawn)
+  def maybePawn   = maybe(Pawn)
+  // format: ON
+
+  private[this] def is(pType: PieceType): Boolean = pieceType == pType
 
   private[this] def maybe[T1 <: PieceType](pType: T1): Option[Piece[C, T1]] =
     (pieceType == pType).option(Piece(color, pType))

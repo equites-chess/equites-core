@@ -17,6 +17,7 @@
 package eu.timepit.equites
 package util
 
+// format: OFF
 trait AlgebraicAbbr {
   def K: WhiteKing   = Piece(White, King)
   def Q: WhiteQueen  = Piece(White, Queen)
@@ -68,6 +69,7 @@ trait WikiAbbr {
   def nd: BlackKnight = n
   def pd: BlackPawn   = p
 }
+// format: ON
 
 object PieceAbbr {
   object Algebraic extends AlgebraicAbbr
