@@ -27,6 +27,6 @@ class PlacedSpec extends Specification with ScalaCheck { def is = s2"""
     satisfy the Functor laws $e2
   """
 
-  def e1 = check(equal.laws[Placed[Piece]])
+  def e1 = check(equal.laws[Placed[AnyPiece]])
   def e2 = check(functor.laws[Placed])
 }

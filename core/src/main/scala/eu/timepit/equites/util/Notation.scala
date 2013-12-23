@@ -37,7 +37,7 @@ object Notation {
 
   def numericRankRange: Range = algebraicRankRange
 
-  def pieceFromLetter(c: Char): Option[Piece] = c match {
+  def pieceFromLetter(c: Char): Option[AnyPiece] = c match {
     case 'K' => Some(K)
     case 'Q' => Some(Q)
     case 'R' => Some(R)
@@ -53,7 +53,7 @@ object Notation {
     case _   => None
   }
 
-  def pieceFromFigurine(c: Char): Option[Piece] = c match {
+  def pieceFromFigurine(c: Char): Option[AnyPiece] = c match {
     case '♔' => Some(♔)
     case '♕' => Some(♕)
     case '♖' => Some(♖)

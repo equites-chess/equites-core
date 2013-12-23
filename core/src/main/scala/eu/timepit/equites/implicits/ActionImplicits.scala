@@ -25,7 +25,7 @@ object ActionImplicits {
     def toLongAlgebraic: String = toLongAlgebraicImpl(_.toAlgebraic)
     def toLongFigurine:  String = toLongAlgebraicImpl(_.toFigurine)
 
-    private def toLongAlgebraicImpl(stringOf: Piece => String): String = {
+    private def toLongAlgebraicImpl(stringOf: AnyPiece => String): String = {
       self match {
         case p: PromotionLike
           => stringOf(p.piece) + moveToLongAlgebraic + stringOf(p.promotedTo)

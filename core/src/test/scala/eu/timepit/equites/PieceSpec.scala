@@ -24,33 +24,33 @@ import ArbitraryInstances._
 class PieceSpec extends Specification with ScalaCheck {
   "Piece" should {
     "be convertible to one of its subtypes" in check {
-      (p: Piece) => p.maybeKing   orElse p.maybeQueen  orElse
-                    p.maybeRook   orElse p.maybeBishop orElse
-                    p.maybeKnight orElse p.maybePawn   must beSome(p)
+      (p: AnyPiece) => p.maybeKing   orElse p.maybeQueen  orElse
+                       p.maybeRook   orElse p.maybeBishop orElse
+                       p.maybeKnight orElse p.maybePawn   must beSome(p)
     }
     "be one of its subtypes" in check {
-      (p: Piece) => p.isKing   || p.isQueen  || p.isRook ||
-                    p.isBishop || p.isKnight || p.isPawn must beTrue
+      (p: AnyPiece) => p.isKing   || p.isQueen  || p.isRook ||
+                       p.isBishop || p.isKnight || p.isPawn must beTrue
     }
   }
 
   "isFriendOf should return true on friendly pieces" in check {
-    (c: Color, p1: Color => Piece, p2: Color => Piece) =>
+    (c: Color, p1: Color => AnyPiece, p2: Color => AnyPiece) =>
       p1(c) isFriendOf p2(c) must beTrue
   }
 
   "isFriendOf should return false on opposing pieces" in check {
-    (c: Color, p1: Color => Piece, p2: Color => Piece) =>
+    (c: Color, p1: Color => AnyPiece, p2: Color => AnyPiece) =>
       p1(c) isFriendOf p2(c.opposite) must beFalse
   }
 
   "isOpponentOf should return true on opposing pieces" in check {
-    (c: Color, p1: Color => Piece, p2: Color => Piece) =>
+    (c: Color, p1: Color => AnyPiece, p2: Color => AnyPiece) =>
       p1(c) isOpponentOf p2(c.opposite) must beTrue
   }
 
   "isOpponentOf should return false on friendly pieces" in check {
-    (c: Color, p1: Color => Piece, p2: Color => Piece) =>
+    (c: Color, p1: Color => AnyPiece, p2: Color => AnyPiece) =>
       p1(c) isOpponentOf p2(c) must beFalse
   }
 }

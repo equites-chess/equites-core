@@ -38,7 +38,7 @@ class PieceImplicitsSpec extends Specification {
       N.toAlgebraic must_== "N"
       n.toAlgebraic must_== "N"
       P.toAlgebraic must_== ""
-      Pawn(Black).toAlgebraic must_== ""
+      Piece(Black, Pawn).toAlgebraic must_== ""
     }
 
     "correctly perform toLetter" in {
@@ -53,7 +53,7 @@ class PieceImplicitsSpec extends Specification {
       N.toLetter must_== "N"
       n.toLetter must_== "n"
       P.toLetter must_== "P"
-      Pawn(Black).toLetter must_== "p"
+      Piece(Black, Pawn).toLetter must_== "p"
     }
 
     "correctly perform toFigurine" in {
@@ -98,7 +98,7 @@ class PieceImplicitsSpec extends Specification {
       N.toNumeric must_== "4"
       n.toNumeric must_== "4"
       P.toNumeric must_== ""
-      Pawn(Black).toNumeric must_== ""
+      Piece(Black, Pawn).toNumeric must_== ""
     }
   }
 }

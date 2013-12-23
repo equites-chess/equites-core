@@ -28,78 +28,78 @@ trait DrawLike {
 }
 
 sealed trait MoveLike extends Action with DrawLike {
-  def piece: Piece
-  def placedPiece: Placed[Piece] = Placed(piece, from)
+  def piece: AnyPiece
+  def placedPiece: Placed[AnyPiece] = Placed(piece, from)
 }
 
 sealed trait PromotionLike extends MoveLike {
   require(piece isFriendOf promotedTo)
 
-  def piece: Pawn
+  def piece: AnyPawn
   def promotedTo: PromotedPiece
 }
 
 sealed trait CaptureLike extends MoveLike {
   require(piece isOpponentOf captured)
 
-  def captured: Piece
+  def captured: AnyPiece
   def capturedOn: Square = to
-  def placedCaptured: Placed[Piece] = Placed(captured, capturedOn)
+  def placedCaptured: Placed[AnyPiece] = Placed(captured, capturedOn)
 }
 
 object Move {
-  def apply(piece: Piece, fromTo: (Square, Square)): Move =
+  def apply(piece: AnyPiece, fromTo: (Square, Square)): Move =
     Move(piece, fromTo._1, fromTo._2)
 
-  def apply(placed: Placed[Piece], to: Square): Move =
+  def apply(placed: Placed[AnyPiece], to: Square): Move =
     Move(placed.elem, placed.square, to)
 }
 
-case class Move(piece: Piece, from: Square, to: Square)
+case class Move(piece: AnyPiece, from: Square, to: Square)
   extends MoveLike
 
 object Promotion {
-  def apply(placed: Placed[Pawn], to: Square, promotedTo: PromotedPiece)
+  def apply(placed: Placed[AnyPawn], to: Square, promotedTo: PromotedPiece)
       : Promotion =
     Promotion(placed.elem, placed.square, to, promotedTo)
 }
 
-case class Promotion(piece: Pawn, from: Square, to: Square,
+case class Promotion(piece: AnyPawn, from: Square, to: Square,
   promotedTo: PromotedPiece)
   extends PromotionLike
 
 object Capture {
-  def apply(move: MoveLike, captured: Piece): Capture =
+  def apply(move: MoveLike, captured: AnyPiece): Capture =
     Capture(move.piece, move.from, move.to, captured)
 
-  def apply(placed: Placed[Piece], to: Square, captured: Piece): Capture =
+  def apply(placed: Placed[AnyPiece], to: Square, captured: AnyPiece): Capture =
     Capture(placed.elem, placed.square, to, captured)
 }
 
-case class Capture(piece: Piece, from: Square, to: Square, captured: Piece)
+case class Capture(piece: AnyPiece, from: Square, to: Square, captured: AnyPiece)
   extends CaptureLike
 
 object CaptureAndPromotion {
-  def apply(promo: PromotionLike, captured: Piece): CaptureAndPromotion =
+  def apply(promo: PromotionLike, captured: AnyPiece): CaptureAndPromotion =
     CaptureAndPromotion(promo.piece, promo.from, promo.to, captured,
                         promo.promotedTo)
 
-  def apply(placed: Placed[Pawn], to: Square, captured: Piece,
+  def apply(placed: Placed[AnyPawn], to: Square, captured: AnyPiece,
             promotedTo: PromotedPiece): CaptureAndPromotion =
     CaptureAndPromotion(placed.elem, placed.square, to, captured, promotedTo)
 }
 
-case class CaptureAndPromotion(piece: Pawn, from: Square, to: Square,
-  captured: Piece, promotedTo: PromotedPiece)
+case class CaptureAndPromotion(piece: AnyPawn, from: Square, to: Square,
+  captured: AnyPiece, promotedTo: PromotedPiece)
   extends CaptureLike with PromotionLike
 
 object EnPassant {
-  def apply(placed: Placed[Pawn], to: Square, captured: Pawn,
+  def apply(placed: Placed[AnyPawn], to: Square, captured: AnyPawn,
             capturedOn: Square): EnPassant =
     EnPassant(placed.elem, placed.square, to, captured, capturedOn)
 }
 
-case class EnPassant(piece: Pawn, from: Square, to: Square, captured: Pawn,
+case class EnPassant(piece: AnyPawn, from: Square, to: Square, captured: AnyPawn,
   override val capturedOn: Square)
   extends CaptureLike
 
@@ -115,8 +115,8 @@ sealed trait Castling extends Action {
   def color: Color
   def side: Side
 
-  def king: King = King(color)
-  def rook: Rook = Rook(color)
+  def king: AnyKing = Piece(color, King)
+  def rook: AnyRook = Piece(color, Rook)
 
   def kingMove: Move = moveOf(king)
   def rookMove: Move = moveOf(rook)

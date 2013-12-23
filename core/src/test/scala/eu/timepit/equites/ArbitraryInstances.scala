@@ -20,15 +20,16 @@ import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary.arbitrary
 
 object ArbitraryInstances {
-  implicit val arbitraryBoard: Arbitrary[Board] = Arbitrary {
-    val genSquarePiece = for {
-      square <- arbitrary[Square]
-      piece <- arbitrary[Piece]
-    } yield (square, piece)
+  implicit val arbitraryBoard: Arbitrary[Board] =
+    Arbitrary {
+      val genSquarePiece = for {
+        square <- arbitrary[Square]
+        piece <- arbitrary[AnyPiece]
+      } yield (square, piece)
 
-    Gen.containerOf[List, (Square, Piece)](genSquarePiece)
-      .map(seq => Board(seq: _*))
-  }
+      Gen.containerOf[List, (Square, AnyPiece)](genSquarePiece)
+        .map(seq => Board(seq: _*))
+    }
 
   implicit val arbitraryColor: Arbitrary[Color] =
     Arbitrary(Gen.oneOf(Color.all))
@@ -41,30 +42,30 @@ object ArbitraryInstances {
       } yield Placed(elem, square)
     }
 
-  implicit val arbitraryPieceFn: Arbitrary[Color => Piece] =
-    Arbitrary(Gen.oneOf(King, Queen, Rook, Bishop, Knight, Pawn))
+  implicit val arbitraryPieceType: Arbitrary[PieceType] =
+    Arbitrary(Gen.oneOf(Piece.allTypes))
 
-  implicit val arbitraryPiece: Arbitrary[Piece] = Arbitrary {
-    for {
-      piece <- arbitrary[Color => Piece]
-      color <- arbitrary[Color]
-    } yield piece(color)
-  }
+  implicit val arbitraryPieceFn: Arbitrary[Color => AnyPiece] =
+    Arbitrary {
+      for {
+        pieceType <- arbitrary[PieceType]
+      } yield (c: Color) => Piece(c, pieceType)
+    }
 
-  implicit val arbitraryPromotedPiece: Arbitrary[PromotedPiece] = Arbitrary {
-    for {
-      color <- arbitrary[Color]
-      piece <- Gen.oneOf(Queen, Rook, Bishop, Knight)
-    } yield piece(color)
-  }
+  implicit val arbitraryPiece: Arbitrary[AnyPiece] =
+    Arbitrary(Gen.oneOf(Piece.all))
+
+  implicit val arbitraryPromotedPiece: Arbitrary[PromotedPiece] =
+    Arbitrary(Gen.oneOf(Piece.allPromoted))
 
   implicit val arbitrarySquare: Arbitrary[Square] =
     Arbitrary(Gen.oneOf(Rules.allSquaresSeq))
 
-  implicit val arbitraryVec: Arbitrary[Vec] = Arbitrary {
-    for {
-      file <- arbitrary[Int]
-      rank <- arbitrary[Int]
-    } yield Vec(file, rank)
-  }
+  implicit val arbitraryVec: Arbitrary[Vec] =
+    Arbitrary {
+      for {
+        file <- arbitrary[Int]
+        rank <- arbitrary[Int]
+      } yield Vec(file, rank)
+    }
 }

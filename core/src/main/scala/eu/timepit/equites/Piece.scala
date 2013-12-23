@@ -16,35 +16,58 @@
 
 package eu.timepit.equites
 
-import PartialFunction.condOpt
+import scalaz._
+import Scalaz._
 
-sealed trait Piece {
-  def color: Color
+sealed trait PieceType
+sealed trait CastlingPieceType extends PieceType
+sealed trait PromotedPieceType extends PieceType
 
-  def isFriendOf(other: Piece): Boolean = color == other.color
-  def isOpponentOf(other: Piece): Boolean = color != other.color
+case object King extends CastlingPieceType
+case object Queen extends PromotedPieceType
+case object Rook extends CastlingPieceType with PromotedPieceType
+case object Bishop extends PromotedPieceType
+case object Knight extends PromotedPieceType
+case object Pawn extends PieceType
 
-  def maybeKing:   Option[King]   = condOpt(this) { case k: King   => k }
-  def maybeQueen:  Option[Queen]  = condOpt(this) { case q: Queen  => q }
-  def maybeRook:   Option[Rook]   = condOpt(this) { case r: Rook   => r }
-  def maybeBishop: Option[Bishop] = condOpt(this) { case b: Bishop => b }
-  def maybeKnight: Option[Knight] = condOpt(this) { case n: Knight => n }
-  def maybePawn:   Option[Pawn]   = condOpt(this) { case p: Pawn   => p }
+object Piece {
+  def allTypes: List[PieceType] =
+    List(King, Queen, Rook, Bishop, Knight, Pawn)
 
-  def isKing:   Boolean = maybeKing.isDefined
-  def isQueen:  Boolean = maybeQueen.isDefined
-  def isRook:   Boolean = maybeRook.isDefined
-  def isBishop: Boolean = maybeBishop.isDefined
-  def isKnight: Boolean = maybeKnight.isDefined
-  def isPawn:   Boolean = maybePawn.isDefined
+  def allCastlingTypes: List[CastlingPieceType] =
+    List(King, Rook)
+
+  def allPromotedTypes: List[PromotedPieceType] =
+    List(Queen, Rook, Bishop, Knight)
+
+  def all: List[AnyPiece] = genAllPieces(allTypes)
+  def allCastling: List[CastlingPiece] = genAllPieces(allCastlingTypes)
+  def allPromoted: List[PromotedPiece] = genAllPieces(allPromotedTypes)
+
+  private def genAllPieces[T <: PieceType](pieceTypes: List[T]) =
+    (Color.all |@| pieceTypes) { Piece.apply }
 }
 
-sealed trait CastlingPiece extends Piece
-sealed trait PromotedPiece extends Piece
+case class Piece[+C <: Color, +T <: PieceType](color: C, pieceType: T) {
+  def isFriendOf(other: AnyPiece): Boolean = color == other.color
+  def isOpponentOf(other: AnyPiece): Boolean = color != other.color
 
-case class King  (color: Color) extends CastlingPiece
-case class Queen (color: Color) extends PromotedPiece
-case class Rook  (color: Color) extends CastlingPiece with PromotedPiece
-case class Bishop(color: Color) extends PromotedPiece
-case class Knight(color: Color) extends PromotedPiece
-case class Pawn  (color: Color) extends Piece
+  def isKing: Boolean = is(King)
+  def isQueen: Boolean = is(Queen)
+  def isRook: Boolean = is(Rook)
+  def isBishop: Boolean = is(Bishop)
+  def isKnight: Boolean = is(Knight)
+  def isPawn: Boolean = is(Pawn)
+
+  private[this] def is(pType: PieceType): Boolean = pieceType == pType
+
+  def maybeKing = maybe(King)
+  def maybeQueen = maybe(Queen)
+  def maybeRook = maybe(Rook)
+  def maybeBishop = maybe(Bishop)
+  def maybeKnight = maybe(Knight)
+  def maybePawn = maybe(Pawn)
+
+  private[this] def maybe[T1 <: PieceType](pType: T1): Option[Piece[C, T1]] =
+    (pieceType == pType).option(Piece(color, pType))
+}

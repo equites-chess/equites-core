@@ -20,5 +20,6 @@ package implicits
 import scala.language.implicitConversions
 
 object PlacedImplicits {
-  implicit def placed2piece[A <: Piece](placed: Placed[A]): A = placed.elem
+  implicit def placed2piece[A <: Piece[_, _]](placed: Placed[A]): A =
+    placed.elem
 }

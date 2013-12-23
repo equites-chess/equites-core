@@ -19,25 +19,27 @@ package eu.timepit.equites
 import scala.collection.immutable.MapProxy
 
 object Board {
-  def apply(mapping: Map[Square, Piece]): Board = new Board(mapping)
-  def apply(kvs: (Square, Piece)*): Board = new Board(kvs.toMap)
+  def apply(mapping: Map[Square, AnyPiece]): Board = new Board(mapping)
+  def apply(kvs: (Square, AnyPiece)*): Board = new Board(kvs.toMap)
   val empty: Board = Board()
 }
 
-class Board(val self: Map[Square, Piece]) extends MapProxy[Square, Piece] {
-  def getPlaced(square: Square): Option[Placed[Piece]] =
+class Board(val self: Map[Square, AnyPiece])
+    extends MapProxy[Square, AnyPiece] {
+
+  def getPlaced(square: Square): Option[Placed[AnyPiece]] =
     get(square).map(Placed(_, square))
 
-  def getPlaced(squares: Seq[Square]): Seq[Placed[Piece]] =
+  def getPlaced(squares: Seq[Square]): Seq[Placed[AnyPiece]] =
     squares.map(getPlaced).flatten
 
   def isVacant(square: Square): Boolean = !isOccupied(square)
   def isOccupied(square: Square): Boolean = contains(square)
 
-  def isOccupiedBy(square: Square, piece: Piece): Boolean =
+  def isOccupiedBy(square: Square, piece: AnyPiece): Boolean =
     get(square).exists(_ == piece)
 
-  def placedPieces: Stream[Placed[Piece]] =
+  def placedPieces: Stream[Placed[AnyPiece]] =
     toStream.map { case (square, piece) => Placed(piece, square) }
 
   def processAction(action: Action): Board = action match {
@@ -88,10 +90,10 @@ class Board(val self: Map[Square, Piece]) extends MapProxy[Square, Piece] {
   def reverseCastling(castling: Castling): Board =
     reverseMove(castling.kingMove).reverseMove(castling.rookMove)
 
-  def +(kv: (Square, Piece)): Board =
+  def +(kv: (Square, AnyPiece)): Board =
     Board(self + kv)
 
-  def +(placed: Placed[Piece]): Board =
+  def +(placed: Placed[AnyPiece]): Board =
     Board(self + (placed.square -> placed.elem))
 
   override def -(square: Square): Board =

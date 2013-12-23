@@ -21,7 +21,7 @@ import implicits.PieceImplicits._
 import util.Notation._
 
 trait AbstractRepr {
-  def pieceToString(piece: Piece): String
+  def pieceToString(piece: AnyPiece): String
   def tileStart: String        = ""
   def tileEmpty: String
   def tileEnd: String          = ""
@@ -40,7 +40,7 @@ trait AbstractRepr {
 }
 
 trait LetterRepr extends AbstractRepr {
-  def pieceToString(piece: Piece) = piece.toLetter
+  def pieceToString(piece: AnyPiece) = piece.toLetter
   def tileEmpty        = "."
   override def rankSep = " "
   def verticalBar      = "  "
@@ -48,7 +48,7 @@ trait LetterRepr extends AbstractRepr {
 }
 
 trait FigurineRepr extends AbstractRepr {
-  def pieceToString(piece: Piece) = piece.toFigurine
+  def pieceToString(piece: AnyPiece) = piece.toFigurine
   def tileEmpty              = "\u00B7"  // ·
   override def rankSep       = " "
   override def horizontalBar = "\u2500"  // ─
@@ -57,7 +57,7 @@ trait FigurineRepr extends AbstractRepr {
 }
 
 trait WikiRepr extends AbstractRepr {
-  def pieceToString(piece: Piece) = piece.toWikiLetters
+  def pieceToString(piece: AnyPiece) = piece.toWikiLetters
   override def tileStart       = "|"
   def tileEmpty                = "  "
   override def tileEnd         = ""

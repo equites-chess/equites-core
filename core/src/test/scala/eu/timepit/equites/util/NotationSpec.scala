@@ -29,7 +29,7 @@ import ArbitraryInstances._
 class NotationSpec extends Specification with ScalaCheck {
   "pieceFromLetter" should {
     "be the inverse of RichPiece.toLetter" in check {
-      (piece: Piece) =>
+      (piece: AnyPiece) =>
         pieceFromLetter(piece.toLetter.charAt(0)) must beSome(piece)
     }
     "yield None on invalid input" in {
@@ -39,7 +39,7 @@ class NotationSpec extends Specification with ScalaCheck {
 
   "pieceFromFigurine" should {
     "be the inverse of RichPiece.toFigurine" in check {
-      (piece: Piece) =>
+      (piece: AnyPiece) =>
         pieceFromFigurine(piece.toFigurine.charAt(0)) must beSome(piece)
     }
     "yield None on invalid input" in {

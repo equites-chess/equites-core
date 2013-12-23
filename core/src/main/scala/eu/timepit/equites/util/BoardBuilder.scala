@@ -52,7 +52,7 @@ class BoardBuilder(board: Board, square: Square) {
 
   def << : Board = board
 
-  private def embattle(piece: Piece): BoardBuilder =
+  private def embattle(piece: AnyPiece): BoardBuilder =
     new BoardBuilder(board + (square -> piece), nextSquare)
 
   private def empty: BoardBuilder =

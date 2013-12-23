@@ -44,11 +44,11 @@ object UciParsers extends RegexParsers {
     case file ~ rank => Square(file, rank)
   }
 
+  def promotedPieceType: Parser[PromotedPieceType] =
+    "q" ^^^ Queen | "r" ^^^ Rook | "b" ^^^ Bishop | "n" ^^^ Knight
+
   def promotedPieceFn: Parser[Color => PromotedPiece] =
-    "q" ^^^ (Queen)  |
-    "r" ^^^ (Rook)   |
-    "b" ^^^ (Bishop) |
-    "n" ^^^ (Knight)
+    promotedPieceType ^^ (t => (c: Color) => Piece(c, t))
 
   def coordinateMove: Parser[util.CoordinateMove] =
     square ~ square ~ promotedPieceFn.? ^^ {

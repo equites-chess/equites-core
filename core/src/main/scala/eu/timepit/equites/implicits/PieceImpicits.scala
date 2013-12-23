@@ -18,19 +18,19 @@ package eu.timepit.equites
 package implicits
 
 object PieceImplicits {
-  implicit final class RichPiece(val self: Piece) extends AnyVal {
-    def toAlgebraic: String = self match {
-      case King(_)   => "K"
-      case Queen(_)  => "Q"
-      case Rook(_)   => "R"
-      case Bishop(_) => "B"
-      case Knight(_) => "N"
-      case Pawn(_)   => ""
+  implicit final class RichPiece(val self: AnyPiece) extends AnyVal {
+    def toAlgebraic: String = self.pieceType match {
+      case King   => "K"
+      case Queen  => "Q"
+      case Rook   => "R"
+      case Bishop => "B"
+      case Knight => "N"
+      case Pawn   => ""
     }
 
-    def toUpperCaseLetter: String = self match {
-      case Pawn(_) => "P"
-      case _       => toAlgebraic
+    def toUpperCaseLetter: String = self.pieceType match {
+      case Pawn => "P"
+      case _    => toAlgebraic
     }
 
     def toLowerCaseLetter: String = toUpperCaseLetter.toLowerCase
@@ -41,18 +41,18 @@ object PieceImplicits {
     }
 
     def toFigurine: String = self match {
-      case King(White)   => "♔"
-      case Queen(White)  => "♕"
-      case Rook(White)   => "♖"
-      case Bishop(White) => "♗"
-      case Knight(White) => "♘"
-      case Pawn(White)   => "♙"
-      case King(Black)   => "♚"
-      case Queen(Black)  => "♛"
-      case Rook(Black)   => "♜"
-      case Bishop(Black) => "♝"
-      case Knight(Black) => "♞"
-      case Pawn(Black)   => "♟"
+      case Piece(White, King)   => "♔"
+      case Piece(White, Queen)  => "♕"
+      case Piece(White, Rook)   => "♖"
+      case Piece(White, Bishop) => "♗"
+      case Piece(White, Knight) => "♘"
+      case Piece(White, Pawn)   => "♙"
+      case Piece(Black, King)   => "♚"
+      case Piece(Black, Queen)  => "♛"
+      case Piece(Black, Rook)   => "♜"
+      case Piece(Black, Bishop) => "♝"
+      case Piece(Black, Knight) => "♞"
+      case Piece(Black, Pawn)   => "♟"
     }
 
     def toWikiLetters: String = toLowerCaseLetter + (self.color match {
@@ -60,24 +60,24 @@ object PieceImplicits {
       case Black => "d"
     })
 
-    def toNumeric: String = self match {
-      case Queen(_)  => "1"
-      case Rook(_)   => "2"
-      case Bishop(_) => "3"
-      case Knight(_) => "4"
-      case _         => ""
+    def toNumeric: String = self.pieceType match {
+      case Queen  => "1"
+      case Rook   => "2"
+      case Bishop => "3"
+      case Knight => "4"
+      case _      => ""
     }
 
-    def centipawns: Int = self match {
-      case King(_)   => 100000000
-      case Queen(_)  => 900
-      case Rook(_)   => 500
-      case Bishop(_) => 300
-      case Knight(_) => 300
-      case Pawn(_)   => 100
+    def centipawns: Int = self.pieceType match {
+      case King   => 100000000
+      case Queen  => 900
+      case Rook   => 500
+      case Bishop => 300
+      case Knight => 300
+      case Pawn   => 100
     }
 
     def toThemeId: String =
-      self.color.toString + self.getClass.getSimpleName
+      self.color.toString + self.pieceType.toString
   }
 }

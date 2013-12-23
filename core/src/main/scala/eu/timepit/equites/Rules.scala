@@ -16,9 +16,6 @@
 
 package eu.timepit.equites
 
-import scalaz._
-import Scalaz._
-
 import implicits.PlacedImplicits._
 
 object Rules {
@@ -38,33 +35,33 @@ object Rules {
   val knightFiles = List(1, 6)
   val bishopFiles = List(2, 5)
 
-  val startingSquares: Map[Piece, List[Square]] = {
-    def startingSquaresBy(color: Color): Map[Piece, List[Square]] = {
+  val startingSquares: Map[AnyPiece, List[Square]] = {
+    def startingSquaresBy(color: Color): Map[AnyPiece, List[Square]] = {
       val backRank = backRankBy(color)
       val pawnRank = pawnRankBy(color)
-      Map(King(color)   -> List(Square(kingFile,  backRank)),
-          Queen(color)  -> List(Square(queenFile, backRank)),
-          Rook(color)   ->   rookFiles.map(Square(_, backRank)),
-          Bishop(color) -> bishopFiles.map(Square(_, backRank)),
-          Knight(color) -> knightFiles.map(Square(_, backRank)),
-          Pawn(color)   ->   fileRange.map(Square(_, pawnRank)).toList)
+      Map(Piece(color, King)   -> List(Square(kingFile,  backRank)),
+          Piece(color, Queen)  -> List(Square(queenFile, backRank)),
+          Piece(color, Rook)   ->   rookFiles.map(Square(_, backRank)),
+          Piece(color, Bishop) -> bishopFiles.map(Square(_, backRank)),
+          Piece(color, Knight) -> knightFiles.map(Square(_, backRank)),
+          Piece(color, Pawn)   ->   fileRange.map(Square(_, pawnRank)).toList)
     }
     Color.all.map(startingSquaresBy).reduce(_ ++ _)
   }
 
-  def onStartingSquare(placed: Placed[Piece]): Boolean =
+  def onStartingSquare(placed: Placed[AnyPiece]): Boolean =
     startingSquares(placed) contains placed.square
 
-  def onEnPassantRank(placed: Placed[Pawn]): Boolean =
+  def onEnPassantRank(placed: Placed[AnyPawn]): Boolean =
     enPassantRankBy(placed.color) == placed.square.rank
 
   val castlingSquares: Map[(Side, CastlingPiece), (Square, Square)] = {
     def castlingSquaresFor(side: Side, piece: CastlingPiece)
         : (Square, Square) = {
       val rookFile = if (side == Kingside) rookFiles(1) else rookFiles(0)
-      val (fromFile, pieceOffset) = piece match {
-        case King(_) => (kingFile, 2)
-        case Rook(_) => (rookFile, 1)
+      val (fromFile, pieceOffset) = piece.pieceType match {
+        case King => (kingFile, 2)
+        case Rook => (rookFile, 1)
       }
 
       val leftOrRight = if (side == Kingside) 1 else -1
@@ -76,7 +73,7 @@ object Rules {
 
     val mapping = for {
       side  <- Side.all
-      piece <- Color.all <*> List(King, Rook)
+      piece <- Piece.allCastling
     } yield (side, piece) -> castlingSquaresFor(side, piece)
     mapping.toMap
   }
@@ -87,11 +84,11 @@ object Rules {
   val allCastlings: List[Castling] =
     castlingsBy(White) ::: castlingsBy(Black)
 
-  def associatedCastlings(placed: Placed[Piece]): List[Castling] =
+  def associatedCastlings(placed: Placed[AnyPiece]): List[Castling] =
     placed.elem match {
-      case King(color) =>
+      case Piece(color, King) =>
         castlingsBy(color)
-      case Rook(color) =>
+      case Piece(color, Rook) =>
         castlingsBy(color).filter(_.rookMove.from == placed.square)
       case _ => Nil
     }
@@ -119,31 +116,31 @@ object Rules {
   def rankBy(rank: Int, color: Color): Int =
     if (color == White) rank else rankRange.end - rank
 
-  val movementTypes: Map[Piece, (Directions, Int)] = {
-    def movementTypesBy(color: Color): Map[Piece, (Directions, Int)] = {
+  val movementTypes: Map[AnyPiece, (Directions, Int)] = {
+    def movementTypesBy(color: Color): Map[AnyPiece, (Directions, Int)] = {
       import Directions._
-      Map(King(color)   -> ((anywhere, 1)),
-          Queen(color)  -> ((anywhere, maxLength)),
-          Rook(color)   -> ((straight, maxLength)),
-          Bishop(color) -> ((diagonal, maxLength)),
-          Knight(color) -> ((knightLike, 1)),
-          Pawn(color)   -> ((front.fromPov(color), 1)))
+      Map(Piece(color, King)   -> ((anywhere, 1)),
+          Piece(color, Queen)  -> ((anywhere, maxLength)),
+          Piece(color, Rook)   -> ((straight, maxLength)),
+          Piece(color, Bishop) -> ((diagonal, maxLength)),
+          Piece(color, Knight) -> ((knightLike, 1)),
+          Piece(color, Pawn)   -> ((front.fromPov(color), 1)))
     }
     Color.all.map(movementTypesBy).reduce(_ ++ _)
   }
 
-  def movementTypeOf(placed: Placed[Piece]): (Directions, Int) = {
+  def movementTypeOf(placed: Placed[AnyPiece]): (Directions, Int) = {
     val (directions, dist) = movementTypes(placed.elem)
-    placed.elem match {
-      case Pawn(_) if onStartingSquare(placed) => (directions, 2)
-      case _ => (directions, dist)
+    placed.pieceType match {
+      case Pawn if onStartingSquare(placed) => (directions, 2)
+      case _                                => (directions, dist)
     }
   }
 
   def squaresInDirection(from: Square, direction: Vec): Stream[Square] =
     Stream.iterate(from)(_ + direction).tail.takeWhile(_.isValid)
 
-  def possibleSquares(placed: Placed[Piece]): Stream[Square] = {
+  def possibleSquares(placed: Placed[AnyPiece]): Stream[Square] = {
     val (directions, dist) = movementTypeOf(placed)
     for {
       direction <- directions.toStream
@@ -151,7 +148,7 @@ object Rules {
     } yield square
   }
 
-  def unvisitedSquares(placed: Placed[Piece], visited: Set[Square])
+  def unvisitedSquares(placed: Placed[AnyPiece], visited: Set[Square])
       : Stream[Square] =
     possibleSquares(placed).filterNot(visited)
 }

@@ -93,4 +93,6 @@ object ActionOps {
   /** Returns true if the given move allows an en passant capture. */
   def allowsEnPassant(move: Move): Boolean =
     move.piece.isPawn && move.l1Length == 2 && move.direction.isStraight
+
+  // TODO isPawnOnStartingSquare(AnyPiece)
 }

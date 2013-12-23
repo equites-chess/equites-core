@@ -85,6 +85,8 @@ object KnightsTour {
   def isClosed(tour: Tour): Boolean =
     tour.nonEmpty && Directions.knightLike.contains(tour.last - tour.head)
 
-  private def unvisited(from: Square, visited: Set[Square]): Stream[Square] =
-    Rules.unvisitedSquares(Placed(Knight(White), from), visited)
+  private def unvisited(from: Square, visited: Set[Square]): Stream[Square] = {
+    val placed = Placed(Piece(White, Knight), from)
+    Rules.unvisitedSquares(placed, visited)
+  }
 }

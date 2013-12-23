@@ -20,31 +20,28 @@ package implicits
 import org.specs2.mutable._
 
 import ActionImplicits._
+import util.PieceAbbr.Wiki._
 
 class ActionImplicitsSpec extends Specification {
   "RichAction" should {
-    val moveWhite = Move(Queen(White), Square(0, 0), Square(7, 7))
-    val moveBlack = Move(Queen(Black), Square(0, 0), Square(7, 7))
+    val moveWhite = Move(ql, Square(0, 0), Square(7, 7))
+    val moveBlack = Move(qd, Square(0, 0), Square(7, 7))
 
-    val promoWhite =
-      Promotion(Pawn(White), Square(3, 6), Square(3, 7), Queen(White))
-    val promoBlack =
-      Promotion(Pawn(Black), Square(3, 1), Square(3, 0), Queen(Black))
+    val promoWhite = Promotion(pl, Square(3, 6), Square(3, 7), ql)
+    val promoBlack = Promotion(pd, Square(3, 1), Square(3, 0), qd)
 
-    val captWhite =
-      Capture(Knight(White), Square(0, 0), Square(2, 1), Pawn(Black))
-    val captBlack =
-      Capture(Knight(Black), Square(0, 0), Square(2, 1), Pawn(White))
+    val captWhite = Capture(nl, Square(0, 0), Square(2, 1), pd)
+    val captBlack = Capture(nd, Square(0, 0), Square(2, 1), pl)
 
-    val captPromoWhite = CaptureAndPromotion(Pawn(White), Square(0, 6),
-      Square(1, 7), Knight(Black), Queen(White))
-    val captPromoBlack = CaptureAndPromotion(Pawn(Black), Square(0, 1),
-      Square(1, 0), Knight(White), Queen(Black))
+    val captPromoWhite = CaptureAndPromotion(pl, Square(0, 6),
+      Square(1, 7), kd, ql)
+    val captPromoBlack = CaptureAndPromotion(pd, Square(0, 1),
+      Square(1, 0), kl, qd)
 
-    val enPassantWhite = EnPassant(Pawn(White), Square(4, 4), Square(5, 5),
-      Pawn(Black), Square(5, 4))
-    val enPassantBlack = EnPassant(Pawn(Black), Square(1, 3), Square(0, 2),
-      Pawn(White), Square(0, 3))
+    val enPassantWhite = EnPassant(pl, Square(4, 4), Square(5, 5),
+      pd, Square(5, 4))
+    val enPassantBlack = EnPassant(pd, Square(1, 3), Square(0, 2),
+      pl, Square(0, 3))
 
     "correctly perform toNumeric" in {
       moveWhite.toNumeric must_== "1188"
