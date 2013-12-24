@@ -55,10 +55,13 @@ object PieceImplicits {
       case Piece(Black, Pawn)   => "♟"
     }
 
-    def toWikiLetters: String = toLowerCaseLetter + (self.color match {
-      case White => "l"
-      case Black => "d"
-    })
+    def toWikiLetters: String = {
+      def colorLetter: String = self.color match {
+        case White => "l"
+        case Black => "d"
+      }
+      toLowerCaseLetter + colorLetter
+    }
 
     def toNumeric: String = self.pieceType match {
       case Queen  => "1"
@@ -77,7 +80,6 @@ object PieceImplicits {
       case Pawn   => 100
     }
 
-    def toThemeId: String =
-      self.color.toString + self.pieceType.toString
+    def toTextualId: String = self.color.toString + self.pieceType.toString
   }
 }
