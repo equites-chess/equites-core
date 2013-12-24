@@ -17,6 +17,7 @@
 package eu.timepit.equites
 
 import java.nio.charset.Charset
+import scala.collection.immutable.NumericRange
 
 package object util {
   def backtracking[C](firstCandidate: C)
@@ -25,6 +26,15 @@ package object util {
       nc => if (accept(nc)) Stream(nc) else recur(nc)
     }
     recur(firstCandidate)
+  }
+
+  def incrRange(range: Range, incr: Int): Range =
+    (range.head + incr) to (range.last + incr) by range.step
+
+  def toCharRange(range: Range, offset: Char): NumericRange[Char] = {
+    val start = (offset + range.head).toChar
+    val end = (offset + range.last).toChar
+    start to end by range.step.toChar
   }
 
   def toStringOnOff(bool: Boolean): String = if (bool) "on" else "off"

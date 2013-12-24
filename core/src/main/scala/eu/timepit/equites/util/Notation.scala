@@ -23,18 +23,10 @@ import PieceAbbr.Algebraic._
 import PieceAbbr.Figurine._
 
 object Notation {
-  val algebraicFileRange: NumericRange[Char] =
-    (Rules.fileRange.start + 'a').toChar to
-      (Rules.fileRange.end + 'a').toChar
+  val algebraicFileRange: NumericRange[Char] = toCharRange(Rules.fileRange, 'a')
+  val algebraicRankRange: Range = incrRange(Rules.rankRange, 1)
 
-  val algebraicRankRange: Range =
-    (Rules.rankRange.start + 1) to
-      (Rules.rankRange.end + 1)
-
-  val numericFileRange: Range =
-    (Rules.fileRange.start + 1) to
-      (Rules.fileRange.end + 1)
-
+  val numericFileRange: Range = incrRange(Rules.fileRange, 1)
   def numericRankRange: Range = algebraicRankRange
 
   def pieceFromLetter(c: Char): Option[AnyPiece] = c match {
