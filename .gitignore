@@ -7,6 +7,7 @@ tmp/
 .cache
 .classpath
 .history
+.idea*/
 .project
 .settings/
 .target/

@@ -17,7 +17,10 @@
 package eu.timepit.equites
 package util
 
+import scala.annotation.tailrec
+
 object Math {
+  @tailrec
   def gcd[A](x: A, y: A)(implicit A: Integral[A]): A =
     if (y == 0) x else gcd(y, A.rem(x, y))
 
