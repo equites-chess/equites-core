@@ -35,8 +35,8 @@ object PgnParsers extends RegexParsers {
   def string: Parser[String] =
     """"([^"\\]|\\.)*"""".r ^^ {
       _.dropLeftRight(1)
-       .replaceAllLiterally("\\\\", "\\")
-       .replaceAllLiterally("\\\"", "\"")
+        .replaceAllLiterally("\\\\", "\\")
+        .replaceAllLiterally("\\\"", "\"")
     }
 
   def symbol: Parser[String] =
@@ -64,7 +64,7 @@ object PgnParsers extends RegexParsers {
     (tagPair <~ comment.*).*
 
   def moveNumberIndicator: Parser[(Int, Color)] = {
-    def white = "."   ^^^ White
+    def white = "." ^^^ White
     def black = "..." ^^^ Black
     integer ~ (black | white) ^^ toTuple
   }
@@ -101,7 +101,6 @@ object PgnParsers extends RegexParsers {
 
   def moveText: Parser[Any] =
     moveTextSeq ~ terminationMarker
-
 
   def toTuple[T, U](seq: T ~ U): (T, U) = (seq._1, seq._2)
 }

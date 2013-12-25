@@ -33,8 +33,8 @@ object GameState {
 }
 
 case class GameState(board: Board, lastAction: Option[Action],
-  color: Color, moveNumber: Int, halfmoveClock: Int,
-  availableCastlings: Set[Castling]) {
+                     color: Color, moveNumber: Int, halfmoveClock: Int,
+                     availableCastlings: Set[Castling]) {
 
   def updated(action: Action): GameState = copy(
     board = board.processAction(action), lastAction = Some(action),

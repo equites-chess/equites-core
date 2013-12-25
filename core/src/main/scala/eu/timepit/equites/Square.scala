@@ -76,11 +76,11 @@ case class Square(file: Int, rank: Int) {
     math.min(file - Rules.fileRange.start, Rules.fileRange.end - file),
     math.min(rank - Rules.rankRange.start, Rules.rankRange.end - rank))
 
-  def up: Square   = this + Vec.front
+  def up: Square = this + Vec.front
   def down: Square = this + Vec.back
 
   def right: Square = this + Vec.right
-  def left: Square  = this + Vec.left
+  def left: Square = this + Vec.left
 
   def rightmost: Square = Square(Rules.fileRange.end, rank)
   def leftmost: Square = Square(Rules.fileRange.start, rank)

@@ -80,11 +80,11 @@ object UciParsers extends RegexParsers {
   def optionName: Parser[String] = """.*(?=\s+type)""".r
 
   def optionType: Parser[UciOption.Type] = "type" ~>
-    ( optionTypeCheck  |
-      optionTypeSpin   |
-      optionTypeCombo  |
+    (optionTypeCheck |
+      optionTypeSpin |
+      optionTypeCombo |
       optionTypeButton |
-      optionTypeString )
+      optionTypeString)
 
   def optionTypeCheck: Parser[UciOption.Check] =
     "check" ~> "default" ~> boolean ^^ (UciOption.Check)
