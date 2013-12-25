@@ -17,6 +17,7 @@
 package eu.timepit.equites
 
 import scalaz._
+import Scalaz._
 
 import util.Math._
 import util.Notation._
@@ -27,10 +28,8 @@ trait SquareInstances {
     // Equal
     override def equal(s1: Square, s2: Square): Boolean = s1 == s2
     // Order
-    def order(s1: Square, s2: Square): Ordering = {
-      val ord = Order[Int].order(s1.rank, s2.rank)
-      if (ord == Ordering.EQ) Order[Int].order(s1.file, s2.file) else ord
-    }
+    def order(s1: Square, s2: Square): Ordering =
+      (s1.rank cmp s2.rank) mappend (s1.file cmp s2.file)
   }
 
   implicit val scalaOrdering = Order[Square].toScalaOrdering
@@ -41,10 +40,8 @@ object Square extends SquareInstances {
     Square(algebraicFileRange.indexOf(algebraicFile),
            algebraicRankRange.indexOf(algebraicRank))
 
-  def validCoordinates(file: Int, rank: Int): Boolean = {
-    Rules.fileRange.contains(file) &&
-    Rules.rankRange.contains(rank)
-  }
+  def validCoordinates(file: Int, rank: Int): Boolean =
+    Rules.fileRange.contains(file) && Rules.rankRange.contains(rank)
 
   def validSum(that: Square, vec: Vec): Boolean =
     validCoordinates(that.file + vec.file, that.rank + vec.rank)
@@ -67,7 +64,7 @@ case class Square(file: Int, rank: Int) {
   def -(that: Square): Vec = Vec(file - that.file, rank - that.rank)
 
   def isValid: Boolean = Square.validCoordinates(file, rank)
-  def asOption: Option[Square] = if (isValid) Some(this) else None
+  def asOption: Option[Square] = isValid.option(this)
 
   def isLight: Boolean = isOdd(sum)
   def isDark: Boolean = isEven(sum)
