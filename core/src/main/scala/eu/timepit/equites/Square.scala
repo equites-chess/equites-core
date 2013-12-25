@@ -43,9 +43,6 @@ object Square extends SquareInstances {
   def validCoordinates(file: Int, rank: Int): Boolean =
     Rules.fileRange.contains(file) && Rules.rankRange.contains(rank)
 
-  def validSum(that: Square, vec: Vec): Boolean =
-    validCoordinates(that.file + vec.file, that.rank + vec.rank)
-
   def l1Dist(p: Square, q: Square): Int = p.l1Dist(q)
   def lInfDist(p: Square, q: Square): Int = p.lInfDist(q)
 

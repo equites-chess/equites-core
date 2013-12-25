@@ -35,14 +35,6 @@ class SquareSpec extends Specification with ScalaCheck {
       validCoordinates( 1, -2) must beFalse
     }
 
-    "correctly perform validSum" in {
-      validSum(Square(0, 0), Vec( 1,  1)) must beTrue
-      validSum(Square(1, 1), Vec(-1, -1)) must beTrue
-      validSum(Square(0, 0), Vec(-1, -1)) must beFalse
-      validSum(Square(7, 7), Vec( 1,  1)) must beFalse
-      validSum(Square(7, 7), Vec( 1,  1)) must beFalse
-    }
-
     "correctly calculate l1Dist and lInfDist" in {
       val s1 = Square(1, 2)
       val s2 = Square(4, 3)
