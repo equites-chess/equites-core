@@ -36,9 +36,11 @@ trait SquareInstances {
 }
 
 object Square extends SquareInstances {
-  def apply(algebraicFile: Char, algebraicRank: Int): Square =
-    Square(algebraicFileRange.indexOf(algebraicFile),
-           algebraicRankRange.indexOf(algebraicRank))
+  def apply(algebraicFile: Char, algebraicRank: Int): Square = {
+    val file = algebraicFileRange.indexOf(algebraicFile)
+    val rank = algebraicRankRange.indexOf(algebraicRank)
+    Square(file, rank)
+  }
 
   def validCoordinates(file: Int, rank: Int): Boolean =
     Rules.fileRange.contains(file) && Rules.rankRange.contains(rank)
@@ -57,7 +59,7 @@ object Square extends SquareInstances {
 
 case class Square(file: Int, rank: Int) {
   def +(vec: Vec): Square = Square(file + vec.file, rank + vec.rank)
-  def -(vec: Vec): Square = Square(file - vec.file, rank - vec.rank)
+  def -(vec: Vec): Square = this + -vec
 
   def +(that: Square): Vec = Vec(file + that.file, rank + that.rank)
   def -(that: Square): Vec = Vec(file - that.file, rank - that.rank)
