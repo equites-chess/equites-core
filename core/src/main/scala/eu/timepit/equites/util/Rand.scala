@@ -21,6 +21,7 @@ import scala.language.higherKinds
 
 import scala.util.Random
 import scalaz._
+import Scalaz._
 
 object Rand {
   type Rand[A] = State[Random, A]
@@ -45,4 +46,7 @@ object Rand {
 
   def pickRandomImpure[A, C[A] : Index : Length](from: C[A]): Option[A] =
     eval(pickRandom(from))
+
+  def randomRangeElem(range: Range): Rand[Int] =
+    pickRandom(range.toStream).map(_.getOrElse(range.start))
 }

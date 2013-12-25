@@ -46,9 +46,11 @@ object Square extends SquareInstances {
   def l1Dist(p: Square, q: Square): Int = p.l1Dist(q)
   def lInfDist(p: Square, q: Square): Int = p.lInfDist(q)
 
-  def random: Rand[Square] = State(rnd => (rnd,
-    Square(Rules.fileRange.start + rnd.nextInt(Rules.fileRange.length),
-           Rules.rankRange.start + rnd.nextInt(Rules.rankRange.length))))
+  def random: Rand[Square] =
+    for {
+      file <- randomRangeElem(Rules.fileRange)
+      rank <- randomRangeElem(Rules.rankRange)
+    } yield Square(file, rank)
 
   def randomImpure(): Square = eval(random)
 }
