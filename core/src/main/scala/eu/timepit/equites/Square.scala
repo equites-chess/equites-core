@@ -19,6 +19,7 @@ package eu.timepit.equites
 import scalaz._
 import Scalaz._
 
+import Rules._
 import util.Math._
 import util.Notation._
 import util.Rand._
@@ -43,15 +44,15 @@ object Square extends SquareInstances {
   }
 
   def validCoordinates(file: Int, rank: Int): Boolean =
-    Rules.fileRange.contains(file) && Rules.rankRange.contains(rank)
+    fileRange.contains(file) && rankRange.contains(rank)
 
   def l1Dist(p: Square, q: Square): Int = p.l1Dist(q)
   def lInfDist(p: Square, q: Square): Int = p.lInfDist(q)
 
   def random: Rand[Square] =
     for {
-      file <- randomRangeElem(Rules.fileRange)
-      rank <- randomRangeElem(Rules.rankRange)
+      file <- randomRangeElem(fileRange)
+      rank <- randomRangeElem(rankRange)
     } yield Square(file, rank)
 
   def randomImpure(): Square = eval(random)
@@ -73,9 +74,11 @@ case class Square(file: Int, rank: Int) {
   def l1Dist(that: Square): Int = (this - that).l1Length
   def lInfDist(that: Square): Int = (this - that).lInfLength
 
-  def distToBoundary: Int = math.min(
-    math.min(file - Rules.fileRange.start, Rules.fileRange.end - file),
-    math.min(rank - Rules.rankRange.start, Rules.rankRange.end - rank))
+  def distToBoundary: Int = {
+    val fileDist = minDistToEndpoints(file, fileRange)
+    val rankDist = minDistToEndpoints(rank, rankRange)
+    math.min(fileDist, rankDist)
+  }
 
   def up: Square = this + Vec.front
   def down: Square = this + Vec.back
@@ -83,8 +86,8 @@ case class Square(file: Int, rank: Int) {
   def right: Square = this + Vec.right
   def left: Square = this + Vec.left
 
-  def rightmost: Square = Square(Rules.fileRange.end, rank)
-  def leftmost: Square = Square(Rules.fileRange.start, rank)
+  def rightmost: Square = Square(fileRange.end, rank)
+  def leftmost: Square = Square(fileRange.start, rank)
 
   def toSeq: Seq[Int] = Seq(file, rank)
 

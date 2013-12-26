@@ -47,7 +47,7 @@ object Piece {
   def allPromoted: List[PromotedPiece] = genAllPieces(allPromotedTypes)
 
   private def genAllPieces[T <: PieceType](pieceTypes: List[T]): List[Piece[Color, T]] =
-    (Color.all |@| pieceTypes) { Piece.apply }
+    ^(Color.all, pieceTypes)(Piece.apply)
 }
 
 case class Piece[+C <: Color, +T <: PieceType](color: C, pieceType: T) {
