@@ -86,8 +86,8 @@ case class Square(file: Int, rank: Int) {
   def right: Square = this + Vec.right
   def left: Square = this + Vec.left
 
-  def rightmost: Square = Square(fileRange.end, rank)
-  def leftmost: Square = Square(fileRange.start, rank)
+  def rightmost: Square = copy(file = fileRange.end)
+  def leftmost: Square = copy(file = fileRange.start)
 
   def toSeq: Seq[Int] = Seq(file, rank)
 
