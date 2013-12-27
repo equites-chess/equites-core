@@ -166,7 +166,7 @@ class TextBoardSpec extends Specification {
     }
 
     "make numeric labeled boards" in {
-      val tb = new TextBoard with FigurineRepr with NumericLabels
+      val tb = new TextBoard with FigurineTheme with NumericLabels
       tb.mkLabeled(board) must_==
         "♜ ♞ ♝ ♛ ♚ ♝ ♞ ♜│ 8\n" +
         "♟ ♟ ♟ ♟ ♟ ♟ ♟ ♟│ 7\n" +

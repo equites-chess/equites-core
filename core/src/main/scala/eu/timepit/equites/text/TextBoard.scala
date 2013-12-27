@@ -21,7 +21,7 @@ import implicits.PieceImplicits._
 import util.Notation._
 
 // format: OFF
-trait AbstractRepr {
+trait AbstractTheme {
   def pieceToString(piece: AnyPiece): String
   def tileStart: String        = ""
   def tileEmpty: String
@@ -40,7 +40,7 @@ trait AbstractRepr {
   val fileLabels: Seq[String]  = algebraicFileRange.map(_.toString)
 }
 
-trait LetterRepr extends AbstractRepr {
+trait LetterTheme extends AbstractTheme {
   def pieceToString(piece: AnyPiece) = piece.toLetter
   def tileEmpty        = "."
   override def rankSep = " "
@@ -48,7 +48,7 @@ trait LetterRepr extends AbstractRepr {
   override def corner  = " "
 }
 
-trait FigurineRepr extends AbstractRepr {
+trait FigurineTheme extends AbstractTheme {
   def pieceToString(piece: AnyPiece) = piece.toFigurine
   def tileEmpty              = "·"
   override def rankSep       = " "
@@ -57,7 +57,7 @@ trait FigurineRepr extends AbstractRepr {
   override def corner        = "┘"
 }
 
-trait WikiRepr extends AbstractRepr {
+trait WikiTheme extends AbstractTheme {
   def pieceToString(piece: AnyPiece) = piece.toWikiLetters
   override def tileStart       = "|"
   def tileEmpty                = "  "
@@ -70,14 +70,14 @@ trait WikiRepr extends AbstractRepr {
   override def rankLabelsRight = false
 }
 
-trait NumericLabels extends AbstractRepr {
+trait NumericLabels extends AbstractTheme {
   override val rankLabels: Seq[String] = numericRankRange.map(_.toString)
   override val fileLabels: Seq[String] = numericFileRange.map(_.toString)
 }
 // format: ON
 
 trait TextBoard {
-  self: AbstractRepr =>
+  self: AbstractTheme =>
 
   def mkUnlabeled(board: Board): String = {
     def squareToString(square: Square): String =
@@ -100,7 +100,7 @@ trait TextBoard {
       val labels = rankLabels.reverse.map(addRankLabel)
       val zipped = if (rankLabelsRight) lines.zip(labels) else labels.zip(lines)
 
-      zipped.map(_.productIterator.mkString("", "", "\n")).mkString
+      zipped.map(_.productIterator.mkString + "\n").mkString
     }
 
     def bottomBorder: String = {
@@ -116,6 +116,6 @@ trait TextBoard {
   }
 }
 
-object LetterTextBoard extends TextBoard with LetterRepr
-object FigurineTextBoard extends TextBoard with FigurineRepr
-object WikiTextBoard extends TextBoard with WikiRepr
+object LetterTextBoard extends TextBoard with LetterTheme
+object FigurineTextBoard extends TextBoard with FigurineTheme
+object WikiTextBoard extends TextBoard with WikiTheme
