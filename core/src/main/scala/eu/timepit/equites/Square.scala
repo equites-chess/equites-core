@@ -56,6 +56,9 @@ object Square extends SquareInstances {
     } yield Square(file, rank)
 
   def randomImpure(): Square = eval(random)
+
+  def topRight: Square = Square(fileRange.end, rankRange.end)
+  def topLeft: Square = Square(fileRange.start, rankRange.end)
 }
 
 case class Square(file: Int, rank: Int) {

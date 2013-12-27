@@ -19,12 +19,12 @@ package util
 
 object BoardBuilder {
   def apply(): BoardBuilder =
-    new BoardBuilder(Board.empty, Square(0, Rules.rankRange.last))
+    new BoardBuilder(Board.empty, Square.topLeft)
 
   def >> : BoardBuilder = apply()
 }
 
-class BoardBuilder(board: Board, square: Square) {
+class BoardBuilder(board: Board, currSquare: Square) {
   import PieceAbbr.Algebraic
 
   def K: BoardBuilder = embattle(Algebraic.K)
@@ -52,14 +52,12 @@ class BoardBuilder(board: Board, square: Square) {
 
   def << : Board = board
 
-  private def embattle(piece: AnyPiece): BoardBuilder =
-    new BoardBuilder(board + (square -> piece), nextSquare)
+  private[this] def embattle(piece: AnyPiece): BoardBuilder =
+    new BoardBuilder(board + (currSquare -> piece), nextSquare)
 
-  private def empty: BoardBuilder =
+  private[this] def empty: BoardBuilder =
     new BoardBuilder(board, nextSquare)
 
-  private def nextSquare: Square = {
-    val right = square.right
-    if (right.isValid) right else square.down.leftmost
-  }
+  private[this] def nextSquare: Square =
+    currSquare.right.asOption.getOrElse(currSquare.down.leftmost)
 }
