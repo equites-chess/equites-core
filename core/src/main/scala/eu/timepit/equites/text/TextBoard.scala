@@ -20,6 +20,7 @@ package text
 import implicits.PieceImplicits._
 import util.Notation._
 
+// format: OFF
 trait AbstractRepr {
   def pieceToString(piece: AnyPiece): String
   def tileStart: String        = ""
@@ -49,11 +50,11 @@ trait LetterRepr extends AbstractRepr {
 
 trait FigurineRepr extends AbstractRepr {
   def pieceToString(piece: AnyPiece) = piece.toFigurine
-  def tileEmpty              = "\u00B7"  // ·
+  def tileEmpty              = "·"
   override def rankSep       = " "
-  override def horizontalBar = "\u2500"  // ─
-  override def verticalBar   = "\u2502 " // │
-  override def corner        = "\u2518"  // ┘
+  override def horizontalBar = "─"
+  override def verticalBar   = "│ "
+  override def corner        = "┘"
 }
 
 trait WikiRepr extends AbstractRepr {
@@ -73,6 +74,7 @@ trait NumericLabels extends AbstractRepr {
   override val rankLabels: Seq[String] = numericRankRange.map(_.toString)
   override val fileLabels: Seq[String] = numericFileRange.map(_.toString)
 }
+// format: ON
 
 trait TextBoard {
   self: AbstractRepr =>

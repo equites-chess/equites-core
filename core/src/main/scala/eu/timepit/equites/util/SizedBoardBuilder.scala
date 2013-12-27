@@ -20,9 +20,9 @@ package util
 import shapeless._
 import nat._
 
-object SizedBoardBuilder {
-  import PieceAbbr.Algebraic
+import PieceAbbr.Algebraic
 
+object SizedBoardBuilder {
   def K = Some(Algebraic.K)
   def Q = Some(Algebraic.Q)
   def R = Some(Algebraic.R)
@@ -55,7 +55,7 @@ object SizedBoardBuilder {
     def toBoard[M](implicit ev: N =:= M): Board = buildBoard
     def toBoard8x8(implicit ev: N =:= _8): Board = buildBoard
 
-    private def buildBoard: Board = {
+    private[this] def buildBoard: Board = {
       val maxRank = sizedBoard.length - 1
       val mapping = for {
         (sizedRank, rank) <- sizedBoard.zipWithIndex

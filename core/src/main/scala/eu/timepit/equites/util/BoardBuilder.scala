@@ -17,13 +17,13 @@
 package eu.timepit.equites
 package util
 
+import PieceAbbr.Algebraic
+
 object BoardBuilder {
   def >> : BoardBuilder = new BoardBuilder(Board.empty, Square.topLeft)
 }
 
 class BoardBuilder private (board: Board, currSquare: Square) {
-  import PieceAbbr.Algebraic
-
   def K: BoardBuilder = embattle(Algebraic.K)
   def Q: BoardBuilder = embattle(Algebraic.Q)
   def R: BoardBuilder = embattle(Algebraic.R)

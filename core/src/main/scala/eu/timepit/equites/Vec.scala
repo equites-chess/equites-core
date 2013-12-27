@@ -31,15 +31,15 @@ trait VecInstances {
 }
 
 object Vec extends VecInstances {
-  val front = Vec(0, 1) // ↑
-  val right = Vec(1, 0) // →
-  val back  = -front    // ↓
-  val left  = -right    // ←
+  val front = Vec(0, 1)
+  val right = Vec(1, 0)
+  val back = -front
+  val left = -right
 
-  val frontRight = front + right // ↗
-  val backRight  = back  + right // ↘
-  val backLeft   = back  + left  // ↙
-  val frontLeft  = front + left  // ↖
+  val frontRight = front + right
+  val backRight = back + right
+  val backLeft = back + left
+  val frontLeft = front + left
 }
 
 case class Vec(file: Int, rank: Int) extends PlayerPerspective[Vec] {
@@ -73,8 +73,8 @@ case class Vec(file: Int, rank: Int) extends PlayerPerspective[Vec] {
 
   def reduced: Vec = this / math.max(1, gcd(file, rank).abs)
 
-  def fileProj: Vec = Vec(file, 0)
-  def rankProj: Vec = Vec(0, rank)
+  def fileProj: Vec = copy(rank = 0)
+  def rankProj: Vec = copy(file = 0)
 
   def isZero: Boolean = this == Monoid[Vec].zero
   def notZero: Boolean = !isZero
@@ -82,8 +82,9 @@ case class Vec(file: Int, rank: Int) extends PlayerPerspective[Vec] {
   def isStraight: Boolean = notZero && (file == 0 || rank == 0)
   def isDiagonal: Boolean = notZero && (file.abs == rank.abs)
 
-  def to(that: Vec): Seq[Vec] = for {
-    f <- file to that.file
-    r <- rank to that.rank
-  } yield Vec(f, r)
+  def to(that: Vec): Seq[Vec] =
+    for {
+      f <- file to that.file
+      r <- rank to that.rank
+    } yield Vec(f, r)
 }

@@ -20,10 +20,10 @@ import java.nio.charset.Charset
 import scala.collection.immutable.NumericRange
 
 package object util {
-  def backtracking[C](firstCandidate: C)
-      (nextCandidates: C => Stream[C], accept: C => Boolean): Stream[C] = {
+  def backtracking[C](firstCandidate: C)(nextCandidates: C => Stream[C],
+                                         accept: C => Boolean): Stream[C] = {
     def recur(c: C): Stream[C] = nextCandidates(c).flatMap {
-      nc => if (accept(nc)) Stream(nc) else recur(nc)
+      next => if (accept(next)) Stream(next) else recur(next)
     }
     recur(firstCandidate)
   }
