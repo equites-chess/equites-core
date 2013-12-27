@@ -58,9 +58,8 @@ class BoardBuilder(board: Board, currSquare: Square) {
   private[this] def empty: BoardBuilder =
     nextBuilder(board)
 
-  private[this] def nextBuilder(nextBoard: Board): BoardBuilder =
+  private[this] def nextBuilder(nextBoard: Board): BoardBuilder = {
+    val nextSquare = currSquare.right.asOption.getOrElse(currSquare.down.leftmost)
     new BoardBuilder(nextBoard, nextSquare)
-
-  private[this] def nextSquare: Square =
-    currSquare.right.asOption.getOrElse(currSquare.down.leftmost)
+  }
 }
