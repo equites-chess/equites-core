@@ -53,10 +53,13 @@ class BoardBuilder(board: Board, currSquare: Square) {
   def << : Board = board
 
   private[this] def embattle(piece: AnyPiece): BoardBuilder =
-    new BoardBuilder(board + (currSquare -> piece), nextSquare)
+    nextBuilder(board + (currSquare -> piece))
 
   private[this] def empty: BoardBuilder =
-    new BoardBuilder(board, nextSquare)
+    nextBuilder(board)
+
+  private[this] def nextBuilder(nextBoard: Board): BoardBuilder =
+    new BoardBuilder(nextBoard, nextSquare)
 
   private[this] def nextSquare: Square =
     currSquare.right.asOption.getOrElse(currSquare.down.leftmost)
