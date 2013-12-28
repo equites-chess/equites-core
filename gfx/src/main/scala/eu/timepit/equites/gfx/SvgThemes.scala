@@ -21,14 +21,24 @@ import scala.xml._
 
 import implicits.PieceImplicits._
 
+trait SvgTheme {
+  def pieceElem(piece: AnyPiece): Elem
+  def tileElem(color: Color): Elem
+}
+
+class SvgBoard(theme: SvgTheme) {
+  def mkUnlabeled(board: Board): Elem = ???
+}
+
+
+
+
+
 object SvgThemes extends App {
   type PieceIds = Map[String, AnyPiece]
 
   def pieceImageIds: PieceIds =
     Piece.all.map(piece => (piece.toTextualId, piece)).toMap
-
-  def pieceTextIds: PieceIds =
-    pieceImageIds.map { case (id, piece) => (id + "Text", piece) }
 
   def extractPieceElems(root: Elem, label: String, ids: PieceIds): Map[AnyPiece, Elem] = {
     val childElems = (root \ label).theSeq.collect { case e: Elem => e }
@@ -39,12 +49,21 @@ object SvgThemes extends App {
   }
 
 
+  def extractElems[A](root: Elem, ids: Map[String, A]): Map[A, Elem] = {
+    val mapping = for {
+      child <- root.child.collect { case e: Elem => e }
+      idText <- child.attribute("id").map(_.text)
+      mappedA <- ids.get(idText)
+    } yield mappedA -> child
+    mapping.toMap
+  }
 
 
   XML.load(getClass.getResourceAsStream("/themes/DejaVuSans.svg"))
   val freeTheme = XML.load(getClass.getResourceAsStream("/themes/FreeSerif.svg"))
   val wikipediaTheme = XML.load(getClass.getResourceAsStream("/themes/Wikipedia.svg"))
 
-  println(extractPieceElems(freeTheme, "text", pieceTextIds).get(Piece(White, King)))
+  //println(extractPieceElems(freeTheme, "text", pieceImageIds).get(Piece(White, King)))
 
+  println(extractElems(wikipediaTheme, Map("WhiteTile" -> White, "BlackTile" -> Black)))
 }
