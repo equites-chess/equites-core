@@ -70,7 +70,6 @@ object Notation {
       (pieceChar, file) <- expandDigits(rankStr).zipWithIndex
       piece <- pieceFromLetter(pieceChar)
     } yield Square(file, rank) -> piece
-
-    Board(mapping: _*)
+    Board(mapping.toMap)
   }
 }

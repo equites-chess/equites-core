@@ -52,8 +52,8 @@ class BoardBuilder private (board: Board, square: Square) {
   private[this] def embattle(piece: AnyPiece): BoardBuilder =
     nextBuilder(Some(piece))
 
-  private[this] def nextBuilder(optPiece: Option[AnyPiece]): BoardBuilder = {
-    val nextBoard = optPiece.fold(board)(piece => board + (square -> piece))
+  private[this] def nextBuilder(pieceOpt: Option[AnyPiece]): BoardBuilder = {
+    val nextBoard = pieceOpt.fold(board)(piece => board + (square -> piece))
     val nextSquare = square.right.asOption.getOrElse(square.down.leftmost)
     new BoardBuilder(nextBoard, nextSquare)
   }
