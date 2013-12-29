@@ -45,19 +45,16 @@ class BoardBuilder private (board: Board, square: Square) {
   def ♘ : BoardBuilder = N; def ♞ : BoardBuilder = n
   def ♙ : BoardBuilder = P; def ♟ : BoardBuilder = p
 
-  def | : BoardBuilder = empty
+  def | : BoardBuilder = nextBuilder(None)
 
   def << : Board = board
 
   private[this] def embattle(piece: AnyPiece): BoardBuilder =
     nextBuilder(Some(piece))
 
-  private[this] def empty: BoardBuilder =
-    nextBuilder(None)
-
   private[this] def nextBuilder(optPiece: Option[AnyPiece]): BoardBuilder = {
-    val nextSquare = square.right.asOption.getOrElse(square.down.leftmost)
     val nextBoard = optPiece.fold(board)(piece => board + (square -> piece))
+    val nextSquare = square.right.asOption.getOrElse(square.down.leftmost)
     new BoardBuilder(nextBoard, nextSquare)
   }
 }
