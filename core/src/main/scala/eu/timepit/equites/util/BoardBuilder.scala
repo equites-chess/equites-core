@@ -23,7 +23,7 @@ object BoardBuilder {
   def >> : BoardBuilder = new BoardBuilder(Board.empty, Square.topLeft)
 }
 
-class BoardBuilder private (board: Board, currSquare: Square) {
+class BoardBuilder private (board: Board, square: Square) {
   def K: BoardBuilder = embattle(Algebraic.K)
   def Q: BoardBuilder = embattle(Algebraic.Q)
   def R: BoardBuilder = embattle(Algebraic.R)
@@ -50,13 +50,14 @@ class BoardBuilder private (board: Board, currSquare: Square) {
   def << : Board = board
 
   private[this] def embattle(piece: AnyPiece): BoardBuilder =
-    nextBuilder(board + (currSquare -> piece))
+    nextBuilder(Some(piece))
 
   private[this] def empty: BoardBuilder =
-    nextBuilder(board)
+    nextBuilder(None)
 
-  private[this] def nextBuilder(nextBoard: Board): BoardBuilder = {
-    val nextSquare = currSquare.right.asOption.getOrElse(currSquare.down.leftmost)
+  private[this] def nextBuilder(optPiece: Option[AnyPiece]): BoardBuilder = {
+    val nextSquare = square.right.asOption.getOrElse(square.down.leftmost)
+    val nextBoard = optPiece.fold(board)(piece => board + (square -> piece))
     new BoardBuilder(nextBoard, nextSquare)
   }
 }
