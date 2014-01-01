@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2011, 2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2011, 2013-2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,38 +19,19 @@ package eu.timepit.equites
 import scalaz._
 import Scalaz._
 
-sealed trait PieceType
-sealed trait CastlingPieceType extends PieceType
-sealed trait PromotedPieceType extends PieceType
-
-// format: OFF
-case object King   extends CastlingPieceType
-case object Queen  extends PromotedPieceType
-case object Rook   extends CastlingPieceType with PromotedPieceType
-case object Bishop extends PromotedPieceType
-case object Knight extends PromotedPieceType
-case object Pawn   extends PieceType
-// format: ON
-
 object Piece {
-  def allTypes: List[PieceType] =
-    List(King, Queen, Rook, Bishop, Knight, Pawn)
+  def all: List[AnyPiece] = mkAllPieces(PieceType.all)
+  def allCastling: List[CastlingPiece] = mkAllPieces(PieceType.allCastling)
+  def allPromoted: List[PromotedPiece] = mkAllPieces(PieceType.allPromoted)
 
-  def allCastlingTypes: List[CastlingPieceType] =
-    List(King, Rook)
-
-  def allPromotedTypes: List[PromotedPieceType] =
-    List(Queen, Rook, Bishop, Knight)
-
-  def all: List[AnyPiece] = genAllPieces(allTypes)
-  def allCastling: List[CastlingPiece] = genAllPieces(allCastlingTypes)
-  def allPromoted: List[PromotedPiece] = genAllPieces(allPromotedTypes)
-
-  private def genAllPieces[T <: PieceType](pieceTypes: List[T]): List[Piece[Color, T]] =
+  private def mkAllPieces[T <: PieceType](pieceTypes: List[T]): List[Piece[Color, T]] =
     ^(Color.all, pieceTypes)(Piece.apply)
 }
 
 case class Piece[+C <: Color, +T <: PieceType](color: C, pieceType: T) {
+  type ColorT = C
+  type PieceTypeT = T
+
   def isFriendOf(other: AnyPiece): Boolean = color == other.color
   def isOpponentOf(other: AnyPiece): Boolean = color != other.color
 
@@ -74,4 +55,36 @@ case class Piece[+C <: Color, +T <: PieceType](color: C, pieceType: T) {
 
   private[this] def maybe[T1 <: PieceType](pType: T1): Option[Piece[C, T1]] =
     (pieceType == pType).option(Piece(color, pType))
+}
+
+trait PieceTypeAliases {
+  type AnyPiece = Piece[Color, PieceType]
+  type CastlingPiece = Piece[Color, CastlingPieceType]
+  type PromotedPiece = Piece[Color, PromotedPieceType]
+
+  // format: OFF
+  type AnyKing   = Piece[Color, King.type]
+  type AnyQueen  = Piece[Color, Queen.type]
+  type AnyRook   = Piece[Color, Rook.type]
+  type AnyBishop = Piece[Color, Bishop.type]
+  type AnyKnight = Piece[Color, Knight.type]
+  type AnyPawn   = Piece[Color, Pawn.type]
+
+  type WhiteKing   = WhitePiece[King.type]
+  type WhiteQueen  = WhitePiece[Queen.type]
+  type WhiteRook   = WhitePiece[Rook.type]
+  type WhiteBishop = WhitePiece[Bishop.type]
+  type WhiteKnight = WhitePiece[Knight.type]
+  type WhitePawn   = WhitePiece[Pawn.type]
+
+  type BlackKing   = BlackPiece[King.type]
+  type BlackQueen  = BlackPiece[Queen.type]
+  type BlackRook   = BlackPiece[Rook.type]
+  type BlackBishop = BlackPiece[Bishop.type]
+  type BlackKnight = BlackPiece[Knight.type]
+  type BlackPawn   = BlackPiece[Pawn.type]
+  // format: ON
+
+  private type WhitePiece[T <: PieceType] = Piece[White.type, T]
+  private type BlackPiece[T <: PieceType] = Piece[Black.type, T]
 }
