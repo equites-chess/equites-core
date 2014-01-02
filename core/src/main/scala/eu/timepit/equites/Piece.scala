@@ -58,11 +58,11 @@ case class Piece[+C <: Color, +T <: PieceType](color: C, pieceType: T) {
 }
 
 trait PieceTypeAliases {
-  type AnyPiece = Piece[Color, PieceType]
+  // format: OFF
+  type AnyPiece      = Piece[Color, PieceType]
   type CastlingPiece = Piece[Color, CastlingPieceType]
   type PromotedPiece = Piece[Color, PromotedPieceType]
 
-  // format: OFF
   type AnyKing   = Piece[Color, King.type]
   type AnyQueen  = Piece[Color, Queen.type]
   type AnyRook   = Piece[Color, Rook.type]
