@@ -35,19 +35,12 @@ class SvgBoard(theme: SvgTheme) {
 
 
 object SvgThemes extends App {
-  type PieceIds = Map[String, AnyPiece]
 
-  def pieceImageIds: PieceIds =
+  def pieceIds: Map[String, AnyPiece] =
     Piece.all.map(piece => (piece.toTextualId, piece)).toMap
 
-  def extractPieceElems(root: Elem, label: String, ids: PieceIds): Map[AnyPiece, Elem] = {
-    val childElems = (root \ label).theSeq.collect { case e: Elem => e }
-    childElems.flatMap { child =>
-      val maybeId = child.attribute("id").map(_.text)
-      maybeId.flatMap(ids.get).map(_ -> child)
-    }.toMap
-  }
-
+  def colorIds: Map[String, Color] =
+    Color.all.map(color => (color.toString + "Tile", color)).toMap
 
   def extractElems[A](root: Elem, ids: Map[String, A]): Map[A, Elem] = {
     val mapping = for {
@@ -59,7 +52,7 @@ object SvgThemes extends App {
   }
 
 
-  XML.load(getClass.getResourceAsStream("/themes/DejaVuSans.svg"))
+  val dejavuTheme = XML.load(getClass.getResourceAsStream("/themes/DejaVuSans.svg"))
   val freeTheme = XML.load(getClass.getResourceAsStream("/themes/FreeSerif.svg"))
   val wikipediaTheme = XML.load(getClass.getResourceAsStream("/themes/Wikipedia.svg"))
 
