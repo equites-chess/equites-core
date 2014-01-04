@@ -17,6 +17,7 @@
 package eu.timepit.equites
 package cli
 
+import scala.concurrent.duration._
 import scalaz.concurrent.Task
 import scalaz.stream._
 
@@ -33,7 +34,7 @@ object UciEngineVsItself extends App {
     def writePositionCommand(history: Seq[GameState]) =
       toRawCommands(Position(history)).through(engine.input)
     val writeGoCommand =
-      toRawCommands(Go(Go.Movetime(100))).through(engine.input)
+      toRawCommands(Go(Go.Movetime(100.millis))).through(engine.input)
     val prepareGame =
       newGameCommands.through(engine.input) ++ readResponses.find(_ == ReadyOk)
     val quitEngine =

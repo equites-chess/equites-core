@@ -18,7 +18,6 @@ package eu.timepit.equites
 package util
 
 import scala.language.higherKinds
-
 import scala.util.Random
 import scalaz._
 import Scalaz._

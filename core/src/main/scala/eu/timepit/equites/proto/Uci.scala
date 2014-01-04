@@ -17,6 +17,8 @@
 package eu.timepit.equites
 package proto
 
+import scala.concurrent.duration._
+
 import implicits.ActionImplicits._
 import implicits.GameStateImplicits._
 
@@ -59,17 +61,22 @@ object Uci {
   object Go {
     sealed trait Argument extends util.TextCommand
 
+    sealed trait MillisArgument extends Argument {
+      def time: FiniteDuration
+      override def cmdArgs: Seq[String] = Seq(time.toMillis.toString)
+    }
+
     // TODO: searchmoves
 
     case object Ponder extends Argument
 
-    // TODO: wtime
+    case class Wtime(time: FiniteDuration) extends MillisArgument
 
-    // TODO: btime
+    case class Btime(time: FiniteDuration) extends MillisArgument
 
-    // TODO: winc
+    case class Winc(time: FiniteDuration) extends MillisArgument
 
-    // TODO: binc
+    case class Binc(time: FiniteDuration) extends MillisArgument
 
     // TODO: movestogo
 
@@ -79,7 +86,7 @@ object Uci {
 
     // TODO: mate
 
-    case class Movetime(milliseconds: Int) extends Argument
+    case class Movetime(time: FiniteDuration) extends MillisArgument
 
     case object Infinite extends Argument
   }

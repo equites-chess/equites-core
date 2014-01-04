@@ -18,13 +18,14 @@ package eu.timepit.equites
 package proto
 
 import org.specs2.mutable._
+import scala.concurrent.duration._
 
 import Uci._
 import implicits.GameStateImplicits._
 import util.CoordinateMove
 import util.PieceAbbr.Wiki._
 
-class UciSpec extends Specification {
+class UciSpec extends Specification with org.specs2.time.NoTimeConversions {
   "Uci.Uci" >> {
     "toString should return 'uci'" in {
       Uci.Uci.toString must_== "uci"
@@ -98,7 +99,7 @@ class UciSpec extends Specification {
       Go(Depth(5)).toString must_== "go depth 5"
     }
     "toString should return 'go movetime ...'" in {
-      Go(Movetime(100)).toString must_== "go movetime 100"
+      Go(Movetime(0.1.second)).toString must_== "go movetime 100"
     }
     "toString should return 'go infinite'" in {
       Go(Infinite).toString must_== "go infinite"
