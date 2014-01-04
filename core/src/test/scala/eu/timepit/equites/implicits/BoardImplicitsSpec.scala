@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2013-2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,32 +17,29 @@
 package eu.timepit.equites
 package implicits
 
-import org.specs2.mutable._
+import org.specs2._
 
 import BoardImplicits._
 import util.PieceAbbr.Wiki._
+import util.SquareAbbr._
 
-class BoardImplicitsSpec extends Specification {
-  "RichBoard" should {
-    "correctly perform toFenPlacement" in {
-      val board0 = Rules.startingBoard
-      board0.toFenPlacement must_==
-        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
+class BoardImplicitsSpec extends Specification { def is = s2"""
+  toFenPlacement should
+    return correct FEN placements $ex1
+  """
 
-      val move1 = Move(pl, Square('e', 2), Square('e', 4))
-      val board1 = board0.processMove(move1)
-      board1.toFenPlacement must_==
-        "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR"
+  val board0 = Rules.startingBoard
+  val board1 = board0.processMove(Move(pl, e2, e4))
+  val board2 = board1.processMove(Move(pd, c7, c5))
+  val board3 = board2.processMove(Move(nl, g1, f3))
 
-      val move2 = Move(pd, Square('c', 7), Square('c', 5))
-      val board2 = board1.processMove(move2)
-      board2.toFenPlacement must_==
-        "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR"
-
-      val move3 = Move(nl, Square('g', 1), Square('f', 3))
-      val board3 = board2.processMove(move3)
-      board3.toFenPlacement must_==
-        "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R"
-    }
-  }
+  def ex1 =
+    (board0.toFenPlacement must_==
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR") and
+    (board1.toFenPlacement must_==
+      "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR") and
+    (board2.toFenPlacement must_==
+      "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR") and
+    (board3.toFenPlacement must_==
+      "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R")
 }
