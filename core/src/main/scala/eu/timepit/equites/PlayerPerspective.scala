@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2013-2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -21,11 +21,11 @@ trait PlayerPerspective[T] {
 
   def inverse: T
 
-  def inverseIfWhite(color: Color): T =
-    if (color == White) inverse else this
+  def inverseIf(bool: Boolean): T = if (bool) inverse else this
 
-  def inverseIfBlack(color: Color): T =
-    if (color == Black) inverse else this
+  def inverseIfWhite(color: Color): T = inverseIf(color == White)
+
+  def inverseIfBlack(color: Color): T = inverseIf(color == Black)
 
   def fromPov(color: Color): T = inverseIfBlack(color)
 }
