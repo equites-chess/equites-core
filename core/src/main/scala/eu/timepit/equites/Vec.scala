@@ -73,7 +73,10 @@ case class Vec(file: Int, rank: Int) extends PlayerPerspective[Vec] {
 
   def reduced: Vec = this / math.max(1, gcd(file, rank).abs)
 
+  /** Returns a copy of this Vec where the rank is set to zero. */
   def fileProj: Vec = copy(rank = 0)
+
+  /** Returns a copy of this Vec where the file is set to zero. */
   def rankProj: Vec = copy(file = 0)
 
   def isZero: Boolean = this == Monoid[Vec].zero

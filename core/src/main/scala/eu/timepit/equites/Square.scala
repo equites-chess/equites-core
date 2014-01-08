@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2011-2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2011-2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -43,12 +43,6 @@ object Square extends SquareInstances {
     Square(file, rank)
   }
 
-  def validCoordinates(file: Int, rank: Int): Boolean =
-    fileRange.contains(file) && rankRange.contains(rank)
-
-  def l1Dist(p: Square, q: Square): Int = p.l1Dist(q)
-  def lInfDist(p: Square, q: Square): Int = p.lInfDist(q)
-
   def random: Rand[Square] =
     for {
       file <- randomRangeElem(fileRange)
@@ -68,7 +62,7 @@ case class Square(file: Int, rank: Int) {
   def +(that: Square): Vec = Vec(file + that.file, rank + that.rank)
   def -(that: Square): Vec = Vec(file - that.file, rank - that.rank)
 
-  def isValid: Boolean = Square.validCoordinates(file, rank)
+  def isValid: Boolean = fileRange.contains(file) && rankRange.contains(rank)
   def asOption: Option[Square] = isValid.option(this)
 
   def isLight: Boolean = isOdd(sum)
@@ -94,5 +88,5 @@ case class Square(file: Int, rank: Int) {
 
   def toSeq: Seq[Int] = Seq(file, rank)
 
-  private def sum = file + rank
+  private[this] def sum = file + rank
 }

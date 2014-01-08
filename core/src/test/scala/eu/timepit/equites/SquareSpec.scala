@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2011-2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2011-2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ import Square._
 import ArbitraryInstances._
 
 class SquareSpec extends Specification with ScalaCheck {
+  /*
   "Square companion" should {
     "correctly perform validCoordinates" in {
       validCoordinates( 4,  4) must beTrue
@@ -49,6 +50,7 @@ class SquareSpec extends Specification with ScalaCheck {
       lInfDist(s3, s4) must_== 1
     }
   }
+  */
 
   "Square" should {
     "satisfy the Equal laws" in check(equal.laws[Square])
