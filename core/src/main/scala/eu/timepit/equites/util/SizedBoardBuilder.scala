@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2013-2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -48,8 +48,8 @@ object SizedBoardBuilder {
 
   def >> = Sized
 
-  type SizedRank[N <: Nat] = Sized[Seq[Option[AnyPiece]], N]
-  type SizedBoard[N <: Nat] = Sized[Seq[SizedRank[N]], N]
+  private type SizedRank[N <: Nat] = Sized[Seq[Option[AnyPiece]], N]
+  private type SizedBoard[N <: Nat] = Sized[Seq[SizedRank[N]], N]
 
   implicit final class RichSizedBoard[N <: Nat](val sizedBoard: SizedBoard[N]) {
     def toBoard[M](implicit ev: N =:= M): Board = buildBoard
