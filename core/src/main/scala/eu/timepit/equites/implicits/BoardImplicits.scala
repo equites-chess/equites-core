@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2013-2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -31,12 +31,12 @@ object BoardImplicits {
         "1{2,}".r.replaceAllIn(target, _.toString.length.toString)
 
       Rules.rankRange.reverse.map { rank =>
-        val rankStr = Rules.fileRange.map { file =>
+        val wholeRank = Rules.fileRange.map { file =>
           val square = Square(file, rank)
-          val optPiece = self.get(square)
-          optPiece.fold("1")(_.toLetter)
+          val pieceOpt = self.get(square)
+          pieceOpt.fold("1")(_.toLetter)
         }.mkString
-        replaceOnes(rankStr)
+        replaceOnes(wholeRank)
       }.mkString("/")
     }
   }
