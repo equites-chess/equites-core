@@ -1,0 +1,648 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>Piece - eu.timepit.equites.Piece</title>
+          <meta name="description" content="Piece - eu.timepit.equites.Piece" />
+          <meta name="keywords" content="Piece eu.timepit.equites.Piece" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'eu.timepit.equites.Piece';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <a href="Piece$.html" title="Go to companion"><img src="../../../lib/class_to_object_big.png" /></a>
+        <p id="owner"><a href="../../package.html" class="extype" name="eu">eu</a>.<a href="../package.html" class="extype" name="eu.timepit">timepit</a>.<a href="package.html" class="extype" name="eu.timepit.equites">equites</a></p>
+        <h1><a href="Piece$.html" title="Go to companion">Piece</a></h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Piece</span><span class="tparams">[<span name="C">+C &lt;: <a href="Color.html" class="extype" name="eu.timepit.equites.Color">Color</a></span>, <span name="T">+T &lt;: <a href="PieceType.html" class="extype" name="eu.timepit.equites.PieceType">PieceType</a></span>]</span><span class="params">(<span name="color">color: <span class="extype" name="eu.timepit.equites.Piece.C">C</span></span>, <span name="pieceType">pieceType: <span class="extype" name="eu.timepit.equites.Piece.T">T</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/fthomas/equites/tree/master/core/src/main/scala/eu/timepit/equites/Piece.scala" target="_blank">Piece.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+        </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">Type Hierarchy</span>
+                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph62" viewBox="0.00 0.00 200.00 120.00" height="120pt" width="200pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 116)" class="graph" id="graph1"><polygon points="-4,5 -4,-116 197,-116 197,5 -4,5" stroke="white" fill="white"></polygon><g class="cluster" id="graph2"></g><g class="cluster" id="graph3"></g><!-- node0 --><g class="node this class" id="graph62_0"><a xlink:title="eu.timepit.equites.Piece (this class)" xlink:href="#inheritance-diagram"><polygon points="138,-50 44,-50 44,-24 138,-24 138,-50" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../../lib/class_diagram.png" y="-45" x="54" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-34.6667" x="76" text-anchor="start">Piece[C, T]</text></a></g><!-- node1 --><g class="node trait" id="graph62_1"><a xlink:title="scala.Product"><polygon points="78,-112 3.55271e-14,-112 0,-86 78,-86 78,-112" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../../lib/trait_diagram.png" y="-107" x="10" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-96.6667" x="32" text-anchor="start">Product</text></a></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph62_1_0"><a xlink:title="Piece[C, T] is a subtype of Product"><path d="M53.2628,-81.9943C61.6908,-71.9456 72.2013,-59.4138 79.988,-50.1297" stroke="#d4d4d4" fill="none"></path><polygon points="51.9001,-80.8958 50.0279,-85.8514 54.5818,-83.145 51.9001,-80.8958" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node2 --><g class="node trait" id="graph62_2"><a xlink:title="scala.Serializable"><polygon points="192,-112 96,-112 96,-86 192,-86 192,-112" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../../lib/trait_diagram.png" y="-107" x="106" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-96.6667" x="128" text-anchor="start">Serializable</text></a></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph62_2_0"><a xlink:title="Piece[C, T] is a subtype of Serializable"><path d="M129.463,-81.9943C120.873,-71.9456 110.16,-59.4138 102.224,-50.1297" stroke="#d4d4d4" fill="none"></path><polygon points="128.181,-83.1879 132.76,-85.8514 130.841,-80.9136 128.181,-83.1879" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
+              </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="eu.timepit.equites.Piece"><span>Piece</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="eu.timepit.equites.Piece#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(color:C,pieceType:T):eu.timepit.equites.Piece[C,T]"></a>
+      <a id="&lt;init&gt;:Piece[C,T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Piece</span><span class="params">(<span name="color">color: <span class="extype" name="eu.timepit.equites.Piece.C">C</span></span>, <span name="pieceType">pieceType: <span class="extype" name="eu.timepit.equites.Piece.T">T</span></span>)</span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="eu.timepit.equites.Piece.ColorT" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ColorT=C"></a>
+      <a id="ColorT:ColorT"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ColorT</span><span class="result"> = <span class="extype" name="eu.timepit.equites.Piece.C">C</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="eu.timepit.equites.Piece.PieceTypeT" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PieceTypeT=T"></a>
+      <a id="PieceTypeT:PieceTypeT"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">PieceTypeT</span><span class="result"> = <span class="extype" name="eu.timepit.equites.Piece.T">T</span></span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:AnyRef):Boolean"></a>
+      <a id="!=(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:AnyRef):Boolean"></a>
+      <a id="==(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="eu.timepit.equites.Piece#color" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="color:C"></a>
+      <a id="color:C"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">color</span><span class="result">: <span class="extype" name="eu.timepit.equites.Piece.C">C</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="eu.timepit.equites.Piece#isBishop" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="isBishop:Boolean"></a>
+      <a id="isBishop:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isBishop</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="eu.timepit.equites.Piece#isFriendOf" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="isFriendOf(other:eu.timepit.equites.AnyPiece):Boolean"></a>
+      <a id="isFriendOf(equites.AnyPiece):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isFriendOf</span><span class="params">(<span name="other">other: <a href="package.html#AnyPiece=eu.timepit.equites.Piece[eu.timepit.equites.Color,eu.timepit.equites.PieceType]" class="extmbr" name="eu.timepit.equites.AnyPiece">equites.AnyPiece</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="eu.timepit.equites.Piece#isKing" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="isKing:Boolean"></a>
+      <a id="isKing:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isKing</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="eu.timepit.equites.Piece#isKnight" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="isKnight:Boolean"></a>
+      <a id="isKnight:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isKnight</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="eu.timepit.equites.Piece#isOpponentOf" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="isOpponentOf(other:eu.timepit.equites.AnyPiece):Boolean"></a>
+      <a id="isOpponentOf(equites.AnyPiece):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isOpponentOf</span><span class="params">(<span name="other">other: <a href="package.html#AnyPiece=eu.timepit.equites.Piece[eu.timepit.equites.Color,eu.timepit.equites.PieceType]" class="extmbr" name="eu.timepit.equites.AnyPiece">equites.AnyPiece</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="eu.timepit.equites.Piece#isPawn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="isPawn:Boolean"></a>
+      <a id="isPawn:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isPawn</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="eu.timepit.equites.Piece#isQueen" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="isQueen:Boolean"></a>
+      <a id="isQueen:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isQueen</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="eu.timepit.equites.Piece#isRook" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="isRook:Boolean"></a>
+      <a id="isRook:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isRook</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="eu.timepit.equites.Piece#maybeBishop" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="maybeBishop:Option[eu.timepit.equites.Piece[C,eu.timepit.equites.Bishop.type]]"></a>
+      <a id="maybeBishop:Option[Piece[C,Bishop.type]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">maybeBishop</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="" class="extype" name="eu.timepit.equites.Piece">Piece</a>[<span class="extype" name="eu.timepit.equites.Piece.C">C</span>, <a href="Bishop$.html" class="extype" name="eu.timepit.equites.Bishop">Bishop</a>.type]]</span>
+      </span>
+      </h4>
+      
+    </li><li name="eu.timepit.equites.Piece#maybeKing" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="maybeKing:Option[eu.timepit.equites.Piece[C,eu.timepit.equites.King.type]]"></a>
+      <a id="maybeKing:Option[Piece[C,King.type]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">maybeKing</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="" class="extype" name="eu.timepit.equites.Piece">Piece</a>[<span class="extype" name="eu.timepit.equites.Piece.C">C</span>, <a href="King$.html" class="extype" name="eu.timepit.equites.King">King</a>.type]]</span>
+      </span>
+      </h4>
+      
+    </li><li name="eu.timepit.equites.Piece#maybeKnight" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="maybeKnight:Option[eu.timepit.equites.Piece[C,eu.timepit.equites.Knight.type]]"></a>
+      <a id="maybeKnight:Option[Piece[C,Knight.type]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">maybeKnight</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="" class="extype" name="eu.timepit.equites.Piece">Piece</a>[<span class="extype" name="eu.timepit.equites.Piece.C">C</span>, <a href="Knight$.html" class="extype" name="eu.timepit.equites.Knight">Knight</a>.type]]</span>
+      </span>
+      </h4>
+      
+    </li><li name="eu.timepit.equites.Piece#maybePawn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="maybePawn:Option[eu.timepit.equites.Piece[C,eu.timepit.equites.Pawn.type]]"></a>
+      <a id="maybePawn:Option[Piece[C,Pawn.type]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">maybePawn</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="" class="extype" name="eu.timepit.equites.Piece">Piece</a>[<span class="extype" name="eu.timepit.equites.Piece.C">C</span>, <a href="Pawn$.html" class="extype" name="eu.timepit.equites.Pawn">Pawn</a>.type]]</span>
+      </span>
+      </h4>
+      
+    </li><li name="eu.timepit.equites.Piece#maybeQueen" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="maybeQueen:Option[eu.timepit.equites.Piece[C,eu.timepit.equites.Queen.type]]"></a>
+      <a id="maybeQueen:Option[Piece[C,Queen.type]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">maybeQueen</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="" class="extype" name="eu.timepit.equites.Piece">Piece</a>[<span class="extype" name="eu.timepit.equites.Piece.C">C</span>, <a href="Queen$.html" class="extype" name="eu.timepit.equites.Queen">Queen</a>.type]]</span>
+      </span>
+      </h4>
+      
+    </li><li name="eu.timepit.equites.Piece#maybeRook" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="maybeRook:Option[eu.timepit.equites.Piece[C,eu.timepit.equites.Rook.type]]"></a>
+      <a id="maybeRook:Option[Piece[C,Rook.type]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">maybeRook</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="" class="extype" name="eu.timepit.equites.Piece">Piece</a>[<span class="extype" name="eu.timepit.equites.Piece.C">C</span>, <a href="Rook$.html" class="extype" name="eu.timepit.equites.Rook">Rook</a>.type]]</span>
+      </span>
+      </h4>
+      
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="eu.timepit.equites.Piece#pieceType" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="pieceType:T"></a>
+      <a id="pieceType:T"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">pieceType</span><span class="result">: <span class="extype" name="eu.timepit.equites.Piece.T">T</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.Product">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Product" class="extype" target="_top">Product</a></h3>
+            </div><div class="parent" name="scala.Equals">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Equals" class="extype" target="_top">Equals</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../lib/template.js"></script><script defer="defer" type="text/javascript" id="modernizr-custom-js" src="../../../lib/modernizr.custom.js"></script><script defer="defer" type="text/javascript" id="diagrams-js" src="../../../lib/diagrams.js"></script>
+    </body>
+      </html>
