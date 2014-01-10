@@ -3,7 +3,6 @@ import Keys._
 
 object BuildSettings {
   import Dependencies._
-  import ScalariformSettings._
 
   lazy val commonSettings = Seq(
     organization := "eu.timepit",
@@ -44,7 +43,7 @@ object BuildSettings {
     de.johoop.cpd4sbt.CopyPasteDetector.cpdSettings ++
     org.scalastyle.sbt.ScalastylePlugin.Settings ++
     ScctPlugin.instrumentSettings ++
-    ourScalariformSettings ++
+    ScalariformSettings.ourScalariformSettings ++
     Seq(
       initialCommands := """
         import scalaz._
