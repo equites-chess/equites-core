@@ -58,11 +58,11 @@ object SizedBoardBuilder {
     private[this] def buildBoard: Board = {
       val maxRank = sizedBoard.length - 1
       val mapping = for {
-        (sizedRank, rank) <- sizedBoard.zipWithIndex
+        (sizedRank, reverseRank) <- sizedBoard.zipWithIndex
         (pieceOpt, file) <- sizedRank.zipWithIndex
         piece <- pieceOpt
-        square = Square(file, maxRank - rank)
-      } yield square -> piece
+        rank = maxRank - reverseRank
+      } yield Square(file, rank) -> piece
       Board(mapping.toMap)
     }
   }
