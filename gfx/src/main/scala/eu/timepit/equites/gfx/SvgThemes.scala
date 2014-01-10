@@ -20,6 +20,7 @@ package gfx
 import scala.xml._
 
 import implicits.PieceImplicits._
+import implicits.SquareImplicits._
 
 trait SvgTheme {
   def pieceElem(piece: AnyPiece): Elem
@@ -56,7 +57,18 @@ object SvgThemes extends App {
   val freeTheme = XML.load(getClass.getResourceAsStream("/themes/FreeSerif.svg"))
   val wikipediaTheme = XML.load(getClass.getResourceAsStream("/themes/Wikipedia.svg"))
 
-  //println(extractPieceElems(freeTheme, "text", pieceImageIds).get(Piece(White, King)))
+  val pieces = extractElems(wikipediaTheme, pieceIds)
+  val tiles = extractElems(wikipediaTheme, colorIds)
 
-  println(extractElems(wikipediaTheme, Map("WhiteTile" -> White, "BlackTile" -> Black)))
+  println(tiles.get(White).get.attribute("x"))
+  println(tiles.get(White).get.attribute("y"))
+
+  def squareToUse(sq: Square): String = {
+    val idT = sq.toAlgebraic
+    val x = <use id="idT" xlink:href="#WhiteTile"  />
+    sq.isDark
+    ""
+  }
+  //Rules.allSquaresSeq.map
+  // TODO make empty board
 }
