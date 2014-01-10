@@ -46,7 +46,7 @@ object UciProcess {
       .lift((str: String) => parseAll(response, str))
       .collect { case Success(result, _) => result }
 
-  def newGameCommands: Process[Task, Array[Byte]] =
+  def newGameCommands: Process[Task, String] =
     toRawCommands(Uci.Uci, UciNewGame, IsReady)
 
   /**

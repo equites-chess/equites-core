@@ -26,7 +26,8 @@ import proto.UciParsers._
 import proto.UciProcess._
 import util.ScalazProcess._
 
-object UciEngineVsHuman extends App {
+/*
+object UciEngineVsHuman { //extends App {
   val game = Subprocess.popen("gnuchess", "-u").flatMap { engine =>
     val readResponses =
       engine.output.pipe(collectResponses)
@@ -35,7 +36,7 @@ object UciEngineVsHuman extends App {
     def writePositionCommand(history: Seq[GameState]) =
       toRawCommands(Position(history)).through(engine.input)
     val writeGoCommand =
-      toRawCommands(Go(Go.Movetime(100.millis))).through(engine.input)
+      toRawCommands(Go(Go.Movetime(50.millis))).through(engine.input)
     val prepareGame =
       newGameCommands.through(engine.input) ++ readResponses.find(_ == ReadyOk)
     val quitEngine =
@@ -64,3 +65,4 @@ object UciEngineVsHuman extends App {
   }
   game.run.run
 }
+*/

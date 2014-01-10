@@ -27,6 +27,6 @@ object ScalazProcess {
   def stdInLines: Process[Task, String] =
     Process.repeatEval(Task.delay { Option(readLine()).getOrElse(throw Process.End) })
 
-  def toRawCommands[A](as: A*): Process[Task, Array[Byte]] =
-    Process(as: _*).map(util.toUtf8BytesLf)
+  def toRawCommands[A](as: A*): Process[Task, String] =
+    Process(as: _*).map(_.toString + "\n")
 }
