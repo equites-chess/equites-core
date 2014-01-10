@@ -42,9 +42,6 @@ class Board(val self: Map[Square, AnyPiece])
   def placedPieces: Stream[Placed[AnyPiece]] =
     toStream.map { case (square, piece) => Placed(piece, square) }
 
-  def sortedBySquare: Seq[(Square, AnyPiece)] =
-    toSeq.sortBy { case (sq, _) => sq }
-
   def processAction(action: Action): Board = action match {
     case a: CaptureAndPromotion => processCaptureAndPromotion(a)
     case a: CaptureLike         => processCapture(a)

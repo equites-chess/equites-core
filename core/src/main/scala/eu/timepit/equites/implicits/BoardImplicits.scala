@@ -18,9 +18,15 @@ package eu.timepit.equites
 package implicits
 
 import implicits.PieceImplicits._
+import implicits.PlacedImplicits._
 
 object BoardImplicits {
   implicit final class RichBoard(val self: Board) extends AnyVal {
+    def toLetterPositions: String = toPositions(_.toLetter)
+    def toFigurinePositions: String = toPositions(_.toFigurine)
+
+    def toPositions(showPlaced: Placed[AnyPiece] => String): String =
+      self.placedPieces.sorted.map(showPlaced).mkString(", ")
 
     /**
      * Returns the piece placement of the [[Board]] in
