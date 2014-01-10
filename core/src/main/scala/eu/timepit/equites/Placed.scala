@@ -24,9 +24,7 @@ trait PlacedInstances {
     def equal(p1: Placed[A], p2: Placed[A]): Boolean = p1 == p2
   }
 
-  implicit def placedOrder[A] = new Order[Placed[A]] {
-    def order(p1: Placed[A], p2: Placed[A]): Ordering = p1.square cmp p2.square
-  }
+  implicit def placedOrder[A] = Order.orderBy((p: Placed[A]) => p.square)
 
   implicit val scalaOrdering = placedOrder[AnyPiece].toScalaOrdering
 
