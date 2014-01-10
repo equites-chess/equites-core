@@ -19,6 +19,19 @@ package implicits
 
 import scala.language.implicitConversions
 
+import PieceImplicits._
+import SquareImplicits._
+
 object PlacedImplicits {
   implicit def placed2piece[A <: AnyPiece](placed: Placed[A]): A = placed.elem
+
+  implicit final class RichPlacedPiece[A <: AnyPiece](val self: Placed[A])
+      extends AnyVal {
+
+    def toFigurine: String = appendSquareTo(self.elem.toFigurine)
+    def toLetter: String = appendSquareTo(self.elem.toLetter)
+
+    private def appendSquareTo(str: String): String =
+      str + self.square.toAlgebraic
+  }
 }

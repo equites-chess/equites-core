@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2013-2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,11 +17,18 @@
 package eu.timepit.equites
 
 import scalaz._
+import Scalaz._
 
 trait PlacedInstances {
   implicit def placedEqual[A] = new Equal[Placed[A]] {
     def equal(p1: Placed[A], p2: Placed[A]): Boolean = p1 == p2
   }
+
+  implicit def placedOrder[A] = new Order[Placed[A]] {
+    def order(p1: Placed[A], p2: Placed[A]): Ordering = p1.square cmp p2.square
+  }
+
+  implicit val scalaOrdering = placedOrder[AnyPiece].toScalaOrdering
 
   implicit object placedInstance extends Functor[Placed] {
     // Functor
