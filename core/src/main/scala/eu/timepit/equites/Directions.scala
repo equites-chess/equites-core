@@ -24,6 +24,7 @@ object Directions {
   def apply(vs: Vec*): Directions = apply(vs)
   def apply(vs: TraversableOnce[Vec]): Directions = new Directions(vs.toSet)
 
+  // format: OFF
   val front = Directions(Vec.front) // ↑
   val right = Directions(Vec.right) // →
   val back  = Directions(Vec.back)  // ↓
@@ -43,12 +44,15 @@ object Directions {
   val straight = Directions(front ++ right ++ back ++ left) // ↑→↓←
   val diagonal = Directions(diagonalFront ++ diagonalBack)  // ↖↗↙↘
   val anywhere = Directions(straight ++ diagonal)
+  // format: ON
 
-  val knightLike = Directions(Vec(-2, -2) to Vec(2, 2) filter(_.l1Length == 3))
+  val knightLike =
+    Directions((Vec(-2, -2) to Vec(2, 2)).filter(_.l1Length == 3))
 }
 
 class Directions(val self: Set[Vec]) extends SetProxy[Vec]
-                                     with PlayerPerspective[Directions] {
+    with PlayerPerspective[Directions] {
+
   def inverse: Directions = Directions(map(_.inverse))
 
   def mostSimilarTo(vec: Vec): Directions =

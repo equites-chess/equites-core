@@ -108,7 +108,7 @@ object Side {
 }
 
 sealed trait Side
-case object Kingside  extends Side
+case object Kingside extends Side
 case object Queenside extends Side
 
 sealed trait Castling extends Action {
