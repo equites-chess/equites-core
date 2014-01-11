@@ -24,7 +24,7 @@ object Piece {
   def allCastling: List[CastlingPiece] = mkAllPieces(PieceType.allCastling)
   def allPromoted: List[PromotedPiece] = mkAllPieces(PieceType.allPromoted)
 
-  private def mkAllPieces[T <: PieceType](pieceTypes: List[T]): List[Piece[Color, T]] =
+  private[this] def mkAllPieces[T <: PieceType](pieceTypes: List[T]): List[Piece[Color, T]] =
     ^(Color.all, pieceTypes)(Piece.apply)
 }
 

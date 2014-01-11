@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2011, 2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2011, 2013-2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -28,80 +28,56 @@ trait DrawLike {
 }
 
 sealed trait MoveLike extends Action with DrawLike {
+  require(from != to)
   def piece: AnyPiece
   def placedPiece: Placed[AnyPiece] = Placed(piece, from)
 }
 
 sealed trait PromotionLike extends MoveLike {
   require(piece isFriendOf promotedTo)
-
   def piece: AnyPawn
   def promotedTo: PromotedPiece
+  def placedPromoted: Placed[PromotedPiece] = Placed(promotedTo, to)
 }
 
 sealed trait CaptureLike extends MoveLike {
   require(piece isOpponentOf captured)
-
   def captured: AnyPiece
   def capturedOn: Square = to
   def placedCaptured: Placed[AnyPiece] = Placed(captured, capturedOn)
 }
 
-object Move {
-  def apply(piece: AnyPiece, fromTo: (Square, Square)): Move =
-    Move(piece, fromTo._1, fromTo._2)
+case class Move(
+  piece: AnyPiece, from: Square, to: Square)
+    extends MoveLike
 
-  def apply(placed: Placed[AnyPiece], to: Square): Move =
-    Move(placed.elem, placed.square, to)
-}
+case class Capture(
+  piece: AnyPiece, from: Square, to: Square, captured: AnyPiece)
+    extends CaptureLike
 
-case class Move(piece: AnyPiece, from: Square, to: Square)
-  extends MoveLike
+case class Promotion(
+  piece: AnyPawn, from: Square, to: Square, promotedTo: PromotedPiece)
+    extends PromotionLike
 
-object Promotion {
-  def apply(placed: Placed[AnyPawn], to: Square, promotedTo: PromotedPiece)
-      : Promotion =
-    Promotion(placed.elem, placed.square, to, promotedTo)
-}
-
-case class Promotion(piece: AnyPawn, from: Square, to: Square,
+case class CaptureAndPromotion(
+  piece: AnyPawn, from: Square, to: Square, captured: AnyPiece,
   promotedTo: PromotedPiece)
-  extends PromotionLike
+    extends CaptureLike with PromotionLike
+
+case class EnPassant(
+  piece: AnyPawn, from: Square, to: Square, captured: AnyPawn,
+  override val capturedOn: Square)
+    extends CaptureLike
 
 object Capture {
   def apply(move: MoveLike, captured: AnyPiece): Capture =
     Capture(move.piece, move.from, move.to, captured)
-
-  def apply(placed: Placed[AnyPiece], to: Square, captured: AnyPiece): Capture =
-    Capture(placed.elem, placed.square, to, captured)
 }
-
-case class Capture(piece: AnyPiece, from: Square, to: Square, captured: AnyPiece)
-  extends CaptureLike
 
 object CaptureAndPromotion {
   def apply(promo: PromotionLike, captured: AnyPiece): CaptureAndPromotion =
-    CaptureAndPromotion(promo.piece, promo.from, promo.to, captured,
-                        promo.promotedTo)
-
-  def apply(placed: Placed[AnyPawn], to: Square, captured: AnyPiece,
-            promotedTo: PromotedPiece): CaptureAndPromotion =
-    CaptureAndPromotion(placed.elem, placed.square, to, captured, promotedTo)
+    CaptureAndPromotion(promo.piece, promo.from, promo.to, captured, promo.promotedTo)
 }
-
-case class CaptureAndPromotion(piece: AnyPawn, from: Square, to: Square,
-  captured: AnyPiece, promotedTo: PromotedPiece)
-  extends CaptureLike with PromotionLike
-
-object EnPassant {
-  def apply(placed: Placed[AnyPawn], to: Square, captured: AnyPawn,
-            capturedOn: Square): EnPassant =
-    EnPassant(placed.elem, placed.square, to, captured, capturedOn)
-}
-
-case class EnPassant(piece: AnyPawn, from: Square, to: Square, captured: AnyPawn,
-  override val capturedOn: Square)
-  extends CaptureLike
 
 object Side {
   def all: List[Side] = List(Kingside, Queenside)
@@ -121,8 +97,10 @@ sealed trait Castling extends Action {
   def kingMove: Move = moveOf(king)
   def rookMove: Move = moveOf(rook)
 
-  private def moveOf(piece: CastlingPiece): Move =
-    Move(piece, Rules.castlingSquares(side -> piece))
+  private[this] def moveOf(piece: CastlingPiece): Move =
+    Rules.castlingSquares(side -> piece) match {
+      case (from, to) => Move(piece, from, to)
+    }
 }
 
 case class CastlingShort(color: Color) extends Castling {
