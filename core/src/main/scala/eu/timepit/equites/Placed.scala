@@ -17,12 +17,9 @@
 package eu.timepit.equites
 
 import scalaz._
-import Scalaz._
 
 trait PlacedInstances {
-  implicit def placedEqual[A] = new Equal[Placed[A]] {
-    def equal(p1: Placed[A], p2: Placed[A]): Boolean = p1 == p2
-  }
+  implicit def placedEqual[A] = Equal.equalA[Placed[A]]
 
   implicit def placedOrder[A] = Order.orderBy((p: Placed[A]) => p.square)
 

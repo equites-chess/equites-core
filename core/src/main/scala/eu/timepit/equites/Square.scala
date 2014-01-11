@@ -25,9 +25,9 @@ import util.Notation._
 import util.Rand._
 
 trait SquareInstances {
-  implicit object squareInstance extends Equal[Square] with Order[Square] {
-    // Equal
-    override def equal(s1: Square, s2: Square): Boolean = s1 == s2
+  implicit val squareEqual = Equal.equalA[Square]
+
+  implicit object squareInstance extends Order[Square] {
     // Order
     def order(s1: Square, s2: Square): Ordering =
       (s1.rank cmp s2.rank) mappend (s1.file cmp s2.file)

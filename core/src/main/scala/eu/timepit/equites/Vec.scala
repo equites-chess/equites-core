@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2011-2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2011-2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -21,11 +21,11 @@ import scalaz._
 import util.Math._
 
 trait VecInstances {
-  implicit object vecInstance extends Equal[Vec] with Monoid[Vec] {
-    // Equal:
-    def equal(v1: Vec, v2: Vec): Boolean = v1 == v2
+  implicit val vecEqual = Equal.equalA[Vec]
+
+  implicit object vecInstance extends Monoid[Vec] {
     // Monoid:
-    def zero: Vec = Vec(0, 0)
+    val zero: Vec = Vec(0, 0)
     def append(v1: Vec, v2: => Vec): Vec = v1 + v2
   }
 }

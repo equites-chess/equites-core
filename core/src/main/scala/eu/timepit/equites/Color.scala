@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2011, 2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2011, 2013-2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,9 +19,9 @@ package eu.timepit.equites
 import scalaz._
 
 trait ColorInstances {
-  implicit object colorInstance extends Equal[Color] with Order[Color] {
-    // Equal
-    override def equal(c1: Color, c2: Color): Boolean = c1 == c2
+  implicit val colorEqual = Equal.equalA[Color]
+
+  implicit object colorInstance extends Order[Color] {
     // Order
     def order(c1: Color, c2: Color): Ordering =
       if (c1 == c2) {
