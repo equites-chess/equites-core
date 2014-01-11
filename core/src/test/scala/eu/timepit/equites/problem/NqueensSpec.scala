@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2013-2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,20 +17,18 @@
 package eu.timepit.equites
 package problem
 
-object NQueens {
-  def allBoards: Stream[Board] = {
-    case class Candidate(board: Board, available: Set[Square])
+import org.specs2.mutable._
 
-    def nextBoards(c: Candidate): Stream[Candidate] = {
-      c.available.toStream.map { sq =>
-        val placed = Placed(Piece(White, Queen), sq)
-        val reachable = Rules.possibleSquares(placed)
-        Candidate(c.board + placed, c.available -- reachable - sq)
-      }
+import Nqueens._
+
+class NqueensSpec extends Specification {
+  "allBoards" should {
+    "place queens on a board that do not attack each other" in {
+      val board = allBoards(0)
+      def nonattacking(placed: Placed[AnyPiece]): Boolean =
+        board.getPlaced(Rules.possibleSquares(placed)).isEmpty
+
+      board.placedPieces.forall(nonattacking) must beTrue
     }
-
-    val first = Candidate(Board.empty, Rules.allSquaresSet)
-    val n = math.sqrt(Rules.allSquaresSeq.length).toInt
-    util.backtracking(first)(nextBoards, _.board.size >= n).map(_.board)
   }
 }
