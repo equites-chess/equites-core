@@ -69,6 +69,11 @@ case class EnPassant(
   override val capturedOn: Square)
     extends CaptureLike
 
+object Move {
+  def apply(piece: AnyPiece, draw: DrawLike): Move =
+    Move(piece, draw.from, draw.to)
+}
+
 object Capture {
   def apply(move: MoveLike, captured: AnyPiece): Capture =
     Capture(move.piece, move.from, move.to, captured)

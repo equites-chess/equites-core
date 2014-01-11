@@ -25,24 +25,24 @@ object Directions {
   def apply(vs: TraversableOnce[Vec]): Directions = new Directions(vs.toSet)
 
   // format: OFF
-  val front = Directions(Vec.front) // ↑
-  val right = Directions(Vec.right) // →
-  val back  = Directions(Vec.back)  // ↓
-  val left  = Directions(Vec.left)  // ←
+  val front = Directions(Vec.front)
+  val right = Directions(Vec.right)
+  val back  = Directions(Vec.back)
+  val left  = Directions(Vec.left)
 
-  val frontRight = Directions(Vec.frontRight) // ↗
-  val backRight  = Directions(Vec.backRight)  // ↘
-  val backLeft   = Directions(Vec.backLeft)   // ↙
-  val frontLeft  = Directions(Vec.frontLeft)  // ↖
+  val frontRight = Directions(Vec.frontRight)
+  val backRight  = Directions(Vec.backRight)
+  val backLeft   = Directions(Vec.backLeft)
+  val frontLeft  = Directions(Vec.frontLeft)
 
-  val diagonalFront = Directions(frontLeft ++ frontRight) // ↖↗
-  val diagonalBack  = Directions( backLeft ++  backRight) // ↙↘
+  val diagonalFront = Directions(frontLeft ++ frontRight)
+  val diagonalBack  = Directions(backLeft ++ backRight)
 
-  val forward  = Directions(diagonalFront ++ front) // ↖↑↗
-  val backward = Directions(diagonalBack  ++ back)  // ↙↓↘
+  val forward  = Directions(diagonalFront ++ front)
+  val backward = Directions(diagonalBack ++ back)
 
-  val straight = Directions(front ++ right ++ back ++ left) // ↑→↓←
-  val diagonal = Directions(diagonalFront ++ diagonalBack)  // ↖↗↙↘
+  val straight = Directions(front ++ right ++ back ++ left)
+  val diagonal = Directions(diagonalFront ++ diagonalBack)
   val anywhere = Directions(straight ++ diagonal)
   // format: ON
 

@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2013-2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,16 +19,18 @@ package eu.timepit.equites
 import scalaz.syntax.std.boolean._
 
 object ActionOps {
-  def drawAsMove(board: Board)(draw: DrawLike): Option[Move] =
-    board.get(draw.from).map(piece => Move(piece, draw.from, draw.to))
+  def drawAsMove(board: Board, draw: DrawLike): Option[Move] =
+    (draw.from != draw.to).option {
+      board.get(draw.from).map(piece => Move(piece, draw))
+    }.flatten
 
-  def moveAsCapture(board: Board)(move: MoveLike): Option[Capture] =
+  def moveAsCapture(board: Board, move: MoveLike): Option[Capture] =
     for {
       captured <- board.get(move.to)
       if captured.isOpponentOf(move.piece)
     } yield Capture(move, captured)
 
-  def moveAsEnPassant(board: Board)(move: MoveLike): Option[EnPassant] =
+  def moveAsEnPassant(board: Board, move: MoveLike): Option[EnPassant] =
     for {
       pawn <- move.piece.maybePawn
       if move.direction.isDiagonal
@@ -38,36 +40,36 @@ object ActionOps {
       if otherPawn.isOpponentOf(pawn)
     } yield EnPassant(pawn, move.from, move.to, otherPawn, target)
 
-  def moveAsCastling(board: Board)(move: MoveLike): Option[Castling] =
+  def moveAsCastling(board: Board, move: MoveLike): Option[Castling] =
     for {
       castling <- Rules.allCastlings.find(_.kingMove == move)
-      if drawAsMove(board)(castling.kingMove).isDefined
-      if drawAsMove(board)(castling.rookMove).isDefined
+      _ <- drawAsMove(board, castling.kingMove)
+      _ <- drawAsMove(board, castling.rookMove)
     } yield castling
 
-  def cmAsAction(board: Board)(cm: util.CoordinateMove): Option[Action] = {
-    val optMove = drawAsMove(board)(cm)
-    optMove.flatMap { move =>
-      lazy val optCapture = moveAsCapture(board)(move)
+  def cmAsAction(board: Board, cm: util.CoordinateMove): Option[Action] = {
+    val moveOpt = drawAsMove(board, cm)
+    moveOpt.flatMap { move =>
+      lazy val captureOpt = moveAsCapture(board, move)
 
-      lazy val optPromotion =
+      lazy val promotionOpt =
         for {
           pawn <- move.piece.maybePawn
           promotedTo <- cm.promotedTo
         } yield Promotion(pawn, move.from, move.to, promotedTo)
 
-      lazy val optCaptureAndPromotion =
+      lazy val captureAndPromotionOpt =
         for {
-          capture <- optCapture
-          promotion <- optPromotion
+          capture <- captureOpt
+          promotion <- promotionOpt
         } yield CaptureAndPromotion(promotion, capture.captured)
 
-      moveAsCastling(board)(move)
-        .orElse(moveAsEnPassant(board)(move))
-        .orElse(optCaptureAndPromotion)
-        .orElse(optCapture)
-        .orElse(optPromotion)
-        .orElse(optMove)
+      moveAsCastling(board, move)
+        .orElse(moveAsEnPassant(board, move))
+        .orElse(captureAndPromotionOpt)
+        .orElse(captureOpt)
+        .orElse(promotionOpt)
+        .orElse(moveOpt)
     }
   }
 
@@ -93,6 +95,4 @@ object ActionOps {
   /** Returns true if the given move allows an en passant capture. */
   def allowsEnPassant(move: Move): Boolean =
     move.piece.isPawn && move.l1Length == 2 && move.direction.isStraight
-
-  // TODO isPawnOnStartingSquare(AnyPiece)
 }

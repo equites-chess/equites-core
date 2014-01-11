@@ -43,7 +43,7 @@ case class GameState(board: Board, lastAction: Option[Action],
     availableCastlings = updatedAvailableCastlings(action))
 
   def updated(cm: util.CoordinateMove): Option[GameState] =
-    ActionOps.cmAsAction(board)(cm).map(updated)
+    ActionOps.cmAsAction(board, cm).map(updated)
 
   private[this] def updatedMoveNumber: Int =
     moveNumber + (if (color == Black) 1 else 0)
