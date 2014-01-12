@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2013-2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,7 +17,8 @@
 package eu.timepit.equites
 package implicits
 
-import scala.collection.{ IterableLike, TraversableLike }
+import scala.collection.{ GenTraversableOnce, IterableLike, TraversableLike }
+import scala.collection.generic.Subtractable
 import scalaz._
 
 object GenericImplicits {
@@ -31,6 +32,14 @@ object GenericImplicits {
     def minGroupBy[A, B](f: A => B)(implicit ev0: C => TraversableLike[A, C],
                                     ev1: scala.Ordering[B]): C = {
       if (self.isEmpty) self else self.groupBy(f).minBy(_._1)._2
+    }
+
+    def lazy_--[A, CC <: Subtractable[A, CC]](xs: => GenTraversableOnce[A])(
+      implicit ev0: C => GenTraversableOnce[A],
+      ev1: C => Subtractable[A, CC],
+      ev2: C => CC): CC = {
+
+      if (self.isEmpty) self else self -- xs
     }
   }
 }

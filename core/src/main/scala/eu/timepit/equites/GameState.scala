@@ -18,6 +18,8 @@ package eu.timepit.equites
 
 import scalaz.std.stream
 
+import implicits.GenericImplicits._
+
 object GameState {
   def init: GameState = GameState(
     board = Rules.startingBoard,
@@ -71,10 +73,6 @@ case class GameState(
         Rules.associatedCastlings(move.placedPiece)
     }
 
-    if (availableCastlings.nonEmpty) {
-      availableCastlings -- unavailableCastlings
-    } else {
-      Set.empty
-    }
+    availableCastlings lazy_-- unavailableCastlings
   }
 }
