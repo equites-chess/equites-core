@@ -27,12 +27,12 @@ object ActionImplicits {
 
     private def toLongAlgebraicImpl(showPiece: AnyPiece => String): String =
       self match {
-        case p: PromotionLike => showPiece(p.piece) + moveToLongAlgebraic + showPiece(p.promotedTo)
-        case m: MoveLike      => showPiece(m.piece) + moveToLongAlgebraic
-        case _                => moveToLongAlgebraic
+        case p: PromotionLike => showPiece(p.piece) + nakedLongAlgebraic + showPiece(p.promotedTo)
+        case m: MoveLike      => showPiece(m.piece) + nakedLongAlgebraic
+        case _                => nakedLongAlgebraic
       }
 
-    private def moveToLongAlgebraic: String = self match {
+    private def nakedLongAlgebraic: String = self match {
       case e: EnPassant     => algebraicSquares(e).mkString("x") + "e.p."
       case c: CaptureLike   => algebraicSquares(c).mkString("x")
       case m: MoveLike      => algebraicSquares(m).mkString("-")
