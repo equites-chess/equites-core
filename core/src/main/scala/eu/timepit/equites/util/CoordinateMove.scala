@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2013-2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@ import implicits.SquareImplicits._
 object CoordinateMove {
   def apply(action: Action): CoordinateMove = action match {
     case p: PromotionLike => CoordinateMove(p.from, p.to, Some(p.promotedTo))
-    case m: MoveLike      => CoordinateMove(m.from, m.to, None)
+    case m: MoveLike      => CoordinateMove(m.from, m.to)
     case c: Castling      => CoordinateMove(c.kingMove)
   }
 }
@@ -31,10 +31,12 @@ object CoordinateMove {
 /**
  * Represents a move in coordinate notation.
  */
-case class CoordinateMove(from: Square, to: Square,
-                          promotedTo: Option[PromotedPiece] = None)
+case class CoordinateMove(
+  from: Square,
+  to: Square,
+  promotedTo: Option[PromotedPiece] = None)
     extends DrawLike {
 
-  def toAlgebraic: String = from.toAlgebraic + to.toAlgebraic +
-    promotedTo.fold("")(_.toLowerCaseLetter)
+  def toAlgebraic: String =
+    from.toAlgebraic + to.toAlgebraic + promotedTo.fold("")(_.toLowerCaseLetter)
 }

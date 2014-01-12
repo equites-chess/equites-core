@@ -49,24 +49,38 @@ sealed trait CaptureLike extends MoveLike {
 }
 
 case class Move(
-  piece: AnyPiece, from: Square, to: Square)
+  piece: AnyPiece,
+  from: Square,
+  to: Square)
     extends MoveLike
 
 case class Capture(
-  piece: AnyPiece, from: Square, to: Square, captured: AnyPiece)
+  piece: AnyPiece,
+  from: Square,
+  to: Square,
+  captured: AnyPiece)
     extends CaptureLike
 
 case class Promotion(
-  piece: AnyPawn, from: Square, to: Square, promotedTo: PromotedPiece)
+  piece: AnyPawn,
+  from: Square,
+  to: Square,
+  promotedTo: PromotedPiece)
     extends PromotionLike
 
 case class CaptureAndPromotion(
-  piece: AnyPawn, from: Square, to: Square, captured: AnyPiece,
+  piece: AnyPawn,
+  from: Square,
+  to: Square,
+  captured: AnyPiece,
   promotedTo: PromotedPiece)
     extends CaptureLike with PromotionLike
 
 case class EnPassant(
-  piece: AnyPawn, from: Square, to: Square, captured: AnyPawn,
+  piece: AnyPawn,
+  from: Square,
+  to: Square,
+  captured: AnyPawn,
   override val capturedOn: Square)
     extends CaptureLike
 

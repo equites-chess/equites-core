@@ -19,18 +19,18 @@ package eu.timepit.equites
 import scalaz.syntax.std.boolean._
 
 object ActionOps {
-  def drawAsMove(board: Board, draw: DrawLike): Option[Move] =
+  def reifyAsMove(board: Board, draw: DrawLike): Option[Move] =
     (draw.from != draw.to).option {
       board.get(draw.from).map(piece => Move(piece, draw))
     }.flatten
 
-  def moveAsCapture(board: Board, move: MoveLike): Option[Capture] =
+  def reifyAsCapture(board: Board, move: MoveLike): Option[Capture] =
     for {
       captured <- board.get(move.to)
       if captured.isOpponentOf(move.piece)
     } yield Capture(move, captured)
 
-  def moveAsEnPassant(board: Board, move: MoveLike): Option[EnPassant] =
+  def reifyAsEnPassant(board: Board, move: MoveLike): Option[EnPassant] =
     for {
       pawn <- move.piece.maybePawn
       if move.direction.isDiagonal
@@ -40,17 +40,17 @@ object ActionOps {
       if otherPawn.isOpponentOf(pawn)
     } yield EnPassant(pawn, move.from, move.to, otherPawn, target)
 
-  def moveAsCastling(board: Board, move: MoveLike): Option[Castling] =
+  def reifyAsCastling(board: Board, move: MoveLike): Option[Castling] =
     for {
       castling <- Rules.allCastlings.find(_.kingMove == move)
-      _ <- drawAsMove(board, castling.kingMove)
-      _ <- drawAsMove(board, castling.rookMove)
+      _ <- reifyAsMove(board, castling.kingMove)
+      _ <- reifyAsMove(board, castling.rookMove)
     } yield castling
 
-  def cmAsAction(board: Board, cm: util.CoordinateMove): Option[Action] = {
-    val moveOpt = drawAsMove(board, cm)
+  def reifyAsAction(board: Board, cm: util.CoordinateMove): Option[Action] = {
+    val moveOpt = reifyAsMove(board, cm)
     moveOpt.flatMap { move =>
-      lazy val captureOpt = moveAsCapture(board, move)
+      lazy val captureOpt = reifyAsCapture(board, move)
 
       lazy val promotionOpt =
         for {
@@ -64,8 +64,8 @@ object ActionOps {
           promotion <- promotionOpt
         } yield CaptureAndPromotion(promotion, capture.captured)
 
-      moveAsCastling(board, move)
-        .orElse(moveAsEnPassant(board, move))
+      reifyAsCastling(board, move)
+        .orElse(reifyAsEnPassant(board, move))
         .orElse(captureAndPromotionOpt)
         .orElse(captureOpt)
         .orElse(promotionOpt)
