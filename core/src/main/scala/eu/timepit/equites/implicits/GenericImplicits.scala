@@ -34,8 +34,8 @@ object GenericImplicits {
       if (self.isEmpty) self else self.groupBy(f).minBy(_._1)._2
     }
 
-    def lazy_--[A, CC <: Subtractable[A, CC]](xs: => GenTraversableOnce[A])(
-      implicit ev0: C => GenTraversableOnce[A],
+    def lazy_--[A, B, CC <: Subtractable[A, CC]](xs: => GenTraversableOnce[A])(
+      implicit ev0: C => GenTraversableOnce[B],
       ev1: C => Subtractable[A, CC],
       ev2: C => CC): CC = {
 
