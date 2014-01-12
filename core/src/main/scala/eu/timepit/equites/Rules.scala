@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2011, 2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2011, 2013-2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -84,13 +84,15 @@ object Rules {
   val allCastlings: List[Castling] =
     castlingsBy(White) ::: castlingsBy(Black)
 
-  def associatedCastlings(placed: Placed[AnyPiece]): List[Castling] =
-    placed.elem match {
-      case Piece(color, King) =>
-        castlingsBy(color)
-      case Piece(color, Rook) =>
-        castlingsBy(color).filter(_.rookMove.from == placed.square)
-      case _ => Nil
+  def associatedCastlings(xs: Placed[AnyPiece]*): Seq[Castling] =
+    xs.flatMap { placed =>
+      placed.elem match {
+        case Piece(color, King) =>
+          castlingsBy(color)
+        case Piece(color, Rook) =>
+          castlingsBy(color).filter(_.rookMove.from == placed.square)
+        case _ => Nil
+      }
     }
 
   val startingBoard: Board = {

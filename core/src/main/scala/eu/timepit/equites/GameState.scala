@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2013-2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,8 +19,12 @@ package eu.timepit.equites
 import scalaz.std.stream
 
 object GameState {
-  def init: GameState = GameState(board = Rules.startingBoard,
-    lastAction = None, color = White, moveNumber = 1, halfmoveClock = 0,
+  def init: GameState = GameState(
+    board = Rules.startingBoard,
+    lastAction = None,
+    color = White,
+    moveNumber = 1,
+    halfmoveClock = 0,
     availableCastlings = Rules.allCastlings.toSet)
 
   def unfold(actions: Seq[Action], first: GameState = init): Stream[GameState] =
@@ -32,13 +36,19 @@ object GameState {
     }
 }
 
-case class GameState(board: Board, lastAction: Option[Action],
-                     color: Color, moveNumber: Int, halfmoveClock: Int,
-                     availableCastlings: Set[Castling]) {
+case class GameState(
+    board: Board,
+    lastAction: Option[Action],
+    color: Color,
+    moveNumber: Int,
+    halfmoveClock: Int,
+    availableCastlings: Set[Castling]) {
 
   def updated(action: Action): GameState = copy(
-    board = board.processAction(action), lastAction = Some(action),
-    color = color.opposite, moveNumber = updatedMoveNumber,
+    board = board.processAction(action),
+    lastAction = Some(action),
+    color = color.opposite,
+    moveNumber = updatedMoveNumber,
     halfmoveClock = updatedHalfmoveClock(action),
     availableCastlings = updatedAvailableCastlings(action))
 
@@ -53,10 +63,10 @@ case class GameState(board: Board, lastAction: Option[Action],
 
   private[this] def updatedAvailableCastlings(action: Action): Set[Castling] = {
     def unavailableCastlings: Seq[Castling] = action match {
-      case castling: Castling => Rules.castlingsBy(castling.color)
+      case castling: Castling =>
+        Rules.castlingsBy(castling.color)
       case capture: CaptureLike =>
-        Rules.associatedCastlings(capture.placedPiece) ++
-        Rules.associatedCastlings(capture.placedCaptured)
+        Rules.associatedCastlings(capture.placedPiece, capture.placedCaptured)
       case move: MoveLike =>
         Rules.associatedCastlings(move.placedPiece)
     }
