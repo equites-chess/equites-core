@@ -25,6 +25,7 @@ trait DrawLike {
   def direction: Vec = to - from
   def l1Length: Int = direction.l1Length
   def lInfLength: Int = direction.lInfLength
+  def squares: Seq[Square] = Seq(from, to)
 }
 
 sealed trait MoveLike extends Action with DrawLike {
