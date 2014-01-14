@@ -35,7 +35,9 @@ object BuildSettings {
       "-sourcepath", baseDirectory.in(LocalRootProject).value.getAbsolutePath
     ),
 
-    autoAPIMappings := true
+    autoAPIMappings := true,
+
+    resolvers += "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases"
   )
 
   lazy val childSettings =

@@ -11,7 +11,7 @@ object Dependencies {
   val scalazScalacheckBinding =
     "org.scalaz" %% "scalaz-scalacheck-binding" % scalazVersion
   val scalazStream =
-    "org.scalaz.stream" %% "scalaz-stream" % "0.1"
+    "org.scalaz.stream" %% "scalaz-stream" % "0.3"
   val shapeless =
     "com.chuusai" % "shapeless" % "2.0.0-M1" cross CrossVersion.full
   val specs2 =
