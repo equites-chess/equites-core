@@ -30,7 +30,7 @@ object UciEngineVsItself extends App {
     val readResponses =
       engine.output.pipe(collectResponses)
     val readFirstBestmove =
-      readResponses |> collectFirst { case bm: Bestmove => bm }
+      readResponses.collectFirst { case bm: Bestmove => bm }
     def writePositionCommand(history: Seq[GameState]) =
       toRawCommands(Position(history)).through(engine.input)
     val writeGoCommand =

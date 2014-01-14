@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2013-2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -21,12 +21,6 @@ import scalaz.concurrent.Task
 import scalaz.stream._
 
 object ScalazProcess {
-  def collectFirst[I, I2](pf: PartialFunction[I, I2]): Process1[I, I2] =
-    process1.collect(pf).take(1)
-
-  def stdInLines: Process[Task, String] =
-    Process.repeatEval(Task.delay { Option(readLine()).getOrElse(throw Process.End) })
-
   def toRawCommands[A](as: A*): Process[Task, String] =
     Process(as: _*).map(_.toString + "\n")
 }
