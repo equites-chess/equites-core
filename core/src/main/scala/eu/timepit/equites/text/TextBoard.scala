@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2011, 2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2011, 2013-2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -92,7 +92,7 @@ trait TextBoard {
   }
 
   def mkLabeled(board: Board): String = {
-    def addVerticalBar: String => String =
+    val addVerticalBar: String => String =
       if (rankLabelsRight) (verticalBar + _) else (_ + verticalBar)
 
     def boardWithRankLabels: String = {
