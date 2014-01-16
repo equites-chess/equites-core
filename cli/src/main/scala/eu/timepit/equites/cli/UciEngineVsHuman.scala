@@ -65,4 +65,4 @@ object UciEngineVsHuman { //extends App {
   }
   game.run.run
 }
-*/
+*/ 

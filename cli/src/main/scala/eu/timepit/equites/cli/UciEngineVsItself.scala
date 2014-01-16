@@ -34,7 +34,7 @@ object UciEngineVsItself extends App {
     def writePositionCommand(history: Seq[GameState]) =
       toRawCommands(Position(history)).through(engine.input)
     val writeGoCommand =
-      toRawCommands(Go(Go.Movetime(15.millis))).through(engine.input)
+      toRawCommands(Go(Go.Movetime(10.millis))).through(engine.input)
     val prepareGame =
       newGameCommands.through(engine.input) ++ readResponses.find(_ == ReadyOk)
     val quitEngine =
@@ -52,5 +52,5 @@ object UciEngineVsItself extends App {
     (prepareGame ++ gameLoop(initialPosition)).onComplete(quitEngine)
   }
   println("running process")
-  game.handle { case ex => println(ex.getMessage); Process.halt }.run.run
+  game.run.run
 }
