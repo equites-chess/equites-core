@@ -22,7 +22,7 @@ import util.Notation._
 
 // format: OFF
 trait AbstractTheme {
-  def pieceToString(piece: AnyPiece): String
+  def showPiece(piece: AnyPiece): String
   def tileStart: String        = ""
   def tileEmpty: String
   def tileEnd: String          = ""
@@ -41,7 +41,7 @@ trait AbstractTheme {
 }
 
 trait LetterTheme extends AbstractTheme {
-  def pieceToString(piece: AnyPiece) = piece.toLetter
+  def showPiece(piece: AnyPiece) = piece.toLetter
   def tileEmpty        = "."
   override def rankSep = " "
   def verticalBar      = "  "
@@ -49,7 +49,7 @@ trait LetterTheme extends AbstractTheme {
 }
 
 trait FigurineTheme extends AbstractTheme {
-  def pieceToString(piece: AnyPiece) = piece.toFigurine
+  def showPiece(piece: AnyPiece) = piece.toFigurine
   def tileEmpty              = "·"
   override def rankSep       = " "
   override def horizontalBar = "─"
@@ -58,7 +58,7 @@ trait FigurineTheme extends AbstractTheme {
 }
 
 trait WikiTheme extends AbstractTheme {
-  def pieceToString(piece: AnyPiece) = piece.toWikiLetters
+  def showPiece(piece: AnyPiece) = piece.toWikiLetters
   override def tileStart       = "|"
   def tileEmpty                = "  "
   override def tileEnd         = ""
@@ -80,24 +80,24 @@ trait TextBoard {
   self: AbstractTheme =>
 
   def mkUnlabeled(board: Board): String = {
-    def squareToString(square: Square): String =
-      board.get(square).fold(tileEmpty)(pieceToString)
+    def showSquare(square: Square): String =
+      board.get(square).fold(tileEmpty)(showPiece)
         .mkString(tileStart, "", tileEnd)
 
-    def rowToString(rank: Int): String =
-      Rules.rankSquares(rank).map(squareToString)
+    def showRank(rank: Int): String =
+      Rules.rankSquares(rank).map(showSquare)
         .mkString(rankBegin, rankSep, rankEnd + "\n")
 
-    Rules.rankRange.reverse.map(rowToString).mkString
+    Rules.rankRange.reverse.map(showRank).mkString
   }
 
   def mkLabeled(board: Board): String = {
-    def addRankLabel(r: String): String =
-      if (rankLabelsRight) s"${verticalBar}${r}" else s"${r}${verticalBar}"
+    def addVerticalBar: String => String =
+      if (rankLabelsRight) (verticalBar + _) else (_ + verticalBar)
 
     def boardWithRankLabels: String = {
       val lines = mkUnlabeled(board).split("\n").toSeq
-      val labels = rankLabels.reverse.map(addRankLabel)
+      val labels = rankLabels.reverse.map(addVerticalBar)
       val zipped = if (rankLabelsRight) lines.zip(labels) else labels.zip(lines)
 
       zipped.map(_.productIterator.mkString + "\n").mkString
