@@ -38,6 +38,7 @@ trait AbstractTheme {
   def rankLabelsRight: Boolean = true
   val rankLabels: Seq[String]  = algebraicRankRange.map(_.toString)
   val fileLabels: Seq[String]  = algebraicFileRange.map(_.toString)
+  def lineSep: String          = "\n"
 }
 
 trait LetterTheme extends AbstractTheme {
@@ -86,7 +87,7 @@ trait TextBoard {
 
     def showRank(rank: Int): String =
       Rules.rankSquares(rank).map(showSquare)
-        .mkString(rankBegin, rankSep, rankEnd + "\n")
+        .mkString(rankBegin, rankSep, rankEnd + lineSep)
 
     Rules.rankRange.reverse.map(showRank).mkString
   }
@@ -96,21 +97,21 @@ trait TextBoard {
       if (rankLabelsRight) (verticalBar + _) else (_ + verticalBar)
 
     def boardWithRankLabels: String = {
-      val lines = mkUnlabeled(board).split("\n").toSeq
+      val lines = mkUnlabeled(board).split(lineSep).toSeq
       val labels = rankLabels.reverse.map(addVerticalBar)
       val zipped = if (rankLabelsRight) lines.zip(labels) else labels.zip(lines)
 
-      zipped.map(_.productIterator.mkString + "\n").mkString
+      zipped.map(_.productIterator.mkString + lineSep).mkString
     }
 
     def bottomBorder: String = {
       val barWidth = Rules.fileRange.length * 2 - 1
       val border = (horizontalBar * barWidth) + corner
-      if (border.isEmpty) "" else border + "\n"
+      if (border.isEmpty) "" else border + lineSep
     }
 
     def fileLabelsLine: String =
-      fileLabels.mkString(fileLabelsStart, fileLabelsSep, fileLabelsEnd + "\n")
+      fileLabels.mkString(fileLabelsStart, fileLabelsSep, fileLabelsEnd + lineSep)
 
     boardWithRankLabels + bottomBorder + fileLabelsLine
   }
