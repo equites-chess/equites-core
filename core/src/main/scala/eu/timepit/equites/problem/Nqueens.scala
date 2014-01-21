@@ -17,6 +17,8 @@
 package eu.timepit.equites
 package problem
 
+import scalaz.std.stream._
+
 object Nqueens {
   def allBoards: Stream[Board] = {
     case class Candidate(board: Board, available: Set[Square])
@@ -31,6 +33,6 @@ object Nqueens {
 
     val first = Candidate(Board.empty, Rules.allSquaresSet)
     val n = math.sqrt(Rules.allSquaresSeq.length).toInt
-    util.backtracking(first)(nextBoards, _.board.size >= n).map(_.board)
+    util.backtrack(first)(nextBoards, _.board.size >= n).map(_.board)
   }
 }

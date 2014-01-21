@@ -48,7 +48,7 @@ object KnightsTour {
     }
 
     val first = Candidate(Stream(start), Set(start))
-    util.backtracking(first)(nextPaths, c => isComplete(c.path)).map(_.path)
+    util.backtrack(first)(nextPaths, c => isComplete(c.path)).map(_.path)
   }
 
   def staticTour(start: Square): Tour =

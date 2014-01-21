@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2013-2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,14 +18,16 @@ package eu.timepit.equites
 
 import java.nio.charset.Charset
 import scala.collection.immutable.NumericRange
+import scala.language.higherKinds
+import scalaz.Monad
+import scalaz.syntax.monad._
 
 package object util {
-  def backtracking[C](firstCandidate: C)(nextCandidates: C => Stream[C],
-                                         accept: C => Boolean): Stream[C] = {
-    def recur(c: C): Stream[C] = nextCandidates(c).flatMap {
-      next => if (accept(next)) Stream(next) else recur(next)
-    }
-    recur(firstCandidate)
+  def backtrack[C, M[_]: Monad](firstCandidate: C)(nextCandidates: C => M[C],
+                                                   accept: C => Boolean): M[C] = {
+    def traverse(c: C): M[C] = nextCandidates(c).flatMap(returnOrTraverse)
+    def returnOrTraverse(c: C): M[C] = if (accept(c)) c.point else traverse(c)
+    returnOrTraverse(firstCandidate)
   }
 
   def incrRange(range: Range, incr: Int): Range =

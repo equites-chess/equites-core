@@ -18,6 +18,7 @@ package eu.timepit.equites
 package util
 
 import org.specs2._
+import scalaz.std.stream._
 
 class PackageSpec extends Specification { def is = s2"""
   util.backtracking should
@@ -30,10 +31,10 @@ class PackageSpec extends Specification { def is = s2"""
 
   def nextBinary(c: String): Stream[String] = Stream("0", "1").map(_ + c)
 
-  def e1 = backtracking("")(nextBinary, _.length == 3).toSet must_==
+  def e1 = backtrack("")(nextBinary, _.length == 3).toSet must_==
     Set("000", "001", "010", "011", "100", "101", "110", "111")
 
-  def e2 = backtracking("1")(nextBinary, _.length == 3).toSet must_==
+  def e2 = backtrack("1")(nextBinary, _.length == 3).toSet must_==
     Set("001", "011", "101", "111")
 
   def e3 = (
