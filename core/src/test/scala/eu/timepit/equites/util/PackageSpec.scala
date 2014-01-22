@@ -18,15 +18,17 @@ package eu.timepit.equites
 package util
 
 import org.specs2._
+import scalaz.std.option._
 import scalaz.std.stream._
 
 class PackageSpec extends Specification { def is = s2"""
-  util.backtracking should
+  util.backtrack should
     generate all 'binary' strings of length three     $e1
     generate all odd 'binary' strings of length three $e2
+    count to ten by using Option                      $e3
 
   util.toUtf8Bytes should
-    return byte sequences of right length $e3
+    return byte sequences of right length $e4
   """
 
   def nextBinary(c: String): Stream[String] = Stream("0", "1").map(_ + c)
@@ -37,7 +39,9 @@ class PackageSpec extends Specification { def is = s2"""
   def e2 = backtrack("1")(nextBinary, _.length == 3).toSet must_==
     Set("001", "011", "101", "111")
 
-  def e3 = (
+  def e3 = backtrack(0)(i => Option(i + 1), _ == 10) must beSome(10)
+
+  def e4 = (
     (toUtf8Bytes(0x0000.toChar).length must_== 1) and
     (toUtf8Bytes(0x007F.toChar).length must_== 1) and
 
