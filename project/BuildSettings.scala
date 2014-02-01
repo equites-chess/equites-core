@@ -26,7 +26,7 @@ object BuildSettings {
       "-feature",
       "-unchecked",
       "-Xfatal-warnings",
-      //"-Xlint",
+      "-Xlint",
       "-Ywarn-all"
     ),
 
