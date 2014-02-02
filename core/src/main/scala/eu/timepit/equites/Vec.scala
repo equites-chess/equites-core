@@ -21,16 +21,19 @@ import scalaz._
 import util.Math._
 
 trait VecInstances {
-  implicit val vecEqual = Equal.equalA[Vec]
-
-  implicit object vecInstance extends Monoid[Vec] {
+  implicit val vecInstance = new Monoid[Vec] {
     // Monoid:
-    val zero: Vec = Vec(0, 0)
     def append(v1: Vec, v2: => Vec): Vec = v1 + v2
+    def zero: Vec = Vec.zero
   }
+
+  implicit val vecEqual = Equal.equalA[Vec]
+  implicit val vecShow = Show.showFromToString[Vec]
 }
 
 object Vec extends VecInstances {
+  val zero = Vec(0, 0)
+
   val front = Vec(0, 1)
   val right = Vec(1, 0)
   val back = -front
@@ -56,30 +59,30 @@ case class Vec(file: Int, rank: Int) extends PlayerPerspective[Vec] {
   def max: Int = math.max(file, rank)
   def min: Int = math.min(file, rank)
 
-  /** Returns the sum of this Vec's components. */
+  /** Returns the sum of this `Vec`'s components. */
   def sum: Int = file + rank
 
   /**
    * Returns the [[http://en.wikipedia.org/wiki/Manhattan_distance L<sub>1</sub> length]]
-   * of this Vec.
+   * of this `Vec`.
    */
   def l1Length: Int = map(_.abs).sum
 
   /**
    * Returns the [[http://en.wikipedia.org/wiki/Chebyshev_distance L<sub>∞</sub> length]]
-   * of this Vec.
+   * of this `Vec`.
    */
   def lInfLength: Int = map(_.abs).max
 
   def reduced: Vec = this / math.max(1, gcd(file, rank).abs)
 
-  /** Returns a copy of this Vec where the rank is set to zero. */
+  /** Returns a copy of this `Vec` where the rank is set to zero. */
   def fileProj: Vec = copy(rank = 0)
 
-  /** Returns a copy of this Vec where the file is set to zero. */
+  /** Returns a copy of this `Vec` where the file is set to zero. */
   def rankProj: Vec = copy(file = 0)
 
-  def isZero: Boolean = this == Monoid[Vec].zero
+  def isZero: Boolean = this == Vec.zero
   def notZero: Boolean = !isZero
 
   def isStraight: Boolean = notZero && (file == 0 || rank == 0)

@@ -25,15 +25,15 @@ import util.Notation._
 import util.Rand._
 
 trait SquareInstances {
-  implicit val squareEqual = Equal.equalA[Square]
-
-  implicit object squareInstance extends Order[Square] {
+  implicit val squareInstance = new Order[Square] {
     // Order
     def order(s1: Square, s2: Square): Ordering =
       (s1.rank cmp s2.rank) mappend (s1.file cmp s2.file)
   }
 
-  implicit val scalaOrdering = Order[Square].toScalaOrdering
+  implicit val squareEqual = Equal.equalA[Square]
+  implicit val squareScalaOrdering = Order[Square].toScalaOrdering
+  implicit val squareShow = Show.showFromToString[Square]
 }
 
 object Square extends SquareInstances {

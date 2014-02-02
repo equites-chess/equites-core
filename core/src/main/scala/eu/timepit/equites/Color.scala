@@ -19,9 +19,7 @@ package eu.timepit.equites
 import scalaz._
 
 trait ColorInstances {
-  implicit val colorEqual = Equal.equalA[Color]
-
-  implicit object colorInstance extends Order[Color] {
+  implicit val colorInstance = new Order[Color] {
     // Order
     def order(c1: Color, c2: Color): Ordering =
       if (c1 == c2) {
@@ -33,7 +31,9 @@ trait ColorInstances {
       }
   }
 
-  implicit val scalaOrdering = Order[Color].toScalaOrdering
+  implicit val colorEqual = Equal.equalA[Color]
+  implicit val colorScalaOrdering = Order[Color].toScalaOrdering
+  implicit val colorShow = Show.showFromToString[Color]
 }
 
 object Color extends ColorInstances {
