@@ -51,11 +51,13 @@ object BuildSettings {
       initialCommands := """
         import scalaz._
         import Scalaz._
+        import scalaz.stream._
         import eu.timepit.equites._
       """
     )
 
   lazy val rootSettings =
+    CoverallsPlugin.multiProject ++
     play.Project.playScalaSettings ++
     ScctPlugin.mergeReportSettings ++
     commonSettings ++
