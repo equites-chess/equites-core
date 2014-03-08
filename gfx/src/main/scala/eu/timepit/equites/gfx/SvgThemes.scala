@@ -31,10 +31,6 @@ class SvgBoard(theme: SvgTheme) {
   def mkUnlabeled(board: Board): Elem = ???
 }
 
-
-
-
-
 object SvgThemes extends App {
 
   def pieceIds: Map[String, AnyPiece] =
@@ -52,7 +48,6 @@ object SvgThemes extends App {
     mapping.toMap
   }
 
-
   val dejavuTheme = XML.load(getClass.getResourceAsStream("/themes/DejaVuSans.svg"))
   val freeTheme = XML.load(getClass.getResourceAsStream("/themes/FreeSerif.svg"))
   val wikipediaTheme = XML.load(getClass.getResourceAsStream("/themes/Wikipedia.svg"))
@@ -65,7 +60,7 @@ object SvgThemes extends App {
 
   def squareToUse(sq: Square): String = {
     val idT = sq.toAlgebraic
-    val x = <use id="idT" xlink:href="#WhiteTile"  />
+    val x = <use id="idT" xlink:href="#WhiteTile"/>
     sq.isDark
     ""
   }

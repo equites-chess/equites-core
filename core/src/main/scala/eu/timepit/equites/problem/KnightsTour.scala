@@ -67,8 +67,7 @@ object KnightsTour {
     Iterator.continually(tour).find(isComplete).get
   }
 
-  def leastDegreeSquares(squares: Stream[Square], visited: Set[Square])
-      : Stream[Square] = {
+  def leastDegreeSquares(squares: Stream[Square], visited: Set[Square]): Stream[Square] = {
     def degree(sq: Square): Int = unvisited(sq, visited).length
     squares.minGroupBy(degree)
   }
