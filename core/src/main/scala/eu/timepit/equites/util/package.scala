@@ -18,7 +18,6 @@ package eu.timepit.equites
 
 import java.nio.charset.Charset
 import scala.collection.immutable.NumericRange
-import scala.language.higherKinds
 import scalaz.Monad
 import scalaz.syntax.monad._
 

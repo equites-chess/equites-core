@@ -17,8 +17,6 @@
 package eu.timepit.equites
 package implicits
 
-import scala.language.implicitConversions
-
 import PieceImplicits._
 import SquareImplicits._
 
