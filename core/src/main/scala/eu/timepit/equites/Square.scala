@@ -18,6 +18,7 @@ package eu.timepit.equites
 
 import scalaz._
 import Scalaz._
+import scalaz.concurrent.Task
 
 import Rules._
 import util.Math._
@@ -45,11 +46,11 @@ object Square extends SquareInstances {
 
   def random: Rand[Square] =
     for {
-      file <- randomRangeElem(fileRange)
-      rank <- randomRangeElem(rankRange)
+      file <- randRangeElem(fileRange)
+      rank <- randRangeElem(rankRange)
     } yield Square(file, rank)
 
-  def randomImpure(): Square = eval(random)
+  def evalRandom: Task[Square] = eval(random)
 
   def topRight: Square = Square(fileRange.end, rankRange.end)
   def topLeft: Square = Square(fileRange.start, rankRange.end)

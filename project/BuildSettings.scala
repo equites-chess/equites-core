@@ -74,6 +74,7 @@ object BuildSettings {
     childSettings ++
     Seq(
       libraryDependencies ++= Seq(
+        scalazConcurrent,
         scalazCore,
         scalazStream,
         shapeless,

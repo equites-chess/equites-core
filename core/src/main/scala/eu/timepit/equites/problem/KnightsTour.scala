@@ -56,14 +56,14 @@ object KnightsTour {
 
   // impure
   def randomTour(start: Square): Tour =
-    genericTour(start, (squares, _) => pickRandomImpure(squares))
+    genericTour(start, (squares, _) => eval(randElem(squares)).run)
 
   def warnsdorffTour(start: Square): Tour =
     genericTour(start, firstLeastDegreeSquare)
 
   // impure
   def randomWarnsdorffTour(start: Square): Tour = {
-    def tour = genericTour(start, evalFn2(randomLeastDegreeSquare))
+    def tour = eval(randomLeastDegreeSquare).map(s => genericTour(start, s)).run
     Iterator.continually(tour).find(isComplete).get
   }
 
@@ -77,7 +77,7 @@ object KnightsTour {
     (squares, visited) => leastDegreeSquares(squares, visited).headOption
 
   def randomLeastDegreeSquare: RandSelector =
-    (squares, visited) => pickRandom(leastDegreeSquares(squares, visited))
+    (squares, visited) => randElem(leastDegreeSquares(squares, visited))
 
   def isComplete(tour: Tour): Boolean =
     tour.toSet == Rules.allSquaresSet

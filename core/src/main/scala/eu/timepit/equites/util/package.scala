@@ -41,6 +41,7 @@ package object util {
 
   def toStringOnOff(bool: Boolean): String = if (bool) "on" else "off"
 
+  // TODO: Require a typeclass that allows conversion to String or Array[Byte].
   def toUtf8Bytes[A](a: A): Array[Byte] = a.toString.getBytes(utf8Charset)
   def toUtf8BytesLf[A](a: A): Array[Byte] = toUtf8Bytes(a.toString + "\n")
 

@@ -17,35 +17,30 @@
 package eu.timepit.equites
 package util
 
-import scala.language.higherKinds
 import scala.util.Random
 import scalaz._
-import Scalaz._
+import scalaz.concurrent.Task
 
 object Rand {
   type Rand[A] = State[Random, A]
 
-  def rand[A](a: A): Rand[A] = State.state(a)
+  def init: Rand[Random] = State.init
 
-  def nextInt(n: Int): Rand[Int] = State.init.map(_.nextInt(n))
+  def pure[A](a: A): Rand[A] = State.state(a)
 
-  // impure
-  def eval[A](rand: Rand[A]): A = rand.eval(Random)
+  def randInt(n: Int): Rand[Int] = init.map(_.nextInt(n))
 
-  // impure
-  def evalFn2[T1, T2, R](f: (T1, T2) => Rand[R]): (T1, T2) => R =
-    (v1, v2) => eval(f(v1, v2))
-
-  def pickRandom[A, C[A]](from: C[A])(implicit I: Index[C], L: Length[C])
-      : Rand[Option[A]] =
-    L.length(from) match {
-      case 0 => rand(None)
-      case x => nextInt(x).map(I.index(from, _))
+  def randElem[A](from: Seq[A]): Rand[Option[A]] =
+    from.length match {
+      case 0 => pure(None)
+      case n => randInt(n).map(n => Some(from(n)))
     }
 
-  def pickRandomImpure[A, C[A] : Index : Length](from: C[A]): Option[A] =
-    eval(pickRandom(from))
+  def randRangeElem(range: Range): Rand[Int] =
+    randElem(range).map(_.getOrElse(range.start))
 
-  def randomRangeElem(range: Range): Rand[Int] =
-    pickRandom(range.toStream).map(_.getOrElse(range.start))
+  def eval[A](rand: Rand[A]): Task[A] = Task.delay(rand.eval(Random))
+
+  def eval[T1, T2, R](f: (T1, T2) => Rand[R]): Task[(T1, T2) => R] =
+    Task.delay((v1, v2) => f(v1, v2).eval(Random))
 }
