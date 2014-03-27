@@ -21,18 +21,13 @@ import scalaz._
 import util.Math._
 
 trait VecInstances {
-  implicit val vecInstance = new Monoid[Vec] {
-    // Monoid:
-    def append(v1: Vec, v2: => Vec): Vec = v1 + v2
-    def zero: Vec = Vec.zero
-  }
-
   implicit val vecEqual = Equal.equalA[Vec]
+  implicit val vecMonoid = Monoid.instance[Vec](_ + _, Vec(0, 0))
   implicit val vecShow = Show.showFromToString[Vec]
 }
 
 object Vec extends VecInstances {
-  val zero = Vec(0, 0)
+  val zero = Monoid[Vec].zero
 
   val front = Vec(0, 1)
   val right = Vec(1, 0)
