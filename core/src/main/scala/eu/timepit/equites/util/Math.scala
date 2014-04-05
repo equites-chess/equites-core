@@ -20,16 +20,20 @@ package util
 import scala.annotation.tailrec
 
 object Math {
-  /** Returns the greatest common divisor of x and y. */
+  /** Returns the greatest common divisor of `x` and `y`. */
   @tailrec
-  def gcd[A](x: A, y: A)(implicit A: Integral[A]): A =
-    if (y == 0) x else gcd(y, A.rem(x, y))
+  def gcd[I](x: I, y: I)(implicit I: Integral[I]): I =
+    if (y == 0) x else gcd(y, I.rem(x, y))
 
-  def isEven[A: Integral](i: A): Boolean = rem2(i) == 0
-  def isOdd[A: Integral](i: A): Boolean = rem2(i) != 0
+  /** Returns true if `i` is divisible by two.*/
+  def isEven[I: Integral](i: I): Boolean = remBy2(i) == 0
 
-  private def rem2[A](i: A)(implicit A: Integral[A]): A =
-    A.rem(i, A.fromInt(2))
+  /** Returns true if `i` is not divisible by two. */
+  def isOdd[I: Integral](i: I): Boolean = remBy2(i) != 0
+
+  /** Returns the remainder of `i` divided by two. */
+  private def remBy2[I](i: I)(implicit I: Integral[I]): I =
+    I.rem(i, I.fromInt(2))
 
   def minDistToEndpoints(x: Int, range: Range): Int =
     math.min(x - range.start, range.end - x)
