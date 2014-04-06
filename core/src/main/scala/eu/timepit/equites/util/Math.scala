@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2011, 2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2011, 2013-2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -24,6 +24,13 @@ object Math {
   @tailrec
   def gcd[I](x: I, y: I)(implicit I: Integral[I]): I =
     if (y == 0) x else gcd(y, I.rem(x, y))
+
+  /**
+   * Returns the absolute value of the greatest common divisor of `x` and `y`,
+   * or one if it is zero.
+   */
+  def positiveGcd[I](x: I, y: I)(implicit I: Integral[I]): I =
+    I.max(I.fromInt(1), I.abs(gcd(x, y)))
 
   /** Returns true if `i` is divisible by two.*/
   def isEven[I: Integral](i: I): Boolean = remBy2(i) == 0

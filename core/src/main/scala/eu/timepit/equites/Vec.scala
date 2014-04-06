@@ -69,7 +69,7 @@ case class Vec(file: Int, rank: Int) extends PlayerPerspective[Vec] {
    */
   def lInfLength: Int = map(_.abs).max
 
-  def reduced: Vec = this / math.max(1, gcd(file, rank).abs)
+  def reduced: Vec = this / positiveGcd(file, rank)
 
   /** Returns a copy of this `Vec` where the rank is set to zero. */
   def fileProj: Vec = copy(rank = 0)
@@ -77,7 +77,10 @@ case class Vec(file: Int, rank: Int) extends PlayerPerspective[Vec] {
   /** Returns a copy of this `Vec` where the file is set to zero. */
   def rankProj: Vec = copy(file = 0)
 
+  /** Returns true if both of this `Vec`'s components are zero. */
   def isZero: Boolean = this == Vec.zero
+
+  /** Returns true if at least one of this `Vec`'s components is non-zero. */
   def notZero: Boolean = !isZero
 
   def isStraight: Boolean = notZero && (file == 0 || rank == 0)
