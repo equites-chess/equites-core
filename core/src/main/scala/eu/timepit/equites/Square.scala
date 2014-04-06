@@ -26,13 +26,11 @@ import util.Notation._
 import util.Rand._
 
 trait SquareInstances {
-  implicit val squareInstance = new Order[Square] {
-    // Order
-    def order(s1: Square, s2: Square): Ordering =
+  implicit val squareEqual = Equal.equalA[Square]
+  implicit val squareOrder = Order.order {
+    (s1: Square, s2: Square) =>
       (s1.rank cmp s2.rank) mappend (s1.file cmp s2.file)
   }
-
-  implicit val squareEqual = Equal.equalA[Square]
   implicit val squareScalaOrdering = Order[Square].toScalaOrdering
   implicit val squareShow = Show.showFromToString[Square]
 }
@@ -66,7 +64,10 @@ case class Square(file: Int, rank: Int) {
   def isValid: Boolean = fileRange.contains(file) && rankRange.contains(rank)
   def asOption: Option[Square] = isValid.option(this)
 
+  /** Returns true if this `Square` is light. */
   def isLight: Boolean = isOdd(sum)
+
+  /** Returns true if this `Square` is dark. */
   def isDark: Boolean = isEven(sum)
 
   def l1Dist(that: Square): Int = (this - that).l1Length
