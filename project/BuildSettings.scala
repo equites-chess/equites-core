@@ -60,7 +60,6 @@ object BuildSettings {
     )
 
   lazy val rootSettings =
-    CoverallsPlugin.multiProject ++
     play.Project.playScalaSettings ++
     ScctPlugin.mergeReportSettings ++
     commonSettings ++
