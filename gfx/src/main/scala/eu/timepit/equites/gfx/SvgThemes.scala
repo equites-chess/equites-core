@@ -33,7 +33,7 @@ class SvgBoard(theme: SvgTheme) {
 object SvgThemes extends App {
 
   def pieceIds: Map[String, AnyPiece] =
-    Piece.all.map(piece => (util.PieceOps.showTextualId(piece), piece)).toMap
+    Piece.all.map(piece => (util.PieceUtil.showTextualId(piece), piece)).toMap
 
   def colorIds: Map[String, Color] =
     Color.all.map(color => (color.toString + "Tile", color)).toMap

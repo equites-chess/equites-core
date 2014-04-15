@@ -22,7 +22,7 @@ import scalaz.syntax.show._
 import PieceAbbr.Algebraic._
 import PieceAbbr.Figurine._
 
-object PieceOps {
+object PieceUtil {
   def centipawns(pieceType: PieceType): Int =
     pieceType match {
       case King   => 100000000

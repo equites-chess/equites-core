@@ -48,7 +48,7 @@ class PieceAbbrSpec extends Specification with matcher.DataTables { def is = s2"
     b      ! "b"      |
     n      ! "n"      |
     PieceAbbr.Algebraic.p ! "p" |> {
-      (piece, string) => PieceOps.showLetter(piece) must_== string
+      (piece, string) => PieceUtil.showLetter(piece) must_== string
     }
 
   def e2 =
@@ -65,7 +65,7 @@ class PieceAbbrSpec extends Specification with matcher.DataTables { def is = s2"
     ♝      ! "♝"        |
     ♞      ! "♞"        |
     ♟      ! "♟"        |> {
-      (piece, string) => PieceOps.showFigurine(piece) must_== string
+      (piece, string) => PieceUtil.showFigurine(piece) must_== string
     }
 
   def e3 =
@@ -82,6 +82,6 @@ class PieceAbbrSpec extends Specification with matcher.DataTables { def is = s2"
     bd     ! "bd"      |
     nd     ! "nd"      |
     pd     ! "pd"      |> {
-      (piece, string) => PieceOps.showWikiLetters(piece) must_== string
+      (piece, string) => PieceUtil.showWikiLetters(piece) must_== string
     }
 }

@@ -27,7 +27,7 @@ import play.api.mvc.Results.Ok
 object FenApi {
   @ApiOperation(value = "Get user by user name", httpMethod = "GET")
   def toTextRepr(placement: String, textBoard: text.TextBoard) = Action {
-    val board = eu.timepit.equites.util.Notation.boardFromFen(placement)
+    val board = eu.timepit.equites.util.BoardUtil.readFenPlacement(placement)
     Ok(textBoard.mkLabeled(board))
   }
 

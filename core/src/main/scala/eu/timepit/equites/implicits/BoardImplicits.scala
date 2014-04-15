@@ -26,23 +26,5 @@ object BoardImplicits {
 
     def toPositions(showPlaced: Placed[AnyPiece] => String): String =
       self.placedPieces.sorted.map(showPlaced).mkString(", ")
-
-    /**
-     * Returns the piece placement of the [[Board]] in
-     * [[http://en.wikipedia.org/wiki/Forsyth–Edwards_Notation Forsyth–Edwards Notation (FEN)]].
-     */
-    def toFenPlacement: String = {
-      def replaceOnes(target: String): String =
-        "1{2,}".r.replaceAllIn(target, _.toString.length.toString)
-
-      Rules.rankRange.reverse.map { rank =>
-        val wholeRank = Rules.fileRange.map { file =>
-          val square = Square(file, rank)
-          val pieceOpt = self.get(square)
-          pieceOpt.fold("1")(util.PieceOps.showLetter)
-        }.mkString
-        replaceOnes(wholeRank)
-      }.mkString("/")
-    }
   }
 }

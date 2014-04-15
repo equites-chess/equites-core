@@ -25,8 +25,8 @@ object PlacedImplicits {
   implicit final class RichPlacedPiece[A <: AnyPiece](val self: Placed[A])
       extends AnyVal {
 
-    def toFigurine: String = appendSquareTo(util.PieceOps.showFigurine(self.elem))
-    def toLetter: String = appendSquareTo(util.PieceOps.showLetter(self.elem))
+    def toFigurine: String = appendSquareTo(util.PieceUtil.showFigurine(self.elem))
+    def toLetter: String = appendSquareTo(util.PieceUtil.showLetter(self.elem))
 
     private def appendSquareTo(str: String): String =
       str + self.square.toAlgebraic

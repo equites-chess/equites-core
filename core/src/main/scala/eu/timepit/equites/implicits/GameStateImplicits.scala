@@ -17,7 +17,6 @@
 package eu.timepit.equites
 package implicits
 
-import BoardImplicits._
 import SquareImplicits._
 
 object GameStateImplicits {
@@ -40,7 +39,7 @@ object GameStateImplicits {
         case _          => None
       }.fold("-")(_.toAlgebraic)
 
-      s"${self.board.toFenPlacement} ${color} ${castlings} ${enPassantTarget}" +
+      s"${util.BoardUtil.showFenPlacement(self.board)} ${color} ${castlings} ${enPassantTarget}" +
         s" ${self.halfmoveClock} ${self.moveNumber}"
     }
 

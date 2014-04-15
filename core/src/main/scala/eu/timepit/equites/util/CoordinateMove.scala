@@ -37,5 +37,5 @@ case class CoordinateMove(
     extends DrawLike {
 
   def toAlgebraic: String =
-    from.toAlgebraic + to.toAlgebraic + promotedTo.fold("")(p => PieceOps.showLowerCaseLetter(p.pieceType))
+    from.toAlgebraic + to.toAlgebraic + promotedTo.fold("")(p => PieceUtil.showLowerCaseLetter(p.pieceType))
 }

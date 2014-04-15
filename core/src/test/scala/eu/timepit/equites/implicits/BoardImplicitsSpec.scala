@@ -34,12 +34,12 @@ class BoardImplicitsSpec extends Specification { def is = s2"""
   val board3 = board2.processMove(Move(nl, g1, f3))
 
   def ex1 =
-    (board0.toFenPlacement must_==
+    (util.BoardUtil.showFenPlacement(board0) must_==
       "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR") and
-    (board1.toFenPlacement must_==
+    (util.BoardUtil.showFenPlacement(board1) must_==
       "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR") and
-    (board2.toFenPlacement must_==
+    (util.BoardUtil.showFenPlacement(board2) must_==
       "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR") and
-    (board3.toFenPlacement must_==
+    (util.BoardUtil.showFenPlacement(board3) must_==
       "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R")
 }

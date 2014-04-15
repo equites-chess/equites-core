@@ -21,8 +21,8 @@ import SquareImplicits._
 
 object ActionImplicits {
   implicit final class RichAction(val self: Action) extends AnyVal {
-    def toLongAlgebraic: String = toLongAlgebraicImpl(p => util.PieceOps.showAlgebraic(p.pieceType))
-    def toLongFigurine: String = toLongAlgebraicImpl(util.PieceOps.showFigurine)
+    def toLongAlgebraic: String = toLongAlgebraicImpl(p => util.PieceUtil.showAlgebraic(p.pieceType))
+    def toLongFigurine: String = toLongAlgebraicImpl(util.PieceUtil.showFigurine)
 
     private def toLongAlgebraicImpl(showPiece: AnyPiece => String): String =
       self match {
@@ -40,13 +40,13 @@ object ActionImplicits {
     }
 
     def toNumeric: String = self match {
-      case p: PromotionLike => numericSquares(p).mkString + util.PieceOps.showNumeric(p.promotedTo.pieceType)
+      case p: PromotionLike => numericSquares(p).mkString + util.PieceUtil.showNumeric(p.promotedTo.pieceType)
       case m: MoveLike      => numericSquares(m).mkString
       case c: Castling      => c.kingMove.toNumeric
     }
 
     def toCoordinate: String = self match {
-      case p: PromotionLike => algebraicSquares(p).mkString + util.PieceOps.showLowerCaseLetter(p.promotedTo.pieceType)
+      case p: PromotionLike => algebraicSquares(p).mkString + util.PieceUtil.showLowerCaseLetter(p.promotedTo.pieceType)
       case m: MoveLike      => algebraicSquares(m).mkString
       case c: Castling      => c.kingMove.toCoordinate
     }

@@ -20,9 +20,8 @@ package util
 import org.specs2.ScalaCheck
 import org.specs2.mutable._
 
-import implicits.BoardImplicits._
-import Notation._
-import PieceOps._
+import BoardUtil._
+import PieceUtil._
 
 import ArbitraryInstances._
 
@@ -49,7 +48,7 @@ class NotationSpec extends Specification with ScalaCheck {
 
   "boardFromFen" should {
     "be the inverse of RichBoard.toFenPlacement" in check {
-      (board: Board) => boardFromFen(board.toFenPlacement) must_== board
+      (board: Board) => readFenPlacement(showFenPlacement(board)) must_== board
     }
   }
 }
