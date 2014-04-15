@@ -47,7 +47,6 @@ object BuildSettings {
   lazy val childSettings =
     bintray.Plugin.bintraySettings ++
     de.johoop.cpd4sbt.CopyPasteDetector.cpdSettings ++
-    org.scalastyle.sbt.ScalastylePlugin.Settings ++
     ScctPlugin.instrumentSettings ++
     ScalariformSettings.ourScalariformSettings ++
     Seq(
