@@ -26,7 +26,7 @@ trait PlacedInstances {
 
   implicit def placedEqual[A] = Equal.equalA[Placed[A]]
   implicit def placedOrder[A] = Order.orderBy((p: Placed[A]) => p.square)
-  implicit val placedScalaOrdering = placedOrder[AnyPiece].toScalaOrdering
+  implicit def placedScalaOrdering[A] = placedOrder[A].toScalaOrdering
   implicit def placedShow[A] = Show.showFromToString[Placed[A]]
 }
 
