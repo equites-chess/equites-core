@@ -17,7 +17,6 @@
 package eu.timepit.equites
 package implicits
 
-import implicits.PieceImplicits._
 import implicits.PlacedImplicits._
 
 object BoardImplicits {
@@ -40,7 +39,7 @@ object BoardImplicits {
         val wholeRank = Rules.fileRange.map { file =>
           val square = Square(file, rank)
           val pieceOpt = self.get(square)
-          pieceOpt.fold("1")(_.toLetter)
+          pieceOpt.fold("1")(util.PieceOps.showLetter)
         }.mkString
         replaceOnes(wholeRank)
       }.mkString("/")

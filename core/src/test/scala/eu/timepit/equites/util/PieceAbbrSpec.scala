@@ -19,7 +19,6 @@ package util
 
 import org.specs2._
 
-import implicits.PieceImplicits._
 import PieceAbbr.Algebraic._
 import PieceAbbr.Figurine._
 import PieceAbbr.Wiki._
@@ -49,7 +48,7 @@ class PieceAbbrSpec extends Specification with matcher.DataTables { def is = s2"
     b      ! "b"      |
     n      ! "n"      |
     PieceAbbr.Algebraic.p ! "p" |> {
-      (piece, string) => piece.toLetter must_== string
+      (piece, string) => PieceOps.showLetter(piece) must_== string
     }
 
   def e2 =
@@ -66,7 +65,7 @@ class PieceAbbrSpec extends Specification with matcher.DataTables { def is = s2"
     ♝      ! "♝"        |
     ♞      ! "♞"        |
     ♟      ! "♟"        |> {
-      (piece, string) => piece.toFigurine must_== string
+      (piece, string) => PieceOps.showFigurine(piece) must_== string
     }
 
   def e3 =
@@ -83,6 +82,6 @@ class PieceAbbrSpec extends Specification with matcher.DataTables { def is = s2"
     bd     ! "bd"      |
     nd     ! "nd"      |
     pd     ! "pd"      |> {
-      (piece, string) => piece.toWikiLetters must_== string
+      (piece, string) => PieceOps.showWikiLetters(piece) must_== string
     }
 }

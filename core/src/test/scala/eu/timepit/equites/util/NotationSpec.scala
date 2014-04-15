@@ -21,8 +21,8 @@ import org.specs2.ScalaCheck
 import org.specs2.mutable._
 
 import implicits.BoardImplicits._
-import implicits.PieceImplicits._
 import Notation._
+import PieceOps._
 
 import ArbitraryInstances._
 
@@ -30,20 +30,20 @@ class NotationSpec extends Specification with ScalaCheck {
   "pieceFromLetter" should {
     "be the inverse of RichPiece.toLetter" in check {
       (piece: AnyPiece) =>
-        pieceFromLetter(piece.toLetter.charAt(0)) must beSome(piece)
+        readLetter(showLetter(piece).charAt(0)) must beSome(piece)
     }
     "yield None on invalid input" in {
-      pieceFromLetter('0') must beNone
+      readLetter('0') must beNone
     }
   }
 
   "pieceFromFigurine" should {
     "be the inverse of RichPiece.toFigurine" in check {
       (piece: AnyPiece) =>
-        pieceFromFigurine(piece.toFigurine.charAt(0)) must beSome(piece)
+        readFigurine(showFigurine(piece).charAt(0)) must beSome(piece)
     }
     "yield None on invalid input" in {
-      pieceFromFigurine('0') must beNone
+      readFigurine('0') must beNone
     }
   }
 

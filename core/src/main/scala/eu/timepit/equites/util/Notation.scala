@@ -19,47 +19,12 @@ package util
 
 import scala.collection.immutable.NumericRange
 
-import PieceAbbr.Algebraic._
-import PieceAbbr.Figurine._
-
 object Notation {
   val algebraicFileRange: NumericRange[Char] = toCharRange(Rules.fileRange, 'a')
   val algebraicRankRange: Range = incrRange(Rules.rankRange, 1)
 
   val numericFileRange: Range = incrRange(Rules.fileRange, 1)
   def numericRankRange: Range = algebraicRankRange
-
-  def pieceFromLetter(c: Char): Option[AnyPiece] = c match {
-    case 'K' => Some(K)
-    case 'Q' => Some(Q)
-    case 'R' => Some(R)
-    case 'B' => Some(B)
-    case 'N' => Some(N)
-    case 'P' => Some(P)
-    case 'k' => Some(k)
-    case 'q' => Some(q)
-    case 'r' => Some(r)
-    case 'b' => Some(b)
-    case 'n' => Some(n)
-    case 'p' => Some(p)
-    case _   => None
-  }
-
-  def pieceFromFigurine(c: Char): Option[AnyPiece] = c match {
-    case '♔' => Some(♔)
-    case '♕' => Some(♕)
-    case '♖' => Some(♖)
-    case '♗' => Some(♗)
-    case '♘' => Some(♘)
-    case '♙' => Some(♙)
-    case '♚' => Some(♚)
-    case '♛' => Some(♛)
-    case '♜' => Some(♜)
-    case '♝' => Some(♝)
-    case '♞' => Some(♞)
-    case '♟' => Some(♟)
-    case _   => None
-  }
 
   def boardFromFen(placement: String): Board = {
     def expandDigits(target: String): String =
@@ -68,7 +33,7 @@ object Notation {
     val mapping = for {
       (rankStr, rank) <- placement.split("/").reverse.zipWithIndex
       (pieceChar, file) <- expandDigits(rankStr).zipWithIndex
-      piece <- pieceFromLetter(pieceChar)
+      piece <- PieceOps.readLetter(pieceChar)
     } yield Square(file, rank) -> piece
     Board(mapping.toMap)
   }

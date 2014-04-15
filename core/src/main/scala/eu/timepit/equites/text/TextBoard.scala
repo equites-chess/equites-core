@@ -17,8 +17,8 @@
 package eu.timepit.equites
 package text
 
-import implicits.PieceImplicits._
 import util.Notation._
+import util.PieceOps._
 
 // format: OFF
 trait AbstractTheme {
@@ -42,7 +42,7 @@ trait AbstractTheme {
 }
 
 trait LetterTheme extends AbstractTheme {
-  def showPiece(piece: AnyPiece) = piece.toLetter
+  def showPiece(piece: AnyPiece) = showLetter(piece)
   def tileEmpty        = "."
   override def rankSep = " "
   def verticalBar      = "  "
@@ -50,7 +50,7 @@ trait LetterTheme extends AbstractTheme {
 }
 
 trait FigurineTheme extends AbstractTheme {
-  def showPiece(piece: AnyPiece) = piece.toFigurine
+  def showPiece(piece: AnyPiece) = showFigurine(piece)
   def tileEmpty              = "·"
   override def rankSep       = " "
   override def horizontalBar = "─"
@@ -59,7 +59,7 @@ trait FigurineTheme extends AbstractTheme {
 }
 
 trait WikiTheme extends AbstractTheme {
-  def showPiece(piece: AnyPiece) = piece.toWikiLetters
+  def showPiece(piece: AnyPiece) = showWikiLetters(piece)
   override def tileStart       = "|"
   def tileEmpty                = "  "
   override def tileEnd         = ""
@@ -94,7 +94,7 @@ trait TextBoard {
 
   def mkLabeled(board: Board): String = {
     val addVerticalBar: String => String =
-      if (rankLabelsRight) (verticalBar + _) else (_ + verticalBar)
+      if (rankLabelsRight) verticalBar + _ else _ + verticalBar
 
     def boardWithRankLabels: String = {
       val lines = mkUnlabeled(board).split(lineSep).toSeq

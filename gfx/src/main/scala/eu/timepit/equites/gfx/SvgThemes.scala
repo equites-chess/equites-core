@@ -19,7 +19,6 @@ package gfx
 
 import scala.xml._
 
-import implicits.PieceImplicits._
 import implicits.SquareImplicits._
 
 trait SvgTheme {
@@ -34,7 +33,7 @@ class SvgBoard(theme: SvgTheme) {
 object SvgThemes extends App {
 
   def pieceIds: Map[String, AnyPiece] =
-    Piece.all.map(piece => (piece.toTextualId, piece)).toMap
+    Piece.all.map(piece => (util.PieceOps.showTextualId(piece), piece)).toMap
 
   def colorIds: Map[String, Color] =
     Color.all.map(color => (color.toString + "Tile", color)).toMap

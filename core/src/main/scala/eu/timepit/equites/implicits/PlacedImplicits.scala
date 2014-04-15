@@ -17,7 +17,6 @@
 package eu.timepit.equites
 package implicits
 
-import PieceImplicits._
 import SquareImplicits._
 
 object PlacedImplicits {
@@ -26,8 +25,8 @@ object PlacedImplicits {
   implicit final class RichPlacedPiece[A <: AnyPiece](val self: Placed[A])
       extends AnyVal {
 
-    def toFigurine: String = appendSquareTo(self.elem.toFigurine)
-    def toLetter: String = appendSquareTo(self.elem.toLetter)
+    def toFigurine: String = appendSquareTo(util.PieceOps.showFigurine(self.elem))
+    def toLetter: String = appendSquareTo(util.PieceOps.showLetter(self.elem))
 
     private def appendSquareTo(str: String): String =
       str + self.square.toAlgebraic

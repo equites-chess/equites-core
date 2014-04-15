@@ -17,13 +17,12 @@
 package eu.timepit.equites
 package implicits
 
-import PieceImplicits._
 import SquareImplicits._
 
 object ActionImplicits {
   implicit final class RichAction(val self: Action) extends AnyVal {
-    def toLongAlgebraic: String = toLongAlgebraicImpl(_.toAlgebraic)
-    def toLongFigurine: String = toLongAlgebraicImpl(_.toFigurine)
+    def toLongAlgebraic: String = toLongAlgebraicImpl(p => util.PieceOps.showAlgebraic(p.pieceType))
+    def toLongFigurine: String = toLongAlgebraicImpl(util.PieceOps.showFigurine)
 
     private def toLongAlgebraicImpl(showPiece: AnyPiece => String): String =
       self match {
@@ -41,13 +40,13 @@ object ActionImplicits {
     }
 
     def toNumeric: String = self match {
-      case p: PromotionLike => numericSquares(p).mkString + p.promotedTo.toNumeric
+      case p: PromotionLike => numericSquares(p).mkString + util.PieceOps.showNumeric(p.promotedTo.pieceType)
       case m: MoveLike      => numericSquares(m).mkString
       case c: Castling      => c.kingMove.toNumeric
     }
 
     def toCoordinate: String = self match {
-      case p: PromotionLike => algebraicSquares(p).mkString + p.promotedTo.toLowerCaseLetter
+      case p: PromotionLike => algebraicSquares(p).mkString + util.PieceOps.showLowerCaseLetter(p.promotedTo.pieceType)
       case m: MoveLike      => algebraicSquares(m).mkString
       case c: Castling      => c.kingMove.toCoordinate
     }
