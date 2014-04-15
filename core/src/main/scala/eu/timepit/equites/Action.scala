@@ -99,14 +99,6 @@ object CaptureAndPromotion {
     CaptureAndPromotion(promo.piece, promo.from, promo.to, captured, promo.promotedTo)
 }
 
-object Side {
-  def all: List[Side] = List(Kingside, Queenside)
-}
-
-sealed trait Side
-case object Kingside extends Side
-case object Queenside extends Side
-
 sealed trait Castling extends Action {
   def color: Color
   def side: Side
