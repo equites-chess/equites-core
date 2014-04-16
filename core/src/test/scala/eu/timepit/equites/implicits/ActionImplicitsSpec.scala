@@ -52,45 +52,45 @@ class ActionImplicitsSpec extends Specification {
 
       CastlingShort(White).toNumeric must_== "5171"
       CastlingShort(Black).toNumeric must_== "5878"
-      CastlingLong(White).toNumeric  must_== "5131"
-      CastlingLong(Black).toNumeric  must_== "5838"
+      CastlingLong(White).toNumeric must_== "5131"
+      CastlingLong(Black).toNumeric must_== "5838"
     }
 
     "correctly perform toLongAlgebraic and toLongFigurine" in {
       moveWhite.toLongAlgebraic must_== "Qa1-h8"
       moveBlack.toLongAlgebraic must_== "Qa1-h8"
-      moveWhite.toLongFigurine  must_== "♕a1-h8"
-      moveBlack.toLongFigurine  must_== "♛a1-h8"
+      moveWhite.toLongFigurine must_== "♕a1-h8"
+      moveBlack.toLongFigurine must_== "♛a1-h8"
 
       promoWhite.toLongAlgebraic must_== "d7-d8Q"
       promoBlack.toLongAlgebraic must_== "d2-d1Q"
-      promoWhite.toLongFigurine  must_== "♙d7-d8♕"
-      promoBlack.toLongFigurine  must_== "♟d2-d1♛"
+      promoWhite.toLongFigurine must_== "♙d7-d8♕"
+      promoBlack.toLongFigurine must_== "♟d2-d1♛"
 
       enPassantWhite.toLongAlgebraic must_== "e5xf6e.p."
       enPassantBlack.toLongAlgebraic must_== "b4xa3e.p."
-      enPassantWhite.toLongFigurine  must_== "♙e5xf6e.p."
-      enPassantBlack.toLongFigurine  must_== "♟b4xa3e.p."
+      enPassantWhite.toLongFigurine must_== "♙e5xf6e.p."
+      enPassantBlack.toLongFigurine must_== "♟b4xa3e.p."
 
       captWhite.toLongAlgebraic must_== "Na1xc2"
       captBlack.toLongAlgebraic must_== "Na1xc2"
-      captWhite.toLongFigurine  must_== "♘a1xc2"
-      captBlack.toLongFigurine  must_== "♞a1xc2"
+      captWhite.toLongFigurine must_== "♘a1xc2"
+      captBlack.toLongFigurine must_== "♞a1xc2"
 
       captPromoWhite.toLongAlgebraic must_== "a7xb8Q"
       captPromoBlack.toLongAlgebraic must_== "a2xb1Q"
-      captPromoWhite.toLongFigurine  must_== "♙a7xb8♕"
-      captPromoBlack.toLongFigurine  must_== "♟a2xb1♛"
+      captPromoWhite.toLongFigurine must_== "♙a7xb8♕"
+      captPromoBlack.toLongFigurine must_== "♟a2xb1♛"
 
       CastlingShort(White).toLongAlgebraic must_== "0-0"
       CastlingShort(Black).toLongAlgebraic must_== "0-0"
-      CastlingShort(White).toLongFigurine  must_== "0-0"
-      CastlingShort(Black).toLongFigurine  must_== "0-0"
+      CastlingShort(White).toLongFigurine must_== "0-0"
+      CastlingShort(Black).toLongFigurine must_== "0-0"
 
       CastlingLong(White).toLongAlgebraic must_== "0-0-0"
       CastlingLong(Black).toLongAlgebraic must_== "0-0-0"
-      CastlingLong(White).toLongFigurine  must_== "0-0-0"
-      CastlingLong(Black).toLongFigurine  must_== "0-0-0"
+      CastlingLong(White).toLongFigurine must_== "0-0-0"
+      CastlingLong(Black).toLongFigurine must_== "0-0-0"
     }
 
     "correctly perform toPureCoordinate" in {

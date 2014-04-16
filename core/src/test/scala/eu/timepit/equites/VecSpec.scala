@@ -29,7 +29,7 @@ class VecSpec extends Specification with DataTables with ScalaCheck {
     "satisfy the Monoid laws" in check(monoid.laws[Vec])
 
     "correctly perform map" in {
-      Vec( 0,  0).map(_ + 1) must_== Vec(1, 1)
+      Vec(0, 0).map(_ + 1) must_== Vec(1, 1)
       Vec(-1, -1).map(_.abs) must_== Vec(1, 1)
     }
 
@@ -69,19 +69,19 @@ class VecSpec extends Specification with DataTables with ScalaCheck {
     }
 
     "correctly perform reduced" in {
-      "Vec"       | "reduced"   |
-      Vec( 0,  0) ! Vec( 0,  0) |
-      Vec( 1,  0) ! Vec( 1,  0) |
-      Vec( 1,  1) ! Vec( 1,  1) |
-      Vec( 2,  1) ! Vec( 2,  1) |
-      Vec( 2,  2) ! Vec( 1,  1) |
-      Vec( 3,  2) ! Vec( 3,  2) |
-      Vec( 4,  2) ! Vec( 2,  1) |
-      Vec(-4,  2) ! Vec(-2,  1) |
-      Vec( 4, -2) ! Vec( 2, -1) |
-      Vec(-4, -2) ! Vec(-2, -1) |> {
-        (v, r) => v.reduced must_== r
-      }
+      "Vec" | "reduced" |
+        Vec(0, 0) ! Vec(0, 0) |
+        Vec(1, 0) ! Vec(1, 0) |
+        Vec(1, 1) ! Vec(1, 1) |
+        Vec(2, 1) ! Vec(2, 1) |
+        Vec(2, 2) ! Vec(1, 1) |
+        Vec(3, 2) ! Vec(3, 2) |
+        Vec(4, 2) ! Vec(2, 1) |
+        Vec(-4, 2) ! Vec(-2, 1) |
+        Vec(4, -2) ! Vec(2, -1) |
+        Vec(-4, -2) ! Vec(-2, -1) |> {
+          (v, r) => v.reduced must_== r
+        }
     }
 
     "be decomposable into component vectors" in check {

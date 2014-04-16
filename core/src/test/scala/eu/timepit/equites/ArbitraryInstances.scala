@@ -16,7 +16,7 @@
 
 package eu.timepit.equites
 
-import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.{ Arbitrary, Gen }
 import org.scalacheck.Arbitrary.arbitrary
 
 object ArbitraryInstances {
@@ -34,7 +34,7 @@ object ArbitraryInstances {
   implicit val arbitraryColor: Arbitrary[Color] =
     Arbitrary(Gen.oneOf(Color.all))
 
-  implicit def arbitraryPlaced[A : Arbitrary]: Arbitrary[Placed[A]] =
+  implicit def arbitraryPlaced[A: Arbitrary]: Arbitrary[Placed[A]] =
     Arbitrary {
       for {
         elem <- arbitrary[A]

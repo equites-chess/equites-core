@@ -23,7 +23,8 @@ import shapeless.test.illTyped
 
 import SizedBoardBuilder._
 
-class SizedBoardBuilderSpec extends Specification { def is = s2"""
+class SizedBoardBuilderSpec extends Specification {
+  def is = s2"""
   SizedBoardBuilder should
     build empty boards with 1x1 empty squares $e1
     build empty boards with 8x8 empty squares $e2
@@ -36,33 +37,33 @@ class SizedBoardBuilderSpec extends Specification { def is = s2"""
 
   def e2 =
     >>(>>(|, |, |, |, |, |, |, |),
-       >>(|, |, |, |, |, |, |, |),
-       >>(|, |, |, |, |, |, |, |),
-       >>(|, |, |, |, |, |, |, |),
-       >>(|, |, |, |, |, |, |, |),
-       >>(|, |, |, |, |, |, |, |),
-       >>(|, |, |, |, |, |, |, |),
-       >>(|, |, |, |, |, |, |, |)).toBoard8x8 must_== Board.empty
+      >>(|, |, |, |, |, |, |, |),
+      >>(|, |, |, |, |, |, |, |),
+      >>(|, |, |, |, |, |, |, |),
+      >>(|, |, |, |, |, |, |, |),
+      >>(|, |, |, |, |, |, |, |),
+      >>(|, |, |, |, |, |, |, |),
+      >>(|, |, |, |, |, |, |, |)).toBoard8x8 must_== Board.empty
 
   def e3 =
     >>(>>(r, n, b, q, k, b, n, r),
-       >>(♟, ♟, ♟, ♟, ♟, ♟, ♟, ♟),
-       >>(|, |, |, |, |, |, |, |),
-       >>(|, |, |, |, |, |, |, |),
-       >>(|, |, |, |, |, |, |, |),
-       >>(|, |, |, |, |, |, |, |),
-       >>(P, P, P, P, P, P, P, P),
-       >>(R, N, B, Q, K, B, N, R)).toBoard8x8 must_== Rules.startingBoard
+      >>(♟, ♟, ♟, ♟, ♟, ♟, ♟, ♟),
+      >>(|, |, |, |, |, |, |, |),
+      >>(|, |, |, |, |, |, |, |),
+      >>(|, |, |, |, |, |, |, |),
+      >>(|, |, |, |, |, |, |, |),
+      >>(P, P, P, P, P, P, P, P),
+      >>(R, N, B, Q, K, B, N, R)).toBoard8x8 must_== Rules.startingBoard
 
   def e4 =
     >>(>>(♜, ♞, ♝, ♛, ♚, ♝, ♞, ♜),
-       >>(♟, ♟, ♟, ♟, ♟, ♟, ♟, ♟),
-       >>(|, |, |, |, |, |, |, |),
-       >>(|, |, |, |, |, |, |, |),
-       >>(|, |, |, |, |, |, |, |),
-       >>(|, |, |, |, |, |, |, |),
-       >>(♙, ♙, ♙, ♙, ♙, ♙, ♙, ♙),
-       >>(♖, ♘, ♗, ♕, ♔, ♗, ♘, ♖)).toBoard8x8 must_== Rules.startingBoard
+      >>(♟, ♟, ♟, ♟, ♟, ♟, ♟, ♟),
+      >>(|, |, |, |, |, |, |, |),
+      >>(|, |, |, |, |, |, |, |),
+      >>(|, |, |, |, |, |, |, |),
+      >>(|, |, |, |, |, |, |, |),
+      >>(♙, ♙, ♙, ♙, ♙, ♙, ♙, ♙),
+      >>(♖, ♘, ♗, ♕, ♔, ♗, ♘, ♖)).toBoard8x8 must_== Rules.startingBoard
 
   // Board is not rectangular
   illTyped("""

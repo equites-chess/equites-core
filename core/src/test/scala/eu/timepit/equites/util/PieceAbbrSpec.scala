@@ -23,7 +23,8 @@ import PieceAbbr.Algebraic._
 import PieceAbbr.Figurine._
 import PieceAbbr.Wiki._
 
-class PieceAbbrSpec extends Specification with matcher.DataTables { def is = s2"""
+class PieceAbbrSpec extends Specification with matcher.DataTables {
+  def is = s2"""
   PieceAbbr.Algebraic should
     contain abbreviations for all pieces $e1
 
@@ -36,52 +37,52 @@ class PieceAbbrSpec extends Specification with matcher.DataTables { def is = s2"
 
   def e1 =
     "abbr" | "letter" |
-    K      ! "K"      |
-    Q      ! "Q"      |
-    R      ! "R"      |
-    B      ! "B"      |
-    N      ! "N"      |
-    P      ! "P"      |
-    k      ! "k"      |
-    q      ! "q"      |
-    r      ! "r"      |
-    b      ! "b"      |
-    n      ! "n"      |
-    PieceAbbr.Algebraic.p ! "p" |> {
-      (piece, string) => PieceUtil.showLetter(piece) must_== string
-    }
+      K ! "K" |
+      Q ! "Q" |
+      R ! "R" |
+      B ! "B" |
+      N ! "N" |
+      P ! "P" |
+      k ! "k" |
+      q ! "q" |
+      r ! "r" |
+      b ! "b" |
+      n ! "n" |
+      PieceAbbr.Algebraic.p ! "p" |> {
+        (piece, string) => PieceUtil.showLetter(piece) must_== string
+      }
 
   def e2 =
     "abbr" | "figurine" |
-    ♔      ! "♔"        |
-    ♕      ! "♕"        |
-    ♖      ! "♖"        |
-    ♗      ! "♗"        |
-    ♘      ! "♘"        |
-    ♙      ! "♙"        |
-    ♚      ! "♚"        |
-    ♛      ! "♛"        |
-    ♜      ! "♜"        |
-    ♝      ! "♝"        |
-    ♞      ! "♞"        |
-    ♟      ! "♟"        |> {
-      (piece, string) => PieceUtil.showFigurine(piece) must_== string
-    }
+      ♔ ! "♔" |
+      ♕ ! "♕" |
+      ♖ ! "♖" |
+      ♗ ! "♗" |
+      ♘ ! "♘" |
+      ♙ ! "♙" |
+      ♚ ! "♚" |
+      ♛ ! "♛" |
+      ♜ ! "♜" |
+      ♝ ! "♝" |
+      ♞ ! "♞" |
+      ♟ ! "♟" |> {
+        (piece, string) => PieceUtil.showFigurine(piece) must_== string
+      }
 
   def e3 =
     "abbr" | "letters" |
-    kl     ! "kl"      |
-    ql     ! "ql"      |
-    rl     ! "rl"      |
-    bl     ! "bl"      |
-    nl     ! "nl"      |
-    pl     ! "pl"      |
-    kd     ! "kd"      |
-    qd     ! "qd"      |
-    rd     ! "rd"      |
-    bd     ! "bd"      |
-    nd     ! "nd"      |
-    pd     ! "pd"      |> {
-      (piece, string) => PieceUtil.showWikiLetters(piece) must_== string
-    }
+      kl ! "kl" |
+      ql ! "ql" |
+      rl ! "rl" |
+      bl ! "bl" |
+      nl ! "nl" |
+      pl ! "pl" |
+      kd ! "kd" |
+      qd ! "qd" |
+      rd ! "rd" |
+      bd ! "bd" |
+      nd ! "nd" |
+      pd ! "pd" |> {
+        (piece, string) => PieceUtil.showWikiLetters(piece) must_== string
+      }
 }

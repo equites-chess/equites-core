@@ -81,7 +81,7 @@ class UciSpec extends Specification with org.specs2.time.NoTimeConversions {
     }
     "toString should return two moves if history contains two moves" in {
       val actions = Seq(Move(pl, Square('e', 2), Square('e', 4)),
-                        Move(nd, Square('g', 8), Square('f', 6)))
+        Move(nd, Square('g', 8), Square('f', 6)))
       val history = GameState.unfold(actions)
 
       Position(history).toString must_==
@@ -150,7 +150,7 @@ class UciSpec extends Specification with org.specs2.time.NoTimeConversions {
     }
     "toString should return 'option ... type combo ...'" in {
       UciOption("Style", Combo("Normal", Seq("Solid", "Normal", "Risky"))).toString must_==
-      "option name Style type combo default Normal var Solid var Normal var Risky"
+        "option name Style type combo default Normal var Solid var Normal var Risky"
     }
     "toString should return 'option ... type button'" in {
       UciOption("Clear Hash", Button).toString must_==

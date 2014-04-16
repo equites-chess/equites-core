@@ -25,13 +25,13 @@ import util.PieceAbbr.Wiki._
 class GameStateSpec extends Specification {
   "GameState" should {
     val actions = Vector(
-        Move(pl, Square('e', 2), Square('e', 4)),
-        Move(pd, Square('c', 7), Square('c', 5)),
-        Move(nl, Square('g', 1), Square('f', 3)),
-        Move(pd, Square('d', 7), Square('d', 6)),
-        Move(bl, Square('f', 1), Square('a', 6)),
-        Capture(nd, Square('b', 8), Square('a', 6), bl),
-        CastlingShort(White))
+      Move(pl, Square('e', 2), Square('e', 4)),
+      Move(pd, Square('c', 7), Square('c', 5)),
+      Move(nl, Square('g', 1), Square('f', 3)),
+      Move(pd, Square('d', 7), Square('d', 6)),
+      Move(bl, Square('f', 1), Square('a', 6)),
+      Capture(nd, Square('b', 8), Square('a', 6), bl),
+      CastlingShort(White))
 
     val states = GameState.unfold(actions)
 

@@ -22,7 +22,8 @@ import scalaz.stream._
 
 import UciProcess._
 
-class UciProcessesSpec extends Specification { def is = s2"""
+class UciProcessesSpec extends Specification {
+  def is = s2"""
   UciProcesses
     collectResponses should parse and filter Uci.Response $e1
   """

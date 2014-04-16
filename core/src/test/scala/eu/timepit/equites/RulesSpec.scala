@@ -35,7 +35,7 @@ class RulesSpec extends Specification {
     "correctly perform possibleSquares" in {
       possibleSquares(Placed(kl, Square(3, 2))).toSet must_==
         Set(Square(3, 3), Square(4, 3), Square(4, 2), Square(4, 1),
-            Square(3, 1), Square(2, 1), Square(2, 2), Square(2, 3))
+          Square(3, 1), Square(2, 1), Square(2, 2), Square(2, 3))
 
       possibleSquares(Placed(pl, Square(3, 3))).toSet must_==
         Set(Square(3, 4))
@@ -48,9 +48,9 @@ class RulesSpec extends Specification {
     "correctly perform possibleSquares for Bishop" in {
       possibleSquares(Placed(bl, Square(3, 3))).toSet must_==
         Set(Square(0, 0), Square(1, 1), Square(2, 2), Square(4, 4),
-            Square(5, 5), Square(6, 6), Square(7, 7),
-            Square(0, 6), Square(1, 5), Square(2, 4), Square(4, 2),
-            Square(5, 1), Square(6, 0))
+          Square(5, 5), Square(6, 6), Square(7, 7),
+          Square(0, 6), Square(1, 5), Square(2, 4), Square(4, 2),
+          Square(5, 1), Square(6, 0))
     }
 
     "determine associated castlings for placed pieces" in {

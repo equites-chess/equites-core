@@ -57,9 +57,9 @@ class SquareSpec extends Specification with ScalaCheck {
     "satisfy the Order laws" in check(order.laws[Square])
 
     "correctly perform +(Vec) and -(Vec)" in {
-      Square(1, 1) + Vec( 1,  1) must_== Square(2, 2)
+      Square(1, 1) + Vec(1, 1) must_== Square(2, 2)
       Square(1, 1) - Vec(-1, -1) must_== Square(2, 2)
-      Square(1, 1) - Vec( 1,  1) must_== Square(0, 0)
+      Square(1, 1) - Vec(1, 1) must_== Square(0, 0)
       Square(1, 1) + Vec(-1, -1) must_== Square(0, 0)
 
       (Square(0, 0) - Vec(1, 1)).isValid must beFalse
@@ -81,17 +81,17 @@ class SquareSpec extends Specification with ScalaCheck {
     }
 
     "correctly perform isValid" in {
-      Square(0,  0).isValid must beTrue
-      Square(0,  7).isValid must beTrue
-      Square(7,  0).isValid must beTrue
-      Square(7,  7).isValid must beTrue
+      Square(0, 0).isValid must beTrue
+      Square(0, 7).isValid must beTrue
+      Square(7, 0).isValid must beTrue
+      Square(7, 7).isValid must beTrue
 
-      Square(-1,  0).isValid must beFalse
-      Square( 0, -1).isValid must beFalse
+      Square(-1, 0).isValid must beFalse
+      Square(0, -1).isValid must beFalse
       Square(-1, -1).isValid must beFalse
-      Square( 8,  0).isValid must beFalse
-      Square( 0,  8).isValid must beFalse
-      Square( 8,  8).isValid must beFalse
+      Square(8, 0).isValid must beFalse
+      Square(0, 8).isValid must beFalse
+      Square(8, 8).isValid must beFalse
     }
 
     "correctly perform isLight and isDark" in {

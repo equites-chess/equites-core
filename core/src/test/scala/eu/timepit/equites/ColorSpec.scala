@@ -22,7 +22,8 @@ import shapeless.test.illTyped
 
 import ArbitraryInstances._
 
-class ColorSpec extends Specification with ScalaCheck { def is = s2"""
+class ColorSpec extends Specification with ScalaCheck {
+  def is = s2"""
   Color should
     satisfy the Equal laws $e1
     satisfy the Order laws $e2
@@ -38,12 +39,12 @@ class ColorSpec extends Specification with ScalaCheck { def is = s2"""
   def e4 = Black.opposite must_== White
 
   def testOppositeType(): Unit = {
-    def isOpposite(color: Color)(opposite: color.Opposite): Unit = ()
+    def checkOpposite(color: Color)(opposite: color.Opposite): Unit = ()
 
-    isOpposite(White)(Black)
-    isOpposite(Black)(White)
+    checkOpposite(White)(Black)
+    checkOpposite(Black)(White)
 
-    illTyped("isOpposite(White)(White)")
-    illTyped("isOpposite(Black)(Black)")
+    illTyped("checkOpposite(White)(White)")
+    illTyped("checkOpposite(Black)(Black)")
   }
 }

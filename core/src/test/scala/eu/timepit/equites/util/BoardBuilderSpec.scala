@@ -21,7 +21,8 @@ import org.specs2._
 
 import BoardBuilder._
 
-class BoardBuilderSpec extends Specification { def is = s2"""
+class BoardBuilderSpec extends Specification {
+  def is = s2"""
   BoardBuilder should
     build empty boards without using empty squares $e1
     build empty boards with using empty squares    $e2
@@ -34,31 +35,31 @@ class BoardBuilderSpec extends Specification { def is = s2"""
 
   def e2 =
     >>.|.|.|.|.|.|.|.|.
-       |.|.|.|.|.|.|.|.
-       |.|.|.|.|.|.|.|.
-       |.|.|.|.|.|.|.|.
-       |.|.|.|.|.|.|.|.
-       |.|.|.|.|.|.|.|.
-       |.|.|.|.|.|.|.|.
-       |.|.|.|.|.|.|.|.<< must_== Board.empty
+      |.|.|.|.|.|.|.|.
+      |.|.|.|.|.|.|.|.
+      |.|.|.|.|.|.|.|.
+      |.|.|.|.|.|.|.|.
+      |.|.|.|.|.|.|.|.
+      |.|.|.|.|.|.|.|.
+      |.|.|.|.|.|.|.|.<< must_== Board.empty
 
   def e3 =
     >>.r.n.b.q.k.b.n.r.
-       p.p.p.p.p.p.p.p.
-       |.|.|.|.|.|.|.|.
-       |.|.|.|.|.|.|.|.
-       |.|.|.|.|.|.|.|.
-       |.|.|.|.|.|.|.|.
-       P.P.P.P.P.P.P.P.
-       R.N.B.Q.K.B.N.R.<< must_== Rules.startingBoard
+      p.p.p.p.p.p.p.p.
+      |.|.|.|.|.|.|.|.
+      |.|.|.|.|.|.|.|.
+      |.|.|.|.|.|.|.|.
+      |.|.|.|.|.|.|.|.
+      P.P.P.P.P.P.P.P.
+      R.N.B.Q.K.B.N.R.<< must_== Rules.startingBoard
 
   def e4 =
     >>.♜.♞.♝.♛.♚.♝.♞.♜.
-       ♟.♟.♟.♟.♟.♟.♟.♟.
-       |.|.|.|.|.|.|.|.
-       |.|.|.|.|.|.|.|.
-       |.|.|.|.|.|.|.|.
-       |.|.|.|.|.|.|.|.
-       ♙.♙.♙.♙.♙.♙.♙.♙.
-       ♖.♘.♗.♕.♔.♗.♘.♖.<< must_== Rules.startingBoard
+      ♟.♟.♟.♟.♟.♟.♟.♟.
+      |.|.|.|.|.|.|.|.
+      |.|.|.|.|.|.|.|.
+      |.|.|.|.|.|.|.|.
+      |.|.|.|.|.|.|.|.
+      ♙.♙.♙.♙.♙.♙.♙.♙.
+      ♖.♘.♗.♕.♔.♗.♘.♖.<< must_== Rules.startingBoard
 }

@@ -23,7 +23,8 @@ import Scalaz._
 
 import GenericImplicits._
 
-class GenericImplicitsSpec extends Specification { def is = s2"""
+class GenericImplicitsSpec extends Specification {
+  def is = s2"""
   asOption should
     return None on empty collections          $e1
     return Some(x) on non-empty collections x $e2
@@ -35,17 +36,17 @@ class GenericImplicitsSpec extends Specification { def is = s2"""
 
   def e1 =
     (List.empty[Int].asOption must beNone) and
-    ("".asOption must beNone)
+      ("".asOption must beNone)
 
   def e2 =
     (List(1, 2, 3).asOption must beSome(List(1, 2, 3))) and
-    ("Hello".asOption must beSome("Hello"))
+      ("Hello".asOption must beSome("Hello"))
 
   def e3 =
     (List.empty[Int].dropLeftRight(1) must_== List.empty[Int]) and
-    ("".dropLeftRight(1) must_== "")
+      ("".dropLeftRight(1) must_== "")
 
   def e4 =
     (List(1, 2, 3, 4).dropLeftRight(1) must_== List(2, 3)) and
-    ("1234".dropLeftRight(1) must_== "23")
+      ("1234".dropLeftRight(1) must_== "23")
 }

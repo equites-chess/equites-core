@@ -27,14 +27,14 @@ class DirectionsSpec extends Specification {
       Directions.right.inverse must_== Directions.left
 
       frontRight.inverse must_== backLeft
-      frontLeft.inverse  must_== backRight
+      frontLeft.inverse must_== backRight
 
       diagonalFront.inverse must_== diagonalBack
-      forward.inverse       must_== backward
+      forward.inverse must_== backward
 
-      straight.inverse   must_== straight
-      diagonal.inverse   must_== diagonal
-      anywhere.inverse   must_== anywhere
+      straight.inverse must_== straight
+      diagonal.inverse must_== diagonal
+      anywhere.inverse must_== anywhere
       knightLike.inverse must_== knightLike
     }
 
@@ -59,7 +59,7 @@ class DirectionsSpec extends Specification {
 
     "correctly perform mostSimilarTo" in {
       diagonal.mostSimilarTo(Vec.front) must_== diagonalFront
-      diagonal.mostSimilarTo(Vec.back)  must_== diagonalBack
+      diagonal.mostSimilarTo(Vec.back) must_== diagonalBack
     }
   }
 }

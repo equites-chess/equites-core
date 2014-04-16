@@ -20,7 +20,6 @@ package util
 import org.specs2.ScalaCheck
 import org.specs2.mutable._
 
-import BoardUtil._
 import PieceUtil._
 
 import ArbitraryInstances._
@@ -43,12 +42,6 @@ class NotationSpec extends Specification with ScalaCheck {
     }
     "yield None on invalid input" in {
       readFigurine('0') must beNone
-    }
-  }
-
-  "boardFromFen" should {
-    "be the inverse of RichBoard.toFenPlacement" in check {
-      (board: Board) => readFenPlacement(showFenPlacement(board)) must_== board
     }
   }
 }

@@ -180,7 +180,7 @@ class PgnParsersSpec extends Specification with ParserMatchers {
   "moveTextSeq" should {
     "succeed on valid input" in {
       val text = "1. e4 e5 2. Nf3 Nc6 3. Bb5 " +
-                 "{This opening is called the Ruy Lopez.} 3... a6"
+        "{This opening is called the Ruy Lopez.} 3... a6"
       val result = List(
         (1, White), "e4", "e5",
         (2, White), "Nf3", "Nc6",

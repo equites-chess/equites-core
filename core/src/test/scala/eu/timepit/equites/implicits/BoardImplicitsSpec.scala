@@ -19,11 +19,11 @@ package implicits
 
 import org.specs2._
 
-import BoardImplicits._
 import util.PieceAbbr.Wiki._
 import util.SquareAbbr._
 
-class BoardImplicitsSpec extends Specification { def is = s2"""
+class BoardImplicitsSpec extends Specification {
+  def is = s2"""
   toFenPlacement should
     return correct FEN placements $ex1
   """
@@ -36,10 +36,10 @@ class BoardImplicitsSpec extends Specification { def is = s2"""
   def ex1 =
     (util.BoardUtil.showFenPlacement(board0) must_==
       "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR") and
-    (util.BoardUtil.showFenPlacement(board1) must_==
-      "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR") and
-    (util.BoardUtil.showFenPlacement(board2) must_==
-      "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR") and
-    (util.BoardUtil.showFenPlacement(board3) must_==
-      "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R")
+      (util.BoardUtil.showFenPlacement(board1) must_==
+        "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR") and
+        (util.BoardUtil.showFenPlacement(board2) must_==
+          "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR") and
+          (util.BoardUtil.showFenPlacement(board3) must_==
+            "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R")
 }

@@ -24,13 +24,15 @@ import ArbitraryInstances._
 class PieceSpec extends Specification with ScalaCheck {
   "Piece" should {
     "be convertible to one of its subtypes" in check {
-      (p: AnyPiece) => p.maybeKing   orElse p.maybeQueen  orElse
-                       p.maybeRook   orElse p.maybeBishop orElse
-                       p.maybeKnight orElse p.maybePawn   must beSome(p)
+      (p: AnyPiece) =>
+        p.maybeKing orElse p.maybeQueen orElse
+          p.maybeRook orElse p.maybeBishop orElse
+          p.maybeKnight orElse p.maybePawn must beSome(p)
     }
     "be one of its subtypes" in check {
-      (p: AnyPiece) => p.isKing   || p.isQueen  || p.isRook ||
-                       p.isBishop || p.isKnight || p.isPawn must beTrue
+      (p: AnyPiece) =>
+        p.isKing || p.isQueen || p.isRook ||
+          p.isBishop || p.isKnight || p.isPawn must beTrue
     }
   }
 

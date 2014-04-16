@@ -36,9 +36,9 @@ class BoardSpec extends Specification {
 
     "report occupied and vacant squares" in {
       board.isOccupied(Square(0, 0)) must beTrue
-      board.isVacant(Square(0, 0))   must beFalse
+      board.isVacant(Square(0, 0)) must beFalse
 
-      board.isVacant(Square(1, 0))   must beTrue
+      board.isVacant(Square(1, 0)) must beTrue
       board.isOccupied(Square(1, 0)) must beFalse
     }
 
@@ -60,44 +60,44 @@ class BoardSpec extends Specification {
 
       processed must_!= before
       processed must_== after
-      reversed  must_== before
-      reversed  must_!= after
+      reversed must_== before
+      reversed must_!= after
     }
 
     "process and reverse moves" in {
       val before = Board(Square(0, 0) -> ql)
-      val after  = Board(Square(7, 7) -> ql)
+      val after = Board(Square(7, 7) -> ql)
       val action = Move(ql, Square(0, 0), Square(7, 7))
       checkAction(before, after, action)
     }
 
     "process and reverse promotions" in {
       val before = Board(Square(0, 6) -> pl)
-      val after  = Board(Square(0, 7) -> ql)
+      val after = Board(Square(0, 7) -> ql)
       val action = Promotion(pl, Square(0, 6), Square(0, 7), ql)
       checkAction(before, after, action)
     }
 
     "process and reverse captures" in {
-      val before = Board(Square(0, 0) -> ql,Square(7, 7) -> pd)
-      val after  = Board(Square(7, 7) -> ql)
+      val before = Board(Square(0, 0) -> ql, Square(7, 7) -> pd)
+      val after = Board(Square(7, 7) -> ql)
       val action = Capture(ql, Square(0, 0), Square(7, 7), pd)
       checkAction(before, after, action)
     }
 
     "process and reverse captures and promotions" in {
       val before = Board(Square(0, 6) -> pl, Square(1, 7) -> nd)
-      val after  = Board(Square(1, 7) -> ql)
+      val after = Board(Square(1, 7) -> ql)
       val action = CaptureAndPromotion(pl, Square(0, 6), Square(1, 7), nd, ql)
       checkAction(before, after, action)
     }
 
     "process and reverse castlings" in {
       val castling = CastlingLong(White)
-      val before   = Board(castling.kingMove.from -> castling.king,
-                           castling.rookMove.from -> castling.rook)
-      val after    = Board(castling.kingMove.to -> castling.king,
-                           castling.rookMove.to -> castling.rook)
+      val before = Board(castling.kingMove.from -> castling.king,
+        castling.rookMove.from -> castling.rook)
+      val after = Board(castling.kingMove.to -> castling.king,
+        castling.rookMove.to -> castling.rook)
       checkAction(before, after, castling)
     }
   }

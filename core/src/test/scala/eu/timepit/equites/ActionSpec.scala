@@ -18,6 +18,7 @@ package eu.timepit.equites
 
 import org.specs2._
 
-class ActionSpec extends Specification { def is = s2"""
+class ActionSpec extends Specification {
+  def is = s2"""
   """
 }

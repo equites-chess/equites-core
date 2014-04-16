@@ -17,8 +17,6 @@
 package eu.timepit.equites
 package util
 
-import scalaz.syntax.show._
-
 import PieceAbbr.Algebraic._
 import PieceAbbr.Figurine._
 
@@ -112,7 +110,7 @@ object PieceUtil {
     }
 
   def showTextualId(piece: AnyPiece): String =
-    piece.color.shows + piece.pieceType.shows
+    piece.color.toString + piece.pieceType.toString
 
   def showUpperCaseLetter(pieceType: PieceType): String =
     pieceType match {

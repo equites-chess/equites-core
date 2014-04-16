@@ -21,7 +21,8 @@ import org.specs2._
 import scalaz.std.option._
 import scalaz.std.stream._
 
-class PackageSpec extends Specification { def is = s2"""
+class PackageSpec extends Specification {
+  def is = s2"""
   util.backtrack should
     generate all 'binary' strings of length three     $e1
     generate all odd 'binary' strings of length three $e2
@@ -41,7 +42,7 @@ class PackageSpec extends Specification { def is = s2"""
 
   def e3 =
     (backtrack(0)(i => Stream(i + 1), _ == 10) must_== Stream(10)) and
-    (backtrack(0)(i => Option(i + 1), _ == 10) must_== Option(10))
+      (backtrack(0)(i => Option(i + 1), _ == 10) must_== Option(10))
 
   def e4 = (
     (toUtf8Bytes(0x0000.toChar).length must_== 1) and
@@ -51,6 +52,5 @@ class PackageSpec extends Specification { def is = s2"""
     (toUtf8Bytes(0x07FF.toChar).length must_== 2) and
 
     (toUtf8Bytes(0x0800.toChar).length must_== 3) and
-    (toUtf8Bytes(0xFFFF.toChar).length must_== 3)
-  )
+    (toUtf8Bytes(0xFFFF.toChar).length must_== 3))
 }

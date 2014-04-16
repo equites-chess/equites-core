@@ -15,16 +15,21 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package eu.timepit.equites
-package implicits
+package util
 
-import implicits.PlacedImplicits._
+import org.specs2._
 
-object BoardImplicits {
-  implicit final class RichBoard(val self: Board) extends AnyVal {
-    def toLetterPositions: String = toPositions(_.toLetter)
-    def toFigurinePositions: String = toPositions(_.toFigurine)
+import BoardUtil._
 
-    def toPositions(showPlaced: Placed[AnyPiece] => String): String =
-      self.placedPieces.sorted.map(showPlaced).mkString(", ")
+import ArbitraryInstances._
+
+class BoardUtilSpec extends Specification with ScalaCheck {
+  def is = s2"""
+  BoardUtil
+    readFenPlacement should be the inverse of showFenPlacement $e1
+  """
+
+  def e1 = check { (board: Board) =>
+    readFenPlacement(showFenPlacement(board)) must_== board
   }
 }
