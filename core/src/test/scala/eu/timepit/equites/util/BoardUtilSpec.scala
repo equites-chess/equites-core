@@ -20,16 +20,36 @@ package util
 import org.specs2._
 
 import BoardUtil._
+import PieceAbbr.Wiki._
+import SquareAbbr._
 
 import ArbitraryInstances._
 
 class BoardUtilSpec extends Specification with ScalaCheck {
   def is = s2"""
   BoardUtil
-    readFenPlacement should be the inverse of showFenPlacement $e1
+    readFenPlacement should be the inverse of showFenPlacement $ex1
+    showFenPlacement should return correct FEN placements      $ex2
   """
 
-  def e1 = check { (board: Board) =>
+  def ex1 = check { (board: Board) =>
     readFenPlacement(showFenPlacement(board)) must_== board
+  }
+
+  def ex2 = {
+    val board0 = Rules.startingBoard
+    val board1 = board0.processMove(Move(pl, e2, e4))
+    val board2 = board1.processMove(Move(pd, c7, c5))
+    val board3 = board2.processMove(Move(nl, g1, f3))
+
+    val placements = Seq(
+      board0 -> "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR",
+      board1 -> "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR",
+      board2 -> "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR",
+      board3 -> "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R")
+
+    placements.map {
+      case (board, placement) => showFenPlacement(board) must_== placement
+    }
   }
 }
