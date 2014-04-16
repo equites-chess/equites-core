@@ -17,7 +17,14 @@
 package eu.timepit.equites
 package util
 
+/**
+ * @define FEN [[http://en.wikipedia.org/wiki/Forsyth–Edwards_Notation Forsyth–Edwards Notation (FEN)]]
+ */
 object BoardUtil {
+  /**
+   * Returns a `Board` from the given $FEN piece placement. An invalid placement
+   * string will result in an empty or nonsensical `Board`.
+   */
   def readFenPlacement(placement: String): Board = {
     def expandDigits(target: String): String =
       """\d""".r.replaceAllIn(target, "1" * _.toString.toInt)
@@ -30,10 +37,7 @@ object BoardUtil {
     Board(mapping.toMap)
   }
 
-  /**
-   * Returns the piece placement of the given [[Board]] in
-   * [[http://en.wikipedia.org/wiki/Forsyth–Edwards_Notation Forsyth–Edwards Notation (FEN)]].
-   */
+  /** Returns the piece placement of the given `Board` in $FEN. */
   def showFenPlacement(board: Board): String = {
     def replaceOnes(target: String): String =
       "1{2,}".r.replaceAllIn(target, _.toString.length.toString)
