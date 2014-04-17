@@ -19,19 +19,12 @@ package eu.timepit.equites
 import scalaz._
 
 trait ColorInstances {
-  implicit val colorInstance = new Order[Color] {
-    // Order
-    def order(c1: Color, c2: Color): Ordering =
-      if (c1 == c2) {
-        Ordering.EQ
-      } else if (c1 == White) {
-        Ordering.GT
-      } else {
-        Ordering.LT
-      }
-  }
-
   implicit val colorEqual = Equal.equalA[Color]
+  implicit val colorOrder = Order.order[Color] {
+    case (White, Black) => Ordering.GT
+    case (Black, White) => Ordering.LT
+    case _              => Ordering.EQ
+  }
   implicit val colorScalaOrdering = Order[Color].toScalaOrdering
   implicit val colorShow = Show.showFromToString[Color]
 }
