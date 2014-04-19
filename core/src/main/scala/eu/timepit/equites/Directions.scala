@@ -20,6 +20,15 @@ import scala.collection.immutable._
 
 import implicits.GenericImplicits._
 
+class Directions(val self: Set[Vec]) extends SetProxy[Vec]
+    with PlayerPerspective[Directions] {
+
+  def inverse: Directions = Directions(map(_.inverse))
+
+  def mostSimilarTo(vec: Vec): Directions =
+    Directions(self.minGroupBy((dir: Vec) => (vec - dir).l1Length))
+}
+
 object Directions {
   def apply(vs: Vec*): Directions = apply(vs)
   def apply(vs: TraversableOnce[Vec]): Directions = new Directions(vs.toSet)
@@ -48,13 +57,4 @@ object Directions {
 
   val knightLike =
     Directions((Vec(-2, -2) to Vec(2, 2)).filter(_.l1Length == 3))
-}
-
-class Directions(val self: Set[Vec]) extends SetProxy[Vec]
-    with PlayerPerspective[Directions] {
-
-  def inverse: Directions = Directions(map(_.inverse))
-
-  def mostSimilarTo(vec: Vec): Directions =
-    Directions(self.minGroupBy((dir: Vec) => (vec - dir).l1Length))
 }

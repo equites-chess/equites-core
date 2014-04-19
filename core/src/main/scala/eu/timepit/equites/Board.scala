@@ -18,12 +18,6 @@ package eu.timepit.equites
 
 import scala.collection.immutable.MapProxy
 
-object Board {
-  def apply(mapping: Map[Square, AnyPiece]): Board = new Board(mapping)
-  def apply(kvs: (Square, AnyPiece)*): Board = new Board(kvs.toMap)
-  val empty: Board = Board()
-}
-
 class Board(val self: Map[Square, AnyPiece])
     extends MapProxy[Square, AnyPiece] {
 
@@ -98,4 +92,10 @@ class Board(val self: Map[Square, AnyPiece])
 
   override def -(square: Square): Board =
     Board(self - square)
+}
+
+object Board {
+  def apply(mapping: Map[Square, AnyPiece]): Board = new Board(mapping)
+  def apply(kvs: (Square, AnyPiece)*): Board = new Board(kvs.toMap)
+  val empty: Board = Board()
 }

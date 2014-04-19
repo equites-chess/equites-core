@@ -18,16 +18,6 @@ package eu.timepit.equites
 
 import scalaz._
 
-trait PieceTypeInstances {
-  implicit val pieceTypeShow = Show.showFromToString[PieceType]
-}
-
-object PieceType extends PieceTypeInstances {
-  def all: List[PieceType] = List(King, Queen, Rook, Bishop, Knight, Pawn)
-  def allCastling: List[CastlingPieceType] = List(King, Rook)
-  def allPromoted: List[PromotedPieceType] = List(Queen, Rook, Bishop, Knight)
-}
-
 sealed trait PieceType
 sealed trait CastlingPieceType extends PieceType
 sealed trait PromotedPieceType extends PieceType
@@ -40,3 +30,13 @@ case object Bishop extends PromotedPieceType
 case object Knight extends PromotedPieceType
 case object Pawn   extends PieceType
 // format: ON
+
+object PieceType extends PieceTypeInstances {
+  def all: List[PieceType] = List(King, Queen, Rook, Bishop, Knight, Pawn)
+  def allCastling: List[CastlingPieceType] = List(King, Rook)
+  def allPromoted: List[PromotedPieceType] = List(Queen, Rook, Bishop, Knight)
+}
+
+trait PieceTypeInstances {
+  implicit val pieceTypeShow = Show.showFromToString[PieceType]
+}

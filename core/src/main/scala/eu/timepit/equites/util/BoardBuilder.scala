@@ -19,10 +19,6 @@ package util
 
 import PieceAbbr.Algebraic
 
-object BoardBuilder {
-  def >> : BoardBuilder = new BoardBuilder(Board.empty, Square.topLeft)
-}
-
 class BoardBuilder private (board: Board, square: Square) {
   def K: BoardBuilder = embattle(Algebraic.K)
   def Q: BoardBuilder = embattle(Algebraic.Q)
@@ -57,4 +53,8 @@ class BoardBuilder private (board: Board, square: Square) {
     val nextSquare = square.right.asOption.getOrElse(square.down.leftmost)
     new BoardBuilder(nextBoard, nextSquare)
   }
+}
+
+object BoardBuilder {
+  def >> : BoardBuilder = new BoardBuilder(Board.empty, Square.topLeft)
 }

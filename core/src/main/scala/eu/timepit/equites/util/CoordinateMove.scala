@@ -19,14 +19,6 @@ package util
 
 import implicits.SquareImplicits._
 
-object CoordinateMove {
-  def apply(action: Action): CoordinateMove = action match {
-    case p: PromotionLike => CoordinateMove(p.from, p.to, Some(p.promotedTo))
-    case m: MoveLike      => CoordinateMove(m.from, m.to)
-    case c: Castling      => CoordinateMove(c.kingMove)
-  }
-}
-
 /**
  * Represents a move in coordinate notation.
  */
@@ -38,4 +30,12 @@ case class CoordinateMove(
 
   def toAlgebraic: String =
     from.toAlgebraic + to.toAlgebraic + promotedTo.fold("")(p => PieceUtil.showLowerCaseLetter(p.pieceType))
+}
+
+object CoordinateMove {
+  def apply(action: Action): CoordinateMove = action match {
+    case p: PromotionLike => CoordinateMove(p.from, p.to, Some(p.promotedTo))
+    case m: MoveLike      => CoordinateMove(m.from, m.to)
+    case c: Castling      => CoordinateMove(c.kingMove)
+  }
 }

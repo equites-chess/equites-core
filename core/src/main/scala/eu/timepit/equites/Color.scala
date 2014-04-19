@@ -18,28 +18,6 @@ package eu.timepit.equites
 
 import scalaz._
 
-trait ColorInstances {
-  implicit val colorEqual = Equal.equalA[Color]
-  implicit val colorOrder = Order.order[Color] {
-    case (White, Black) => Ordering.GT
-    case (Black, White) => Ordering.LT
-    case _              => Ordering.EQ
-  }
-  implicit val colorScalaOrdering = Order[Color].toScalaOrdering
-  implicit val colorShow = Show.showFromToString[Color]
-}
-
-object Color extends ColorInstances {
-  def all: List[Color] = List(White, Black)
-
-  def guessFrom(direction: Vec): Option[Color] =
-    direction.rankProj.reduced match {
-      case Vec.front => Some(White)
-      case Vec.back  => Some(Black)
-      case _         => None
-    }
-}
-
 sealed trait Color {
   type Opposite <: Color
   def opposite: Opposite
@@ -53,4 +31,26 @@ case object White extends Color {
 case object Black extends Color {
   override type Opposite = White.type
   override def opposite: Opposite = White
+}
+
+object Color extends ColorInstances {
+  def all: List[Color] = List(White, Black)
+
+  def guessFrom(direction: Vec): Option[Color] =
+    direction.rankProj.reduced match {
+      case Vec.front => Some(White)
+      case Vec.back  => Some(Black)
+      case _         => None
+    }
+}
+
+trait ColorInstances {
+  implicit val colorEqual = Equal.equalA[Color]
+  implicit val colorOrder = Order.order[Color] {
+    case (White, Black) => Ordering.GT
+    case (Black, White) => Ordering.LT
+    case _              => Ordering.EQ
+  }
+  implicit val colorScalaOrdering = Order[Color].toScalaOrdering
+  implicit val colorShow = Show.showFromToString[Color]
 }

@@ -18,20 +18,18 @@ package eu.timepit.equites
 
 import scalaz._
 
-trait PlacedInstances {
-  implicit val placedInstance = new Functor[Placed] {
-    // Functor
-    def map[A, B](fa: Placed[A])(f: A => B): Placed[B] = fa.map(f)
-  }
-
-  implicit def placedEqual[A] = Equal.equalA[Placed[A]]
-  implicit def placedOrder[A] = Order.orderBy((p: Placed[A]) => p.square)
-  implicit def placedScalaOrdering[A] = placedOrder[A].toScalaOrdering
-  implicit def placedShow[A] = Show.showFromToString[Placed[A]]
+case class Placed[+A](elem: A, square: Square) {
+  def map[B](f: A => B): Placed[B] = copy(f(elem))
 }
 
 object Placed extends PlacedInstances
 
-case class Placed[+A](elem: A, square: Square) {
-  def map[B](f: A => B): Placed[B] = copy(f(elem))
+trait PlacedInstances {
+  implicit def placedEqual[A] = Equal.equalA[Placed[A]]
+  implicit val placedFunctor = new Functor[Placed] {
+    def map[A, B](fa: Placed[A])(f: A => B): Placed[B] = fa.map(f)
+  }
+  implicit def placedOrder[A] = Order.orderBy((p: Placed[A]) => p.square)
+  implicit def placedScalaOrdering[A] = placedOrder[A].toScalaOrdering
+  implicit def placedShow[A] = Show.showFromToString[Placed[A]]
 }

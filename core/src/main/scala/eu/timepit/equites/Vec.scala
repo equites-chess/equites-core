@@ -20,26 +20,6 @@ import scalaz._
 
 import util.Math._
 
-trait VecInstances {
-  implicit val vecEqual = Equal.equalA[Vec]
-  implicit val vecMonoid = Monoid.instance[Vec](_ + _, Vec(0, 0))
-  implicit val vecShow = Show.showFromToString[Vec]
-}
-
-object Vec extends VecInstances {
-  val zero = Monoid[Vec].zero
-
-  val front = Vec(0, 1)
-  val right = Vec(1, 0)
-  val back = -front
-  val left = -right
-
-  val frontRight = front + right
-  val backRight = back + right
-  val backLeft = back + left
-  val frontLeft = front + left
-}
-
 case class Vec(file: Int, rank: Int) extends PlayerPerspective[Vec] {
   def map(f: Int => Int): Vec = Vec(f(file), f(rank))
 
@@ -91,4 +71,24 @@ case class Vec(file: Int, rank: Int) extends PlayerPerspective[Vec] {
       f <- file to that.file
       r <- rank to that.rank
     } yield Vec(f, r)
+}
+
+object Vec extends VecInstances {
+  val zero = Monoid[Vec].zero
+
+  val front = Vec(0, 1)
+  val right = Vec(1, 0)
+  val back = -front
+  val left = -right
+
+  val frontRight = front + right
+  val backRight = back + right
+  val backLeft = back + left
+  val frontLeft = front + left
+}
+
+trait VecInstances {
+  implicit val vecEqual = Equal.equalA[Vec]
+  implicit val vecMonoid = Monoid.instance[Vec](_ + _, Vec(0, 0))
+  implicit val vecShow = Show.showFromToString[Vec]
 }

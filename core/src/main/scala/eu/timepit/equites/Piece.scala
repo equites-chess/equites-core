@@ -19,15 +19,6 @@ package eu.timepit.equites
 import scalaz._
 import Scalaz._
 
-object Piece {
-  def all: List[AnyPiece] = mkAllPieces(PieceType.all)
-  def allCastling: List[CastlingPiece] = mkAllPieces(PieceType.allCastling)
-  def allPromoted: List[PromotedPiece] = mkAllPieces(PieceType.allPromoted)
-
-  private[this] def mkAllPieces[T <: PieceType](pieceTypes: List[T]): List[Piece[Color, T]] =
-    ^(Color.all, pieceTypes)(Piece.apply)
-}
-
 case class Piece[+C <: Color, +T <: PieceType](color: C, pieceType: T) {
   type ColorT = C
   type PieceTypeT = T
@@ -55,6 +46,15 @@ case class Piece[+C <: Color, +T <: PieceType](color: C, pieceType: T) {
 
   private[this] def maybe[T1 <: PieceType](pType: T1): Option[Piece[C, T1]] =
     (pieceType == pType).option(Piece(color, pType))
+}
+
+object Piece {
+  def all: List[AnyPiece] = mkAllPieces(PieceType.all)
+  def allCastling: List[CastlingPiece] = mkAllPieces(PieceType.allCastling)
+  def allPromoted: List[PromotedPiece] = mkAllPieces(PieceType.allPromoted)
+
+  private[this] def mkAllPieces[T <: PieceType](pieceTypes: List[T]): List[Piece[Color, T]] =
+    ^(Color.all, pieceTypes)(Piece.apply)
 }
 
 trait PieceTypeAliases {

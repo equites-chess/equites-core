@@ -25,14 +25,60 @@ import util.Math._
 import util.Notation._
 import util.Rand._
 
-trait SquareInstances {
-  implicit val squareEqual = Equal.equalA[Square]
-  implicit val squareOrder = Order.order {
-    (s1: Square, s2: Square) =>
-      (s1.rank cmp s2.rank) mappend (s1.file cmp s2.file)
+case class Square(file: Int, rank: Int) {
+  def +(vec: Vec): Square = Square(file + vec.file, rank + vec.rank)
+  def -(vec: Vec): Square = this + -vec
+
+  def +(that: Square): Vec = Vec(file + that.file, rank + that.rank)
+  def -(that: Square): Vec = Vec(file - that.file, rank - that.rank)
+
+  def isValid: Boolean = fileRange.contains(file) && rankRange.contains(rank)
+  def asOption: Option[Square] = isValid.option(this)
+
+  /** Returns true if this `Square` is light. */
+  def isLight: Boolean = isOdd(sum)
+
+  /** Returns true if this `Square` is dark. */
+  def isDark: Boolean = isEven(sum)
+
+  /**
+   * Returns the [[http://en.wikipedia.org/wiki/Manhattan_distance L<sub>1</sub> distance]]
+   * of this `Square` to `that`.
+   */
+  def l1Dist(that: Square): Int = (this - that).l1Length
+
+  /**
+   * Returns the [[http://en.wikipedia.org/wiki/Chebyshev_distance L<sub>∞</sub> distance]]
+   * of this `Square` to `that`.
+   */
+  def lInfDist(that: Square): Int = (this - that).lInfLength
+
+  def isAdjacent(that: Square): Boolean = lInfDist(that) == 1
+
+  /** Returns true if this `Square` is on the same diagonal as `that`. */
+  def isSameDiagonal(that: Square): Boolean = (this - that).isDiagonal
+
+  /** Returns true if this `Square` is on the same file or rank as `that`. */
+  def isSameLine(that: Square): Boolean = (this - that).isStraight
+
+  def distToBoundary: Int = {
+    val fileDist = minDistToEndpoints(file, fileRange)
+    val rankDist = minDistToEndpoints(rank, rankRange)
+    math.min(fileDist, rankDist)
   }
-  implicit val squareScalaOrdering = Order[Square].toScalaOrdering
-  implicit val squareShow = Show.showFromToString[Square]
+
+  def up: Square = this + Vec.front
+  def down: Square = this + Vec.back
+
+  def right: Square = this + Vec.right
+  def left: Square = this + Vec.left
+
+  def rightmost: Square = copy(file = fileRange.end)
+  def leftmost: Square = copy(file = fileRange.start)
+
+  def toSeq: Seq[Int] = Seq(file, rank)
+
+  private[this] def sum = file + rank
 }
 
 object Square extends SquareInstances {
@@ -54,41 +100,11 @@ object Square extends SquareInstances {
   def topLeft: Square = Square(fileRange.start, rankRange.end)
 }
 
-case class Square(file: Int, rank: Int) {
-  def +(vec: Vec): Square = Square(file + vec.file, rank + vec.rank)
-  def -(vec: Vec): Square = this + -vec
-
-  def +(that: Square): Vec = Vec(file + that.file, rank + that.rank)
-  def -(that: Square): Vec = Vec(file - that.file, rank - that.rank)
-
-  def isValid: Boolean = fileRange.contains(file) && rankRange.contains(rank)
-  def asOption: Option[Square] = isValid.option(this)
-
-  /** Returns true if this `Square` is light. */
-  def isLight: Boolean = isOdd(sum)
-
-  /** Returns true if this `Square` is dark. */
-  def isDark: Boolean = isEven(sum)
-
-  def l1Dist(that: Square): Int = (this - that).l1Length
-  def lInfDist(that: Square): Int = (this - that).lInfLength
-
-  def distToBoundary: Int = {
-    val fileDist = minDistToEndpoints(file, fileRange)
-    val rankDist = minDistToEndpoints(rank, rankRange)
-    math.min(fileDist, rankDist)
+trait SquareInstances {
+  implicit val squareEqual = Equal.equalA[Square]
+  implicit val squareOrder = Order.order[Square] {
+    case (s1, s2) => (s1.rank cmp s2.rank) mappend (s1.file cmp s2.file)
   }
-
-  def up: Square = this + Vec.front
-  def down: Square = this + Vec.back
-
-  def right: Square = this + Vec.right
-  def left: Square = this + Vec.left
-
-  def rightmost: Square = copy(file = fileRange.end)
-  def leftmost: Square = copy(file = fileRange.start)
-
-  def toSeq: Seq[Int] = Seq(file, rank)
-
-  private[this] def sum = file + rank
+  implicit val squareScalaOrdering = Order[Square].toScalaOrdering
+  implicit val squareShow = Show.showFromToString[Square]
 }
