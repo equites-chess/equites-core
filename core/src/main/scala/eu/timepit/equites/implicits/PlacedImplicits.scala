@@ -17,8 +17,6 @@
 package eu.timepit.equites
 package implicits
 
-import SquareImplicits._
-
 object PlacedImplicits {
   implicit def placed2piece[A <: AnyPiece](placed: Placed[A]): A = placed.elem
 
@@ -29,6 +27,6 @@ object PlacedImplicits {
     def toLetter: String = appendSquareTo(util.PieceUtil.showLetter(self.elem))
 
     private def appendSquareTo(str: String): String =
-      str + self.square.toAlgebraic
+      str + util.SquareUtil.showAlgebraic(self.square)
   }
 }

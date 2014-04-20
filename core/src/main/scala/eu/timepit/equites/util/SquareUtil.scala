@@ -15,20 +15,16 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package eu.timepit.equites
-package implicits
+package util
 
-import util.Notation._
+import Notation._
 
-object SquareImplicits {
-  implicit final class RichSquare(val self: Square) extends AnyVal {
-    def toAlgebraic: String =
-      algebraicFileRange(self.file).toString +
-        algebraicRankRange(self.rank).toString
+object SquareUtil {
+  def showAlgebraic(square: Square): String =
+    algebraicFileRange(square.file).toString +
+      algebraicRankRange(square.rank).toString
 
-    def toNumeric: String =
-      numericFileRange(self.file).toString +
-        numericRankRange(self.rank).toString
-
-    def color: Color = if (self.isLight) White else Black
-  }
+  def showNumeric(square: Square): String =
+    numericFileRange(square.file).toString +
+      numericRankRange(square.rank).toString
 }

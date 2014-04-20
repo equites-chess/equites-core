@@ -17,8 +17,6 @@
 package eu.timepit.equites
 package util
 
-import implicits.SquareImplicits._
-
 /**
  * Represents a move in coordinate notation.
  */
@@ -29,7 +27,7 @@ case class CoordinateMove(
     extends DrawLike {
 
   def toAlgebraic: String =
-    from.toAlgebraic + to.toAlgebraic + promotedTo.fold("")(p => PieceUtil.showLowerCaseLetter(p.pieceType))
+    util.SquareUtil.showAlgebraic(from) + util.SquareUtil.showAlgebraic(to) + promotedTo.fold("")(p => PieceUtil.showLowerCaseLetter(p.pieceType))
 }
 
 object CoordinateMove {

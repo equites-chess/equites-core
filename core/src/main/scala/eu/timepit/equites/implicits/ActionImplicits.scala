@@ -17,8 +17,6 @@
 package eu.timepit.equites
 package implicits
 
-import SquareImplicits._
-
 object ActionImplicits {
   implicit final class RichAction(val self: Action) extends AnyVal {
     def toLongAlgebraic: String = toLongAlgebraicImpl(p => util.PieceUtil.showAlgebraic(p.pieceType))
@@ -52,9 +50,9 @@ object ActionImplicits {
     }
 
     private def algebraicSquares(move: MoveLike): Seq[String] =
-      move.squares.map(_.toAlgebraic)
+      move.squares.map(util.SquareUtil.showAlgebraic)
 
     private def numericSquares(move: MoveLike): Seq[String] =
-      move.squares.map(_.toNumeric)
+      move.squares.map(util.SquareUtil.showNumeric)
   }
 }

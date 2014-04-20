@@ -17,8 +17,6 @@
 package eu.timepit.equites
 package implicits
 
-import SquareImplicits._
-
 object GameStateImplicits {
   implicit final class RichGameState(val self: GameState) extends AnyVal {
     def toFen: String = {
@@ -37,7 +35,7 @@ object GameStateImplicits {
       val enPassantTarget = self.lastAction.flatMap {
         case move: Move => ActionOps.enPassantTarget(move)
         case _          => None
-      }.fold("-")(_.toAlgebraic)
+      }.fold("-")(util.SquareUtil.showAlgebraic)
 
       s"${util.BoardUtil.showFenPlacement(self.board)} ${color} ${castlings} ${enPassantTarget}" +
         s" ${self.halfmoveClock} ${self.moveNumber}"

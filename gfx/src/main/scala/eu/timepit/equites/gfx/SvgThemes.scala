@@ -19,8 +19,6 @@ package gfx
 
 import scala.xml._
 
-import implicits.SquareImplicits._
-
 trait SvgTheme {
   def pieceElem(piece: AnyPiece): Elem
   def tileElem(color: Color): Elem
@@ -58,7 +56,7 @@ object SvgThemes extends App {
   println(tiles.get(White).get.attribute("y"))
 
   def squareToUse(sq: Square): String = {
-    val idT = sq.toAlgebraic
+    val idT = util.SquareUtil.showAlgebraic(sq)
     val x = <use id="idT" xlink:href="#WhiteTile"/>
     sq.isDark
     ""

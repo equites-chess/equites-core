@@ -21,7 +21,6 @@ import org.specs2.ScalaCheck
 import org.specs2.mutable._
 import org.specs2.matcher.ParserMatchers
 
-import implicits.SquareImplicits._
 import util.CoordinateMove
 import util.PieceAbbr.Wiki._
 import util.SquareAbbr._
@@ -35,7 +34,7 @@ class UciParsersSpec extends Specification with ParserMatchers with ScalaCheck {
 
   "square" should {
     "succeed on random algebraic squares" in check {
-      (s: Square) => square should succeedOn(s.toAlgebraic).withResult(s)
+      (s: Square) => square should succeedOn(util.SquareUtil.showAlgebraic(s)).withResult(s)
     }
   }
 
