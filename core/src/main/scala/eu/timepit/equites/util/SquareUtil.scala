@@ -26,6 +26,12 @@ object SquareUtil {
   val numericFileRange: Range = incrRange(Rules.fileRange, 1)
   def numericRankRange: Range = algebraicRankRange
 
+  def fromAlgebraic(algebraicFile: Char, algebraicRank: Int): Square = {
+    val file = algebraicFileRange.indexOf(algebraicFile)
+    val rank = algebraicRankRange.indexOf(algebraicRank)
+    Square(file, rank)
+  }
+
   def showAlgebraic(square: Square): String =
     algebraicFileRange(square.file).toString +
       algebraicRankRange(square.rank).toString

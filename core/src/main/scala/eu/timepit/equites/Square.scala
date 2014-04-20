@@ -82,11 +82,8 @@ case class Square(file: Int, rank: Int) {
 }
 
 object Square extends SquareInstances {
-  def apply(algebraicFile: Char, algebraicRank: Int): Square = {
-    val file = algebraicFileRange.indexOf(algebraicFile)
-    val rank = algebraicRankRange.indexOf(algebraicRank)
-    Square(file, rank)
-  }
+  def apply(algebraicFile: Char, algebraicRank: Int): Square =
+    fromAlgebraic(algebraicFile, algebraicRank)
 
   def random: Rand[Square] =
     for {
