@@ -22,8 +22,8 @@ import scalaz.concurrent.Task
 
 import Rules._
 import util.Math._
-import util.Notation._
 import util.Rand._
+import util.SquareUtil._
 
 case class Square(file: Int, rank: Int) {
   def +(vec: Vec): Square = Square(file + vec.file, rank + vec.rank)

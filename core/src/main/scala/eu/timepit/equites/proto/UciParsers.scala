@@ -20,8 +20,8 @@ package proto
 import scala.util.parsing.combinator._
 
 import Uci._
-import util.Notation._
 import util.PieceAbbr.Textual._
+import util.SquareUtil._
 
 /**
  * Parsers for the Universal Chess Interface (UCI).

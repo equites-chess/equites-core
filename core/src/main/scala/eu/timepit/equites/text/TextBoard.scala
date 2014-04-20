@@ -17,8 +17,8 @@
 package eu.timepit.equites
 package text
 
-import util.Notation._
 import util.PieceUtil._
+import util.SquareUtil._
 
 // format: OFF
 trait AbstractTheme {

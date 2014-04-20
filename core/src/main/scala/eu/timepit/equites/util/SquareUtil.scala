@@ -17,9 +17,15 @@
 package eu.timepit.equites
 package util
 
-import Notation._
+import scala.collection.immutable.NumericRange
 
 object SquareUtil {
+  val algebraicFileRange: NumericRange[Char] = toCharRange(Rules.fileRange, 'a')
+  val algebraicRankRange: Range = incrRange(Rules.rankRange, 1)
+
+  val numericFileRange: Range = incrRange(Rules.fileRange, 1)
+  def numericRankRange: Range = algebraicRankRange
+
   def showAlgebraic(square: Square): String =
     algebraicFileRange(square.file).toString +
       algebraicRankRange(square.rank).toString
