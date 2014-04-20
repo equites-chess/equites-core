@@ -63,7 +63,9 @@ case class Vec(file: Int, rank: Int) extends PlayerPerspective[Vec] {
   /** Returns true if at least one of this `Vec`'s components is non-zero. */
   def notZero: Boolean = !isZero
 
+  /** Returns true if only one of this `Vec`'s components is zero. */
   def isStraight: Boolean = notZero && (file == 0 || rank == 0)
+
   def isDiagonal: Boolean = notZero && (file.abs == rank.abs)
 
   def to(that: Vec): Seq[Vec] =
@@ -74,17 +76,17 @@ case class Vec(file: Int, rank: Int) extends PlayerPerspective[Vec] {
 }
 
 object Vec extends VecInstances {
-  val zero = Monoid[Vec].zero
+  val zero: Vec = Monoid[Vec].zero
 
-  val front = Vec(0, 1)
-  val right = Vec(1, 0)
-  val back = -front
-  val left = -right
+  val front: Vec = Vec(0, 1)
+  val right: Vec = Vec(1, 0)
+  val back: Vec = -front
+  val left: Vec = -right
 
-  val frontRight = front + right
-  val backRight = back + right
-  val backLeft = back + left
-  val frontLeft = front + left
+  val frontRight: Vec = front + right
+  val backRight: Vec = back + right
+  val backLeft: Vec = back + left
+  val frontLeft: Vec = front + left
 }
 
 trait VecInstances {

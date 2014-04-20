@@ -78,7 +78,7 @@ case class Square(file: Int, rank: Int) {
 
   def toSeq: Seq[Int] = Seq(file, rank)
 
-  private[this] def sum = file + rank
+  private[this] def sum: Int = file + rank
 }
 
 object Square extends SquareInstances {
@@ -95,6 +95,9 @@ object Square extends SquareInstances {
     } yield Square(file, rank)
 
   def evalRandom: Task[Square] = eval(random)
+
+  def bottomRight: Square = Square(fileRange.end, rankRange.start)
+  def bottomLeft: Square = Square(fileRange.start, rankRange.start)
 
   def topRight: Square = Square(fileRange.end, rankRange.end)
   def topLeft: Square = Square(fileRange.start, rankRange.end)
