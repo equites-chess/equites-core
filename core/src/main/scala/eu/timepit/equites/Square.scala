@@ -62,8 +62,8 @@ case class Square(file: Int, rank: Int) {
   def isSameLine(that: Square): Boolean = (this - that).isStraight
 
   def distToBoundary: Int = {
-    val fileDist = minDistToEndpoints(file, fileRange)
-    val rankDist = minDistToEndpoints(rank, rankRange)
+    val fileDist = minDistToBoundaries(file, fileRange)
+    val rankDist = minDistToBoundaries(rank, rankRange)
     math.min(fileDist, rankDist)
   }
 
@@ -82,9 +82,6 @@ case class Square(file: Int, rank: Int) {
 }
 
 object Square extends SquareInstances {
-  def apply(algebraicFile: Char, algebraicRank: Int): Square =
-    fromAlgebraic(algebraicFile, algebraicRank)
-
   def random: Rand[Square] =
     for {
       file <- randRangeElem(fileRange)

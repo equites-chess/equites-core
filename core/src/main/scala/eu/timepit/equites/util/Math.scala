@@ -42,6 +42,6 @@ object Math {
   private def remBy2[I](i: I)(implicit I: Integral[I]): I =
     I.rem(i, I.fromInt(2))
 
-  def minDistToEndpoints(x: Int, range: Range): Int =
+  def minDistToBoundaries(x: Int, range: Range): Int =
     math.min(x - range.start, range.end - x)
 }

@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2013-2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@ package proto
 
 import scala.util.parsing.combinator._
 
-import Uci._
+import proto.Uci._
 import util.PieceAbbr.Textual._
 import util.SquareUtil._
 
@@ -42,7 +42,7 @@ object UciParsers extends RegexParsers {
   val algebraicRank: Parser[Int] = oneOf(algebraicRankRange) ^^ (_.toInt)
 
   def square: Parser[Square] = algebraicFile ~ algebraicRank ^^ {
-    case file ~ rank => Square(file, rank)
+    case file ~ rank => fromAlgebraic(file, rank)
   }
 
   def promotedPieceFn: Parser[Color => PromotedPiece] =
@@ -80,14 +80,14 @@ object UciParsers extends RegexParsers {
   def optionName: Parser[String] = """.*(?=\s+type)""".r
 
   def optionType: Parser[UciOption.Type] = "type" ~>
-    (optionTypeCheck |
-      optionTypeSpin |
-      optionTypeCombo |
-      optionTypeButton |
-      optionTypeString)
+    (optionTypeCheck
+      | optionTypeSpin
+      | optionTypeCombo
+      | optionTypeButton
+      | optionTypeString)
 
   def optionTypeCheck: Parser[UciOption.Check] =
-    "check" ~> "default" ~> boolean ^^ (UciOption.Check)
+    "check" ~> "default" ~> boolean ^^ UciOption.Check
 
   def optionTypeSpin: Parser[UciOption.Spin] =
     "spin" ~> "default" ~> int ~ ("min" ~> int) ~ ("max" ~> int) ^^ {
@@ -103,7 +103,7 @@ object UciParsers extends RegexParsers {
     "button" ^^^ UciOption.Button
 
   def optionTypeString: Parser[UciOption.StringType] =
-    "string" ~> "default" ~> string ^^ (UciOption.StringType)
+    "string" ~> "default" ~> string ^^ UciOption.StringType
 
   def response: Parser[Response] = id | uciok | readyok | bestmove | option
 

@@ -25,33 +25,6 @@ import Square._
 import ArbitraryInstances._
 
 class SquareSpec extends Specification with ScalaCheck {
-  /*
-  "Square companion" should {
-    "correctly perform validCoordinates" in {
-      validCoordinates( 4,  4) must beTrue
-      validCoordinates( 0,  0) must beTrue
-      validCoordinates( 7,  7) must beTrue
-      validCoordinates(-1,  4) must beFalse
-      validCoordinates( 1,  8) must beFalse
-      validCoordinates( 1, -2) must beFalse
-    }
-
-    "correctly calculate l1Dist and lInfDist" in {
-      val s1 = Square(1, 2)
-      val s2 = Square(4, 3)
-
-      l1Dist(s1, s2)   must_== 4
-      lInfDist(s1, s2) must_== 3
-
-      val s3 = Square(0, 0)
-      val s4 = Square(1, 1)
-
-      l1Dist(s3, s4)   must_== 2
-      lInfDist(s3, s4) must_== 1
-    }
-  }
-  */
-
   "Square" should {
     "satisfy the Equal laws" in check(equal.laws[Square])
     "satisfy the Order laws" in check(order.laws[Square])
@@ -112,14 +85,6 @@ class SquareSpec extends Specification with ScalaCheck {
 
     "up.right.down.left must be the identity" in check {
       (sq: Square) => sq.up.right.down.left must_== sq
-    }
-
-    "be constructible with algebraic arguments" in {
-      Square(0, 0) must_== Square('a', 1)
-      Square(7, 7) must_== Square('h', 8)
-
-      Square('i', 1).isValid must beFalse
-      Square('a', 9).isValid must beFalse
     }
   }
 }
