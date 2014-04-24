@@ -33,6 +33,8 @@ case class Square(file: Int, rank: Int) {
   def -(that: Square): Vec = Vec(file - that.file, rank - that.rank)
 
   def isValid: Boolean = fileRange.contains(file) && rankRange.contains(rank)
+
+  /** Returns `Some(this)` if this `Square` is valid and `None` otherwise. */
   def asOption: Option[Square] = isValid.option(this)
 
   /** Returns true if this `Square` is light. */

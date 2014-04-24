@@ -31,7 +31,10 @@ case class Vec(file: Int, rank: Int) extends PlayerPerspective[Vec] {
   def *(n: Int): Vec = map(_ * n)
   def /(n: Int): Vec = map(_ / n)
 
+  /** Returns the greatest value of this `Vec`'s components. */
   def max: Int = math.max(file, rank)
+
+  /** Returns the smallest value of this `Vec`'s components. */
   def min: Int = math.min(file, rank)
 
   /** Returns the sum of this `Vec`'s components. */
