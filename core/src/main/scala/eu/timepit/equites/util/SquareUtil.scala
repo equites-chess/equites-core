@@ -19,11 +19,14 @@ package util
 
 import scala.collection.immutable.NumericRange
 
-object SquareUtil {
-  val algebraicFileRange: NumericRange[Char] = toCharRange(Rules.fileRange, 'a')
-  val algebraicRankRange: Range = incrRange(Rules.rankRange, 1)
+import Rules._
+import util.Rand._
 
-  val numericFileRange: Range = incrRange(Rules.fileRange, 1)
+object SquareUtil {
+  val algebraicFileRange: NumericRange[Char] = toCharRange(fileRange, 'a')
+  val algebraicRankRange: Range = incrRange(rankRange, 1)
+
+  val numericFileRange: Range = incrRange(fileRange, 1)
   def numericRankRange: Range = algebraicRankRange
 
   def fromAlgebraic(algebraicFile: Char, algebraicRank: Int): Square = {
@@ -31,6 +34,12 @@ object SquareUtil {
     val rank = algebraicRankRange.indexOf(algebraicRank)
     Square(file, rank)
   }
+
+  def randomSquare: Rand[Square] =
+    for {
+      file <- randRangeElem(fileRange)
+      rank <- randRangeElem(rankRange)
+    } yield Square(file, rank)
 
   def showAlgebraic(square: Square): String =
     algebraicFileRange(square.file).toString +

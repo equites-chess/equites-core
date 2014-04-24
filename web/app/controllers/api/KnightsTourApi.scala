@@ -23,6 +23,7 @@ import play.api.mvc.Results._
 
 import eu.timepit.equites._
 import eu.timepit.equites.problem.KnightsTour._
+import scala.util.Random
 
 object KnightsTourApi {
   def staticTourAsJson = genericTourAsJson(staticTour)
@@ -31,7 +32,7 @@ object KnightsTourApi {
   def randomWarnsdorffTourAsJson = genericTourAsJson(randomWarnsdorffTour)
 
   def genericTourAsJson(tourFun: Square => Stream[Square]) = Action {
-    Ok(toJson(tourFun(Square.evalRandom.run).map(_.toSeq)))
+    Ok(toJson(tourFun(util.SquareUtil.randomSquare.eval(Random)).map(_.toSeq)))
       .withHeaders(("Cache-Control", "no-cache"))
   }
 }

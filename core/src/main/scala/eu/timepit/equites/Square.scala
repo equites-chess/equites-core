@@ -17,20 +17,17 @@
 package eu.timepit.equites
 
 import scalaz._
-import Scalaz._
-import scalaz.concurrent.Task
+import scalaz.Scalaz._
 
 import Rules._
 import util.Math._
-import util.Rand._
-import util.SquareUtil._
 
 case class Square(file: Int, rank: Int) {
   def +(vec: Vec): Square = Square(file + vec.file, rank + vec.rank)
   def -(vec: Vec): Square = this + -vec
 
   def +(that: Square): Vec = Vec(file + that.file, rank + that.rank)
-  def -(that: Square): Vec = Vec(file - that.file, rank - that.rank)
+  def -(that: Square): Vec = this + -that
 
   def isValid: Boolean = fileRange.contains(file) && rankRange.contains(rank)
 
@@ -81,17 +78,11 @@ case class Square(file: Int, rank: Int) {
   def toSeq: Seq[Int] = Seq(file, rank)
 
   private[this] def sum: Int = file + rank
+
+  private def unary_- : Square = Square(-file, -rank)
 }
 
 object Square extends SquareInstances {
-  def random: Rand[Square] =
-    for {
-      file <- randRangeElem(fileRange)
-      rank <- randRangeElem(rankRange)
-    } yield Square(file, rank)
-
-  def evalRandom: Task[Square] = eval(random)
-
   def bottomRight: Square = Square(fileRange.end, rankRange.start)
   def bottomLeft: Square = Square(fileRange.start, rankRange.start)
 
