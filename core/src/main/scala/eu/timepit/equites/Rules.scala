@@ -16,6 +16,8 @@
 
 package eu.timepit.equites
 
+import scalaz.std.stream
+
 import implicits.PlacedImplicits._
 
 object Rules {
@@ -142,8 +144,7 @@ object Rules {
   }
 
   def squaresInDirection(from: Square, direction: Vec): Stream[Square] =
-    scalaz.std.stream.unfold(from)(sq => (sq + direction).map(x => (x, x)))
-  //Stream.iterate(from)(_ + direction).tail.takeWhile(_.isValid)
+    stream.unfold(from)(sq => (sq + direction).map(x => (x, x)))
 
   def possibleSquares(placed: Placed[AnyPiece]): Stream[Square] = {
     val (directions, dist) = movementTypeOf(placed)

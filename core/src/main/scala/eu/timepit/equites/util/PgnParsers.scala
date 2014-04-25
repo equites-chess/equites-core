@@ -85,10 +85,8 @@ object PgnParsers extends RegexParsers {
   def numericAnnotationGlyph: Parser[Int] =
     "$" ~> integer
 
-  def terminationMarker: Parser[String] = {
-    import Result._
-    WhiteWon.toString | BlackWon.toString | Draw.toString | Unknown.toString
-  }
+  def terminationMarker: Parser[Result] =
+    Result.all.map(r => ResultUtil.showPgnMarker(r) ^^^ r).reduce(_ | _)
 
   def moveTextElem: Parser[Any] =
     moveNumberIndicator | sanMove | moveAnnotation | numericAnnotationGlyph

@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2011, 2013-2014 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -15,11 +15,16 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package eu.timepit.equites
+package util
 
-sealed trait Side
-case object Kingside extends Side
-case object Queenside extends Side
+import Result._
 
-object Side {
-  def all: List[Side] = List(Kingside, Queenside)
+object ResultUtil {
+  def showPgnMarker(result: Result): String =
+    result match {
+      case WhiteWon => "1-0"
+      case BlackWon => "0-1"
+      case Draw     => "1/2-1/2"
+      case Other    => "*"
+    }
 }

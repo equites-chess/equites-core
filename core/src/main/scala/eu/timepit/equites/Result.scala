@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2013-2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,13 +16,15 @@
 
 package eu.timepit.equites
 
-sealed abstract class Result(str: String) {
-  override def toString: String = str
-}
+sealed trait Result
 
 object Result {
-  case object WhiteWon extends Result("1-0")
-  case object BlackWon extends Result("0-1")
-  case object Draw extends Result("1/2-1/2")
-  case object Unknown extends Result("*")
+  // format: OFF
+  case object WhiteWon extends Result
+  case object BlackWon extends Result
+  case object Draw     extends Result
+  case object Other    extends Result
+  // format: ON
+
+  def all: List[Result] = List(WhiteWon, BlackWon, Draw, Other)
 }
