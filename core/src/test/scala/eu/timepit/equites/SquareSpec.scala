@@ -30,61 +30,40 @@ class SquareSpec extends Specification with ScalaCheck {
     "satisfy the Order laws" in check(order.laws[Square])
 
     "correctly perform +(Vec) and -(Vec)" in {
-      Square(1, 1) + Vec(1, 1) must_== Square(2, 2)
-      Square(1, 1) - Vec(-1, -1) must_== Square(2, 2)
-      Square(1, 1) - Vec(1, 1) must_== Square(0, 0)
-      Square(1, 1) + Vec(-1, -1) must_== Square(0, 0)
-
-      (Square(0, 0) - Vec(1, 1)).isValid must beFalse
-      (Square(7, 7) + Vec(1, 1)).isValid must beFalse
+      Square.unsafeFrom(1, 1) + Vec(1, 1) must_== Some(Square.unsafeFrom(2, 2))
+      Square.unsafeFrom(1, 1) - Vec(-1, -1) must_== Some(Square.unsafeFrom(2, 2))
+      Square.unsafeFrom(1, 1) - Vec(1, 1) must_== Some(Square.unsafeFrom(0, 0))
+      Square.unsafeFrom(1, 1) + Vec(-1, -1) must_== Some(Square.unsafeFrom(0, 0))
     }
 
     "correctly perform +(Square)" in {
-      Square(1, 1) + Square(1, 1) must_== Vec(2, 2)
-      Square(2, 2) + Square(1, 1) must_== Vec(3, 3)
-      Square(2, 1) + Square(0, 0) must_== Vec(2, 1)
-      Square(0, 0) + Square(3, 4) must_== Vec(3, 4)
+      Square.unsafeFrom(1, 1) + Square.unsafeFrom(1, 1) must_== Vec(2, 2)
+      Square.unsafeFrom(2, 2) + Square.unsafeFrom(1, 1) must_== Vec(3, 3)
+      Square.unsafeFrom(2, 1) + Square.unsafeFrom(0, 0) must_== Vec(2, 1)
+      Square.unsafeFrom(0, 0) + Square.unsafeFrom(3, 4) must_== Vec(3, 4)
     }
 
     "correctly perform -(Square)" in {
-      Square(1, 1) - Square(1, 1) must_== Vec(0, 0)
-      Square(2, 2) - Square(1, 1) must_== Vec(1, 1)
-      Square(2, 1) - Square(0, 0) must_== Vec(2, 1)
-      Square(0, 0) - Square(3, 4) must_== Vec(-3, -4)
-    }
-
-    "correctly perform isValid" in {
-      Square(0, 0).isValid must beTrue
-      Square(0, 7).isValid must beTrue
-      Square(7, 0).isValid must beTrue
-      Square(7, 7).isValid must beTrue
-
-      Square(-1, 0).isValid must beFalse
-      Square(0, -1).isValid must beFalse
-      Square(-1, -1).isValid must beFalse
-      Square(8, 0).isValid must beFalse
-      Square(0, 8).isValid must beFalse
-      Square(8, 8).isValid must beFalse
+      Square.unsafeFrom(1, 1) - Square.unsafeFrom(1, 1) must_== Vec(0, 0)
+      Square.unsafeFrom(2, 2) - Square.unsafeFrom(1, 1) must_== Vec(1, 1)
+      Square.unsafeFrom(2, 1) - Square.unsafeFrom(0, 0) must_== Vec(2, 1)
+      Square.unsafeFrom(0, 0) - Square.unsafeFrom(3, 4) must_== Vec(-3, -4)
     }
 
     "correctly perform isLight and isDark" in {
-      Square(0, 0).isDark must beTrue
-      Square(7, 7).isDark must beTrue
-      Square(0, 2).isDark must beTrue
-      Square(2, 0).isDark must beTrue
+      Square.unsafeFrom(0, 0).isDark must beTrue
+      Square.unsafeFrom(7, 7).isDark must beTrue
+      Square.unsafeFrom(0, 2).isDark must beTrue
+      Square.unsafeFrom(2, 0).isDark must beTrue
 
-      Square(0, 1).isLight must beTrue
-      Square(0, 3).isLight must beTrue
-      Square(1, 0).isLight must beTrue
-      Square(3, 0).isLight must beTrue
+      Square.unsafeFrom(0, 1).isLight must beTrue
+      Square.unsafeFrom(0, 3).isLight must beTrue
+      Square.unsafeFrom(1, 0).isLight must beTrue
+      Square.unsafeFrom(3, 0).isLight must beTrue
     }
 
     "correctly calculate the distance to the board boundary" in check {
       (sq: Square) => sq.distToBoundary must beBetween(0, 3)
-    }
-
-    "up.right.down.left must be the identity" in check {
-      (sq: Square) => sq.up.right.down.left must_== sq
     }
   }
 }

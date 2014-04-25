@@ -29,17 +29,20 @@ object SquareUtil {
   val numericFileRange: Range = incrRange(fileRange, 1)
   def numericRankRange: Range = algebraicRankRange
 
-  def fromAlgebraic(algebraicFile: Char, algebraicRank: Int): Square = {
+  def fromAlgebraic(algebraicFile: Char, algebraicRank: Int): Option[Square] = {
     val file = algebraicFileRange.indexOf(algebraicFile)
     val rank = algebraicRankRange.indexOf(algebraicRank)
-    Square(file, rank)
+    Square.from(file, rank)
   }
 
+  /**
+   * @throws NoSuchElementException
+   */
+  def unsafeFromAlgebraic(algebraicFile: Char, algebraicRank: Int): Square =
+    fromAlgebraic(algebraicFile, algebraicRank).get
+
   def randomSquare: Rand[Square] =
-    for {
-      file <- randRangeElem(fileRange)
-      rank <- randRangeElem(rankRange)
-    } yield Square(file, rank)
+    randElem(allSquaresSeq).map(_.get)
 
   def showAlgebraic(square: Square): String =
     algebraicFileRange(square.file).toString +

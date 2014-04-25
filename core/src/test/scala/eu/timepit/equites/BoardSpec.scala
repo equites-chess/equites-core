@@ -22,36 +22,36 @@ import util.PieceAbbr.Wiki._
 
 class BoardSpec extends Specification {
   "Board" should {
-    val board = Board(Square(0, 0) -> pl, Square(1, 1) -> pd)
+    val board = Board(Square.unsafeFrom(0, 0) -> pl, Square.unsafeFrom(1, 1) -> pd)
 
     "return placed pieces" in {
-      board.getPlaced(Square(0, 0)) must beSome(Placed(pl, Square(0, 0)))
-      board.getPlaced(Square(1, 0)) must beNone
+      board.getPlaced(Square.unsafeFrom(0, 0)) must beSome(Placed(pl, Square.unsafeFrom(0, 0)))
+      board.getPlaced(Square.unsafeFrom(1, 0)) must beNone
     }
 
     "return sequences of placed pieces" in {
-      board.getPlaced(Seq(Square(0, 0), Square(1, 0), Square(1, 1))) must_==
-        Seq(Placed(pl, Square(0, 0)), Placed(pd, Square(1, 1)))
+      board.getPlaced(Seq(Square.unsafeFrom(0, 0), Square.unsafeFrom(1, 0), Square.unsafeFrom(1, 1))) must_==
+        Seq(Placed(pl, Square.unsafeFrom(0, 0)), Placed(pd, Square.unsafeFrom(1, 1)))
     }
 
     "report occupied and vacant squares" in {
-      board.isOccupied(Square(0, 0)) must beTrue
-      board.isVacant(Square(0, 0)) must beFalse
+      board.isOccupied(Square.unsafeFrom(0, 0)) must beTrue
+      board.isVacant(Square.unsafeFrom(0, 0)) must beFalse
 
-      board.isVacant(Square(1, 0)) must beTrue
-      board.isOccupied(Square(1, 0)) must beFalse
+      board.isVacant(Square.unsafeFrom(1, 0)) must beTrue
+      board.isOccupied(Square.unsafeFrom(1, 0)) must beFalse
     }
 
     "report occupied squares by piece" in {
-      board.isOccupiedBy(Square(0, 0), pl) must beTrue
-      board.isOccupiedBy(Square(0, 0), pd) must beFalse
+      board.isOccupiedBy(Square.unsafeFrom(0, 0), pl) must beTrue
+      board.isOccupiedBy(Square.unsafeFrom(0, 0), pd) must beFalse
 
-      board.isOccupiedBy(Square(1, 0), pl) must beFalse
+      board.isOccupiedBy(Square.unsafeFrom(1, 0), pl) must beFalse
     }
 
     "return all placed pieces" in {
       board.placedPieces.toSet must_==
-        Set(Placed(pl, Square(0, 0)), Placed(pd, Square(1, 1)))
+        Set(Placed(pl, Square.unsafeFrom(0, 0)), Placed(pd, Square.unsafeFrom(1, 1)))
     }
 
     def checkAction(before: Board, after: Board, action: Action) = {
@@ -65,30 +65,30 @@ class BoardSpec extends Specification {
     }
 
     "process and reverse moves" in {
-      val before = Board(Square(0, 0) -> ql)
-      val after = Board(Square(7, 7) -> ql)
-      val action = Move(ql, Square(0, 0), Square(7, 7))
+      val before = Board(Square.unsafeFrom(0, 0) -> ql)
+      val after = Board(Square.unsafeFrom(7, 7) -> ql)
+      val action = Move(ql, Square.unsafeFrom(0, 0), Square.unsafeFrom(7, 7))
       checkAction(before, after, action)
     }
 
     "process and reverse promotions" in {
-      val before = Board(Square(0, 6) -> pl)
-      val after = Board(Square(0, 7) -> ql)
-      val action = Promotion(pl, Square(0, 6), Square(0, 7), ql)
+      val before = Board(Square.unsafeFrom(0, 6) -> pl)
+      val after = Board(Square.unsafeFrom(0, 7) -> ql)
+      val action = Promotion(pl, Square.unsafeFrom(0, 6), Square.unsafeFrom(0, 7), ql)
       checkAction(before, after, action)
     }
 
     "process and reverse captures" in {
-      val before = Board(Square(0, 0) -> ql, Square(7, 7) -> pd)
-      val after = Board(Square(7, 7) -> ql)
-      val action = Capture(ql, Square(0, 0), Square(7, 7), pd)
+      val before = Board(Square.unsafeFrom(0, 0) -> ql, Square.unsafeFrom(7, 7) -> pd)
+      val after = Board(Square.unsafeFrom(7, 7) -> ql)
+      val action = Capture(ql, Square.unsafeFrom(0, 0), Square.unsafeFrom(7, 7), pd)
       checkAction(before, after, action)
     }
 
     "process and reverse captures and promotions" in {
-      val before = Board(Square(0, 6) -> pl, Square(1, 7) -> nd)
-      val after = Board(Square(1, 7) -> ql)
-      val action = CaptureAndPromotion(pl, Square(0, 6), Square(1, 7), nd, ql)
+      val before = Board(Square.unsafeFrom(0, 6) -> pl, Square.unsafeFrom(1, 7) -> nd)
+      val after = Board(Square.unsafeFrom(1, 7) -> ql)
+      val action = CaptureAndPromotion(pl, Square.unsafeFrom(0, 6), Square.unsafeFrom(1, 7), nd, ql)
       checkAction(before, after, action)
     }
 

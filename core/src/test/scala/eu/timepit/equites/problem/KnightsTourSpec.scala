@@ -36,13 +36,13 @@ class KnightsTourSpec extends Specification {
 
   "staticTour" should {
     "not generate a complete tour" in {
-      isComplete(staticTour(Square(0, 0))) must beFalse
+      isComplete(staticTour(Square.unsafeFrom(0, 0))) must beFalse
     }
   }
 
   "randomTour" should {
     "not generate a complete tour" in {
-      isComplete(randomTour(Square(0, 0))) must beFalse
+      isComplete(randomTour(Square.unsafeFrom(0, 0))) must beFalse
     }
   }
 

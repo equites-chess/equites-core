@@ -24,24 +24,24 @@ import util.PieceAbbr.Wiki._
 
 class ActionImplicitsSpec extends Specification {
   "RichAction" should {
-    val moveWhite = Move(ql, Square(0, 0), Square(7, 7))
-    val moveBlack = Move(qd, Square(0, 0), Square(7, 7))
+    val moveWhite = Move(ql, Square.unsafeFrom(0, 0), Square.unsafeFrom(7, 7))
+    val moveBlack = Move(qd, Square.unsafeFrom(0, 0), Square.unsafeFrom(7, 7))
 
-    val promoWhite = Promotion(pl, Square(3, 6), Square(3, 7), ql)
-    val promoBlack = Promotion(pd, Square(3, 1), Square(3, 0), qd)
+    val promoWhite = Promotion(pl, Square.unsafeFrom(3, 6), Square.unsafeFrom(3, 7), ql)
+    val promoBlack = Promotion(pd, Square.unsafeFrom(3, 1), Square.unsafeFrom(3, 0), qd)
 
-    val captWhite = Capture(nl, Square(0, 0), Square(2, 1), pd)
-    val captBlack = Capture(nd, Square(0, 0), Square(2, 1), pl)
+    val captWhite = Capture(nl, Square.unsafeFrom(0, 0), Square.unsafeFrom(2, 1), pd)
+    val captBlack = Capture(nd, Square.unsafeFrom(0, 0), Square.unsafeFrom(2, 1), pl)
 
-    val captPromoWhite = CaptureAndPromotion(pl, Square(0, 6),
-      Square(1, 7), kd, ql)
-    val captPromoBlack = CaptureAndPromotion(pd, Square(0, 1),
-      Square(1, 0), kl, qd)
+    val captPromoWhite = CaptureAndPromotion(pl, Square.unsafeFrom(0, 6),
+      Square.unsafeFrom(1, 7), kd, ql)
+    val captPromoBlack = CaptureAndPromotion(pd, Square.unsafeFrom(0, 1),
+      Square.unsafeFrom(1, 0), kl, qd)
 
-    val enPassantWhite = EnPassant(pl, Square(4, 4), Square(5, 5),
-      pd, Square(5, 4))
-    val enPassantBlack = EnPassant(pd, Square(1, 3), Square(0, 2),
-      pl, Square(0, 3))
+    val enPassantWhite = EnPassant(pl, Square.unsafeFrom(4, 4), Square.unsafeFrom(5, 5),
+      pd, Square.unsafeFrom(5, 4))
+    val enPassantBlack = EnPassant(pd, Square.unsafeFrom(1, 3), Square.unsafeFrom(0, 2),
+      pl, Square.unsafeFrom(0, 3))
 
     "correctly perform toNumeric" in {
       moveWhite.toNumeric must_== "1188"

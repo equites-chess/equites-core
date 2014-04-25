@@ -42,7 +42,7 @@ object UciParsers extends RegexParsers {
   val algebraicRank: Parser[Int] = oneOf(algebraicRankRange) ^^ (_.toInt)
 
   def square: Parser[Square] = algebraicFile ~ algebraicRank ^^ {
-    case file ~ rank => fromAlgebraic(file, rank)
+    case file ~ rank => unsafeFromAlgebraic(file, rank)
   }
 
   def promotedPieceFn: Parser[Color => PromotedPiece] =
@@ -50,13 +50,12 @@ object UciParsers extends RegexParsers {
 
   def coordinateMove: Parser[util.CoordinateMove] =
     square ~ square ~ promotedPieceFn.? ^^ {
-      case from ~ to ~ pieceFn => {
+      case from ~ to ~ pieceFn =>
         val piece = pieceFn.map { piece =>
           val color = Color.guessFrom(to - from).getOrElse(White)
           piece(color)
         }
         util.CoordinateMove(from, to, piece)
-      }
     }
 
   def id: Parser[Id] = "id" ~> symbol ~ string ^^ {

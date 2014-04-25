@@ -24,45 +24,45 @@ import Rules._
 class RulesSpec extends Specification {
   "Rules" should {
     "correctly perform squaresInDirection" in {
-      squaresInDirection(Square(3, 3), Vec(1, 1)).toList must_==
-        List(Square(4, 4), Square(5, 5), Square(6, 6), Square(7, 7))
-      squaresInDirection(Square(3, 3), Vec(-1, 0)).toList must_==
-        List(Square(2, 3), Square(1, 3), Square(0, 3))
-      squaresInDirection(Square(3, 3), Vec(3, 1)).toList must_==
-        List(Square(6, 4))
+      squaresInDirection(Square.unsafeFrom(3, 3), Vec(1, 1)).toList must_==
+        List(Square.unsafeFrom(4, 4), Square.unsafeFrom(5, 5), Square.unsafeFrom(6, 6), Square.unsafeFrom(7, 7))
+      squaresInDirection(Square.unsafeFrom(3, 3), Vec(-1, 0)).toList must_==
+        List(Square.unsafeFrom(2, 3), Square.unsafeFrom(1, 3), Square.unsafeFrom(0, 3))
+      squaresInDirection(Square.unsafeFrom(3, 3), Vec(3, 1)).toList must_==
+        List(Square.unsafeFrom(6, 4))
     }
 
     "correctly perform possibleSquares" in {
-      possibleSquares(Placed(kl, Square(3, 2))).toSet must_==
-        Set(Square(3, 3), Square(4, 3), Square(4, 2), Square(4, 1),
-          Square(3, 1), Square(2, 1), Square(2, 2), Square(2, 3))
+      possibleSquares(Placed(kl, Square.unsafeFrom(3, 2))).toSet must_==
+        Set(Square.unsafeFrom(3, 3), Square.unsafeFrom(4, 3), Square.unsafeFrom(4, 2), Square.unsafeFrom(4, 1),
+          Square.unsafeFrom(3, 1), Square.unsafeFrom(2, 1), Square.unsafeFrom(2, 2), Square.unsafeFrom(2, 3))
 
-      possibleSquares(Placed(pl, Square(3, 3))).toSet must_==
-        Set(Square(3, 4))
-      possibleSquares(Placed(pl, Square(0, 1))).toSet must_==
-        Set(Square(0, 2), Square(0, 3))
-      possibleSquares(Placed(pd, Square(0, 6))).toSet must_==
-        Set(Square(0, 5), Square(0, 4))
+      possibleSquares(Placed(pl, Square.unsafeFrom(3, 3))).toSet must_==
+        Set(Square.unsafeFrom(3, 4))
+      possibleSquares(Placed(pl, Square.unsafeFrom(0, 1))).toSet must_==
+        Set(Square.unsafeFrom(0, 2), Square.unsafeFrom(0, 3))
+      possibleSquares(Placed(pd, Square.unsafeFrom(0, 6))).toSet must_==
+        Set(Square.unsafeFrom(0, 5), Square.unsafeFrom(0, 4))
     }
 
     "correctly perform possibleSquares for Bishop" in {
-      possibleSquares(Placed(bl, Square(3, 3))).toSet must_==
-        Set(Square(0, 0), Square(1, 1), Square(2, 2), Square(4, 4),
-          Square(5, 5), Square(6, 6), Square(7, 7),
-          Square(0, 6), Square(1, 5), Square(2, 4), Square(4, 2),
-          Square(5, 1), Square(6, 0))
+      possibleSquares(Placed(bl, Square.unsafeFrom(3, 3))).toSet must_==
+        Set(Square.unsafeFrom(0, 0), Square.unsafeFrom(1, 1), Square.unsafeFrom(2, 2), Square.unsafeFrom(4, 4),
+          Square.unsafeFrom(5, 5), Square.unsafeFrom(6, 6), Square.unsafeFrom(7, 7),
+          Square.unsafeFrom(0, 6), Square.unsafeFrom(1, 5), Square.unsafeFrom(2, 4), Square.unsafeFrom(4, 2),
+          Square.unsafeFrom(5, 1), Square.unsafeFrom(6, 0))
     }
 
     "determine associated castlings for placed pieces" in {
-      associatedCastlings(Placed(rl, Square(0, 0))) must_==
+      associatedCastlings(Placed(rl, Square.unsafeFrom(0, 0))) must_==
         Seq(CastlingLong(White))
-      associatedCastlings(Placed(rl, Square(3, 5))) must_==
+      associatedCastlings(Placed(rl, Square.unsafeFrom(3, 5))) must_==
         Seq.empty
-      associatedCastlings(Placed(rd, Square(7, 7))) must_==
+      associatedCastlings(Placed(rd, Square.unsafeFrom(7, 7))) must_==
         Seq(CastlingShort(Black))
-      associatedCastlings(Placed(kd, Square(4, 2))) must_==
+      associatedCastlings(Placed(kd, Square.unsafeFrom(4, 2))) must_==
         Seq(CastlingShort(Black), CastlingLong(Black))
-      associatedCastlings(Placed(ql, Square(0, 0))) must_==
+      associatedCastlings(Placed(ql, Square.unsafeFrom(0, 0))) must_==
         Seq.empty
     }
   }

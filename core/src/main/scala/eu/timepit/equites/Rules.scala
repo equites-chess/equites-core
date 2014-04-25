@@ -23,8 +23,8 @@ object Rules {
   val rankRange = 0 to 7
   val maxLength = math.max(fileRange.length, rankRange.length) - 1
 
-  def fileSquares(file: Int): Seq[Square] = rankRange.map(Square(file, _))
-  def rankSquares(rank: Int): Seq[Square] = fileRange.map(Square(_, rank))
+  def fileSquares(file: Int): Seq[Square] = rankRange.map(Square.from(file, _)).flatten
+  def rankSquares(rank: Int): Seq[Square] = fileRange.map(Square.from(_, rank)).flatten
 
   val allSquaresSeq: Seq[Square] = rankRange.flatMap(rankSquares)
   val allSquaresSet: Set[Square] = allSquaresSeq.toSet
@@ -39,12 +39,12 @@ object Rules {
     def startingSquaresBy(color: Color): Map[AnyPiece, List[Square]] = {
       val backRank = backRankBy(color)
       val pawnRank = pawnRankBy(color)
-      Map(Piece(color, King) -> List(Square(kingFile, backRank)),
-        Piece(color, Queen) -> List(Square(queenFile, backRank)),
-        Piece(color, Rook) -> rookFiles.map(Square(_, backRank)),
-        Piece(color, Bishop) -> bishopFiles.map(Square(_, backRank)),
-        Piece(color, Knight) -> knightFiles.map(Square(_, backRank)),
-        Piece(color, Pawn) -> fileRange.map(Square(_, pawnRank)).toList)
+      Map(Piece(color, King) -> Square.from(kingFile, backRank).toList,
+        Piece(color, Queen) -> Square.from(queenFile, backRank).toList,
+        Piece(color, Rook) -> rookFiles.map(Square.from(_, backRank)).flatten,
+        Piece(color, Bishop) -> bishopFiles.map(Square.from(_, backRank)).flatten,
+        Piece(color, Knight) -> knightFiles.map(Square.from(_, backRank)).flatten,
+        Piece(color, Pawn) -> fileRange.map(Square.from(_, pawnRank)).flatten.toList)
     }
     Color.all.map(startingSquaresBy).reduce(_ ++ _)
   }
@@ -56,7 +56,7 @@ object Rules {
     enPassantRankBy(placed.color) == placed.square.rank
 
   val castlingSquares: Map[(Side, CastlingPiece), (Square, Square)] = {
-    def castlingSquaresFor(side: Side, piece: CastlingPiece): (Square, Square) = {
+    def castlingSquaresFor(side: Side, piece: CastlingPiece): (Option[Square], Option[Square]) = {
       val rookFile = if (side == Kingside) rookFiles(1) else rookFiles(0)
       val (fromFile, pieceOffset) = piece.pieceType match {
         case King => (kingFile, 2)
@@ -67,13 +67,16 @@ object Rules {
       val toFile = kingFile + pieceOffset * leftOrRight
       val rank = backRankBy(piece.color)
 
-      (Square(fromFile, rank), Square(toFile, rank))
+      (Square.from(fromFile, rank), Square.from(toFile, rank))
     }
 
     val mapping = for {
       side <- Side.all
       piece <- Piece.allCastling
-    } yield (side, piece) -> castlingSquaresFor(side, piece)
+      x = castlingSquaresFor(side, piece)
+      xx <- x._1
+      yy <- x._2
+    } yield (side, piece) -> ((xx, yy))
     mapping.toMap
   }
 
@@ -139,7 +142,8 @@ object Rules {
   }
 
   def squaresInDirection(from: Square, direction: Vec): Stream[Square] =
-    Stream.iterate(from)(_ + direction).tail.takeWhile(_.isValid)
+    scalaz.std.stream.unfold(from)(sq => (sq + direction).map(x => (x, x)))
+  //Stream.iterate(from)(_ + direction).tail.takeWhile(_.isValid)
 
   def possibleSquares(placed: Placed[AnyPiece]): Stream[Square] = {
     val (directions, dist) = movementTypeOf(placed)

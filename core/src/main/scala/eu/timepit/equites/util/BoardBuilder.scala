@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2013-2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ class BoardBuilder private (board: Board, square: Square) {
 
   private[this] def nextBuilder(pieceOpt: Option[AnyPiece]): BoardBuilder = {
     val nextBoard = pieceOpt.fold(board)(piece => board + (square -> piece))
-    val nextSquare = square.right.asOption.getOrElse(square.down.leftmost)
+    val nextSquare = square.right.orElse(square.down.map(_.leftmost)).getOrElse(square)
     new BoardBuilder(nextBoard, nextSquare)
   }
 }

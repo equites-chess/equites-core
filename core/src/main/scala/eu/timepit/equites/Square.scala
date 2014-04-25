@@ -22,17 +22,14 @@ import scalaz.Scalaz._
 import Rules._
 import util.Math._
 
-case class Square(file: Int, rank: Int) {
-  def +(vec: Vec): Square = Square(file + vec.file, rank + vec.rank)
-  def -(vec: Vec): Square = this + -vec
+case class Square private (file: Int, rank: Int) {
+  def +(vec: Vec): Option[Square] = Square(file + vec.file, rank + vec.rank).asOption
+  def -(vec: Vec): Option[Square] = this + -vec
 
   def +(that: Square): Vec = Vec(file + that.file, rank + that.rank)
   def -(that: Square): Vec = this + -that
 
-  def isValid: Boolean = fileRange.contains(file) && rankRange.contains(rank)
-
-  /** Returns `Some(this)` if this `Square` is valid and `None` otherwise. */
-  def asOption: Option[Square] = isValid.option(this)
+  def sum: Int = file + rank
 
   /** Returns true if this `Square` is light. */
   def isLight: Boolean = isOdd(sum)
@@ -66,23 +63,35 @@ case class Square(file: Int, rank: Int) {
     math.min(fileDist, rankDist)
   }
 
-  def up: Square = this + Vec.front
-  def down: Square = this + Vec.back
+  def up: Option[Square] = this + Vec.front
+  def down: Option[Square] = this + Vec.back
 
-  def right: Square = this + Vec.right
-  def left: Square = this + Vec.left
+  def right: Option[Square] = this + Vec.right
+  def left: Option[Square] = this + Vec.left
 
   def rightmost: Square = copy(file = fileRange.end)
   def leftmost: Square = copy(file = fileRange.start)
 
   def toSeq: Seq[Int] = Seq(file, rank)
 
-  private[this] def sum: Int = file + rank
+  private def isValid: Boolean =
+    fileRange.contains(file) && rankRange.contains(rank)
+
+  /** Returns `Some(this)` if this `Square` is valid and `None` otherwise. */
+  private def asOption: Option[Square] = isValid.option(this)
 
   private def unary_- : Square = Square(-file, -rank)
 }
 
 object Square extends SquareInstances {
+  def from(file: Int, rank: Int): Option[Square] =
+    Square(file, rank).asOption
+
+  /**
+   * @throws NoSuchElementException
+   */
+  def unsafeFrom(file: Int, rank: Int): Square = from(file, rank).get
+
   def bottomRight: Square = Square(fileRange.end, rankRange.start)
   def bottomLeft: Square = Square(fileRange.start, rankRange.start)
 

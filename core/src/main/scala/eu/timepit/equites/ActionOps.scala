@@ -34,7 +34,7 @@ object ActionOps {
     for {
       pawn <- move.piece.maybePawn
       if move.direction.isDiagonal
-      target = move.from + move.direction.fileProj
+      target <- move.from + move.direction.fileProj
       other <- board.get(target)
       otherPawn <- other.maybePawn
       if otherPawn.isOpponentOf(pawn)
@@ -89,8 +89,8 @@ object ActionOps {
     allowsEnPassant(move).option {
       val file = move.from.file
       val rank = Rules.enPassantTargetRankBy(move.piece.color)
-      Square(file, rank)
-    }
+      Square.from(file, rank)
+    }.flatten
 
   /** Returns true if the given move allows an en passant capture. */
   def allowsEnPassant(move: Move): Boolean =
