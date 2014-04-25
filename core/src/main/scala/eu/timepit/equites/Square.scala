@@ -23,7 +23,7 @@ import Rules._
 import util.Math._
 
 case class Square private (file: Int, rank: Int) {
-  def +(vec: Vec): Option[Square] = Square(file + vec.file, rank + vec.rank).asOption
+  def +(vec: Vec): Option[Square] = Square.from(file + vec.file, rank + vec.rank)
   def -(vec: Vec): Option[Square] = this + -vec
 
   def +(that: Square): Vec = Vec(file + that.file, rank + that.rank)
@@ -88,9 +88,10 @@ object Square extends SquareInstances {
     Square(file, rank).asOption
 
   /**
-   * @throws NoSuchElementException
+   * @throws IllegalArgumentException
    */
-  def unsafeFrom(file: Int, rank: Int): Square = from(file, rank).get
+  def unsafeFrom(file: Int, rank: Int): Square =
+    from(file, rank).getOrElse(throw new IllegalArgumentException)
 
   def bottomRight: Square = Square(fileRange.end, rankRange.start)
   def bottomLeft: Square = Square(fileRange.start, rankRange.start)

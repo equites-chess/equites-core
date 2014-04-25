@@ -36,10 +36,12 @@ object SquareUtil {
   }
 
   /**
-   * @throws NoSuchElementException
+   * @throws IllegalArgumentException
    */
   def unsafeFromAlgebraic(algebraicFile: Char, algebraicRank: Int): Square =
-    fromAlgebraic(algebraicFile, algebraicRank).get
+    fromAlgebraic(algebraicFile, algebraicRank).getOrElse {
+      throw new IllegalArgumentException
+    }
 
   def randomSquare: Rand[Square] =
     randElem(allSquaresSeq).map(_.get)
