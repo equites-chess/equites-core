@@ -17,7 +17,7 @@
 package eu.timepit.equites
 
 import scalaz._
-import Scalaz._
+import scalaz.Scalaz._
 
 case class Piece[+C <: Color, +T <: PieceType](color: C, pieceType: T) {
   type ColorT = C
@@ -25,6 +25,11 @@ case class Piece[+C <: Color, +T <: PieceType](color: C, pieceType: T) {
 
   def isFriendOf(other: AnyPiece): Boolean = color == other.color
   def isOpponentOf(other: AnyPiece): Boolean = color != other.color
+
+  def is(pType: PieceType): Boolean = pieceType == pType
+
+  def maybe[T1 <: PieceType](pType: T1): Option[Piece[C, T1]] =
+    (pieceType == pType).option(Piece(color, pType))
 
   // format: OFF
   def isKing   = is(King)
@@ -41,11 +46,6 @@ case class Piece[+C <: Color, +T <: PieceType](color: C, pieceType: T) {
   def maybeKnight = maybe(Knight)
   def maybePawn   = maybe(Pawn)
   // format: ON
-
-  private[this] def is(pType: PieceType): Boolean = pieceType == pType
-
-  private[this] def maybe[T1 <: PieceType](pType: T1): Option[Piece[C, T1]] =
-    (pieceType == pType).option(Piece(color, pType))
 }
 
 object Piece {
