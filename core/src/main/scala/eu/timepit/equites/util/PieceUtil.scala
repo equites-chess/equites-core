@@ -92,10 +92,7 @@ object PieceUtil {
     }
 
   def showLetter(piece: AnyPiece): String =
-    piece.color match {
-      case White => showUpperCaseLetter(piece.pieceType)
-      case Black => showLowerCaseLetter(piece.pieceType)
-    }
+    piece.color.fold(showUpperCaseLetter _, showLowerCaseLetter _)(piece.pieceType)
 
   def showLowerCaseLetter(pieceType: PieceType): String =
     showUpperCaseLetter(pieceType).toLowerCase
@@ -118,11 +115,6 @@ object PieceUtil {
       case _    => showAlgebraic(pieceType)
     }
 
-  def showWikiLetters(piece: AnyPiece): String = {
-    val colorLetter = piece.color match {
-      case White => "l"
-      case Black => "d"
-    }
-    showLowerCaseLetter(piece.pieceType) + colorLetter
-  }
+  def showWikiLetters(piece: AnyPiece): String =
+    showLowerCaseLetter(piece.pieceType) + piece.color.fold("l", "d")
 }

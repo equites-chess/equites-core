@@ -21,6 +21,12 @@ import scalaz._
 sealed trait Color {
   type Opposite <: Color
   def opposite: Opposite
+
+  def fold[A](ifWhite: => A, ifBlack: => A): A =
+    this match {
+      case White => ifWhite
+      case Black => ifBlack
+    }
 }
 
 case object White extends Color {
