@@ -18,30 +18,28 @@ package eu.timepit.equites
 package implicits
 
 import org.specs2.mutable._
-
-import DrawImplicits._
 import ActionImplicits._
 import util.PieceAbbr.Wiki._
 
 class ActionImplicitsSpec extends Specification {
   "RichAction" should {
-    val moveWhite = Move(ql, Square.unsafeFrom(0, 0) -> Square.unsafeFrom(7, 7))
-    val moveBlack = Move(qd, Square.unsafeFrom(0, 0) -> Square.unsafeFrom(7, 7))
+    val moveWhite = Move(ql, Square.unsafeFrom(0, 0) to Square.unsafeFrom(7, 7))
+    val moveBlack = Move(qd, Square.unsafeFrom(0, 0) to Square.unsafeFrom(7, 7))
 
-    val promoWhite = Promotion(pl, Square.unsafeFrom(3, 6) -> Square.unsafeFrom(3, 7), ql)
-    val promoBlack = Promotion(pd, Square.unsafeFrom(3, 1) -> Square.unsafeFrom(3, 0), qd)
+    val promoWhite = Promotion(pl, Square.unsafeFrom(3, 6) to Square.unsafeFrom(3, 7), ql)
+    val promoBlack = Promotion(pd, Square.unsafeFrom(3, 1) to Square.unsafeFrom(3, 0), qd)
 
-    val captWhite = Capture(nl, Square.unsafeFrom(0, 0) -> Square.unsafeFrom(2, 1), pd)
-    val captBlack = Capture(nd, Square.unsafeFrom(0, 0) -> Square.unsafeFrom(2, 1), pl)
+    val captWhite = Capture(nl, Square.unsafeFrom(0, 0) to Square.unsafeFrom(2, 1), pd)
+    val captBlack = Capture(nd, Square.unsafeFrom(0, 0) to Square.unsafeFrom(2, 1), pl)
 
-    val captPromoWhite = CaptureAndPromotion(pl, Square.unsafeFrom(0, 6) ->
+    val captPromoWhite = CaptureAndPromotion(pl, Square.unsafeFrom(0, 6) to
       Square.unsafeFrom(1, 7), kd, ql)
-    val captPromoBlack = CaptureAndPromotion(pd, Square.unsafeFrom(0, 1) ->
+    val captPromoBlack = CaptureAndPromotion(pd, Square.unsafeFrom(0, 1) to
       Square.unsafeFrom(1, 0), kl, qd)
 
-    val enPassantWhite = EnPassant(pl, Square.unsafeFrom(4, 4) -> Square.unsafeFrom(5, 5),
+    val enPassantWhite = EnPassant(pl, Square.unsafeFrom(4, 4) to Square.unsafeFrom(5, 5),
       pd, Square.unsafeFrom(5, 4))
-    val enPassantBlack = EnPassant(pd, Square.unsafeFrom(1, 3) -> Square.unsafeFrom(0, 2),
+    val enPassantBlack = EnPassant(pd, Square.unsafeFrom(1, 3) to Square.unsafeFrom(0, 2),
       pl, Square.unsafeFrom(0, 3))
 
     "correctly perform toNumeric" in {

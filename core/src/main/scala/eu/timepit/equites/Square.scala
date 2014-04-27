@@ -57,6 +57,8 @@ case class Square private (file: Int, rank: Int) {
   /** Returns true if this `Square` is on the same file or rank as `that`. */
   def isSameLine(that: Square): Boolean = (this - that).isStraight
 
+  def to(that: Square): Draw = Draw(this, that)
+
   def distToBoundary: Int = {
     val fileDist = minDistToBoundaries(file, fileRange)
     val rankDist = minDistToBoundaries(rank, rankRange)
