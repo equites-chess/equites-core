@@ -18,15 +18,5 @@ package eu.timepit.equites
 package implicits
 
 object PlacedImplicits {
-  implicit def placed2piece[A <: AnyPiece](placed: Placed[A]): A = placed.elem
-
-  implicit final class RichPlacedPiece[A <: AnyPiece](val self: Placed[A])
-      extends AnyVal {
-
-    def toFigurine: String = appendSquareTo(util.PieceUtil.showFigurine(self.elem))
-    def toLetter: String = appendSquareTo(util.PieceUtil.showLetter(self.elem))
-
-    private def appendSquareTo(str: String): String =
-      str + util.SquareUtil.showAlgebraic(self.square)
-  }
+  implicit def placedToPiece[A <: AnyPiece](placed: Placed[A]): A = placed.elem
 }

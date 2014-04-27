@@ -18,6 +18,6 @@ package eu.timepit.equites
 package implicits
 
 object DrawImplicits {
-  implicit def tuple2draw(tuple: (Square, Square)): Draw =
+  implicit def tupleToDraw(tuple: (Square, Square)): Draw =
     Draw(tuple._1, tuple._2)
 }
