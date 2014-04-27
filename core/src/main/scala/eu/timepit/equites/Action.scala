@@ -18,20 +18,16 @@ package eu.timepit.equites
 
 sealed trait Action
 
-trait DrawLike {
-  def from: Square
-  def to: Square
-
-  def direction: Vec = to - from
-  def l1Length: Int = direction.l1Length
-  def lInfLength: Int = direction.lInfLength
-  def squares: Seq[Square] = Seq(from, to)
-}
-
-sealed trait MoveLike extends Action with DrawLike {
+sealed trait MoveLike extends Action {
   require(from != to)
+  def draw: Draw
+  def from = draw.from
+  def to = draw.to
+  def direction = draw.direction
+  def l1Length = draw.l1Length
+  def squares = draw.squares
   def piece: AnyPiece
-  def placedPiece: Placed[AnyPiece] = Placed(piece, from)
+  def placedPiece: Placed[AnyPiece] = Placed(piece, draw.from)
 }
 
 sealed trait PromotionLike extends MoveLike {
@@ -50,53 +46,43 @@ sealed trait CaptureLike extends MoveLike {
 
 case class Move(
   piece: AnyPiece,
-  from: Square,
-  to: Square)
+  draw: Draw)
     extends MoveLike
 
 case class Capture(
   piece: AnyPiece,
-  from: Square,
-  to: Square,
+  draw: Draw,
   captured: AnyPiece)
     extends CaptureLike
 
 case class Promotion(
   piece: AnyPawn,
-  from: Square,
-  to: Square,
+  draw: Draw,
   promotedTo: PromotedPiece)
     extends PromotionLike
 
 case class CaptureAndPromotion(
   piece: AnyPawn,
-  from: Square,
-  to: Square,
+  draw: Draw,
   captured: AnyPiece,
   promotedTo: PromotedPiece)
     extends CaptureLike with PromotionLike
 
 case class EnPassant(
   piece: AnyPawn,
-  from: Square,
-  to: Square,
+  draw: Draw,
   captured: AnyPawn,
   override val capturedOn: Square)
     extends CaptureLike
 
-object Move {
-  def apply(piece: AnyPiece, draw: DrawLike): Move =
-    Move(piece, draw.from, draw.to)
-}
-
 object Capture {
   def apply(move: MoveLike, captured: AnyPiece): Capture =
-    Capture(move.piece, move.from, move.to, captured)
+    Capture(move.piece, move.draw, captured)
 }
 
 object CaptureAndPromotion {
   def apply(promo: PromotionLike, captured: AnyPiece): CaptureAndPromotion =
-    CaptureAndPromotion(promo.piece, promo.from, promo.to, captured, promo.promotedTo)
+    CaptureAndPromotion(promo.piece, promo.draw, captured, promo.promotedTo)
 }
 
 sealed trait Castling extends Action {
@@ -111,7 +97,7 @@ sealed trait Castling extends Action {
 
   private[this] def moveOf(piece: CastlingPiece): Move =
     Rules.castlingSquares(side -> piece) match {
-      case (from, to) => Move(piece, from, to)
+      case (from, to) => Move(piece, Draw(from, to))
     }
 }
 

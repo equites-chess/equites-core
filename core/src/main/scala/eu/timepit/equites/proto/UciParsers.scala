@@ -55,7 +55,7 @@ object UciParsers extends RegexParsers {
           val color = Color.guessFrom(to - from).getOrElse(White)
           piece(color)
         }
-        util.CoordinateMove(from, to, piece)
+        util.CoordinateMove(Draw(from, to), piece)
     }
 
   def id: Parser[Id] = "id" ~> symbol ~ string ^^ {

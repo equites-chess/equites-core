@@ -25,12 +25,12 @@ import util.SquareAbbr._
 class CoordinateMoveSpec extends Specification {
   "CoordinateMove" should {
     "apply promotions" in {
-      val promotion = Promotion(pl, a7, a8, rl)
-      CoordinateMove(promotion) must_== CoordinateMove(a7, a8, Some(rl))
+      val promotion = Promotion(pl, Draw(a7, a8), rl)
+      CoordinateMove(promotion) must_== CoordinateMove(Draw(a7, a8), Some(rl))
     }
     "apply moves" in {
-      val move = Move(ql, a1, d4)
-      CoordinateMove(move) must_== CoordinateMove(a1, d4)
+      val move = Move(ql, Draw(a1, d4))
+      CoordinateMove(move) must_== CoordinateMove(Draw(a1, d4))
     }
     "apply castlings" in {
       val castling = CastlingLong(White)

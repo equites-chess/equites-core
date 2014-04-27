@@ -38,9 +38,9 @@ class BoardUtilSpec extends Specification with ScalaCheck {
 
   def ex2 = {
     val board0 = Rules.startingBoard
-    val board1 = board0.processMove(Move(pl, e2, e4))
-    val board2 = board1.processMove(Move(pd, c7, c5))
-    val board3 = board2.processMove(Move(nl, g1, f3))
+    val board1 = board0.processMove(Move(pl, Draw(e2, e4)))
+    val board2 = board1.processMove(Move(pd, Draw(c7, c5)))
+    val board3 = board2.processMove(Move(nl, Draw(g1, f3)))
 
     val placements = Seq(
       board0 -> "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR",

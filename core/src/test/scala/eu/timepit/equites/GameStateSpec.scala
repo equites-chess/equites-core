@@ -19,6 +19,7 @@ package eu.timepit.equites
 import org.specs2.mutable._
 
 import implicits.ActionImplicits._
+import implicits.DrawImplicits._
 import implicits.GameStateImplicits._
 import util.PieceAbbr.Wiki._
 import util.SquareAbbr._
@@ -26,12 +27,12 @@ import util.SquareAbbr._
 class GameStateSpec extends Specification {
   "GameState" should {
     val actions = Vector(
-      Move(pl, e2, e4),
-      Move(pd, c7, c5),
-      Move(nl, g1, f3),
-      Move(pd, d7, d6),
-      Move(bl, f1, a6),
-      Capture(nd, b8, a6, bl),
+      Move(pl, e2 -> e4),
+      Move(pd, c7 -> c5),
+      Move(nl, g1 -> f3),
+      Move(pd, d7 -> d6),
+      Move(bl, f1 -> a6),
+      Capture(nd, b8 -> a6, bl),
       CastlingShort(White))
 
     val states = GameState.unfold(actions)
@@ -106,12 +107,12 @@ class GameStateSpec extends Specification {
     }
 
     "handle valid coordinate moves" in {
-      val move = Move(pl, e2, e4)
+      val move = Move(pl, e2 -> e4)
       val cm = util.CoordinateMove(move)
       GameState.init.updated(cm) must beSome(GameState.init.updated(move))
     }
     "handle invalid coordinate moves" in {
-      val cm = util.CoordinateMove(a3, a4)
+      val cm = util.CoordinateMove(a3 -> a4)
       GameState.init.updated(cm) must beNone
     }
   }

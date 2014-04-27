@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2013-2014 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -15,20 +15,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package eu.timepit.equites
-package util
 
-/**
- * Represents a move in coordinate notation.
- */
-case class CoordinateMove(draw: Draw, promotedTo: Option[PromotedPiece] = None) {
-  def toAlgebraic: String =
-    util.SquareUtil.showAlgebraic(draw.from) + util.SquareUtil.showAlgebraic(draw.to) + promotedTo.fold("")(p => PieceUtil.showLowerCaseLetter(p.pieceType))
-}
-
-object CoordinateMove {
-  def apply(action: Action): CoordinateMove = action match {
-    case p: PromotionLike => CoordinateMove(p.draw, Some(p.promotedTo))
-    case m: MoveLike      => CoordinateMove(m.draw)
-    case c: Castling      => CoordinateMove(c.kingMove)
-  }
+case class Draw(from: Square, to: Square) {
+  def direction: Vec = to - from
+  def l1Length: Int = direction.l1Length
+  def lInfLength: Int = direction.lInfLength
+  def squares: Seq[Square] = Seq(from, to)
 }

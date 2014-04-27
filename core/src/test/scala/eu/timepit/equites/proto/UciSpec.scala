@@ -22,6 +22,7 @@ import scala.concurrent.duration._
 
 import Uci._
 import implicits.GameStateImplicits._
+import implicits.DrawImplicits._
 import util.CoordinateMove
 import util.PieceAbbr.Wiki._
 import util.SquareAbbr._
@@ -74,15 +75,15 @@ class UciSpec extends Specification with org.specs2.time.NoTimeConversions {
         s"position fen ${GameState.init.toFen} moves"
     }
     "toString should return one move if history contains one move" in {
-      val actions = Seq(Move(pl, e2, e4))
+      val actions = Seq(Move(pl, e2 -> e4))
       val history = GameState.unfold(actions)
 
       Position(history).toString must_==
         s"position fen ${GameState.init.toFen} moves e2e4"
     }
     "toString should return two moves if history contains two moves" in {
-      val actions = Seq(Move(pl, e2, e4),
-        Move(nd, g8, f6))
+      val actions = Seq(Move(pl, Draw(e2, e4)),
+        Move(nd, Draw(g8, f6)))
       val history = GameState.unfold(actions)
 
       Position(history).toString must_==
@@ -124,16 +125,16 @@ class UciSpec extends Specification with org.specs2.time.NoTimeConversions {
 
   "Uci.Bestmove" >> {
     "toString should return the expected result on a move" in {
-      val move = CoordinateMove(e2, e4)
+      val move = CoordinateMove(Draw(e2, e4))
       Bestmove(move).toString must_== "bestmove e2e4"
     }
     "toString should return the expected result on a promotion" in {
-      val move = CoordinateMove(e7, e8, Some(ql))
+      val move = CoordinateMove(Draw(e7, e8), Some(ql))
       Bestmove(move).toString must_== "bestmove e7e8q"
     }
     "toString should return the expected result on a move and a ponder" in {
-      val move = CoordinateMove(g1, f3)
-      val ponder = Some(CoordinateMove(d8, f6))
+      val move = CoordinateMove(Draw(g1, f3))
+      val ponder = Some(CoordinateMove(Draw(d8, f6)))
       Bestmove(move, ponder).toString must_== "bestmove g1f3 ponder d8f6"
     }
   }

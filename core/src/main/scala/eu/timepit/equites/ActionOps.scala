@@ -19,7 +19,7 @@ package eu.timepit.equites
 import scalaz.syntax.std.boolean._
 
 object ActionOps {
-  def reifyAsMove(board: Board, draw: DrawLike): Option[Move] =
+  def reifyAsMove(board: Board, draw: Draw): Option[Move] =
     (draw.from != draw.to).option {
       board.get(draw.from).map(piece => Move(piece, draw))
     }.flatten
@@ -38,17 +38,17 @@ object ActionOps {
       other <- board.get(target)
       otherPawn <- other.maybePawn
       if otherPawn.isOpponentOf(pawn)
-    } yield EnPassant(pawn, move.from, move.to, otherPawn, target)
+    } yield EnPassant(pawn, move.draw, otherPawn, target)
 
   def reifyAsCastling(board: Board, move: MoveLike): Option[Castling] =
     for {
       castling <- Rules.allCastlings.find(_.kingMove == move)
-      _ <- reifyAsMove(board, castling.kingMove)
-      _ <- reifyAsMove(board, castling.rookMove)
+      _ <- reifyAsMove(board, castling.kingMove.draw)
+      _ <- reifyAsMove(board, castling.rookMove.draw)
     } yield castling
 
   def reifyAsAction(board: Board, cm: util.CoordinateMove): Option[Action] = {
-    val moveOpt = reifyAsMove(board, cm)
+    val moveOpt = reifyAsMove(board, cm.draw)
     moveOpt.flatMap { move =>
       lazy val captureOpt = reifyAsCapture(board, move)
 
@@ -56,7 +56,7 @@ object ActionOps {
         for {
           pawn <- move.piece.maybePawn
           promotedTo <- cm.promotedTo
-        } yield Promotion(pawn, move.from, move.to, promotedTo)
+        } yield Promotion(pawn, move.draw, promotedTo)
 
       lazy val captureAndPromotionOpt =
         for {

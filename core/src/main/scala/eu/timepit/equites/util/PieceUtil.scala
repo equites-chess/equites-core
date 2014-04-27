@@ -119,11 +119,10 @@ object PieceUtil {
     }
 
   def showWikiLetters(piece: AnyPiece): String = {
-    def showColorLetter: String =
-      piece.color match {
-        case White => "l"
-        case Black => "d"
-      }
-    showLowerCaseLetter(piece.pieceType) + showColorLetter
+    val colorLetter = piece.color match {
+      case White => "l"
+      case Black => "d"
+    }
+    showLowerCaseLetter(piece.pieceType) + colorLetter
   }
 }

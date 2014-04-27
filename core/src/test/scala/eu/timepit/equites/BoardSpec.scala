@@ -18,6 +18,7 @@ package eu.timepit.equites
 
 import org.specs2.mutable._
 
+import implicits.DrawImplicits._
 import util.PieceAbbr.Wiki._
 
 class BoardSpec extends Specification {
@@ -67,28 +68,28 @@ class BoardSpec extends Specification {
     "process and reverse moves" in {
       val before = Board(Square.unsafeFrom(0, 0) -> ql)
       val after = Board(Square.unsafeFrom(7, 7) -> ql)
-      val action = Move(ql, Square.unsafeFrom(0, 0), Square.unsafeFrom(7, 7))
+      val action = Move(ql, Square.unsafeFrom(0, 0) -> Square.unsafeFrom(7, 7))
       checkAction(before, after, action)
     }
 
     "process and reverse promotions" in {
       val before = Board(Square.unsafeFrom(0, 6) -> pl)
       val after = Board(Square.unsafeFrom(0, 7) -> ql)
-      val action = Promotion(pl, Square.unsafeFrom(0, 6), Square.unsafeFrom(0, 7), ql)
+      val action = Promotion(pl, Square.unsafeFrom(0, 6) -> Square.unsafeFrom(0, 7), ql)
       checkAction(before, after, action)
     }
 
     "process and reverse captures" in {
       val before = Board(Square.unsafeFrom(0, 0) -> ql, Square.unsafeFrom(7, 7) -> pd)
       val after = Board(Square.unsafeFrom(7, 7) -> ql)
-      val action = Capture(ql, Square.unsafeFrom(0, 0), Square.unsafeFrom(7, 7), pd)
+      val action = Capture(ql, Square.unsafeFrom(0, 0) -> Square.unsafeFrom(7, 7), pd)
       checkAction(before, after, action)
     }
 
     "process and reverse captures and promotions" in {
       val before = Board(Square.unsafeFrom(0, 6) -> pl, Square.unsafeFrom(1, 7) -> nd)
       val after = Board(Square.unsafeFrom(1, 7) -> ql)
-      val action = CaptureAndPromotion(pl, Square.unsafeFrom(0, 6), Square.unsafeFrom(1, 7), nd, ql)
+      val action = CaptureAndPromotion(pl, Square.unsafeFrom(0, 6) -> Square.unsafeFrom(1, 7), nd, ql)
       checkAction(before, after, action)
     }
 
