@@ -170,10 +170,10 @@ class PgnParsersSpec extends Specification with ParserMatchers {
 
   "terminationMarker" should {
     "succeed on all possible termination markers" in {
-      terminationMarker must succeedOn("1-0").withResult(Result.WhiteWon)
-      terminationMarker must succeedOn("0-1").withResult(Result.BlackWon)
-      terminationMarker must succeedOn("1/2-1/2").withResult(Result.Draw)
-      terminationMarker must succeedOn("*").withResult(Result.Other)
+      terminationMarker must succeedOn("1-0").withResult(GameResult.WhiteWon)
+      terminationMarker must succeedOn("0-1").withResult(GameResult.BlackWon)
+      terminationMarker must succeedOn("1/2-1/2").withResult(GameResult.Draw)
+      terminationMarker must succeedOn("*").withResult(GameResult.Other)
     }
   }
 

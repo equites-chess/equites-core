@@ -16,15 +16,15 @@
 
 package eu.timepit.equites
 
-sealed trait Result
+sealed trait GameResult
 
-object Result {
+object GameResult {
   // format: OFF
-  case object WhiteWon extends Result
-  case object BlackWon extends Result
-  case object Draw     extends Result
-  case object Other    extends Result
+  case object WhiteWon extends GameResult
+  case object BlackWon extends GameResult
+  case object Draw     extends GameResult
+  case object Other    extends GameResult
   // format: ON
 
-  def all: List[Result] = List(WhiteWon, BlackWon, Draw, Other)
+  def all: List[GameResult] = List(WhiteWon, BlackWon, Draw, Other)
 }

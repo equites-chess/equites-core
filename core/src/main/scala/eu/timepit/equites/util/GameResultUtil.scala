@@ -17,10 +17,10 @@
 package eu.timepit.equites
 package util
 
-import Result._
+import GameResult._
 
-object ResultUtil {
-  def showPgnMarker(result: Result): String =
+object GameResultUtil {
+  def showPgnMarker(result: GameResult): String =
     result match {
       case WhiteWon => "1-0"
       case BlackWon => "0-1"
