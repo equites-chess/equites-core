@@ -15,15 +15,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package eu.timepit.equites
+package util
 
-case class Draw(from: Square, to: Square) {
-  def direction: Vec = to - from
-
-  def isNull: Boolean = from == to
-  def nonNull: Boolean = !isNull
-
-  def l1Length: Int = direction.l1Length
-  def lInfLength: Int = direction.lInfLength
-
-  def squares: Seq[Square] = Seq(from, to)
+object DrawUtil {
+  def showAlgebraic(draw: Draw): String =
+    draw.squares.map(SquareUtil.showAlgebraic).mkString
 }
