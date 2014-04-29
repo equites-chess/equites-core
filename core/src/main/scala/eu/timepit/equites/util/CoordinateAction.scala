@@ -23,7 +23,7 @@ package util
 case class CoordinateAction(draw: Draw, promotedTo: Option[PromotedPiece] = None) {
   def toAlgebraic: String =
     DrawUtil.showAlgebraic(draw) +
-      promotedTo.fold("")(p => PieceUtil.showLowerCaseLetter(p.pieceType))
+      promotedTo.map(_.pieceType).fold("")(PieceUtil.showLowerCaseLetter)
 }
 
 object CoordinateAction {

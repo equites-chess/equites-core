@@ -39,21 +39,21 @@ class UciParsersSpec extends Specification with ParserMatchers with ScalaCheck {
 
   "coordinateMove" should {
     "succeed on a move" in {
-      coordinateMove should succeedOn("e2e4")
+      coordinateAction should succeedOn("e2e4")
         .withResult(CoordinateAction(e2 to e4))
     }
     "succeed on white promotions" in check {
       (p: PromotedPiece) =>
         (p.color == White) ==> {
           val cm = CoordinateAction(e7 to e8, Some(p))
-          coordinateMove should succeedOn(cm.toAlgebraic).withResult(cm)
+          coordinateAction should succeedOn(cm.toAlgebraic).withResult(cm)
         }
     }
     "succeed on black promotions" in check {
       (p: PromotedPiece) =>
         (p.color == Black) ==> {
           val cm = CoordinateAction(e2 to e1, Some(p))
-          coordinateMove should succeedOn(cm.toAlgebraic).withResult(cm)
+          coordinateAction should succeedOn(cm.toAlgebraic).withResult(cm)
         }
     }
   }

@@ -20,7 +20,8 @@ package proto
 import scala.util.parsing.combinator._
 
 import proto.Uci._
-import util.PieceAbbr.Textual._
+import util.CoordinateAction
+import util.PieceUtil._
 import util.SquareUtil._
 
 /**
@@ -45,17 +46,22 @@ object UciParsers extends RegexParsers {
     case file ~ rank => unsafeFromAlgebraic(file, rank)
   }
 
-  def promotedPieceFn: Parser[Color => PromotedPiece] =
-    "q" ^^^ queen _ | "r" ^^^ rook _ | "b" ^^^ bishop _ | "n" ^^^ knight _
+  def draw: Parser[Draw] =
+    square ~ square ^^ { case src ~ dest => src to dest }
 
-  def coordinateMove: Parser[util.CoordinateAction] =
-    square ~ square ~ promotedPieceFn.? ^^ {
-      case from ~ to ~ pieceFn =>
-        val piece = pieceFn.map { piece =>
-          val color = Color.guessFrom(to - from).getOrElse(White)
-          piece(color)
+  def promotedPieceFn: Parser[Color => PromotedPiece] =
+    PieceType.allPromoted.map {
+      pt => showLowerCaseLetter(pt) ^^^ ((c: Color) => Piece(c, pt))
+    }.reduce(_ | _)
+
+  def coordinateAction: Parser[CoordinateAction] =
+    draw ~ promotedPieceFn.? ^^ {
+      case draw ~ pieceFnOpt =>
+        val piece = pieceFnOpt.map { pieceFn =>
+          val color = Color.guessFrom(draw.direction).getOrElse(White)
+          pieceFn(color)
         }
-        util.CoordinateAction(Draw(from, to), piece)
+        CoordinateAction(draw, piece)
     }
 
   def id: Parser[Id] = "id" ~> symbol ~ string ^^ {
@@ -67,7 +73,7 @@ object UciParsers extends RegexParsers {
   def readyok: Parser[ReadyOk.type] = "readyok" ^^^ ReadyOk
 
   def bestmove: Parser[Bestmove] =
-    "bestmove" ~> coordinateMove ~ ("ponder" ~> coordinateMove).? ^^ {
+    "bestmove" ~> coordinateAction ~ ("ponder" ~> coordinateAction).? ^^ {
       case move ~ ponder => Bestmove(move, ponder)
     }
 

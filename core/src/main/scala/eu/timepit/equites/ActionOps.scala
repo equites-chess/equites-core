@@ -41,8 +41,8 @@ object ActionOps {
   /** Returns true if `action` is a capture or a pawn move. */
   def isCaptureOrPawnMove(action: Action): Boolean =
     action match {
-      case _: Capture => true
-      case _          => action.piece.isPawn
+      case _: CaptureLike => true
+      case _              => action.piece.isPawn
     }
 
   def promotedPiece(action: Action): Option[PromotedPiece] =
