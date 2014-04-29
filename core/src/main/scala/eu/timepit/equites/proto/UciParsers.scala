@@ -57,9 +57,9 @@ object UciParsers extends RegexParsers {
   def coordinateAction: Parser[CoordinateAction] =
     draw ~ promotedPieceFn.? ^^ {
       case parsedDraw ~ pieceFnOpt =>
-        val color = Color.guessFrom(parsedDraw.direction).getOrElse(White)
-        val piece = pieceFnOpt.map(_(color))
-        CoordinateAction(parsedDraw, piece)
+        val colorOpt = Color.guessFrom(parsedDraw.direction)
+        val pieceOpt = pieceFnOpt.flatMap(colorOpt.map)
+        CoordinateAction(parsedDraw, pieceOpt)
     }
 
   def id: Parser[Id] = "id" ~> symbol ~ string ^^ {

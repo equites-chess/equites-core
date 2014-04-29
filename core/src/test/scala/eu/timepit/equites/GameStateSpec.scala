@@ -17,9 +17,8 @@
 package eu.timepit.equites
 
 import org.specs2.mutable._
-
-import implicits.ActionImplicits._
 import implicits.GameStateImplicits._
+import util.ActionUtil._
 import util.PieceAbbr.Wiki._
 import util.SquareAbbr._
 
@@ -37,7 +36,7 @@ class GameStateSpec extends Specification {
     val states = GameState.unfold(actions)
 
     def moveIndicator(i: Int): String =
-      states(i).moveNumberIndicator + " " + actions(i).toLongFigurine
+      states(i).moveNumberIndicator + " " + showLongFigurine(actions(i))
 
     "record the starting position" in {
       states(0).board must_== Rules.startingBoard

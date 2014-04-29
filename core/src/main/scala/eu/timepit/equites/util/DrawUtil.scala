@@ -18,6 +18,15 @@ package eu.timepit.equites
 package util
 
 object DrawUtil {
+  def algebraicSquares(draw: Draw): Seq[String] =
+    draw.squares.map(SquareUtil.showAlgebraic)
+
+  def numericSquares(draw: Draw): Seq[String] =
+    draw.squares.map(SquareUtil.showNumeric)
+
   def showAlgebraic(draw: Draw): String =
-    draw.squares.map(SquareUtil.showAlgebraic).mkString
+    algebraicSquares(draw).mkString
+
+  def showNumeric(draw: Draw): String =
+    numericSquares(draw).mkString
 }

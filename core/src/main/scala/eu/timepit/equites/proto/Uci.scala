@@ -19,8 +19,8 @@ package proto
 
 import scala.concurrent.duration._
 
-import implicits.ActionImplicits._
 import implicits.GameStateImplicits._
+import util.ActionUtil._
 
 object Uci {
   sealed trait Command extends util.TextCommand
@@ -53,7 +53,7 @@ object Uci {
       if (history.isEmpty) {
         Seq("startpos", "moves")
       } else {
-        val moves = history.tail.flatMap(_.lastAction).map(_.toCoordinate)
+        val moves = history.tail.flatMap(_.lastAction).map(showCoordinate)
         Seq("fen", history.head.toFen, "moves") ++ moves
       }
   }
