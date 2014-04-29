@@ -22,7 +22,7 @@ import scala.concurrent.duration._
 
 import Uci._
 import implicits.GameStateImplicits._
-import util.CoordinateMove
+import util.CoordinateAction
 import util.PieceAbbr.Wiki._
 import util.SquareAbbr._
 
@@ -124,16 +124,16 @@ class UciSpec extends Specification with org.specs2.time.NoTimeConversions {
 
   "Uci.Bestmove" >> {
     "toString should return the expected result on a move" in {
-      val move = CoordinateMove(e2 to e4)
+      val move = CoordinateAction(e2 to e4)
       Bestmove(move).toString must_== "bestmove e2e4"
     }
     "toString should return the expected result on a promotion" in {
-      val move = CoordinateMove(e7 to e8, Some(ql))
+      val move = CoordinateAction(e7 to e8, Some(ql))
       Bestmove(move).toString must_== "bestmove e7e8q"
     }
     "toString should return the expected result on a move and a ponder" in {
-      val move = CoordinateMove(g1 to f3)
-      val ponder = Some(CoordinateMove(d8 to f6))
+      val move = CoordinateAction(g1 to f3)
+      val ponder = Some(CoordinateAction(d8 to f6))
       Bestmove(move, ponder).toString must_== "bestmove g1f3 ponder d8f6"
     }
   }

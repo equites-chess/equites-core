@@ -48,14 +48,14 @@ object UciParsers extends RegexParsers {
   def promotedPieceFn: Parser[Color => PromotedPiece] =
     "q" ^^^ queen _ | "r" ^^^ rook _ | "b" ^^^ bishop _ | "n" ^^^ knight _
 
-  def coordinateMove: Parser[util.CoordinateMove] =
+  def coordinateMove: Parser[util.CoordinateAction] =
     square ~ square ~ promotedPieceFn.? ^^ {
       case from ~ to ~ pieceFn =>
         val piece = pieceFn.map { piece =>
           val color = Color.guessFrom(to - from).getOrElse(White)
           piece(color)
         }
-        util.CoordinateMove(Draw(from, to), piece)
+        util.CoordinateAction(Draw(from, to), piece)
     }
 
   def id: Parser[Id] = "id" ~> symbol ~ string ^^ {

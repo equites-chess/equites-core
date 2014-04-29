@@ -18,17 +18,15 @@ package eu.timepit.equites
 package util
 
 /**
- * Represents a move in coordinate notation.
+ * Represents an action in coordinate notation.
  */
-case class CoordinateMove(draw: Draw, promotedTo: Option[PromotedPiece] = None) {
+case class CoordinateAction(draw: Draw, promotedTo: Option[PromotedPiece] = None) {
   def toAlgebraic: String =
-    util.SquareUtil.showAlgebraic(draw.from) + util.SquareUtil.showAlgebraic(draw.to) + promotedTo.fold("")(p => PieceUtil.showLowerCaseLetter(p.pieceType))
+    DrawUtil.showAlgebraic(draw) +
+      promotedTo.fold("")(p => PieceUtil.showLowerCaseLetter(p.pieceType))
 }
 
-object CoordinateMove {
-  def apply(action: Action): CoordinateMove = action match {
-    case p: PromotionLike => CoordinateMove(p.draw, Some(p.promotedTo))
-    case m: MoveLike      => CoordinateMove(m.draw)
-    case c: Castling      => CoordinateMove(c.kingMove)
-  }
+object CoordinateAction {
+  def apply(action: Action): CoordinateAction =
+    CoordinateAction(action.draw, ActionOps.promotedPiece(action))
 }

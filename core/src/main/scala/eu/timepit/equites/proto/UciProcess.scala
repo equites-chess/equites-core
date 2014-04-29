@@ -22,7 +22,7 @@ import scalaz.stream._
 
 import Uci._
 import UciParsers._
-import util.CoordinateMove
+import util.CoordinateAction
 import util.ScalazProcess._
 
 object UciProcess {
@@ -33,8 +33,8 @@ object UciProcess {
       case (history, bestmove) => (history, bestmove.move)
     } |> appendCoordinateMove
 
-  def appendCoordinateMove: HistoryTransformer[CoordinateMove] =
-    Process.await1[(Seq[GameState], CoordinateMove)].flatMap {
+  def appendCoordinateMove: HistoryTransformer[CoordinateAction] =
+    Process.await1[(Seq[GameState], CoordinateAction)].flatMap {
       case (history, move) => {
         val state = history.lastOption.flatMap(_.updated(move))
         state.map(s => Process(history :+ s)).getOrElse(Process.halt)

@@ -109,8 +109,8 @@ object Uci {
 
   case object ReadyOk extends Response
 
-  case class Bestmove(move: util.CoordinateMove,
-                      ponder: Option[util.CoordinateMove] = None)
+  case class Bestmove(move: util.CoordinateAction,
+                      ponder: Option[util.CoordinateAction] = None)
       extends Response {
 
     override def cmdArgs: Seq[String] =

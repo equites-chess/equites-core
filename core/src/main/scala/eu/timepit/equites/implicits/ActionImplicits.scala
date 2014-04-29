@@ -50,9 +50,9 @@ object ActionImplicits {
     }
 
     private def algebraicSquares(move: MoveLike): Seq[String] =
-      move.squares.map(util.SquareUtil.showAlgebraic)
+      move.draw.squares.map(util.SquareUtil.showAlgebraic)
 
     private def numericSquares(move: MoveLike): Seq[String] =
-      move.squares.map(util.SquareUtil.showNumeric)
+      move.draw.squares.map(util.SquareUtil.showNumeric)
   }
 }

@@ -19,6 +19,40 @@ package eu.timepit.equites
 import scalaz.syntax.std.boolean._
 
 object ActionOps {
+  /** Returns true if `action` allows an en passant capture. */
+  def allowsEnPassant(action: Action): Boolean = {
+    val drawLength = 2
+    action.piece.isPawn &&
+      action.draw.l1Length == drawLength &&
+      action.draw.direction.isStraight
+  }
+
+  /**
+   * Returns the square where a pawn can be captured via an en passant if
+   * `action` allows it.
+   */
+  def enPassantTarget(action: Action): Option[Square] =
+    allowsEnPassant(action).option {
+      val file = action.draw.from.file
+      val rank = Rules.enPassantTargetRankBy(action.piece.color)
+      Square.from(file, rank)
+    }.flatten
+
+  /** Returns true if `action` is a capture or a pawn move. */
+  def isCaptureOrPawnMove(action: Action): Boolean =
+    action match {
+      case _: Capture => true
+      case _          => action.piece.isPawn
+    }
+
+  def promotedPiece(action: Action): Option[PromotedPiece] =
+    action match {
+      case p: PromotionLike => Some(p.promotedTo)
+      case _                => None
+    }
+
+  /// OLD
+
   def reifyAsMove(board: Board, draw: Draw): Option[Move] =
     (draw.from != draw.to).option {
       board.get(draw.from).map(piece => Move(piece, draw))
@@ -26,15 +60,15 @@ object ActionOps {
 
   def reifyAsCapture(board: Board, move: MoveLike): Option[Capture] =
     for {
-      captured <- board.get(move.to)
+      captured <- board.get(move.draw.to)
       if captured.isOpponentOf(move.piece)
-    } yield Capture(move, captured)
+    } yield Capture(move.piece, move.draw, captured)
 
   def reifyAsEnPassant(board: Board, move: MoveLike): Option[EnPassant] =
     for {
       pawn <- move.piece.maybePawn
-      if move.direction.isDiagonal
-      target <- move.from + move.direction.fileProj
+      if move.draw.direction.isDiagonal
+      target <- move.draw.from + move.draw.direction.fileProj
       other <- board.get(target)
       otherPawn <- other.maybePawn
       if otherPawn.isOpponentOf(pawn)
@@ -47,7 +81,7 @@ object ActionOps {
       _ <- reifyAsMove(board, castling.rookMove.draw)
     } yield castling
 
-  def reifyAsAction(board: Board, cm: util.CoordinateMove): Option[Action] = {
+  def reifyAsAction(board: Board, cm: util.CoordinateAction): Option[Action] = {
     val moveOpt = reifyAsMove(board, cm.draw)
     moveOpt.flatMap { move =>
       lazy val captureOpt = reifyAsCapture(board, move)
@@ -62,7 +96,7 @@ object ActionOps {
         for {
           capture <- captureOpt
           promotion <- promotionOpt
-        } yield CaptureAndPromotion(promotion, capture.captured)
+        } yield CaptureAndPromotion(promotion.piece, promotion.draw, capture.captured, promotion.promotedTo)
 
       reifyAsCastling(board, move)
         .orElse(reifyAsEnPassant(board, move))
@@ -73,26 +107,4 @@ object ActionOps {
     }
   }
 
-  /** Returns true if the given action is a capture or a pawn move. */
-  def isCaptureOrPawnMove(action: Action): Boolean =
-    action match {
-      case _: CaptureLike => true
-      case move: MoveLike => move.piece.isPawn
-      case _              => false
-    }
-
-  /**
-   * Returns the square where a pawn can be captured via an en passant if the
-   * given move allows it.
-   */
-  def enPassantTarget(move: Move): Option[Square] =
-    allowsEnPassant(move).option {
-      val file = move.from.file
-      val rank = Rules.enPassantTargetRankBy(move.piece.color)
-      Square.from(file, rank)
-    }.flatten
-
-  /** Returns true if the given move allows an en passant capture. */
-  def allowsEnPassant(move: Move): Boolean =
-    move.piece.isPawn && move.l1Length == 2 && move.direction.isStraight
 }

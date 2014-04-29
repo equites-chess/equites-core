@@ -22,19 +22,19 @@ import org.specs2.mutable._
 import util.PieceAbbr.Wiki._
 import util.SquareAbbr._
 
-class CoordinateMoveSpec extends Specification {
-  "CoordinateMove" should {
+class CoordinateActionSpec extends Specification {
+  "CoordinateAction" should {
     "apply promotions" in {
-      val promotion = Promotion(pl, Draw(a7, a8), rl)
-      CoordinateMove(promotion) must_== CoordinateMove(Draw(a7, a8), Some(rl))
+      val promotion = Promotion(pl, a7 to a8, rl)
+      CoordinateAction(promotion) must_== CoordinateAction(a7 to a8, Some(rl))
     }
     "apply moves" in {
-      val move = Move(ql, Draw(a1, d4))
-      CoordinateMove(move) must_== CoordinateMove(Draw(a1, d4))
+      val move = Move(ql, a1 to d4)
+      CoordinateAction(move) must_== CoordinateAction(a1 to d4)
     }
     "apply castlings" in {
       val castling = CastlingLong(White)
-      CoordinateMove(castling) must_== CoordinateMove(castling.kingMove)
+      CoordinateAction(castling) must_== CoordinateAction(castling.kingMove)
     }
   }
 }

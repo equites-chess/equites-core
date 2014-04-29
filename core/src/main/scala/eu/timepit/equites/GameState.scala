@@ -36,7 +36,7 @@ case class GameState(
     halfmoveClock = updatedHalfmoveClock(action),
     availableCastlings = updatedAvailableCastlings(action))
 
-  def updated(cm: util.CoordinateMove): Option[GameState] =
+  def updated(cm: util.CoordinateAction): Option[GameState] =
     ActionOps.reifyAsAction(board, cm).map(updated)
 
   private[this] def updatedMoveNumber: Int =

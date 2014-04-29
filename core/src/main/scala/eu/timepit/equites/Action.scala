@@ -16,32 +16,27 @@
 
 package eu.timepit.equites
 
-sealed trait Action
-
-sealed trait MoveLike extends Action {
-  require(from != to)
-  def draw: Draw
-  def from = draw.from
-  def to = draw.to
-  def direction = draw.direction
-  def l1Length = draw.l1Length
-  def squares = draw.squares
+sealed trait Action {
   def piece: AnyPiece
+  def draw: Draw
+
   def placedPiece: Placed[AnyPiece] = Placed(piece, draw.from)
 }
 
-sealed trait PromotionLike extends MoveLike {
-  require(piece isFriendOf promotedTo)
-  def piece: AnyPawn
-  def promotedTo: PromotedPiece
-  def placedPromoted: Placed[PromotedPiece] = Placed(promotedTo, to)
-}
+sealed trait MoveLike extends Action
 
 sealed trait CaptureLike extends MoveLike {
-  require(piece isOpponentOf captured)
   def captured: AnyPiece
-  def capturedOn: Square = to
+
+  def capturedOn: Square = draw.to
   def placedCaptured: Placed[AnyPiece] = Placed(captured, capturedOn)
+}
+
+sealed trait PromotionLike extends MoveLike {
+  def piece: AnyPawn
+  def promotedTo: PromotedPiece
+
+  def placedPromoted: Placed[PromotedPiece] = Placed(promotedTo, draw.to)
 }
 
 case class Move(
@@ -75,30 +70,21 @@ case class EnPassant(
   override val capturedOn: Square)
     extends CaptureLike
 
-object Capture {
-  def apply(move: MoveLike, captured: AnyPiece): Capture =
-    Capture(move.piece, move.draw, captured)
-}
-
-object CaptureAndPromotion {
-  def apply(promo: PromotionLike, captured: AnyPiece): CaptureAndPromotion =
-    CaptureAndPromotion(promo.piece, promo.draw, captured, promo.promotedTo)
-}
-
 sealed trait Castling extends Action {
+  def piece: AnyKing = king
+  def draw: Draw = kingMove.draw
+
   def color: Color
   def side: Side
 
   def king: AnyKing = Piece(color, King)
   def rook: AnyRook = Piece(color, Rook)
 
-  def kingMove: Move = moveOf(king)
-  def rookMove: Move = moveOf(rook)
+  def kingMove: Action = moveOf(king)
+  def rookMove: Action = moveOf(rook)
 
-  private[this] def moveOf(piece: CastlingPiece): Move =
-    Rules.castlingSquares(side -> piece) match {
-      case (from, to) => Move(piece, Draw(from, to))
-    }
+  def moveOf(piece: CastlingPiece): Action =
+    Move(piece, Rules.castlingDraws(side -> piece))
 }
 
 case class CastlingShort(color: Color) extends Castling {

@@ -53,36 +53,36 @@ class Board(val self: Map[Square, AnyPiece])
   }
 
   def processMove(move: MoveLike): Board =
-    this - move.from + (move.to -> move.piece)
+    this - move.draw.from + (move.draw.to -> move.piece)
 
   def reverseMove(move: MoveLike): Board =
-    this - move.to + (move.from -> move.piece)
+    this - move.draw.to + (move.draw.from -> move.piece)
 
   def processPromotion(promotion: PromotionLike): Board =
-    this - promotion.from + (promotion.to -> promotion.promotedTo)
+    this - promotion.draw.from + (promotion.draw.to -> promotion.promotedTo)
 
   def reversePromotion(promotion: PromotionLike): Board =
-    this - promotion.to + (promotion.from -> promotion.piece)
+    this - promotion.draw.to + (promotion.draw.from -> promotion.piece)
 
   def processCapture(capture: CaptureLike): Board =
-    this - capture.from - capture.capturedOn + (capture.to -> capture.piece)
+    this - capture.draw.from - capture.capturedOn + (capture.draw.to -> capture.piece)
 
   def reverseCapture(capture: CaptureLike): Board =
-    this - capture.to + (capture.capturedOn -> capture.captured) +
-      (capture.from -> capture.piece)
+    this - capture.draw.to + (capture.capturedOn -> capture.captured) +
+      (capture.draw.from -> capture.piece)
 
   def processCaptureAndPromotion(capture: CaptureAndPromotion): Board =
-    this - capture.from - capture.capturedOn +
-      (capture.to -> capture.promotedTo)
+    this - capture.draw.from - capture.capturedOn +
+      (capture.draw.to -> capture.promotedTo)
 
   def reverseCaptureAndPromotion(capture: CaptureAndPromotion): Board =
     reverseCapture(capture: CaptureLike)
 
   def processCastling(castling: Castling): Board =
-    processMove(castling.kingMove).processMove(castling.rookMove)
+    processAction(castling.kingMove).processAction(castling.rookMove)
 
   def reverseCastling(castling: Castling): Board =
-    reverseMove(castling.kingMove).reverseMove(castling.rookMove)
+    reverseAction(castling.kingMove).reverseAction(castling.rookMove)
 
   def +(kv: (Square, AnyPiece)): Board =
     Board(self + kv)

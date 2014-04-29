@@ -57,7 +57,7 @@ object Rules {
   def onEnPassantRank(placed: Placed[AnyPawn]): Boolean =
     enPassantRankBy(placed.color) == placed.square.rank
 
-  val castlingSquares: Map[(Side, CastlingPiece), (Square, Square)] = {
+  val castlingDraws: Map[(Side, CastlingPiece), Draw] = {
     def castlingSquaresFor(side: Side, piece: CastlingPiece): (Option[Square], Option[Square]) = {
       val rookFile = if (side == Kingside) rookFiles(1) else rookFiles(0)
       val (fromFile, pieceOffset) = piece.pieceType match {
@@ -78,7 +78,7 @@ object Rules {
       x = castlingSquaresFor(side, piece)
       xx <- x._1
       yy <- x._2
-    } yield (side, piece) -> ((xx, yy))
+    } yield (side, piece) -> (xx to yy)
     mapping.toMap
   }
 
@@ -94,7 +94,7 @@ object Rules {
         case Piece(color, King) =>
           castlingsBy(color)
         case Piece(color, Rook) =>
-          castlingsBy(color).filter(_.rookMove.from == placed.square)
+          castlingsBy(color).filter(_.rookMove.draw.from == placed.square)
         case _ => Nil
       }
     }

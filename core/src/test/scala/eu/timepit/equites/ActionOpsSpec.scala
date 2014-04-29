@@ -20,7 +20,7 @@ import org.specs2.mutable._
 
 import ActionOps._
 import util.BoardBuilder._
-import util.CoordinateMove
+import util.CoordinateAction
 import util.PieceAbbr.Wiki._
 
 class ActionOpsSpec extends Specification {
@@ -37,7 +37,7 @@ class ActionOpsSpec extends Specification {
 
     "reconstruct a capture" in {
       val move = Move(rl, Square.unsafeFrom(0, 0) to Square.unsafeFrom(0, 7))
-      val capture = Capture(move, bd)
+      val capture = Capture(move.piece, move.draw, bd)
       reifyAsCapture(board, move) must beSome(capture)
     }
     "not reconstruct a move as capture" in {
@@ -74,27 +74,27 @@ class ActionOpsSpec extends Specification {
     }
 
     "reconstruct a cm as move" in {
-      reifyAsAction(board, CoordinateMove(Square.unsafeFrom(0, 0) to Square.unsafeFrom(0, 6))) must
+      reifyAsAction(board, CoordinateAction(Square.unsafeFrom(0, 0) to Square.unsafeFrom(0, 6))) must
         beSome(Move(rl, Square.unsafeFrom(0, 0) to Square.unsafeFrom(0, 6)))
     }
     "reconstruct a cm as promotion" in {
-      reifyAsAction(board, CoordinateMove(Square.unsafeFrom(4, 6) to Square.unsafeFrom(4, 7), Some(ql))) must
+      reifyAsAction(board, CoordinateAction(Square.unsafeFrom(4, 6) to Square.unsafeFrom(4, 7), Some(ql))) must
         beSome(Promotion(pl, Square.unsafeFrom(4, 6) to Square.unsafeFrom(4, 7), ql))
     }
     "reconstruct a cm as capture" in {
-      reifyAsAction(board, CoordinateMove(Square.unsafeFrom(0, 0) to Square.unsafeFrom(0, 7))) must
+      reifyAsAction(board, CoordinateAction(Square.unsafeFrom(0, 0) to Square.unsafeFrom(0, 7))) must
         beSome(Capture(rl, Square.unsafeFrom(0, 0) to Square.unsafeFrom(0, 7), bd))
     }
     "reconstruct a cm as capture and promotion" in {
-      reifyAsAction(board, CoordinateMove(Square.unsafeFrom(1, 6) to Square.unsafeFrom(0, 7), Some(ql))) must
+      reifyAsAction(board, CoordinateAction(Square.unsafeFrom(1, 6) to Square.unsafeFrom(0, 7), Some(ql))) must
         beSome(CaptureAndPromotion(pl, Square.unsafeFrom(1, 6) to Square.unsafeFrom(0, 7), bd, ql))
     }
     "reconstruct a cm as en passant" in {
-      reifyAsAction(board, CoordinateMove(Square.unsafeFrom(5, 4) to Square.unsafeFrom(6, 5))) must
+      reifyAsAction(board, CoordinateAction(Square.unsafeFrom(5, 4) to Square.unsafeFrom(6, 5))) must
         beSome(EnPassant(pl, Square.unsafeFrom(5, 4) to Square.unsafeFrom(6, 5), pd, Square.unsafeFrom(6, 4)))
     }
     "reconstruct a cm as long castling" in {
-      reifyAsAction(board, CoordinateMove(Square.unsafeFrom(4, 0) to Square.unsafeFrom(2, 0))) must
+      reifyAsAction(board, CoordinateAction(Square.unsafeFrom(4, 0) to Square.unsafeFrom(2, 0))) must
         beSome(CastlingLong(White))
     }
 
