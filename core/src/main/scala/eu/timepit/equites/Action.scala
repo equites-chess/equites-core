@@ -20,7 +20,7 @@ sealed trait Action {
   def piece: AnyPiece
   def draw: Draw
 
-  def placedPiece: Placed[AnyPiece] = Placed(piece, draw.from)
+  def placedPiece: Placed[AnyPiece] = Placed(piece, draw.src)
 }
 
 sealed trait MoveLike extends Action
@@ -28,7 +28,7 @@ sealed trait MoveLike extends Action
 sealed trait CaptureLike extends MoveLike {
   def captured: AnyPiece
 
-  def capturedOn: Square = draw.to
+  def capturedOn: Square = draw.dest
   def placedCaptured: Placed[AnyPiece] = Placed(captured, capturedOn)
 }
 
@@ -36,7 +36,7 @@ sealed trait PromotionLike extends MoveLike {
   def piece: AnyPawn
   def promotedTo: PromotedPiece
 
-  def placedPromoted: Placed[PromotedPiece] = Placed(promotedTo, draw.to)
+  def placedPromoted: Placed[PromotedPiece] = Placed(promotedTo, draw.dest)
 }
 
 case class Move(

@@ -16,14 +16,14 @@
 
 package eu.timepit.equites
 
-case class Draw(from: Square, to: Square) {
-  def direction: Vec = to - from
+case class Draw(src: Square, dest: Square) {
+  def direction: Vec = dest - src
 
-  def isNull: Boolean = from == to
+  def isNull: Boolean = src == dest
   def nonNull: Boolean = !isNull
 
   def l1Length: Int = direction.l1Length
   def lInfLength: Int = direction.lInfLength
 
-  def squares: Seq[Square] = Seq(from, to)
+  def squares: Seq[Square] = Seq(src, dest)
 }

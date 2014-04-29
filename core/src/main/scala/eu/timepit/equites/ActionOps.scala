@@ -33,7 +33,7 @@ object ActionOps {
    */
   def enPassantTarget(action: Action): Option[Square] =
     allowsEnPassant(action).option {
-      val file = action.draw.from.file
+      val file = action.draw.src.file
       val rank = Rules.enPassantTargetRankBy(action.piece.color)
       Square.from(file, rank)
     }.flatten
@@ -54,13 +54,13 @@ object ActionOps {
   /// OLD
 
   def reifyAsMove(board: Board, draw: Draw): Option[Move] =
-    (draw.from != draw.to).option {
-      board.get(draw.from).map(piece => Move(piece, draw))
+    (draw.src != draw.dest).option {
+      board.get(draw.src).map(piece => Move(piece, draw))
     }.flatten
 
   def reifyAsCapture(board: Board, move: MoveLike): Option[Capture] =
     for {
-      captured <- board.get(move.draw.to)
+      captured <- board.get(move.draw.dest)
       if captured.isOpponentOf(move.piece)
     } yield Capture(move.piece, move.draw, captured)
 
@@ -68,7 +68,7 @@ object ActionOps {
     for {
       pawn <- move.piece.maybePawn
       if move.draw.direction.isDiagonal
-      target <- move.draw.from + move.draw.direction.fileProj
+      target <- move.draw.src + move.draw.direction.fileProj
       other <- board.get(target)
       otherPawn <- other.maybePawn
       if otherPawn.isOpponentOf(pawn)

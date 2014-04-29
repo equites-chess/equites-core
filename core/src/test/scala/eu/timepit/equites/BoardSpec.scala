@@ -93,10 +93,10 @@ class BoardSpec extends Specification {
 
     "process and reverse castlings" in {
       val castling = CastlingLong(White)
-      val before = Board(castling.kingMove.draw.from -> castling.king,
-        castling.rookMove.draw.from -> castling.rook)
-      val after = Board(castling.kingMove.draw.to -> castling.king,
-        castling.rookMove.draw.to -> castling.rook)
+      val before = Board(castling.kingMove.draw.src -> castling.king,
+        castling.rookMove.draw.src -> castling.rook)
+      val after = Board(castling.kingMove.draw.dest -> castling.king,
+        castling.rookMove.draw.dest -> castling.rook)
       checkAction(before, after, castling)
     }
   }

@@ -53,27 +53,27 @@ class Board(val self: Map[Square, AnyPiece])
   }
 
   def processMove(move: MoveLike): Board =
-    this - move.draw.from + (move.draw.to -> move.piece)
+    this - move.draw.src + (move.draw.dest -> move.piece)
 
   def reverseMove(move: MoveLike): Board =
-    this - move.draw.to + (move.draw.from -> move.piece)
+    this - move.draw.dest + (move.draw.src -> move.piece)
 
   def processPromotion(promotion: PromotionLike): Board =
-    this - promotion.draw.from + (promotion.draw.to -> promotion.promotedTo)
+    this - promotion.draw.src + (promotion.draw.dest -> promotion.promotedTo)
 
   def reversePromotion(promotion: PromotionLike): Board =
-    this - promotion.draw.to + (promotion.draw.from -> promotion.piece)
+    this - promotion.draw.dest + (promotion.draw.src -> promotion.piece)
 
   def processCapture(capture: CaptureLike): Board =
-    this - capture.draw.from - capture.capturedOn + (capture.draw.to -> capture.piece)
+    this - capture.draw.src - capture.capturedOn + (capture.draw.dest -> capture.piece)
 
   def reverseCapture(capture: CaptureLike): Board =
-    this - capture.draw.to + (capture.capturedOn -> capture.captured) +
-      (capture.draw.from -> capture.piece)
+    this - capture.draw.dest + (capture.capturedOn -> capture.captured) +
+      (capture.draw.src -> capture.piece)
 
   def processCaptureAndPromotion(capture: CaptureAndPromotion): Board =
-    this - capture.draw.from - capture.capturedOn +
-      (capture.draw.to -> capture.promotedTo)
+    this - capture.draw.src - capture.capturedOn +
+      (capture.draw.dest -> capture.promotedTo)
 
   def reverseCaptureAndPromotion(capture: CaptureAndPromotion): Board =
     reverseCapture(capture: CaptureLike)

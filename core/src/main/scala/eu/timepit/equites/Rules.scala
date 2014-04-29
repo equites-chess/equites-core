@@ -94,7 +94,7 @@ object Rules {
         case Piece(color, King) =>
           castlingsBy(color)
         case Piece(color, Rook) =>
-          castlingsBy(color).filter(_.rookMove.draw.from == placed.square)
+          castlingsBy(color).filter(_.rookMove.draw.src == placed.square)
         case _ => Nil
       }
     }
