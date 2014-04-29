@@ -38,9 +38,9 @@ object UciParsers extends RegexParsers {
 
   def int: Parser[Int] = """-?\d+""".r ^^ (_.toInt)
 
-  val algebraicFile: Parser[Char] = oneOf(algebraicFileRange) ^^ (_.charAt(0))
+  def algebraicFile: Parser[Char] = oneOf(algebraicFileRange) ^^ (_.charAt(0))
 
-  val algebraicRank: Parser[Int] = oneOf(algebraicRankRange) ^^ (_.toInt)
+  def algebraicRank: Parser[Int] = oneOf(algebraicRankRange) ^^ (_.toInt)
 
   def square: Parser[Square] = algebraicFile ~ algebraicRank ^^ {
     case file ~ rank => unsafeFromAlgebraic(file, rank)
@@ -56,12 +56,10 @@ object UciParsers extends RegexParsers {
 
   def coordinateAction: Parser[CoordinateAction] =
     draw ~ promotedPieceFn.? ^^ {
-      case draw ~ pieceFnOpt =>
-        val piece = pieceFnOpt.map { pieceFn =>
-          val color = Color.guessFrom(draw.direction).getOrElse(White)
-          pieceFn(color)
-        }
-        CoordinateAction(draw, piece)
+      case parsedDraw ~ pieceFnOpt =>
+        val color = Color.guessFrom(parsedDraw.direction).getOrElse(White)
+        val piece = pieceFnOpt.map(_(color))
+        CoordinateAction(parsedDraw, piece)
     }
 
   def id: Parser[Id] = "id" ~> symbol ~ string ^^ {
