@@ -19,6 +19,7 @@ package eu.timepit.equites
 import scalaz._
 
 import util.Math._
+import util.PlayerPerspective
 
 case class Vec(file: Int, rank: Int) extends PlayerPerspective[Vec] {
   def map(f: Int => Int): Vec = Vec(f(file), f(rank))
@@ -71,7 +72,7 @@ case class Vec(file: Int, rank: Int) extends PlayerPerspective[Vec] {
 
   def isDiagonal: Boolean = notZero && (file.abs == rank.abs)
 
-  def to(that: Vec): Seq[Vec] =
+  def rectangleTo(that: Vec): Seq[Vec] =
     for {
       f <- file to that.file
       r <- rank to that.rank

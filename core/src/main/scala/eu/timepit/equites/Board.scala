@@ -18,8 +18,17 @@ package eu.timepit.equites
 
 import scala.collection.immutable.MapProxy
 
-class Board(val self: Map[Square, AnyPiece])
+case class Board(self: Map[Square, AnyPiece])
     extends MapProxy[Square, AnyPiece] {
+
+  def +(kv: (Square, AnyPiece)): Board =
+    Board(self + kv)
+
+  def +(placed: Placed[AnyPiece]): Board =
+    this + placed.toTuple
+
+  override def -(square: Square): Board =
+    Board(self - square)
 
   def getPlaced(square: Square): Option[Placed[AnyPiece]] =
     get(square).map(Placed(_, square))
@@ -35,6 +44,8 @@ class Board(val self: Map[Square, AnyPiece])
 
   def placedPieces: Stream[Placed[AnyPiece]] =
     toStream.map { case (square, piece) => Placed(piece, square) }
+
+  // TODO: CLEAN!
 
   def processAction(action: Action): Board = action match {
     case a: CaptureAndPromotion => processCaptureAndPromotion(a)
@@ -83,19 +94,9 @@ class Board(val self: Map[Square, AnyPiece])
 
   def reverseCastling(castling: Castling): Board =
     reverseAction(castling.kingMove).reverseAction(castling.rookMove)
-
-  def +(kv: (Square, AnyPiece)): Board =
-    Board(self + kv)
-
-  def +(placed: Placed[AnyPiece]): Board =
-    Board(self + (placed.square -> placed.elem))
-
-  override def -(square: Square): Board =
-    Board(self - square)
 }
 
 object Board {
-  def apply(mapping: Map[Square, AnyPiece]): Board = new Board(mapping)
-  def apply(kvs: (Square, AnyPiece)*): Board = new Board(kvs.toMap)
-  val empty: Board = Board()
+  def apply(kvs: (Square, AnyPiece)*): Board = Board(kvs.toMap)
+  val empty: Board = Board(Map.empty[Square, AnyPiece])
 }

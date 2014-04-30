@@ -130,7 +130,7 @@ object Rules {
         Piece(color, Rook) -> ((straight, maxLength)),
         Piece(color, Bishop) -> ((diagonal, maxLength)),
         Piece(color, Knight) -> ((knightLike, 1)),
-        Piece(color, Pawn) -> ((front.fromPov(color), 1)))
+        Piece(color, Pawn) -> ((front.fromViewOf(color), 1)))
     }
     Color.all.map(movementTypesBy).reduce(_ ++ _)
   }

@@ -15,17 +15,16 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package eu.timepit.equites
+package util
 
 trait PlayerPerspective[T] {
   self: T =>
 
   def inverse: T
 
-  def inverseIf(bool: Boolean): T = if (bool) inverse else this
+  def inverseIfWhite(color: Color): T = color.fold(inverse, this)
 
-  def inverseIfWhite(color: Color): T = inverseIf(color == White)
+  def inverseIfBlack(color: Color): T = color.fold(this, inverse)
 
-  def inverseIfBlack(color: Color): T = inverseIf(color == Black)
-
-  def fromPov(color: Color): T = inverseIfBlack(color)
+  def fromViewOf(color: Color): T = inverseIfBlack(color)
 }

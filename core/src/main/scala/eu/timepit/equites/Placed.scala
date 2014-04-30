@@ -20,6 +20,7 @@ import scalaz._
 
 case class Placed[+A](elem: A, square: Square) {
   def map[B](f: A => B): Placed[B] = copy(f(elem))
+  def toTuple: (Square, A) = (square, elem)
 }
 
 object Placed extends PlacedInstances

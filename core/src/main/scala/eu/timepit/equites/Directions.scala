@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2011-2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2011-2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,11 +16,12 @@
 
 package eu.timepit.equites
 
-import scala.collection.immutable._
+import scala.collection.immutable.SetProxy
 
 import implicits.GenericImplicits._
+import util.PlayerPerspective
 
-class Directions(val self: Set[Vec]) extends SetProxy[Vec]
+case class Directions(self: Set[Vec]) extends SetProxy[Vec]
     with PlayerPerspective[Directions] {
 
   def inverse: Directions = Directions(map(_.inverse))
@@ -30,8 +31,8 @@ class Directions(val self: Set[Vec]) extends SetProxy[Vec]
 }
 
 object Directions {
-  def apply(vs: Vec*): Directions = apply(vs)
-  def apply(vs: TraversableOnce[Vec]): Directions = new Directions(vs.toSet)
+  def apply(vs: Vec*): Directions = Directions(vs)
+  def apply(vs: TraversableOnce[Vec]): Directions = Directions(vs.toSet)
 
   // format: OFF
   val front = Directions(Vec.front)
@@ -55,6 +56,9 @@ object Directions {
   val anywhere = Directions(straight ++ diagonal)
   // format: ON
 
-  val knightLike =
-    Directions((Vec(-2, -2) to Vec(2, 2)).filter(_.l1Length == 3))
+  val knightLike = {
+    val moveLength = 3
+    val directions = Vec(-2, -2) rectangleTo Vec(2, 2)
+    Directions(directions.filter(_.l1Length == moveLength))
+  }
 }

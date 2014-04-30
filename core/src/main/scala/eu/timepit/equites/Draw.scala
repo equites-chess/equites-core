@@ -18,6 +18,7 @@ package eu.timepit.equites
 
 case class Draw(src: Square, dest: Square) {
   def direction: Vec = dest - src
+  def inverse: Draw = dest to src
 
   def isNull: Boolean = src == dest
   def nonNull: Boolean = !isNull
