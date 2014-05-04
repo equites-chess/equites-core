@@ -16,7 +16,14 @@
 
 package eu.timepit.equites
 
-sealed trait Side
+sealed trait Side {
+  def fold[A](ifKingside: => A, ifQueenside: => A): A =
+    this match {
+      case Kingside  => ifKingside
+      case Queenside => ifQueenside
+    }
+}
+
 case object Kingside extends Side
 case object Queenside extends Side
 
