@@ -42,29 +42,29 @@ trait AbstractTheme {
 }
 
 trait LetterTheme extends AbstractTheme {
-  def showPiece(piece: AnyPiece) = showLetter(piece)
-  def tileEmpty        = "."
-  override def rankSep = " "
-  def verticalBar      = "  "
-  override def corner  = " "
+  override def showPiece(piece: AnyPiece) = showLetter(piece)
+  override def tileEmpty       = "."
+  override def rankSep         = " "
+  override def verticalBar     = "  "
+  override def corner          = " "
 }
 
 trait FigurineTheme extends AbstractTheme {
-  def showPiece(piece: AnyPiece) = showFigurine(piece)
-  def tileEmpty              = "·"
-  override def rankSep       = " "
-  override def horizontalBar = "─"
-  override def verticalBar   = "│ "
-  override def corner        = "┘"
+  override def showPiece(piece: AnyPiece) = showFigurine(piece)
+  override def tileEmpty       = "·"
+  override def rankSep         = " "
+  override def horizontalBar   = "─"
+  override def verticalBar     = "│ "
+  override def corner          = "┘"
 }
 
 trait WikiTheme extends AbstractTheme {
-  def showPiece(piece: AnyPiece) = showWikiLetters(piece)
+  override def showPiece(piece: AnyPiece) = showWikiLetters(piece)
   override def tileStart       = "|"
-  def tileEmpty                = "  "
+  override def tileEmpty       = "  "
   override def tileEnd         = ""
   override def rankEnd         = "|="
-  def verticalBar              = " "
+  override def verticalBar     = " "
   override def fileLabelsStart = "   "
   override def fileLabelsSep   = "  "
   override def fileLabelsEnd   = " "
