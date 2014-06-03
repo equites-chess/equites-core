@@ -20,6 +20,8 @@ package util
 import org.specs2.mutable._
 import org.specs2.matcher.ParserMatchers
 
+import util.Pgn._
+
 class PgnParsersSpec extends Specification with ParserMatchers {
   val parsers = PgnParsers
   import parsers._
@@ -75,14 +77,14 @@ class PgnParsersSpec extends Specification with ParserMatchers {
   }
 
   "tagPair" should {
-    "succeed on valid input" in {
-      val result = ("name", "value")
+    "succeed on valid tags" in {
+      val result = Tag("name", "value")
       tagPair must succeedOn("""[name"value"]""").withResult(result)
       tagPair must succeedOn("""[name "value"]""").withResult(result)
       tagPair must succeedOn("""[ name "value"]""").withResult(result)
       tagPair must succeedOn("""[ name "value" ]""").withResult(result)
     }
-    "fail on invalid input" in {
+    "fail on invalid tags" in {
       tagPair must failOn("""[name "value"""")
       tagPair must failOn("""name "value"]""")
       tagPair must failOn("""[name ["value"]""")
@@ -100,13 +102,13 @@ class PgnParsersSpec extends Specification with ParserMatchers {
            |[Black "Spassky, Boris V."]
            |[Result "1/2-1/2"]""".stripMargin
       val result = List(
-        ("Event", "F/S Return Match"),
-        ("Site", "Belgrade, Serbia Yugoslavia|JUG"),
-        ("Date", "1992.11.04"),
-        ("Round", "29"),
-        ("White", "Fischer, Robert J."),
-        ("Black", "Spassky, Boris V."),
-        ("Result", "1/2-1/2"))
+        Tag("Event", "F/S Return Match"),
+        Tag("Site", "Belgrade, Serbia Yugoslavia|JUG"),
+        Tag("Date", "1992.11.04"),
+        Tag("Round", "29"),
+        Tag("White", "Fischer, Robert J."),
+        Tag("Black", "Spassky, Boris V."),
+        Tag("Result", "1/2-1/2"))
       tagSection must succeedOn(section).withResult(equalTo(result))
     }
     "succeed on valid input with trailing comments" in {
@@ -115,17 +117,19 @@ class PgnParsersSpec extends Specification with ParserMatchers {
            |[name2 "value2"] { comment1 } { comment2 }
            |[name3 "value3"]""".stripMargin
       val result = List(
-        ("name1", "value1"),
-        ("name2", "value2"),
-        ("name3", "value3"))
+        Tag("name1", "value1"),
+        Tag("name2", "value2"),
+        Tag("name3", "value3"))
       tagSection must succeedOn(section).withResult(equalTo(result))
     }
   }
 
   "moveNumberIndicator" should {
-    "succeed on numbers with on or three periods" in {
-      moveNumberIndicator must succeedOn("23.").withResult((23, White))
-      moveNumberIndicator must succeedOn("42...").withResult((42, Black))
+    "succeed on numbers with one or three periods" in {
+      moveNumberIndicator must succeedOn("23.")
+        .withResult(MoveNumberIndicator(23, White))
+      moveNumberIndicator must succeedOn("42...")
+        .withResult(MoveNumberIndicator(42, Black))
     }
     "fail on invalid input" in {
       moveNumberIndicator must failOn("1")
@@ -152,19 +156,19 @@ class PgnParsersSpec extends Specification with ParserMatchers {
 
   "moveAnnotation" should {
     "succeed on all valid possibilities" in {
-      moveAnnotation must succeedOn("!").withResult(1)
-      moveAnnotation must succeedOn("?").withResult(2)
-      moveAnnotation must succeedOn("!!").withResult(3)
-      moveAnnotation must succeedOn("??").withResult(4)
-      moveAnnotation must succeedOn("!?").withResult(5)
-      moveAnnotation must succeedOn("?!").withResult(6)
+      moveAnnotation must succeedOn("!").withResult(AnnotationGlyph(1))
+      moveAnnotation must succeedOn("?").withResult(AnnotationGlyph(2))
+      moveAnnotation must succeedOn("!!").withResult(AnnotationGlyph(3))
+      moveAnnotation must succeedOn("??").withResult(AnnotationGlyph(4))
+      moveAnnotation must succeedOn("!?").withResult(AnnotationGlyph(5))
+      moveAnnotation must succeedOn("?!").withResult(AnnotationGlyph(6))
     }
   }
 
   "numericAnnotationGlyph" should {
     "succeed on valid input" in {
-      numericAnnotationGlyph must succeedOn("$1").withResult(1)
-      numericAnnotationGlyph must succeedOn("$123").withResult(123)
+      numericAnnotationGlyph must succeedOn("$1").withResult(AnnotationGlyph(1))
+      numericAnnotationGlyph must succeedOn("$123").withResult(AnnotationGlyph(123))
     }
   }
 
@@ -182,10 +186,10 @@ class PgnParsersSpec extends Specification with ParserMatchers {
       val text = "1. e4 e5 2. Nf3 Nc6 3. Bb5 " +
         "{This opening is called the Ruy Lopez.} 3... a6"
       val result = List(
-        (1, White), "e4", "e5",
-        (2, White), "Nf3", "Nc6",
-        (3, White), "Bb5", Comment("This opening is called the Ruy Lopez."),
-        (3, Black), "a6")
+        MoveNumberIndicator(1, White), "e4", "e5",
+        MoveNumberIndicator(2, White), "Nf3", "Nc6",
+        MoveNumberIndicator(3, White), "Bb5", Comment("This opening is called the Ruy Lopez."),
+        MoveNumberIndicator(3, Black), "a6")
 
       moveTextSeq must succeedOn(text).withResult(equalTo(result))
     }

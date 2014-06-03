@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2013-2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,8 +20,7 @@ package util
 import scala.util.parsing.combinator._
 
 import implicits.GenericImplicits._
-
-case class Comment(text: String)
+import util.Pgn._
 
 /**
  * Parsers for the Portable Game Notation (PGN).
@@ -43,10 +42,10 @@ object PgnParsers extends RegexParsers {
     """[\d\p{Alpha}][\w+#=:-]*""".r
 
   def blockComment: Parser[Comment] =
-    """\{[^}]*\}""".r ^^ (x => Comment(x.dropLeftRight(1)))
+    """\{[^}]*\}""".r ^^ (text => Comment(text.dropLeftRight(1)))
 
   def lineComment: Parser[Comment] =
-    """;.*""".r ^^ (x => Comment(x.drop(1)))
+    """;.*""".r ^^ (text => Comment(text.drop(1)))
 
   def comment: Parser[Comment] =
     blockComment | lineComment
@@ -57,22 +56,26 @@ object PgnParsers extends RegexParsers {
   def tagValue: Parser[String] =
     string
 
-  def tagPair: Parser[(String, String)] =
-    "[" ~> tagName ~ tagValue <~ "]" ^^ toTuple
+  def tagPair: Parser[Tag] =
+    "[" ~> tagName ~ tagValue <~ "]" ^^ {
+      case name ~ value => Tag(name, value)
+    }
 
-  def tagSection: Parser[List[(String, String)]] =
+  def tagSection: Parser[List[Tag]] =
     (tagPair <~ comment.*).*
 
-  def moveNumberIndicator: Parser[(Int, Color)] = {
+  def moveNumberIndicator: Parser[MoveNumberIndicator] = {
     def white = "." ^^^ White
     def black = "..." ^^^ Black
-    integer ~ (black | white) ^^ toTuple
+    integer ~ (black | white) ^^ {
+      case number ~ color => MoveNumberIndicator(number, color)
+    }
   }
 
   def sanMove: Parser[String] =
     """(\p{Print}?([a-z]?\d?|)x?[a-z]\d(=\p{Print})?[+#]?|O(-O){1,2})""".r
 
-  def moveAnnotation: Parser[Int] =
+  def moveAnnotation: Parser[AnnotationGlyph] =
     """[!?]{1,2}""".r ^^ {
       case "!"  => 1
       case "?"  => 2
@@ -80,10 +83,10 @@ object PgnParsers extends RegexParsers {
       case "??" => 4
       case "!?" => 5
       case "?!" => 6
-    }
+    } map AnnotationGlyph
 
-  def numericAnnotationGlyph: Parser[Int] =
-    "$" ~> integer
+  def numericAnnotationGlyph: Parser[AnnotationGlyph] =
+    "$" ~> integer ^^ AnnotationGlyph
 
   def terminationMarker: Parser[GameResult] =
     GameResult.all.map(r => GameResultUtil.showPgnMarker(r) ^^^ r).reduce(_ | _)
@@ -99,8 +102,6 @@ object PgnParsers extends RegexParsers {
 
   def moveText: Parser[Any] =
     moveTextSeq ~ terminationMarker
-
-  def toTuple[T, U](seq: T ~ U): (T, U) = (seq._1, seq._2)
 }
 
 /*
