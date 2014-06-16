@@ -72,8 +72,8 @@ object PgnParsers extends RegexParsers {
     }
   }
 
-  def sanMove: Parser[String] =
-    """(\p{Print}?([a-z]?\d?|)x?[a-z]\d(=\p{Print})?[+#]?|O(-O){1,2})""".r
+  def sanMove: Parser[SanMove] =
+    """(\p{Print}?([a-z]?\d?|)x?[a-z]\d(=\p{Print})?[+#]?|O(-O){1,2})""".r ^^ SanMove
 
   def moveAnnotation: Parser[AnnotationGlyph] =
     """[!?]{1,2}""".r ^^ {
@@ -91,17 +91,24 @@ object PgnParsers extends RegexParsers {
   def terminationMarker: Parser[GameResult] =
     GameResult.all.map(r => GameResultUtil.showPgnMarker(r) ^^^ r).reduce(_ | _)
 
-  def moveTextElem: Parser[Any] =
+  def moveTextElem: Parser[MoveElement] =
     moveNumberIndicator | sanMove | moveAnnotation | numericAnnotationGlyph
 
-  def moveTextSeq: Parser[List[Any]] =
+  def moveTextSeq: Parser[List[SeqElem]] =
     (moveTextElem | blockComment | recursiveVariation).*
 
-  def recursiveVariation: Parser[List[Any]] =
-    "(" ~> moveTextSeq <~ ")"
+  def recursiveVariation: Parser[RecursiveVariation] =
+    "(" ~> moveTextSeq <~ ")" ^^ RecursiveVariation
 
-  def moveText: Parser[Any] =
-    moveTextSeq ~ terminationMarker
+  def moveTextSection: Parser[MoveTextSection] =
+    moveTextSeq ~ terminationMarker ^^ {
+      case moveText ~ result => MoveTextSection(moveText, result)
+    }
+
+  def gameRecord: Parser[GameRecord] =
+    tagSection ~ moveTextSection ^^ {
+      case tags ~ moves => GameRecord(tags, moves)
+    }
 }
 
 /*

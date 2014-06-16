@@ -18,11 +18,23 @@ package eu.timepit.equites
 package util
 
 object Pgn {
-  case class Comment(text: String) extends AnyVal
+  sealed trait SeqElem
+
+  case class RecursiveVariation(variation: List[SeqElem]) extends SeqElem
+
+  case class Comment(text: String) extends SeqElem
 
   case class Tag(name: String, value: String)
 
-  case class MoveNumberIndicator(moveNumber: Int, color: Color)
+  sealed trait MoveElement extends SeqElem
 
-  case class AnnotationGlyph(glyph: Int) extends AnyVal
+  case class MoveNumberIndicator(moveNumber: Int, color: Color) extends MoveElement
+
+  case class SanMove(move: String) extends MoveElement
+
+  case class AnnotationGlyph(glyph: Int) extends MoveElement
+
+  case class MoveTextSection(moveText: List[SeqElem], result: GameResult)
+
+  case class GameRecord(header: List[Tag], moveText: MoveTextSection)
 }
