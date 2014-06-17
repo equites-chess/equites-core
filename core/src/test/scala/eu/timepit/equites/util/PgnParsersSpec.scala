@@ -186,10 +186,17 @@ class PgnParsersSpec extends Specification with ParserMatchers {
       val text = "1. e4 e5 2. Nf3 Nc6 3. Bb5 " +
         "{This opening is called the Ruy Lopez.} 3... a6"
       val result = List(
-        MoveNumberIndicator(1, White), SanMove("e4"), SanMove("e5"),
-        MoveNumberIndicator(2, White), SanMove("Nf3"), SanMove("Nc6"),
-        MoveNumberIndicator(3, White), SanMove("Bb5"), Comment("This opening is called the Ruy Lopez."),
-        MoveNumberIndicator(3, Black), SanMove("a6"))
+        SeqMoveElement(MoveNumberIndicator(1, White)),
+        SeqMoveElement(SanMove("e4")),
+        SeqMoveElement(SanMove("e5")),
+        SeqMoveElement(MoveNumberIndicator(2, White)),
+        SeqMoveElement(SanMove("Nf3")),
+        SeqMoveElement(SanMove("Nc6")),
+        SeqMoveElement(MoveNumberIndicator(3, White)),
+        SeqMoveElement(SanMove("Bb5")),
+        SeqComment(Comment("This opening is called the Ruy Lopez.")),
+        SeqMoveElement(MoveNumberIndicator(3, Black)),
+        SeqMoveElement(SanMove("a6")))
 
       moveTextSeq must succeedOn(text).withResult(equalTo(result))
     }
