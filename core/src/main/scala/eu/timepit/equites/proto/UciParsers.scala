@@ -18,6 +18,8 @@ package eu.timepit.equites
 package proto
 
 import scala.util.parsing.combinator._
+import scalaz.Apply
+import scalaz.std.option._
 
 import proto.Uci._
 import util.CoordinateAction
@@ -49,16 +51,16 @@ object UciParsers extends RegexParsers {
   def draw: Parser[Draw] =
     square ~ square ^^ { case src ~ dest => src to dest }
 
-  def promotedPieceFn: Parser[Color => PromotedPiece] =
+  def promotedPieceType: Parser[PromotedPieceType] =
     PieceType.allPromoted.map {
-      pt => showLowerCaseLetter(pt) ^^^ ((c: Color) => Piece(c, pt))
+      pt => showLowerCaseLetter(pt) ^^^ pt
     }.reduce(_ | _)
 
   def coordinateAction: Parser[CoordinateAction] =
-    draw ~ promotedPieceFn.? ^^ {
-      case parsedDraw ~ pieceFnOpt =>
+    draw ~ promotedPieceType.? ^^ {
+      case parsedDraw ~ pieceTypeOpt =>
         val colorOpt = Color.guessFrom(parsedDraw.direction)
-        val pieceOpt = pieceFnOpt.flatMap(colorOpt.map)
+        val pieceOpt = Apply[Option].apply2(colorOpt, pieceTypeOpt)(Piece.apply)
         CoordinateAction(parsedDraw, pieceOpt)
     }
 
