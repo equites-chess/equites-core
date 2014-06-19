@@ -47,8 +47,8 @@ object BuildSettings {
   lazy val childSettings =
     bintray.Plugin.bintraySettings ++
     de.johoop.cpd4sbt.CopyPasteDetector.cpdSettings ++
-    ScctPlugin.instrumentSettings ++
     ScalariformSettings.ourScalariformSettings ++
+    scoverage.ScoverageSbtPlugin.instrumentSettings ++
     Seq(
       initialCommands := """
         import scalaz._
@@ -60,7 +60,6 @@ object BuildSettings {
 
   lazy val rootSettings =
     play.Project.playScalaSettings ++
-    ScctPlugin.mergeReportSettings ++
     commonSettings ++
     Seq(
       publishArtifact := false
