@@ -59,7 +59,7 @@ object BuildSettings {
     )
 
   lazy val rootSettings =
-    play.Project.playScalaSettings ++
+    //play.Project.playScalaSettings ++
     commonSettings ++
     Seq(
       publishArtifact := false
@@ -88,7 +88,7 @@ object BuildSettings {
     commonSettings ++
     childSettings
 
-  lazy val webSettings =
+  /*lazy val webSettings =
     play.Project.playScalaSettings ++
     commonSettings ++
     childSettings ++
@@ -96,5 +96,5 @@ object BuildSettings {
       libraryDependencies ++= Seq(
         swaggerPlay
       )
-    )
+    )*/
 }

@@ -6,7 +6,7 @@ object EquitesBuild extends Build {
 
   lazy val root = Project(id = "equites-root", base = file("."))
     .settings(rootSettings: _*)
-    .aggregate(cli, core, gfx, web)
+    .aggregate(cli, core, gfx)
 
   lazy val cli = Project(id = "equites-cli", base = file("cli"))
     .settings(cliSettings: _*)
@@ -19,7 +19,7 @@ object EquitesBuild extends Build {
     .settings(gfxSettings: _*)
     .dependsOn(core)
 
-  lazy val web = Project(id = "equites-web", base = file("web"))
-    .settings(webSettings: _*)
-    .dependsOn(core)
+  //lazy val web = Project(id = "equites-web", base = file("web"))
+  //  .settings(webSettings: _*)
+  //  .dependsOn(core)
 }
