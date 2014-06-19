@@ -17,21 +17,20 @@
 package eu.timepit.equites
 package proto
 
-import scala.util.parsing.combinator._
 import scalaz.Apply
 import scalaz.std.option._
 
 import proto.Uci._
 import util.CoordinateAction
+import util.GenericParsers
 import util.PieceUtil._
-import util.SquareUtil._
 
 /**
  * Parsers for the Universal Chess Interface (UCI).
  *
  * @see [[http://www.shredderchess.com/chess-info/features/uci-universal-chess-interface.html UCI Protocol]]
  */
-object UciParsers extends RegexParsers {
+object UciParsers extends GenericParsers {
   def symbol: Parser[String] = """\p{Alnum}+""".r
 
   def string: Parser[String] = """.*""".r
@@ -40,21 +39,11 @@ object UciParsers extends RegexParsers {
 
   def int: Parser[Int] = """-?\d+""".r ^^ (_.toInt)
 
-  def algebraicFile: Parser[Char] = oneOf(algebraicFileRange) ^^ (_.charAt(0))
-
-  def algebraicRank: Parser[Int] = oneOf(algebraicRankRange) ^^ (_.toInt)
-
-  def square: Parser[Square] = algebraicFile ~ algebraicRank ^^ {
-    case file ~ rank => unsafeFromAlgebraic(file, rank)
-  }
-
   def draw: Parser[Draw] =
     square ~ square ^^ { case src ~ dest => src to dest }
 
   def promotedPieceType: Parser[PromotedPieceType] =
-    PieceType.allPromoted.map {
-      pt => showLowerCaseLetter(pt) ^^^ pt
-    }.reduce(_ | _)
+    oneOf(PieceType.allPromoted)(showLowerCaseLetter)
 
   def coordinateAction: Parser[CoordinateAction] =
     draw ~ promotedPieceType.? ^^ {
@@ -111,6 +100,4 @@ object UciParsers extends RegexParsers {
     "string" ~> "default" ~> string ^^ UciOption.StringType
 
   def response: Parser[Response] = id | uciok | readyok | bestmove | option
-
-  private def oneOf[A](as: Seq[A]): Parser[String] = as.mkString("|").r
 }

@@ -17,8 +17,6 @@
 package eu.timepit.equites
 package util
 
-import scala.util.parsing.combinator._
-
 import implicits.GenericImplicits._
 import util.Pgn._
 
@@ -27,7 +25,7 @@ import util.Pgn._
  *
  * @see [[http://www.chessclub.com/help/PGN-spec Portable Game Notation Specification and Implementation Guide]]
  */
-object PgnParsers extends RegexParsers {
+object PgnParsers extends GenericParsers {
   def integer: Parser[Int] =
     """\d+""".r ^^ (_.toInt)
 
@@ -89,7 +87,7 @@ object PgnParsers extends RegexParsers {
     "$" ~> integer ^^ AnnotationGlyph
 
   def terminationMarker: Parser[GameResult] =
-    GameResult.all.map(r => GameResultUtil.showPgnMarker(r) ^^^ r).reduce(_ | _)
+    oneOf(GameResult.all)(GameResultUtil.showPgnMarker)
 
   def moveTextElem: Parser[MoveElement] =
     moveNumberIndicator | sanMove | moveAnnotation | numericAnnotationGlyph
