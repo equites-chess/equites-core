@@ -18,6 +18,4 @@ object Dependencies {
     "com.chuusai" %% "shapeless" % "2.0.0"
   val specs2 =
     "org.specs2" %% "specs2" % "2.3.12"
-  val swaggerPlay =
-    "com.wordnik" %% "swagger-play2" % "1.3.2"
 }
