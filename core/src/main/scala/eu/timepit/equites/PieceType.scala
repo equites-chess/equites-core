@@ -16,7 +16,7 @@
 
 package eu.timepit.equites
 
-import scalaz._
+import scalaz.Show
 
 sealed trait PieceType
 sealed trait CastlingPieceType extends PieceType

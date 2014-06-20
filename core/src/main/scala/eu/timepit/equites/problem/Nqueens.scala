@@ -33,6 +33,6 @@ object Nqueens {
 
     val first = Candidate(Board.empty, Rules.allSquaresSet)
     val n = math.sqrt(Rules.allSquaresSeq.length).toInt
-    util.backtrack(first)(nextBoards, _.board.size >= n).map(_.board)
+    util.backtrack(first)(nextBoards, _.board.pieceCount >= n).map(_.board)
   }
 }

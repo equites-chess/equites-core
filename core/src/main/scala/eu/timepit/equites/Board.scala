@@ -16,19 +16,17 @@
 
 package eu.timepit.equites
 
-import scala.collection.immutable.MapProxy
-
-case class Board(self: Map[Square, AnyPiece])
-    extends MapProxy[Square, AnyPiece] {
-
+case class Board(self: Map[Square, AnyPiece]) extends AnyVal {
   def +(kv: (Square, AnyPiece)): Board =
     Board(self + kv)
 
   def +(placed: Placed[AnyPiece]): Board =
     this + placed.toTuple
 
-  override def -(square: Square): Board =
+  def -(square: Square): Board =
     Board(self - square)
+
+  def get(key: Square) = self.get(key)
 
   def getPlaced(square: Square): Option[Placed[AnyPiece]] =
     get(square).map(Placed(_, square))
@@ -37,13 +35,15 @@ case class Board(self: Map[Square, AnyPiece])
     squares.map(getPlaced).flatten
 
   def isVacant(square: Square): Boolean = !isOccupied(square)
-  def isOccupied(square: Square): Boolean = contains(square)
+  def isOccupied(square: Square): Boolean = self.contains(square)
 
   def isOccupiedBy(square: Square, piece: AnyPiece): Boolean =
     get(square).exists(_ == piece)
 
   def placedPieces: Stream[Placed[AnyPiece]] =
-    toStream.map { case (square, piece) => Placed(piece, square) }
+    self.toStream.map { case (square, piece) => Placed(piece, square) }
+
+  def pieceCount: Int = self.size
 
   // TODO: CLEAN!
 

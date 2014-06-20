@@ -35,7 +35,7 @@ object UciEngineVsItself extends App {
       toRawCommands(Position(history)).through(engine.input)
     val writeGoCommand =
       toRawCommands(Go(Go.Movetime(10.millis))).through(engine.input)
-    val prepareGame =
+    val prepareGame: Process[Task, Any] =
       newGameCommands.through(engine.input) ++ readResponses.find(_ == ReadyOk)
     val quitEngine =
       toRawCommands(Quit).through(engine.input)

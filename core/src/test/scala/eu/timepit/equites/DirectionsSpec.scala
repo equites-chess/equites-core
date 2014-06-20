@@ -38,8 +38,8 @@ class DirectionsSpec extends Specification {
       knightLike.inverse must_== knightLike
     }
 
-    "all straight directions are straight" in { straight.forall(_.isStraight) }
-    "all diagonal directions are diagonal" in { diagonal.forall(_.isDiagonal) }
+    "all straight directions are straight" in { straight.self.forall(_.isStraight) }
+    "all diagonal directions are diagonal" in { diagonal.self.forall(_.isDiagonal) }
 
     "correctly perform inverseIfWhite" in {
       front.inverseIfWhite(White) must_== back
@@ -49,12 +49,6 @@ class DirectionsSpec extends Specification {
     "correctly perform inverseIfBlack" in {
       front.inverseIfBlack(White) must_== front
       front.inverseIfBlack(Black) must_== back
-    }
-
-    "must be comparable to Set[Vector]" in {
-      anywhere equals anywhere.self must beTrue
-      anywhere.self equals anywhere must beTrue
-      anywhere diff diagonal must_== straight
     }
 
     "correctly perform mostSimilarTo" in {

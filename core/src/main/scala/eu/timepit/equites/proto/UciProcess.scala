@@ -54,7 +54,7 @@ object UciProcess {
    * `GameState`s to standard output.
    */
   def stdOutLastBoard: Sink[Task, Seq[GameState]] = {
-    val tb = text.FigurineTextBoard
+    val tb = eu.timepit.equites.text.FigurineTextBoard
     io.stdOutLines.contramap {
       (history: Seq[GameState]) =>
         history.lastOption.fold("")(state => tb.mkLabeled(state.board))

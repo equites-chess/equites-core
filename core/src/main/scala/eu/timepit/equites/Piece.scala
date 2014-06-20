@@ -20,8 +20,8 @@ import scalaz._
 import scalaz.Scalaz._
 
 case class Piece[+C <: Color, +T <: PieceType](color: C, pieceType: T) {
-  type ColorT = C
-  type PieceTypeT = T
+  type ColorT <: C
+  type PieceTypeT <: T
 
   def isFriendOf(other: AnyPiece): Boolean = color == other.color
   def isOpponentOf(other: AnyPiece): Boolean = color != other.color

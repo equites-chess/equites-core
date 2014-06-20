@@ -16,15 +16,17 @@
 
 package eu.timepit.equites
 
-import scala.collection.immutable.SetProxy
-
 import implicits.GenericImplicits._
 import util.PlayerPerspective
 
-case class Directions(self: Set[Vec]) extends SetProxy[Vec]
-    with PlayerPerspective[Directions] {
+case class Directions(self: Set[Vec]) extends PlayerPerspective[Directions] {
+  def ++(other: Directions): Directions = Directions(self ++ other.self)
 
-  def inverse: Directions = Directions(map(_.inverse))
+  def contains(dir: Vec): Boolean = self.contains(dir)
+
+  def toStream = self.toStream
+
+  def inverse: Directions = Directions(self.map(_.inverse))
 
   def mostSimilarTo(vec: Vec): Directions =
     Directions(self.minGroupBy((dir: Vec) => (vec - dir).l1Length))
@@ -45,15 +47,15 @@ object Directions {
   val backLeft   = Directions(Vec.backLeft)
   val frontLeft  = Directions(Vec.frontLeft)
 
-  val diagonalFront = Directions(frontLeft ++ frontRight)
-  val diagonalBack  = Directions(backLeft ++ backRight)
+  val diagonalFront = frontLeft ++ frontRight
+  val diagonalBack  = backLeft ++ backRight
 
-  val forward  = Directions(diagonalFront ++ front)
-  val backward = Directions(diagonalBack ++ back)
+  val forward  = diagonalFront ++ front
+  val backward = diagonalBack ++ back
 
-  val straight = Directions(front ++ right ++ back ++ left)
-  val diagonal = Directions(diagonalFront ++ diagonalBack)
-  val anywhere = Directions(straight ++ diagonal)
+  val straight = front ++ right ++ back ++ left
+  val diagonal = diagonalFront ++ diagonalBack
+  val anywhere = straight ++ diagonal
   // format: ON
 
   val knightLike = {

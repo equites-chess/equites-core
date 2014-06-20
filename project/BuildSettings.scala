@@ -18,7 +18,7 @@ object BuildSettings {
     scmInfo := Some(ScmInfo(url("https://github.com/fthomas/equites"),
                     "git@github.com:fthomas/equites.git")),
 
-    scalaVersion := "2.10.4",
+    scalaVersion := "2.11.1",
 
     scalacOptions ++= Seq(
       "-deprecation",
@@ -29,8 +29,7 @@ object BuildSettings {
       "-language:implicitConversions",
       "-unchecked",
       "-Xfatal-warnings",
-      "-Xlint",
-      "-Ywarn-all"
+      "-Xlint"
     ),
 
     scalacOptions in (Compile, doc) ++= Seq(
