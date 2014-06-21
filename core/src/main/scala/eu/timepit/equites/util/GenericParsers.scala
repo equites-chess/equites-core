@@ -23,7 +23,7 @@ import util.SquareUtil._
 
 trait GenericParsers extends RegexParsers {
   def oneOf[A](as: Seq[A])(toLiteral: A => String): Parser[A] =
-    as.map(a => toLiteral(a) ^^^ a).reduce(_ | _)
+    as.map(a => toLiteral(a) ^^^ a).fold(failure("empty sequence"))(_ | _)
 
   def algebraicFile: Parser[Char] = oneOf(algebraicFileRange)(_.toString)
 
