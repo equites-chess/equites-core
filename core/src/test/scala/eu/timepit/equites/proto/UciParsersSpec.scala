@@ -33,7 +33,7 @@ class UciParsersSpec extends Specification with ParserMatchers with ScalaCheck {
 
   "square" should {
     "succeed on random algebraic squares" in check {
-      (s: Square) => square should succeedOn(util.SquareUtil.showAlgebraic(s)).withResult(s)
+      (s: Square) => algebraicSquare should succeedOn(util.SquareUtil.showAlgebraic(s)).withResult(s)
     }
   }
 

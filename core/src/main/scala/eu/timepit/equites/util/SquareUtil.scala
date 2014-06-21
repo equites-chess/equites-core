@@ -29,9 +29,15 @@ object SquareUtil {
   val numericFileRange: Range = incrRange(fileRange, 1)
   def numericRankRange: Range = algebraicRankRange
 
+  def fileFromAlgebraic(algebraicFile: Char): Int =
+    algebraicFileRange.indexOf(algebraicFile)
+
+  def rankFromAlgebraic(algebraicRank: Int): Int =
+    algebraicRankRange.indexOf(algebraicRank)
+
   def fromAlgebraic(algebraicFile: Char, algebraicRank: Int): Option[Square] = {
-    val file = algebraicFileRange.indexOf(algebraicFile)
-    val rank = algebraicRankRange.indexOf(algebraicRank)
+    val file = fileFromAlgebraic(algebraicFile)
+    val rank = rankFromAlgebraic(algebraicRank)
     Square.from(file, rank)
   }
 

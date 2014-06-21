@@ -24,11 +24,73 @@ object Pgn {
 
   ///
 
+  case class MaybeSquare(file: Option[Int] = None, rank: Option[Int] = None)
+
+  object MaybeSquare {
+    def apply(sq: Square): MaybeSquare = MaybeSquare(Some(sq.file), Some(sq.rank))
+  }
+
+  case class MaybeDraw(src: MaybeSquare, dest: Square)
+
+  object MaybeDraw {
+    def apply(dest: Square): MaybeDraw = MaybeDraw(MaybeSquare(), dest)
+  }
+
+  ///
+
+  sealed trait CheckIndicator
+  case object Check extends CheckIndicator
+  case object CheckMate extends CheckIndicator
+
+  ///
+
+  sealed trait SanAction
+
+  sealed trait SanMoveLike extends SanAction {
+    def pieceType: PieceType
+    def draw: MaybeDraw
+  }
+
+  sealed trait SanPromotionLike extends SanMoveLike {
+    def promotedTo: PromotedPieceType
+  }
+
+  case class SanMove(
+    pieceType: PieceType,
+    draw: MaybeDraw)
+      extends SanMoveLike
+
+  case class SanCapture(
+    pieceType: PieceType,
+    draw: MaybeDraw)
+      extends SanMoveLike
+
+  case class SanPromotion(
+    pieceType: PieceType,
+    draw: MaybeDraw,
+    promotedTo: PromotedPieceType)
+      extends SanPromotionLike
+
+  case class SanCaptureAndPromotion(
+    pieceType: PieceType,
+    draw: MaybeDraw,
+    promotedTo: PromotedPieceType)
+      extends SanPromotionLike
+
+  case class SanCastling(side: Side) extends SanAction
+
+  case class CheckingSanAction(
+    action: SanAction,
+    indicator: CheckIndicator)
+      extends SanAction
+
+  ///
+
   sealed trait MoveElement
 
-  case class MoveNumberIndicator(moveNumber: Int, color: Color) extends MoveElement
+  case class MoveNumber(moveNumber: Int, color: Color) extends MoveElement
 
-  case class SanMove(move: String) extends MoveElement
+  case class MoveSymbol(action: SanAction) extends MoveElement
 
   case class AnnotationGlyph(glyph: Int) extends MoveElement
 

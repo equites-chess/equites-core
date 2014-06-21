@@ -40,13 +40,10 @@ object UciParsers extends GenericParsers {
   def int: Parser[Int] = """-?\d+""".r ^^ (_.toInt)
 
   def draw: Parser[Draw] =
-    square ~ square ^^ { case src ~ dest => src to dest }
-
-  def promotedPieceType: Parser[PromotedPieceType] =
-    oneOf(PieceType.allPromoted)(showLowerCaseLetter)
+    algebraicSquare ~ algebraicSquare ^^ { case src ~ dest => src to dest }
 
   def coordinateAction: Parser[CoordinateAction] =
-    draw ~ promotedPieceType.? ^^ {
+    draw ~ lowerCasePromotedPieceType.? ^^ {
       case parsedDraw ~ pieceTypeOpt =>
         val colorOpt = Color.guessFrom(parsedDraw.direction)
         val pieceOpt = Apply[Option].apply2(colorOpt, pieceTypeOpt)(Piece.apply)

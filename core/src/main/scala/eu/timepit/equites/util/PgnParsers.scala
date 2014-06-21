@@ -26,7 +26,11 @@ import util.Pgn._
  * @see [[http://www.chessclub.com/help/PGN-spec Portable Game Notation Specification and Implementation Guide]]
  */
 object PgnParsers extends GenericParsers {
-  def integer: Parser[Int] =
+  override val skipWhitespace = false
+
+  def ws = """\s*""".r
+
+  def nonNegativeInteger: Parser[Int] =
     """\d+""".r ^^ (_.toInt)
 
   def string: Parser[String] =
@@ -55,23 +59,67 @@ object PgnParsers extends GenericParsers {
     string
 
   def tagPair: Parser[Tag] =
-    "[" ~> tagName ~ tagValue <~ "]" ^^ {
+    "[" ~> ws ~> (tagName <~ ws) ~ tagValue <~ ws <~ "]" ^^ {
       case name ~ value => Tag(name, value)
     }
 
   def tagSection: Parser[List[Tag]] =
-    (tagPair <~ comment.*).*
+    (tagPair <~ ws <~ (comment <~ ws).*).*
 
-  def moveNumberIndicator: Parser[MoveNumberIndicator] = {
+  def moveNumber: Parser[MoveNumber] = {
     def white = "." ^^^ White
     def black = "..." ^^^ Black
-    integer ~ (black | white) ^^ {
-      case number ~ color => MoveNumberIndicator(number, color)
+    nonNegativeInteger ~ (black | white) ^^ {
+      case number ~ color => MoveNumber(number, color)
     }
   }
 
-  def sanMove: Parser[SanMove] =
-    """(\p{Print}?([a-z]?\d?|)x?[a-z]\d(=\p{Print})?|O(-O){1,2})[+#]?""".r ^^ SanMove
+  def sanAction: Parser[SanAction] = {
+    def maybeUpperCasePieceType: Parser[PieceType] =
+      upperCasePieceType.?.map(_.getOrElse(Pawn))
+
+    def maybeSquare: Parser[MaybeSquare] =
+      algebraicFile.? ~ algebraicRank.? ^^ {
+        case file ~ rank => MaybeSquare(file, rank)
+      }
+
+    def srcSquareParsers: Seq[Parser[MaybeSquare]] =
+      Seq(algebraicSquare ^^ MaybeSquare.apply, maybeSquare, success(MaybeSquare()))
+
+    def sanMove: Parser[SanMoveLike] = {
+      def capture = "x".? ^^ (_.isDefined)
+
+      def drawAndCapture: Parser[(MaybeDraw, Boolean)] =
+        appendSeq(srcSquareParsers.map(_ ~ capture ~ algebraicSquare)) ^^ {
+          case src ~ x ~ dest => (MaybeDraw(src, dest), x)
+        }
+
+      def promotedTo = ("=" ~> upperCasePromotedPieceType).?
+
+      maybeUpperCasePieceType ~ drawAndCapture ~ promotedTo ^^ {
+        case pt ~ ((draw, false)) ~ None           => SanMove(pt, draw)
+        case pt ~ ((draw, true)) ~ None            => SanCapture(pt, draw)
+        case pt ~ ((draw, false)) ~ Some(promoted) => SanPromotion(pt, draw, promoted)
+        case pt ~ ((draw, true)) ~ Some(promoted)  => SanCaptureAndPromotion(pt, draw, promoted)
+      }
+    }
+
+    def castling: Parser[SanCastling] =
+      ("O-O-O" ^^^ Queenside | "O-O" ^^^ Kingside).map(SanCastling)
+
+    def nonCheckingSanAction: Parser[SanAction] =
+      sanMove | castling
+
+    def maybeCheckingSanAction: Parser[SanAction] = {
+      def checkIndicator = "+" ^^^ Check | "#" ^^^ CheckMate
+      nonCheckingSanAction ~ checkIndicator.? ^^ {
+        case action ~ indicator =>
+          indicator.fold(action)(i => CheckingSanAction(action, i))
+      }
+    }
+
+    maybeCheckingSanAction
+  }
 
   def moveAnnotation: Parser[AnnotationGlyph] =
     """[!?]{1,2}""".r ^^ {
@@ -84,29 +132,29 @@ object PgnParsers extends GenericParsers {
     } map AnnotationGlyph
 
   def numericAnnotationGlyph: Parser[AnnotationGlyph] =
-    "$" ~> integer ^^ AnnotationGlyph
+    "$" ~> nonNegativeInteger ^^ AnnotationGlyph
 
   def terminationMarker: Parser[GameResult] =
     oneOf(GameResult.all)(GameResultUtil.showPgnMarker)
 
   def moveTextElem: Parser[MoveElement] =
-    moveNumberIndicator | sanMove | moveAnnotation | numericAnnotationGlyph
+    moveNumber | sanAction ^^ MoveSymbol | moveAnnotation | numericAnnotationGlyph
 
   def moveTextSeq: Parser[List[SeqElem]] =
-    (moveTextElem ^^ SeqMoveElement
+    ((moveTextElem ^^ SeqMoveElement
       | blockComment ^^ SeqComment
-      | recursiveVariation).*
+      | recursiveVariation) <~ ws).*
 
   def recursiveVariation: Parser[RecursiveVariation] =
-    "(" ~> moveTextSeq <~ ")" ^^ RecursiveVariation
+    "(" ~> ws ~> moveTextSeq <~ ws <~ ")" ^^ RecursiveVariation
 
   def moveTextSection: Parser[MoveTextSection] =
-    moveTextSeq ~ terminationMarker ^^ {
+    (ws ~> moveTextSeq <~ ws) ~ terminationMarker ^^ {
       case moveText ~ result => MoveTextSection(moveText, result)
     }
 
   def gameRecord: Parser[GameRecord] =
-    tagSection ~ moveTextSection ^^ {
+    (ws ~> tagSection <~ ws) ~ moveTextSection ^^ {
       case tags ~ moves => GameRecord(tags, moves)
     }
 }

@@ -19,17 +19,32 @@ package util
 
 import scala.util.parsing.combinator.RegexParsers
 
+import util.PieceUtil._
 import util.SquareUtil._
 
 trait GenericParsers extends RegexParsers {
+  def appendSeq[A](ps: Seq[Parser[A]]): Parser[A] =
+    ps.fold(failure("empty sequence"))(_ | _)
+
   def oneOf[A](as: Seq[A])(toLiteral: A => String): Parser[A] =
-    as.map(a => toLiteral(a) ^^^ a).fold(failure("empty sequence"))(_ | _)
+    appendSeq(as.map(a => toLiteral(a) ^^^ a))
 
-  def algebraicFile: Parser[Char] = oneOf(algebraicFileRange)(_.toString)
+  def algebraicFile: Parser[Int] =
+    oneOf(algebraicFileRange)(_.toString).map(fileFromAlgebraic)
 
-  def algebraicRank: Parser[Int] = oneOf(algebraicRankRange)(_.toString)
+  def algebraicRank: Parser[Int] =
+    oneOf(algebraicRankRange)(_.toString).map(rankFromAlgebraic)
 
-  def square: Parser[Square] = algebraicFile ~ algebraicRank ^^ {
-    case file ~ rank => unsafeFromAlgebraic(file, rank)
+  def algebraicSquare: Parser[Square] = algebraicFile ~ algebraicRank ^^ {
+    case file ~ rank => Square.unsafeFrom(file, rank)
   }
+
+  def lowerCasePromotedPieceType: Parser[PromotedPieceType] =
+    oneOf(PieceType.allPromoted)(showLowerCaseLetter)
+
+  def upperCasePieceType: Parser[PieceType] =
+    oneOf(PieceType.all)(showUpperCaseLetter)
+
+  def upperCasePromotedPieceType: Parser[PromotedPieceType] =
+    oneOf(PieceType.allPromoted)(showUpperCaseLetter)
 }
