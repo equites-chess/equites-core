@@ -29,6 +29,12 @@ trait GenericParsers extends RegexParsers {
   def oneOf[A](as: Seq[A])(toLiteral: A => String): Parser[A] =
     appendSeq(as.map(a => toLiteral(a) ^^^ a))
 
+  def integer: Parser[Int] =
+    """-?\d+""".r ^^ (_.toInt)
+
+  def nonNegativeInteger: Parser[Int] =
+    """\d+""".r ^^ (_.toInt)
+
   def algebraicFile: Parser[Int] =
     oneOf(algebraicFileRange)(_.toString).map(fileFromAlgebraic)
 

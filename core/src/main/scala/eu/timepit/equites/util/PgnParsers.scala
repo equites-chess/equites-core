@@ -30,9 +30,6 @@ object PgnParsers extends GenericParsers {
 
   def ws = """\s*""".r
 
-  def nonNegativeInteger: Parser[Int] =
-    """\d+""".r ^^ (_.toInt)
-
   def string: Parser[String] =
     """"([^"\\]|\\.)*"""".r ^^ {
       _.dropLeftRight(1)

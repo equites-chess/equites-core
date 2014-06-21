@@ -37,8 +37,6 @@ object UciParsers extends GenericParsers {
 
   def boolean: Parser[Boolean] = "true" ^^^ true | "false" ^^^ false
 
-  def int: Parser[Int] = """-?\d+""".r ^^ (_.toInt)
-
   def draw: Parser[Draw] =
     algebraicSquare ~ algebraicSquare ^^ { case src ~ dest => src to dest }
 
@@ -70,8 +68,8 @@ object UciParsers extends GenericParsers {
 
   def optionName: Parser[String] = """.*(?=\s+type)""".r
 
-  def optionType: Parser[UciOption.Type] = "type" ~>
-    (optionTypeCheck
+  def optionType: Parser[UciOption.Type] =
+    "type" ~> (optionTypeCheck
       | optionTypeSpin
       | optionTypeCombo
       | optionTypeButton
@@ -81,7 +79,7 @@ object UciParsers extends GenericParsers {
     "check" ~> "default" ~> boolean ^^ UciOption.Check
 
   def optionTypeSpin: Parser[UciOption.Spin] =
-    "spin" ~> "default" ~> int ~ ("min" ~> int) ~ ("max" ~> int) ^^ {
+    "spin" ~> "default" ~> integer ~ ("min" ~> integer) ~ ("max" ~> integer) ^^ {
       case default ~ min ~ max => UciOption.Spin(default, min, max)
     }
 
@@ -96,5 +94,6 @@ object UciParsers extends GenericParsers {
   def optionTypeString: Parser[UciOption.StringType] =
     "string" ~> "default" ~> string ^^ UciOption.StringType
 
-  def response: Parser[Response] = id | uciok | readyok | bestmove | option
+  def response: Parser[Response] =
+    id | uciok | readyok | bestmove | option
 }
