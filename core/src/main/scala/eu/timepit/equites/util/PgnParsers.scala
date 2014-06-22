@@ -72,7 +72,7 @@ object PgnParsers extends GenericParsers {
   }
 
   def sanAction: Parser[SanAction] = {
-    def maybeUpperCasePieceType: Parser[PieceType] =
+    def pieceTypeOrPawn: Parser[PieceType] =
       upperCasePieceType.?.map(_.getOrElse(Pawn))
 
     def maybeSquare: Parser[MaybeSquare] =
@@ -83,23 +83,21 @@ object PgnParsers extends GenericParsers {
     def srcSquareParsers: Seq[Parser[MaybeSquare]] =
       Seq(algebraicSquare ^^ MaybeSquare.apply, maybeSquare, success(MaybeSquare()))
 
-    def sanMove: Parser[SanMoveLike] = {
-      def capture = "x".? ^^ (_.isDefined)
-
-      def drawAndCapture: Parser[(MaybeDraw, Boolean)] =
-        appendSeq(srcSquareParsers.map(_ ~ capture ~ algebraicSquare)) ^^ {
-          case src ~ x ~ dest => (MaybeDraw(src, dest), x)
-        }
-
-      def promotedTo = ("=" ~> upperCasePromotedPieceType).?
-
-      maybeUpperCasePieceType ~ drawAndCapture ~ promotedTo ^^ {
-        case pt ~ ((draw, false)) ~ None           => SanMove(pt, draw)
-        case pt ~ ((draw, true)) ~ None            => SanCapture(pt, draw)
-        case pt ~ ((draw, false)) ~ Some(promoted) => SanPromotion(pt, draw, promoted)
-        case pt ~ ((draw, true)) ~ Some(promoted)  => SanCaptureAndPromotion(pt, draw, promoted)
+    def drawAndCapture: Parser[(MaybeDraw, Boolean)] =
+      appendSeq(srcSquareParsers.map(_ ~ "x".? ~ algebraicSquare)) ^^ {
+        case src ~ x ~ dest => (MaybeDraw(src, dest), x.isDefined)
       }
-    }
+
+    def promotedTo: Parser[Option[PromotedPieceType]] =
+      ("=" ~> upperCasePromotedPieceType).?
+
+    def sanMove: Parser[SanMoveLike] =
+      pieceTypeOrPawn ~ drawAndCapture ~ promotedTo ^^ {
+        case pt ~ ((draw, false)) ~ None      => SanMove(pt, draw)
+        case pt ~ ((draw, false)) ~ Some(ppt) => SanPromotion(pt, draw, ppt)
+        case pt ~ ((draw, true)) ~ None       => SanCapture(pt, draw)
+        case pt ~ ((draw, true)) ~ Some(ppt)  => SanCaptureAndPromotion(pt, draw, ppt)
+      }
 
     def castling: Parser[SanCastling] =
       ("O-O-O" ^^^ Queenside | "O-O" ^^^ Kingside).map(SanCastling)
@@ -107,13 +105,14 @@ object PgnParsers extends GenericParsers {
     def nonCheckingSanAction: Parser[SanAction] =
       sanMove | castling
 
-    def maybeCheckingSanAction: Parser[SanAction] = {
-      def checkIndicator = "+" ^^^ Check | "#" ^^^ CheckMate
+    def checkIndicator: Parser[CheckIndicator] =
+      "+" ^^^ Check | "#" ^^^ CheckMate
+
+    def maybeCheckingSanAction: Parser[SanAction] =
       nonCheckingSanAction ~ checkIndicator.? ^^ {
         case action ~ indicator =>
           indicator.fold(action)(i => CheckingSanAction(action, i))
       }
-    }
 
     maybeCheckingSanAction
   }
