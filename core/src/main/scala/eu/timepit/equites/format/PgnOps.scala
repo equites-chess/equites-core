@@ -21,7 +21,7 @@ import format.Pgn._
 
 object PgnOps {
   def xxx(m: MoveTextSection): Seq[GameResult] = {
-    m.moveText
+    //m.moveText
     ???
   }
 
