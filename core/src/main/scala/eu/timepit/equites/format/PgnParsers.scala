@@ -15,10 +15,12 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package eu.timepit.equites
-package util
+package format
 
+import format.Pgn._
 import implicits.GenericImplicits._
-import util.Pgn._
+import util.GameResultUtil
+import util.GenericParsers
 
 /**
  * Parsers for the Portable Game Notation (PGN).

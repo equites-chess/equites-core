@@ -15,12 +15,12 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package eu.timepit.equites
-package util
+package format
 
 import org.specs2.mutable._
 import org.specs2.matcher.ParserMatchers
 
-import util.Pgn._
+import format.Pgn._
 import util.SquareUtil._
 
 class PgnParsersSpec extends Specification with ParserMatchers {
