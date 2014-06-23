@@ -66,13 +66,13 @@ object Pgn {
       extends SanMoveLike
 
   case class SanPromotion(
-    pieceType: PieceType,
+    pieceType: Pawn.type,
     draw: MaybeDraw,
     promotedTo: PromotedPieceType)
       extends SanPromotionLike
 
   case class SanCaptureAndPromotion(
-    pieceType: PieceType,
+    pieceType: Pawn.type,
     draw: MaybeDraw,
     promotedTo: PromotedPieceType)
       extends SanPromotionLike

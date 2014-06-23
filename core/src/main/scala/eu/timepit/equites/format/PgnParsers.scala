@@ -21,6 +21,7 @@ import format.Pgn._
 import implicits.GenericImplicits._
 import util.GameResultUtil
 import util.GenericParsers
+import util.PieceUtil
 
 /**
  * Parsers for the Portable Game Notation (PGN).
@@ -77,6 +78,9 @@ object PgnParsers extends GenericParsers {
     def pieceTypeOrPawn: Parser[PieceType] =
       upperCasePieceType.?.map(_.getOrElse(Pawn))
 
+    def nothingOrPawn: Parser[Pawn.type] =
+      PieceUtil.showUpperCaseLetter(Pawn).? ^^^ Pawn
+
     def maybeSquare: Parser[MaybeSquare] =
       algebraicFile.? ~ algebraicRank.? ^^ {
         case file ~ rank => MaybeSquare(file, rank)
@@ -90,22 +94,26 @@ object PgnParsers extends GenericParsers {
         case src ~ x ~ dest => (MaybeDraw(src, dest), x.isDefined)
       }
 
-    def promotedTo: Parser[Option[PromotedPieceType]] =
-      ("=" ~> upperCasePromotedPieceType).?
+    def promotedTo: Parser[PromotedPieceType] =
+      "=" ~> upperCasePromotedPieceType
+
+    def sanPromotion: Parser[SanPromotionLike] =
+      nothingOrPawn ~ drawAndCapture ~ promotedTo ^^ {
+        case pt ~ ((draw, false)) ~ ppt => SanPromotion(pt, draw, ppt)
+        case pt ~ ((draw, true)) ~ ppt  => SanCaptureAndPromotion(pt, draw, ppt)
+      }
 
     def sanMove: Parser[SanMoveLike] =
-      pieceTypeOrPawn ~ drawAndCapture ~ promotedTo ^^ {
-        case pt ~ ((draw, false)) ~ None      => SanMove(pt, draw)
-        case pt ~ ((draw, false)) ~ Some(ppt) => SanPromotion(pt, draw, ppt)
-        case pt ~ ((draw, true)) ~ None       => SanCapture(pt, draw)
-        case pt ~ ((draw, true)) ~ Some(ppt)  => SanCaptureAndPromotion(pt, draw, ppt)
+      pieceTypeOrPawn ~ drawAndCapture ^^ {
+        case pt ~ ((draw, false)) => SanMove(pt, draw)
+        case pt ~ ((draw, true))  => SanCapture(pt, draw)
       }
 
     def castling: Parser[SanCastling] =
       ("O-O-O" ^^^ Queenside | "O-O" ^^^ Kingside).map(SanCastling)
 
     def nonCheckingSanAction: Parser[SanAction] =
-      sanMove | castling
+      sanPromotion | sanMove | castling
 
     def checkIndicator: Parser[CheckIndicator] =
       "+" ^^^ Check | "#" ^^^ CheckMate

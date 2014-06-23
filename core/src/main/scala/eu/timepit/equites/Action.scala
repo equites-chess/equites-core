@@ -87,6 +87,11 @@ sealed trait Castling extends Action {
     Move(piece, Rules.castlingDraws(side -> piece))
 }
 
+object Castling {
+  def apply(color: Color, side: Side): Castling =
+    side.fold(CastlingShort, CastlingLong)(color)
+}
+
 case class CastlingShort(color: Color) extends Castling {
   def side: Side = Kingside
 }
