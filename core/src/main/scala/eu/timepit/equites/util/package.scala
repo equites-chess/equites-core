@@ -16,7 +16,6 @@
 
 package eu.timepit.equites
 
-import java.nio.charset.Charset
 import scala.collection.immutable.NumericRange
 import scalaz.Monad
 import scalaz.syntax.monad._
@@ -35,14 +34,11 @@ package object util {
   def toCharRange(range: Range, offset: Char): NumericRange[Char] = {
     val start = (offset + range.head).toChar
     val end = (offset + range.last).toChar
-    start to end by range.step.toChar
+    val step = range.step.toChar
+    start to end by step
   }
 
   def toStringOnOff(bool: Boolean): String = if (bool) "on" else "off"
 
-  // TODO: Require a typeclass that allows conversion to String or Array[Byte].
-  def toUtf8Bytes[A](a: A): Array[Byte] = a.toString.getBytes(utf8Charset)
-  def toUtf8BytesLf[A](a: A): Array[Byte] = toUtf8Bytes(a.toString + "\n")
-
-  private val utf8Charset: Charset = Charset.forName("UTF-8")
+  def toTuple2[A](a: A): (A, A) = (a, a)
 }

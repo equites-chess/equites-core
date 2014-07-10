@@ -27,9 +27,6 @@ class PackageSpec extends Specification {
     generate all 'binary' strings of length three     $e1
     generate all odd 'binary' strings of length three $e2
     count to ten with Stream and Option               $e3
-
-  util.toUtf8Bytes should
-    return byte sequences of right length $e4
   """
 
   def nextBinary(c: String): Stream[String] = Stream("0", "1").map(_ + c)
@@ -43,14 +40,4 @@ class PackageSpec extends Specification {
   def e3 =
     (backtrack(0)(i => Stream(i + 1), _ == 10) must_== Stream(10)) and
       (backtrack(0)(i => Option(i + 1), _ == 10) must_== Option(10))
-
-  def e4 = (
-    (toUtf8Bytes(0x0000.toChar).length must_== 1) and
-    (toUtf8Bytes(0x007F.toChar).length must_== 1) and
-
-    (toUtf8Bytes(0x0080.toChar).length must_== 2) and
-    (toUtf8Bytes(0x07FF.toChar).length must_== 2) and
-
-    (toUtf8Bytes(0x0800.toChar).length must_== 3) and
-    (toUtf8Bytes(0xFFFF.toChar).length must_== 3))
 }
