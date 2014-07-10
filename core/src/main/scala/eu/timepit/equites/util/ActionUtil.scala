@@ -21,8 +21,16 @@ import util.DrawUtil._
 import util.PieceUtil._
 
 object ActionUtil {
+  def showAlgebraicCastling(side: Side): String =
+    side.fold("0-0", "0-0-0")
+
   def showCoordinate(action: Action): String =
     CoordinateAction(action).toAlgebraic
+
+  def showFenCastlingLetter(castling: Castling): String = {
+    val letter = castling.side.fold("K", "Q")
+    castling.color.fold(letter, letter.toLowerCase)
+  }
 
   def showLongAlgebraic(action: Action): String =
     showLongAlgebraicImpl(action, p => PieceUtil.showAlgebraic(p.pieceType))
@@ -39,11 +47,10 @@ object ActionUtil {
 
   def showNakedLongAlgebraic(action: Action): String =
     action match {
-      case e: EnPassant     => algebraicSquares(e.draw).mkString("x") + "e.p."
-      case c: CaptureLike   => algebraicSquares(c.draw).mkString("x")
-      case m: MoveLike      => algebraicSquares(m.draw).mkString("-")
-      case c: CastlingShort => "0-0"
-      case c: CastlingLong  => "0-0-0"
+      case e: EnPassant   => algebraicSquares(e.draw).mkString("x") + "e.p."
+      case c: CaptureLike => algebraicSquares(c.draw).mkString("x")
+      case m: MoveLike    => algebraicSquares(m.draw).mkString("-")
+      case c: Castling    => showAlgebraicCastling(c.side)
     }
 
   def showNumeric(action: Action): String =

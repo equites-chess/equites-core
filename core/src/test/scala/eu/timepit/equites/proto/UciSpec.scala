@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2013-2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,8 +20,8 @@ package proto
 import org.specs2.mutable._
 import scala.concurrent.duration._
 
-import Uci._
-import implicits.GameStateImplicits._
+import proto.Uci._
+import util.GameStateUtil
 import util.CoordinateAction
 import util.PieceAbbr.Wiki._
 import util.SquareAbbr._
@@ -35,10 +35,10 @@ class UciSpec extends Specification with org.specs2.time.NoTimeConversions {
 
   "Uci.Debug" >> {
     "toString should return 'debug on' if on is true" in {
-      Debug(true).toString must_== "debug on"
+      Debug(on = true).toString must_== "debug on"
     }
     "toString should return 'debug off' if on is false" in {
-      Debug(false).toString must_== "debug off"
+      Debug(on = false).toString must_== "debug off"
     }
   }
 
@@ -66,19 +66,21 @@ class UciSpec extends Specification with org.specs2.time.NoTimeConversions {
   }
 
   "Uci.Position" >> {
+    val fen = GameStateUtil.showFen(GameState.init)
+
     "toString should return 'position startpos moves' if history is empty" in {
       Position(Seq.empty).toString must_== "position startpos moves"
     }
     "toString should return no moves if history contains only the initial state" in {
       Position(Seq(GameState.init)).toString must_==
-        s"position fen ${GameState.init.toFen} moves"
+        s"position fen $fen moves"
     }
     "toString should return one move if history contains one move" in {
       val actions = Seq(Move(pl, e2 to e4))
       val history = GameState.unfold(actions)
 
       Position(history).toString must_==
-        s"position fen ${GameState.init.toFen} moves e2e4"
+        s"position fen $fen moves e2e4"
     }
     "toString should return two moves if history contains two moves" in {
       val actions = Seq(Move(pl, e2 to e4),
@@ -86,7 +88,7 @@ class UciSpec extends Specification with org.specs2.time.NoTimeConversions {
       val history = GameState.unfold(actions)
 
       Position(history).toString must_==
-        s"position fen ${GameState.init.toFen} moves e2e4 g8f6"
+        s"position fen $fen moves e2e4 g8f6"
     }
   }
 
@@ -142,7 +144,7 @@ class UciSpec extends Specification with org.specs2.time.NoTimeConversions {
     import UciOption._
 
     "toString should return 'option ... type check ...'" in {
-      UciOption("Ponder", Check(true)).toString must_==
+      UciOption("Ponder", Check(default = true)).toString must_==
         "option name Ponder type check default true"
     }
     "toString should return 'option ... type spin ...'" in {

@@ -144,7 +144,7 @@ object Rules {
   }
 
   def squaresInDirection(from: Square, direction: Vec): Stream[Square] =
-    stream.unfold(from)(sq => (sq + direction).map(x => (x, x)))
+    stream.unfold(from)(sq => (sq + direction).map(util.toTuple2))
 
   def possibleSquares(placed: Placed[AnyPiece]): Stream[Square] = {
     val (directions, dist) = movementTypeOf(placed)
