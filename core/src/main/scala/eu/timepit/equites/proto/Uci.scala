@@ -50,12 +50,12 @@ object Uci {
 
   case class Position(history: Seq[GameState]) extends Request {
     override def cmdArgs: Seq[String] =
-      if (history.isEmpty) {
-        Seq("startpos", "moves")
-      } else {
-        val fen = showFen(history.head)
-        val moves = history.tail.flatMap(_.lastAction).map(showCoordinate)
-        Seq("fen", fen, "moves") ++ moves
+      history match {
+        case Seq() =>
+          Seq("startpos", "moves")
+        case head +: tail =>
+          val moves = tail.flatMap(_.lastAction).map(showCoordinate)
+          Seq("fen", showFen(head), "moves") ++ moves
       }
   }
 
