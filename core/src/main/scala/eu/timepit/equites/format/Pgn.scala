@@ -24,10 +24,14 @@ object Pgn {
 
   ///
 
-  case class MaybeSquare(file: Option[Int] = None, rank: Option[Int] = None)
+  case class MaybeSquare(file: Option[Int] = None, rank: Option[Int] = None) {
+    def toSquare: Option[Square] =
+      file.flatMap(f => rank.flatMap(r => Square.from(f, r)))
+  }
 
   object MaybeSquare {
-    def apply(sq: Square): MaybeSquare = MaybeSquare(Some(sq.file), Some(sq.rank))
+    def apply(square: Square): MaybeSquare =
+      MaybeSquare(Some(square.file), Some(square.rank))
   }
 
   case class MaybeDraw(src: MaybeSquare, dest: Square)
