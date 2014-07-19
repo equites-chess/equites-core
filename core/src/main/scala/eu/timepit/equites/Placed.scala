@@ -34,3 +34,7 @@ trait PlacedInstances {
   implicit def placedScalaOrdering[A] = placedOrder[A].toScalaOrdering
   implicit def placedShow[A] = Show.showFromToString[Placed[A]]
 }
+
+trait PlacedTypeAliases {
+  type PlacedPiece = Placed[AnyPiece]
+}

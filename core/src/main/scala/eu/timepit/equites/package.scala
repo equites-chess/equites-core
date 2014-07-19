@@ -16,4 +16,4 @@
 
 package eu.timepit
 
-package object equites extends PieceTypeAliases
+package object equites extends PieceTypeAliases with PlacedTypeAliases
