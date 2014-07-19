@@ -20,10 +20,4 @@ package format
 import format.Pgn._
 
 object PgnOps {
-  def xxx(m: MoveTextSection): Seq[GameResult] = {
-    //m.moveText
-    ???
-  }
-
-  def yyy(i: GameState, l: List[SeqElem]): Seq[GameState] = ???
 }
