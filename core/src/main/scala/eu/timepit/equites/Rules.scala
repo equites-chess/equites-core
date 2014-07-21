@@ -19,6 +19,7 @@ package eu.timepit.equites
 import scalaz.std.stream
 
 import implicits.PlacedImplicits._
+import util.PieceAbbr.Textual._
 
 object Rules {
   val fileRange = 0 to 7
@@ -71,7 +72,6 @@ object Rules {
 
   val startingSquares: Map[AnyPiece, List[Square]] = {
     def startingSquaresBy(color: Color): Map[AnyPiece, List[Square]] = {
-      import util.PieceAbbr.Textual._
       val backRank = backRankBy(color)
       val pawnRank = pawnRankBy(color)
       // format: OFF
@@ -144,7 +144,6 @@ object Rules {
   val pieceMovements: Map[AnyPiece, Movement] = {
     def pieceMovementsBy(color: Color): Map[AnyPiece, Movement] = {
       import Directions._
-      import util.PieceAbbr.Textual._
       // format: OFF
       Map(
         king(color)   -> Movement(anywhere, 1),
