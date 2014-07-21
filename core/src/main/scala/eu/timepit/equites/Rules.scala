@@ -23,13 +23,45 @@ import implicits.PlacedImplicits._
 object Rules {
   val fileRange = 0 to 7
   val rankRange = 0 to 7
-  val maxLength = math.max(fileRange.length, rankRange.length) - 1
+  val boardLength = math.max(fileRange.end, rankRange.end)
 
-  def fileSquares(file: Int): Seq[Square] = rankRange.map(Square.from(file, _)).flatten
-  def rankSquares(rank: Int): Seq[Square] = fileRange.map(Square.from(_, rank)).flatten
+  def fileSquares(file: Int): Seq[Square] =
+    rankRange.map(Square.from(file, _)).flatten
+
+  def rankSquares(rank: Int): Seq[Square] =
+    fileRange.map(Square.from(_, rank)).flatten
 
   val allSquaresSeq: Seq[Square] = rankRange.flatMap(rankSquares)
   val allSquaresSet: Set[Square] = allSquaresSeq.toSet
+
+  val whiteBackRank = rankRange.start
+  val whitePawnRank = whiteBackRank + 1
+
+  val blackBackRank = backRankBy(Black)
+  val blackPawnRank = pawnRankBy(Black)
+
+  def rankBy(rank: Int, color: Color): Int =
+    color.fold(rank, rankRange.end - rank)
+
+  def backRankBy(color: Color): Int =
+    rankBy(whiteBackRank, color)
+
+  def pawnRankBy(color: Color): Int =
+    rankBy(whitePawnRank, color)
+
+  /** Returns the rank a pawn moves from with an en passant capture. */
+  def enPassantSrcRankBy(color: Color): Int =
+    rankBy(whitePawnRank + 2, color.opposite)
+
+  /** Returns the rank a pawn moves to with an en passant capture. */
+  def enPassantDestRankBy(color: Color): Int =
+    rankBy(whitePawnRank + 1, color.opposite)
+
+  /** Returns the rank "behind" a pawn that made a two-square move. */
+  def enPassantTargetRankBy(color: Color): Int =
+    enPassantDestRankBy(color.opposite)
+
+  ///
 
   val kingFile = 4
   val queenFile = 3
@@ -39,65 +71,21 @@ object Rules {
 
   val startingSquares: Map[AnyPiece, List[Square]] = {
     def startingSquaresBy(color: Color): Map[AnyPiece, List[Square]] = {
+      import util.PieceAbbr.Textual._
       val backRank = backRankBy(color)
       val pawnRank = pawnRankBy(color)
-      Map(Piece(color, King) -> Square.from(kingFile, backRank).toList,
-        Piece(color, Queen) -> Square.from(queenFile, backRank).toList,
-        Piece(color, Rook) -> rookFiles.map(Square.from(_, backRank)).flatten,
-        Piece(color, Bishop) -> bishopFiles.map(Square.from(_, backRank)).flatten,
-        Piece(color, Knight) -> knightFiles.map(Square.from(_, backRank)).flatten,
-        Piece(color, Pawn) -> fileRange.map(Square.from(_, pawnRank)).flatten.toList)
+      // format: OFF
+      Map(
+        king(color)   -> Square.from(kingFile, backRank).toList,
+        queen(color)  -> Square.from(queenFile, backRank).toList,
+        rook(color)   -> rookFiles.map(Square.from(_, backRank)).flatten,
+        bishop(color) -> bishopFiles.map(Square.from(_, backRank)).flatten,
+        knight(color) -> knightFiles.map(Square.from(_, backRank)).flatten,
+        pawn(color)   -> fileRange.map(Square.from(_, pawnRank)).flatten.toList)
+      // format: ON
     }
     Color.all.map(startingSquaresBy).reduce(_ ++ _)
   }
-
-  def onStartingSquare(placed: Placed[AnyPiece]): Boolean =
-    startingSquares(placed) contains placed.square
-
-  def onEnPassantRank(placed: Placed[AnyPawn]): Boolean =
-    enPassantRankBy(placed.color) == placed.square.rank
-
-  val castlingDraws: Map[(Side, CastlingPiece), Draw] = {
-    def castlingSquaresFor(side: Side, piece: CastlingPiece): (Option[Square], Option[Square]) = {
-      val rookFile = if (side == Kingside) rookFiles(1) else rookFiles(0)
-      val (fromFile, pieceOffset) = piece.pieceType match {
-        case King => (kingFile, 2)
-        case Rook => (rookFile, 1)
-      }
-
-      val leftOrRight = if (side == Kingside) 1 else -1
-      val toFile = kingFile + pieceOffset * leftOrRight
-      val rank = backRankBy(piece.color)
-
-      (Square.from(fromFile, rank), Square.from(toFile, rank))
-    }
-
-    val mapping = for {
-      side <- Side.all
-      piece <- Piece.allCastling
-      x = castlingSquaresFor(side, piece)
-      xx <- x._1
-      yy <- x._2
-    } yield (side, piece) -> (xx to yy)
-    mapping.toMap
-  }
-
-  def castlingsBy(color: Color): List[Castling] =
-    List(CastlingShort(color), CastlingLong(color))
-
-  val allCastlings: List[Castling] =
-    castlingsBy(White) ::: castlingsBy(Black)
-
-  def associatedCastlings(xs: Placed[AnyPiece]*): Seq[Castling] =
-    xs.flatMap { placed =>
-      placed.elem match {
-        case Piece(color, King) =>
-          castlingsBy(color)
-        case Piece(color, Rook) =>
-          castlingsBy(color).filter(_.rookMove.draw.src == placed.square)
-        case _ => Nil
-      }
-    }
 
   val startingBoard: Board = {
     val mapping = for {
@@ -107,53 +95,90 @@ object Rules {
     Board(mapping)
   }
 
-  def backRankBy(color: Color): Int =
-    rankBy(rankRange.start, color)
+  def onStartingSquare(placed: PlacedPiece): Boolean =
+    startingSquares(placed).contains(placed.square)
 
-  def pawnRankBy(color: Color): Int =
-    rankBy(rankRange.start + 1, color)
+  ///
 
-  def enPassantRankBy(color: Color): Int =
-    rankBy(rankRange.start + 3, color.opposite)
+  val castlingDraws: Map[(Side, CastlingPiece), Draw] = {
+    def castlingDrawFor(side: Side, piece: CastlingPiece): Option[Draw] = {
+      val rookFile = rookFiles(side.fold(1, 0))
+      val (srcFile, offset) = piece.pieceType match {
+        case King => (kingFile, 2)
+        case Rook => (rookFile, 1)
+      }
 
-  def enPassantTargetRankBy(color: Color): Int =
-    rankBy(rankRange.start + 2, color)
+      val leftOrRight = side.fold(1, -1)
+      val destFile = kingFile + offset * leftOrRight
+      val rank = backRankBy(piece.color)
 
-  def rankBy(rank: Int, color: Color): Int =
-    if (color == White) rank else rankRange.end - rank
-
-  val movementTypes: Map[AnyPiece, (Directions, Int)] = {
-    def movementTypesBy(color: Color): Map[AnyPiece, (Directions, Int)] = {
-      import Directions._
-      Map(Piece(color, King) -> ((anywhere, 1)),
-        Piece(color, Queen) -> ((anywhere, maxLength)),
-        Piece(color, Rook) -> ((straight, maxLength)),
-        Piece(color, Bishop) -> ((diagonal, maxLength)),
-        Piece(color, Knight) -> ((knightLike, 1)),
-        Piece(color, Pawn) -> ((front.fromViewOf(color), 1)))
+      for {
+        src <- Square.from(srcFile, rank)
+        dest <- Square.from(destFile, rank)
+      } yield src to dest
     }
-    Color.all.map(movementTypesBy).reduce(_ ++ _)
+
+    val mapping = for {
+      side <- Side.all
+      piece <- Piece.allCastling
+      draw <- castlingDrawFor(side, piece)
+    } yield (side, piece) -> draw
+    mapping.toMap
   }
 
-  def movementTypeOf(placed: Placed[AnyPiece]): (Directions, Int) = {
-    val (directions, dist) = movementTypes(placed.elem)
+  def associatedCastlings(xs: PlacedPiece*): Seq[Castling] =
+    xs.flatMap { placed =>
+      placed.elem match {
+        case Piece(color, King) =>
+          Castling.allBy(color)
+        case Piece(color, Rook) =>
+          Castling.allBy(color).filter(_.rookMove.draw.src == placed.square)
+        case _ => Nil
+      }
+    }
+
+  ///
+
+  case class Movement(directions: Directions, distance: Int)
+
+  val pieceMovements: Map[AnyPiece, Movement] = {
+    def pieceMovementsBy(color: Color): Map[AnyPiece, Movement] = {
+      import Directions._
+      import util.PieceAbbr.Textual._
+      // format: OFF
+      Map(
+        king(color)   -> Movement(anywhere, 1),
+        queen(color)  -> Movement(anywhere, boardLength),
+        rook(color)   -> Movement(straight, boardLength),
+        bishop(color) -> Movement(diagonal, boardLength),
+        knight(color) -> Movement(knightLike, 1),
+        pawn(color)   -> Movement(front.fromViewOf(color), 1))
+      // format: ON
+    }
+    Color.all.map(pieceMovementsBy).reduce(_ ++ _)
+  }
+
+  def movementOf(placed: PlacedPiece): Movement = {
+    val movement = pieceMovements(placed)
     placed.pieceType match {
-      case Pawn if onStartingSquare(placed) => (directions, 2)
-      case _                                => (directions, dist)
+      case Pawn if onStartingSquare(placed) => movement.copy(distance = 2)
+      case _                                => movement
     }
   }
 
   def squaresInDirection(from: Square, direction: Vec): Stream[Square] =
     stream.unfold(from)(sq => (sq + direction).map(util.toTuple2))
 
-  def possibleSquares(placed: Placed[AnyPiece]): Stream[Square] = {
-    val (directions, dist) = movementTypeOf(placed)
-    for {
-      direction <- directions.toStream
-      square <- squaresInDirection(placed.square, direction).take(dist)
-    } yield square
+  def directedReachableSquares(placed: PlacedPiece): Stream[Stream[Square]] = {
+    val movement = movementOf(placed)
+    movement.directions.toStream.map { dir =>
+      squaresInDirection(placed.square, dir).take(movement.distance)
+    }
   }
 
-  def unvisitedSquares(placed: Placed[AnyPiece], visited: Set[Square]): Stream[Square] =
-    possibleSquares(placed).filterNot(visited)
+  def undirectedReachableSquares(placed: PlacedPiece): Stream[Square] =
+    directedReachableSquares(placed).flatten
+
+  def unvisitedSquares(placed: PlacedPiece, visited: Set[Square]): Stream[Square] =
+    undirectedReachableSquares(placed).filterNot(visited)
 }

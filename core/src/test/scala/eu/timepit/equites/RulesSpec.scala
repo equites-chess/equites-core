@@ -32,21 +32,21 @@ class RulesSpec extends Specification {
         List(Square.unsafeFrom(6, 4))
     }
 
-    "correctly perform possibleSquares" in {
-      possibleSquares(Placed(kl, Square.unsafeFrom(3, 2))).toSet must_==
+    "correctly perform undirectedReachableSquares" in {
+      undirectedReachableSquares(Placed(kl, Square.unsafeFrom(3, 2))).toSet must_==
         Set(Square.unsafeFrom(3, 3), Square.unsafeFrom(4, 3), Square.unsafeFrom(4, 2), Square.unsafeFrom(4, 1),
           Square.unsafeFrom(3, 1), Square.unsafeFrom(2, 1), Square.unsafeFrom(2, 2), Square.unsafeFrom(2, 3))
 
-      possibleSquares(Placed(pl, Square.unsafeFrom(3, 3))).toSet must_==
+      undirectedReachableSquares(Placed(pl, Square.unsafeFrom(3, 3))).toSet must_==
         Set(Square.unsafeFrom(3, 4))
-      possibleSquares(Placed(pl, Square.unsafeFrom(0, 1))).toSet must_==
+      undirectedReachableSquares(Placed(pl, Square.unsafeFrom(0, 1))).toSet must_==
         Set(Square.unsafeFrom(0, 2), Square.unsafeFrom(0, 3))
-      possibleSquares(Placed(pd, Square.unsafeFrom(0, 6))).toSet must_==
+      undirectedReachableSquares(Placed(pd, Square.unsafeFrom(0, 6))).toSet must_==
         Set(Square.unsafeFrom(0, 5), Square.unsafeFrom(0, 4))
     }
 
-    "correctly perform possibleSquares for Bishop" in {
-      possibleSquares(Placed(bl, Square.unsafeFrom(3, 3))).toSet must_==
+    "correctly perform undirectedReachableSquares for Bishop" in {
+      undirectedReachableSquares(Placed(bl, Square.unsafeFrom(3, 3))).toSet must_==
         Set(Square.unsafeFrom(0, 0), Square.unsafeFrom(1, 1), Square.unsafeFrom(2, 2), Square.unsafeFrom(4, 4),
           Square.unsafeFrom(5, 5), Square.unsafeFrom(6, 6), Square.unsafeFrom(7, 7),
           Square.unsafeFrom(0, 6), Square.unsafeFrom(1, 5), Square.unsafeFrom(2, 4), Square.unsafeFrom(4, 2),

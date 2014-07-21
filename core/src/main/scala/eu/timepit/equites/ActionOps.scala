@@ -76,7 +76,7 @@ object ActionOps {
 
   def reifyAsCastling(board: Board, move: MoveLike): Option[Castling] =
     for {
-      castling <- Rules.allCastlings.find(_.kingMove == move)
+      castling <- Castling.all.find(_.kingMove == move)
       _ <- reifyAsMove(board, castling.kingMove.draw)
       _ <- reifyAsMove(board, castling.rookMove.draw)
     } yield castling

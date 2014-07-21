@@ -26,7 +26,7 @@ object Nqueens {
     def nextBoards(c: Candidate): Stream[Candidate] = {
       c.available.toStream.map { sq =>
         val placed = Placed(Piece(White, Queen), sq)
-        val reachable = Rules.possibleSquares(placed)
+        val reachable = Rules.undirectedReachableSquares(placed)
         Candidate(c.board + placed, c.available -- reachable - sq)
       }
     }

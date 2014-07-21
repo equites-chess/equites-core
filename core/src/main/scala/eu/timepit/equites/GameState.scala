@@ -48,7 +48,7 @@ case class GameState(
   private[this] def updatedAvailableCastlings(action: Action): Set[Castling] = {
     def unavailableCastlings: Seq[Castling] = action match {
       case castling: Castling =>
-        Rules.castlingsBy(castling.color)
+        Castling.allBy(castling.color)
       case capture: CaptureLike =>
         Rules.associatedCastlings(capture.placedPiece, capture.placedCaptured)
       case move: MoveLike =>
@@ -66,7 +66,7 @@ object GameState {
     color = White,
     moveNumber = 1,
     halfmoveClock = 0,
-    availableCastlings = Rules.allCastlings.toSet)
+    availableCastlings = Castling.all.toSet)
 
   def unfold(actions: Seq[Action], first: GameState = init): Stream[GameState] =
     first #:: stream.unfold((first, actions)) {

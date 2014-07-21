@@ -90,6 +90,12 @@ sealed trait Castling extends Action {
 object Castling {
   def apply(color: Color, side: Side): Castling =
     side.fold(CastlingShort, CastlingLong)(color)
+
+  def allBy(color: Color): List[Castling] =
+    Side.all.map(Castling(color, _))
+
+  def all: List[Castling] =
+    Color.all.flatMap(allBy)
 }
 
 case class CastlingShort(color: Color) extends Castling {
