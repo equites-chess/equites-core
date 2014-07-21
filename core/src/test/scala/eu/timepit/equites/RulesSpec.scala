@@ -18,7 +18,10 @@ package eu.timepit.equites
 
 import org.specs2.mutable._
 
+import util.BoardBuilder._
+import util.PieceAbbr.Algebraic._
 import util.PieceAbbr.Wiki._
+import util.SquareAbbr._
 import Rules._
 
 class RulesSpec extends Specification {
@@ -64,6 +67,26 @@ class RulesSpec extends Specification {
         Seq(CastlingShort(Black), CastlingLong(Black))
       associatedCastlings(Placed(ql, Square.unsafeFrom(0, 0))) must_==
         Seq.empty
+    }
+
+    "find reachable vacant and occupied squares" in {
+      val board = >>.
+        |.|.q.|.|.|.|.P.
+        |.|.|.|.|.|.R.|.
+        |.|.|.|.|.|.|.|.
+        |.|.|.|.|.|.|.|.
+        B.|.|.|.|.|.|.|.
+        |.|.|.|.|.|.|.|.
+        |.|.|.|.|.|.|.|.
+        Q.|.n.|.|.k.|.|.<<
+
+      val queen = Placed(ql, a1)
+
+      reachableVacantSquares(queen, board).toSet must_==
+        Set(a2, a3, b1, b2, c3, d4, e5, f6)
+
+      reachableOccupiedSquares(queen, board).toSet must_==
+        Set(Placed(B, a4), Placed(R, g7), Placed(n, c1))
     }
   }
 }

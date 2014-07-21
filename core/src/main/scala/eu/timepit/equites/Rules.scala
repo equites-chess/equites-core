@@ -179,6 +179,16 @@ object Rules {
   def undirectedReachableSquares(placed: PlacedPiece): Stream[Square] =
     directedReachableSquares(placed).flatten
 
+  def reachableVacantSquares(placed: PlacedPiece, board: Board): Stream[Square] =
+    directedReachableSquares(placed).flatMap {
+      _.takeWhile(board.isVacant)
+    }
+
+  def reachableOccupiedSquares(placed: PlacedPiece, board: Board): Stream[PlacedPiece] =
+    directedReachableSquares(placed).flatMap {
+      _.flatMap(sq => board.getPlaced(sq).toList).take(1)
+    }
+
   def unvisitedSquares(placed: PlacedPiece, visited: Set[Square]): Stream[Square] =
     undirectedReachableSquares(placed).filterNot(visited)
 }
