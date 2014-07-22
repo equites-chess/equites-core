@@ -98,22 +98,5 @@ class ActionOpsSpec extends Specification {
       reifyAsAction(board, CoordinateAction(e1 to c1)) must
         beSome(CastlingLong(White))
     }
-
-    "correctly perform isCaptureOrPawnMove for a non-pawn move" in {
-      val move = Move(ql, f5 to g6)
-      isCaptureOrPawnMove(move) must beFalse
-    }
-    "correctly perform isCaptureOrPawnMove for a pawn move" in {
-      val move = Move(pl, f5 to g6)
-      isCaptureOrPawnMove(move) must beTrue
-    }
-    "correctly perform isCaptureOrPawnMove for a capture" in {
-      val capture = Capture(rl, a1 to a8, bd)
-      isCaptureOrPawnMove(capture) must beTrue
-    }
-    "correctly perform isCaptureOrPawnMove for a castling" in {
-      val castling = CastlingLong(White)
-      isCaptureOrPawnMove(castling) must beFalse
-    }
   }
 }

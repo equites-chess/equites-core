@@ -40,10 +40,12 @@ case class GameState(
     ActionOps.reifyAsAction(board, cm).map(updated)
 
   private[this] def updatedMoveNumber: Int =
-    moveNumber + (if (color == Black) 1 else 0)
+    moveNumber + color.fold(0, 1)
 
-  private[this] def updatedHalfmoveClock(action: Action): Int =
-    if (ActionOps.isCaptureOrPawnMove(action)) 0 else halfmoveClock + 1
+  private[this] def updatedHalfmoveClock(action: Action): Int = {
+    val reset = Rules.isCapture(action) || Rules.isPawnMove(action)
+    if (reset) 0 else halfmoveClock + 1
+  }
 
   private[this] def updatedAvailableCastlings(action: Action): Set[Castling] = {
     def unavailableCastlings: Seq[Castling] = action match {
@@ -70,9 +72,9 @@ object GameState {
 
   def unfold(actions: Seq[Action], first: GameState = init): Stream[GameState] =
     first #:: stream.unfold((first, actions)) {
-      case (state, actions) => actions.headOption.map { action =>
+      case (state, remActions) => remActions.headOption.map { action =>
         val updated = state.updated(action)
-        (updated, (updated, actions.tail))
+        (updated, (updated, remActions.tail))
       }
     }
 }

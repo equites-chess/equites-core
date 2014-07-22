@@ -201,7 +201,7 @@ object Rules {
     action.piece.isPawn
 
   def isTwoRanksPawnMoveFromStartingSquare(action: Action): Boolean =
-    action.piece.isPawn &&
+    isPawnMove(action) &&
       action.draw.l1Length == 2 &&
       action.draw.direction.isVertical &&
       onStartingSquare(action.placedPiece)

@@ -19,13 +19,6 @@ package eu.timepit.equites
 import scalaz.syntax.std.boolean._
 
 object ActionOps {
-  /** Returns true if `action` is a capture or a pawn move. */
-  def isCaptureOrPawnMove(action: Action): Boolean =
-    action match {
-      case _: CaptureLike => true
-      case _              => action.piece.isPawn
-    }
-
   def promotedPiece(action: Action): Option[PromotedPiece] =
     action match {
       case p: PromotionLike => Some(p.promotedTo)
@@ -35,7 +28,7 @@ object ActionOps {
   /// OLD
 
   def reifyAsMove(board: Board, draw: Draw): Option[Move] =
-    (draw.src != draw.dest).option {
+    draw.nonNull.option {
       board.get(draw.src).map(piece => Move(piece, draw))
     }.flatten
 
