@@ -5,7 +5,7 @@ object Dependencies {
   val scalazVersion = "7.0.6"
 
   val scalacheck =
-    "org.scalacheck" %% "scalacheck" % "1.10.1"
+    "org.scalacheck" %% "scalacheck" % "1.11.4"
   val scalazConcurrent =
     "org.scalaz" %% "scalaz-concurrent" % scalazVersion
   val scalazCore =
@@ -17,5 +17,5 @@ object Dependencies {
   val shapeless =
     "com.chuusai" %% "shapeless" % "2.0.0"
   val specs2 =
-    "org.specs2" %% "specs2" % "2.3.12"
+    "org.specs2" %% "specs2" % "2.3.13"
 }
