@@ -20,6 +20,7 @@ import org.specs2.ScalaCheck
 import org.specs2.mutable._
 import scalaz.scalacheck.ScalazProperties._
 
+import util.SquareAbbr._
 import Square._
 
 import ArbitraryInstances._
@@ -30,36 +31,36 @@ class SquareSpec extends Specification with ScalaCheck {
     "satisfy the Order laws" in check(order.laws[Square])
 
     "correctly perform +(Vec) and -(Vec)" in {
-      Square.unsafeFrom(1, 1) + Vec(1, 1) must_== Some(Square.unsafeFrom(2, 2))
-      Square.unsafeFrom(1, 1) - Vec(-1, -1) must_== Some(Square.unsafeFrom(2, 2))
-      Square.unsafeFrom(1, 1) - Vec(1, 1) must_== Some(Square.unsafeFrom(0, 0))
-      Square.unsafeFrom(1, 1) + Vec(-1, -1) must_== Some(Square.unsafeFrom(0, 0))
+      b2 + Vec(+1, +1) must_== Some(c3)
+      b2 - Vec(-1, -1) must_== Some(c3)
+      b2 - Vec(+1, +1) must_== Some(a1)
+      b2 + Vec(-1, -1) must_== Some(a1)
     }
 
     "correctly perform +(Square)" in {
-      Square.unsafeFrom(1, 1) + Square.unsafeFrom(1, 1) must_== Vec(2, 2)
-      Square.unsafeFrom(2, 2) + Square.unsafeFrom(1, 1) must_== Vec(3, 3)
-      Square.unsafeFrom(2, 1) + Square.unsafeFrom(0, 0) must_== Vec(2, 1)
-      Square.unsafeFrom(0, 0) + Square.unsafeFrom(3, 4) must_== Vec(3, 4)
+      b2 + b2 must_== Vec(2, 2)
+      c3 + b2 must_== Vec(3, 3)
+      c2 + a1 must_== Vec(2, 1)
+      a1 + d5 must_== Vec(3, 4)
     }
 
     "correctly perform -(Square)" in {
-      Square.unsafeFrom(1, 1) - Square.unsafeFrom(1, 1) must_== Vec(0, 0)
-      Square.unsafeFrom(2, 2) - Square.unsafeFrom(1, 1) must_== Vec(1, 1)
-      Square.unsafeFrom(2, 1) - Square.unsafeFrom(0, 0) must_== Vec(2, 1)
-      Square.unsafeFrom(0, 0) - Square.unsafeFrom(3, 4) must_== Vec(-3, -4)
+      b2 - b2 must_== Vec(+0, +0)
+      c3 - b2 must_== Vec(+1, +1)
+      c2 - a1 must_== Vec(+2, +1)
+      a1 - d5 must_== Vec(-3, -4)
     }
 
     "correctly perform isLight and isDark" in {
-      Square.unsafeFrom(0, 0).isDark must beTrue
-      Square.unsafeFrom(7, 7).isDark must beTrue
-      Square.unsafeFrom(0, 2).isDark must beTrue
-      Square.unsafeFrom(2, 0).isDark must beTrue
+      a1.isDark must beTrue
+      h8.isDark must beTrue
+      a3.isDark must beTrue
+      c1.isDark must beTrue
 
-      Square.unsafeFrom(0, 1).isLight must beTrue
-      Square.unsafeFrom(0, 3).isLight must beTrue
-      Square.unsafeFrom(1, 0).isLight must beTrue
-      Square.unsafeFrom(3, 0).isLight must beTrue
+      a2.isLight must beTrue
+      a4.isLight must beTrue
+      b1.isLight must beTrue
+      d1.isLight must beTrue
     }
 
     "correctly calculate the distance to the board boundary" in check {

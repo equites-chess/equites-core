@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2011, 2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2011, 2013-2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -27,46 +27,31 @@ import Rules._
 class RulesSpec extends Specification {
   "Rules" should {
     "correctly perform squaresInDirection" in {
-      squaresInDirection(Square.unsafeFrom(3, 3), Vec(1, 1)).toList must_==
-        List(Square.unsafeFrom(4, 4), Square.unsafeFrom(5, 5), Square.unsafeFrom(6, 6), Square.unsafeFrom(7, 7))
-      squaresInDirection(Square.unsafeFrom(3, 3), Vec(-1, 0)).toList must_==
-        List(Square.unsafeFrom(2, 3), Square.unsafeFrom(1, 3), Square.unsafeFrom(0, 3))
-      squaresInDirection(Square.unsafeFrom(3, 3), Vec(3, 1)).toList must_==
-        List(Square.unsafeFrom(6, 4))
+      squaresInDirection(d4, Vec(+1, 1)).toList must_== List(e5, f6, g7, h8)
+      squaresInDirection(d4, Vec(-1, 0)).toList must_== List(c4, b4, a4)
+      squaresInDirection(d4, Vec(+3, 1)).toList must_== List(g5)
     }
 
     "correctly perform undirectedReachableSquares" in {
-      undirectedReachableSquares(Placed(kl, Square.unsafeFrom(3, 2))).toSet must_==
-        Set(Square.unsafeFrom(3, 3), Square.unsafeFrom(4, 3), Square.unsafeFrom(4, 2), Square.unsafeFrom(4, 1),
-          Square.unsafeFrom(3, 1), Square.unsafeFrom(2, 1), Square.unsafeFrom(2, 2), Square.unsafeFrom(2, 3))
+      undirectedReachableSquares(Placed(kl, d3)).toSet must_==
+        Set(c2, c3, c4, d2, d4, e2, e3, e4)
 
-      undirectedReachableSquares(Placed(pl, Square.unsafeFrom(3, 3))).toSet must_==
-        Set(Square.unsafeFrom(3, 4))
-      undirectedReachableSquares(Placed(pl, Square.unsafeFrom(0, 1))).toSet must_==
-        Set(Square.unsafeFrom(0, 2), Square.unsafeFrom(0, 3))
-      undirectedReachableSquares(Placed(pd, Square.unsafeFrom(0, 6))).toSet must_==
-        Set(Square.unsafeFrom(0, 5), Square.unsafeFrom(0, 4))
+      undirectedReachableSquares(Placed(pl, d4)).toSet must_== Set(d5)
+      undirectedReachableSquares(Placed(pl, a2)).toSet must_== Set(a3, a4)
+      undirectedReachableSquares(Placed(pd, a7)).toSet must_== Set(a6, a5)
     }
 
     "correctly perform undirectedReachableSquares for Bishop" in {
-      undirectedReachableSquares(Placed(bl, Square.unsafeFrom(3, 3))).toSet must_==
-        Set(Square.unsafeFrom(0, 0), Square.unsafeFrom(1, 1), Square.unsafeFrom(2, 2), Square.unsafeFrom(4, 4),
-          Square.unsafeFrom(5, 5), Square.unsafeFrom(6, 6), Square.unsafeFrom(7, 7),
-          Square.unsafeFrom(0, 6), Square.unsafeFrom(1, 5), Square.unsafeFrom(2, 4), Square.unsafeFrom(4, 2),
-          Square.unsafeFrom(5, 1), Square.unsafeFrom(6, 0))
+      undirectedReachableSquares(Placed(bl, d4)).toSet must_==
+        Set(a1, b2, c3, e5, f6, g7, h8, a7, b6, c5, e3, f2, g1)
     }
 
     "determine associated castlings for placed pieces" in {
-      associatedCastlings(Placed(rl, Square.unsafeFrom(0, 0))) must_==
-        Seq(CastlingLong(White))
-      associatedCastlings(Placed(rl, Square.unsafeFrom(3, 5))) must_==
-        Seq.empty
-      associatedCastlings(Placed(rd, Square.unsafeFrom(7, 7))) must_==
-        Seq(CastlingShort(Black))
-      associatedCastlings(Placed(kd, Square.unsafeFrom(4, 2))) must_==
-        Seq(CastlingShort(Black), CastlingLong(Black))
-      associatedCastlings(Placed(ql, Square.unsafeFrom(0, 0))) must_==
-        Seq.empty
+      associatedCastlings(Placed(rl, a1)) must_== Seq(CastlingLong(White))
+      associatedCastlings(Placed(rl, d6)) must_== Seq.empty
+      associatedCastlings(Placed(rd, h8)) must_== Seq(CastlingShort(Black))
+      associatedCastlings(Placed(kd, e3)) must_== Seq(CastlingShort(Black), CastlingLong(Black))
+      associatedCastlings(Placed(ql, a1)) must_== Seq.empty
     }
 
     "find reachable vacant and occupied squares" in {

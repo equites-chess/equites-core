@@ -24,7 +24,7 @@ object Pgn {
 
   ///
 
-  case class MaybeSquare(file: Option[Int] = None, rank: Option[Int] = None) {
+  case class MaybeSquare(file: Option[File] = None, rank: Option[Rank] = None) {
     def toSquare: Option[Square] =
       file.flatMap(f => rank.flatMap(r => Square.from(f, r)))
   }

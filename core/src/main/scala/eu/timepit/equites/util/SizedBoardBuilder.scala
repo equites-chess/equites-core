@@ -62,7 +62,7 @@ object SizedBoardBuilder {
         (pieceOpt, file) <- sizedRank.zipWithIndex
         piece <- pieceOpt
         rank = maxRank - reverseRank
-        square <- Square.from(file, rank)
+        square <- Square.from(File(file), Rank(rank))
       } yield square -> piece
       Board(mapping.toMap)
     }

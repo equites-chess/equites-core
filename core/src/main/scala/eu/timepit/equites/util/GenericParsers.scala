@@ -35,11 +35,11 @@ trait GenericParsers extends RegexParsers {
   def nonNegativeInteger: Parser[Int] =
     """\d+""".r ^^ (_.toInt)
 
-  def algebraicFile: Parser[Int] =
-    oneOf(algebraicFileRange)(_.toString).map(fileFromAlgebraic)
+  def algebraicFile: Parser[File] =
+    oneOf(algebraicFileSeq)(_.value.toString).map(fileFromAlgebraic)
 
-  def algebraicRank: Parser[Int] =
-    oneOf(algebraicRankRange)(_.toString).map(rankFromAlgebraic)
+  def algebraicRank: Parser[Rank] =
+    oneOf(algebraicRankSeq)(_.value.toString).map(rankFromAlgebraic)
 
   def algebraicSquare: Parser[Square] = algebraicFile ~ algebraicRank ^^ {
     case file ~ rank => Square.unsafeFrom(file, rank)

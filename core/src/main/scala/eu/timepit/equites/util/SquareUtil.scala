@@ -17,46 +17,53 @@
 package eu.timepit.equites
 package util
 
-import scala.collection.immutable.NumericRange
-
 import Rules._
 import util.Rand._
 
+case class AlgebraicFile(value: Char) extends AnyVal {
+  def toFile: File = SquareUtil.fileFromAlgebraic(this)
+}
+
+case class AlgebraicRank(value: Int) extends AnyVal {
+  def toRank: Rank = SquareUtil.rankFromAlgebraic(this)
+}
+
 object SquareUtil {
-  val algebraicFileRange: NumericRange[Char] = toCharRange(fileRange, 'a')
-  val algebraicRankRange: Range = incrRange(rankRange, 1)
+  val algebraicFileSeq: Seq[AlgebraicFile] = fileSeq.map(fileToAlgebraic)
+  val algebraicRankSeq: Seq[AlgebraicRank] = rankSeq.map(rankToAlgebraic)
 
-  val numericFileRange: Range = incrRange(fileRange, 1)
-  def numericRankRange: Range = algebraicRankRange
+  val numericFileSeq: Seq[Int] = fileSeq.map(_.value + 1)
+  val numericRankSeq: Seq[Int] = rankSeq.map(_.value + 1)
 
-  def fileFromAlgebraic(algebraicFile: Char): Int =
-    algebraicFileRange.indexOf(algebraicFile)
+  def fileFromAlgebraic(file: AlgebraicFile): File =
+    File(file.value - 'a')
 
-  def rankFromAlgebraic(algebraicRank: Int): Int =
-    algebraicRankRange.indexOf(algebraicRank)
+  def fileToAlgebraic(file: File): AlgebraicFile =
+    AlgebraicFile((file.value + 'a').toChar)
 
-  def fromAlgebraic(algebraicFile: Char, algebraicRank: Int): Option[Square] = {
-    val file = fileFromAlgebraic(algebraicFile)
-    val rank = rankFromAlgebraic(algebraicRank)
-    Square.from(file, rank)
-  }
+  def rankFromAlgebraic(rank: AlgebraicRank): Rank =
+    Rank(rank.value - 1)
+
+  def rankToAlgebraic(rank: Rank): AlgebraicRank =
+    AlgebraicRank(rank.value + 1)
+
+  def fromAlgebraic(file: AlgebraicFile, rank: AlgebraicRank): Option[Square] =
+    Square.from(fileFromAlgebraic(file), rankFromAlgebraic(rank))
 
   /**
    * @throws IllegalArgumentException
    */
-  def unsafeFromAlgebraic(algebraicFile: Char, algebraicRank: Int): Square =
-    fromAlgebraic(algebraicFile, algebraicRank).getOrElse {
-      throw new IllegalArgumentException
-    }
+  def unsafeFromAlgebraic(file: AlgebraicFile, rank: AlgebraicRank): Square =
+    fromAlgebraic(file, rank).getOrElse(throw new IllegalArgumentException)
 
   def randomSquare: Rand[Square] =
     randElem(allSquaresSeq).map(_.get)
 
   def showAlgebraic(square: Square): String =
-    algebraicFileRange(square.file).toString +
-      algebraicRankRange(square.rank).toString
+    fileToAlgebraic(square.file).value.toString +
+      rankToAlgebraic(square.rank).value.toString
 
   def showNumeric(square: Square): String =
-    numericFileRange(square.file).toString +
-      numericRankRange(square.rank).toString
+    numericFileSeq(square.file.value).toString +
+      numericRankSeq(square.rank.value).toString
 }

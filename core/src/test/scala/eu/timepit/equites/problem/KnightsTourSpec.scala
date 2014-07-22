@@ -19,7 +19,8 @@ package problem
 
 import org.specs2.mutable._
 
-import KnightsTour._
+import problem.KnightsTour._
+import util.SquareAbbr._
 
 class KnightsTourSpec extends Specification {
   def alwaysVisitAllSquares(tourFn: Square => Tour) = {
@@ -36,13 +37,13 @@ class KnightsTourSpec extends Specification {
 
   "staticTour" should {
     "not generate a complete tour" in {
-      isComplete(staticTour(Square.unsafeFrom(0, 0))) must beFalse
+      isComplete(staticTour(a1)) must beFalse
     }
   }
 
   "randomTour" should {
     "not generate a complete tour" in {
-      isComplete(randomTour(Square.unsafeFrom(0, 0))) must beFalse
+      isComplete(randomTour(a1)) must beFalse
     }
   }
 

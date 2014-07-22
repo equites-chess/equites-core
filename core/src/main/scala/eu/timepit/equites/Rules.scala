@@ -22,53 +22,53 @@ import implicits.PlacedImplicits._
 import util.PieceAbbr.Textual._
 
 object Rules {
-  val fileRange = 0 to 7
-  val rankRange = 0 to 7
-  val boardLength = math.max(fileRange.end, rankRange.end)
+  val fileSeq: Seq[File] = (0 to 7).map(File)
+  val rankSeq: Seq[Rank] = (0 to 7).map(Rank)
+  val boardLength: Int = math.max(fileSeq.last.value, rankSeq.last.value)
 
-  def fileSquares(file: Int): Seq[Square] =
-    rankRange.map(Square.from(file, _)).flatten
+  def fileSquares(file: File): Seq[Square] =
+    rankSeq.map(Square.from(file, _)).flatten
 
-  def rankSquares(rank: Int): Seq[Square] =
-    fileRange.map(Square.from(_, rank)).flatten
+  def rankSquares(rank: Rank): Seq[Square] =
+    fileSeq.map(Square.from(_, rank)).flatten
 
-  val allSquaresSeq: Seq[Square] = rankRange.flatMap(rankSquares)
+  val allSquaresSeq: Seq[Square] = rankSeq.flatMap(rankSquares)
   val allSquaresSet: Set[Square] = allSquaresSeq.toSet
 
-  val whiteBackRank = rankRange.start
-  val whitePawnRank = whiteBackRank + 1
+  val whiteBackRank: Rank = rankSeq.head
+  val whitePawnRank: Rank = whiteBackRank + Rank(1)
 
-  val blackBackRank = backRankBy(Black)
-  val blackPawnRank = pawnRankBy(Black)
+  val blackBackRank: Rank = backRankBy(Black)
+  val blackPawnRank: Rank = pawnRankBy(Black)
 
-  def rankBy(rank: Int, color: Color): Int =
-    color.fold(rank, rankRange.end - rank)
+  def rankBy(rank: Rank, color: Color): Rank =
+    color.fold(rank, rankSeq.last - rank)
 
-  def backRankBy(color: Color): Int =
+  def backRankBy(color: Color): Rank =
     rankBy(whiteBackRank, color)
 
-  def pawnRankBy(color: Color): Int =
+  def pawnRankBy(color: Color): Rank =
     rankBy(whitePawnRank, color)
 
   /** Returns the rank a pawn moves from with an en passant capture. */
-  def enPassantSrcRankBy(color: Color): Int =
-    rankBy(whitePawnRank + 2, color.opposite)
+  def enPassantSrcRankBy(color: Color): Rank =
+    rankBy(whitePawnRank + Rank(2), color.opposite)
 
   /** Returns the rank a pawn moves to with an en passant capture. */
-  def enPassantDestRankBy(color: Color): Int =
-    rankBy(whitePawnRank + 1, color.opposite)
+  def enPassantDestRankBy(color: Color): Rank =
+    rankBy(whitePawnRank + Rank(1), color.opposite)
 
   /** Returns the rank "behind" a pawn that made a two-square move. */
-  def enPassantTargetRankBy(color: Color): Int =
+  def enPassantTargetRankBy(color: Color): Rank =
     enPassantDestRankBy(color.opposite)
 
   ///
 
-  val kingFile = 4
-  val queenFile = 3
-  val rookFiles = List(0, 7)
-  val knightFiles = List(1, 6)
-  val bishopFiles = List(2, 5)
+  val kingFile: File = File(4)
+  val queenFile: File = File(3)
+  val rookFiles: List[File] = List(0, 7).map(File)
+  val knightFiles: List[File] = List(1, 6).map(File)
+  val bishopFiles: List[File] = List(2, 5).map(File)
 
   val startingSquares: Map[AnyPiece, List[Square]] = {
     def startingSquaresBy(color: Color): Map[AnyPiece, List[Square]] = {
@@ -81,7 +81,7 @@ object Rules {
         rook(color)   -> rookFiles.map(Square.from(_, backRank)).flatten,
         bishop(color) -> bishopFiles.map(Square.from(_, backRank)).flatten,
         knight(color) -> knightFiles.map(Square.from(_, backRank)).flatten,
-        pawn(color)   -> fileRange.map(Square.from(_, pawnRank)).flatten.toList)
+        pawn(color)   -> fileSeq.map(Square.from(_, pawnRank)).flatten.toList)
       // format: ON
     }
     Color.all.map(startingSquaresBy).reduce(_ ++ _)
@@ -109,7 +109,7 @@ object Rules {
       }
 
       val leftOrRight = side.fold(1, -1)
-      val destFile = kingFile + offset * leftOrRight
+      val destFile = kingFile + File(offset * leftOrRight)
       val rank = backRankBy(piece.color)
 
       for {

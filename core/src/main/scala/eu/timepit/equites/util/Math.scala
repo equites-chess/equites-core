@@ -44,4 +44,7 @@ object Math {
 
   def minDistToBoundaries(x: Int, range: Range): Int =
     math.min(x - range.start, range.end - x)
+
+  def minDistToBoundaries(x: Int, sortedSeq: Seq[Int]): Int =
+    math.min(x - sortedSeq.head, sortedSeq.last - x)
 }

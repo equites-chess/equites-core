@@ -22,14 +22,24 @@ import scalaz.Scalaz._
 import Rules._
 import util.Math._
 
-case class Square private (file: Int, rank: Int) {
-  def +(vec: Vec): Option[Square] = Square.from(file + vec.file, rank + vec.rank)
+case class File(value: Int) extends AnyVal {
+  def +(that: File): File = File(value + that.value)
+  def -(that: File): File = File(value - that.value)
+  def unary_- : File = File(-value)
+}
+
+case class Rank(value: Int) extends AnyVal {
+  def +(that: Rank): Rank = Rank(value + that.value)
+  def -(that: Rank): Rank = Rank(value - that.value)
+  def unary_- : Rank = Rank(-value)
+}
+
+case class Square private (file: File, rank: Rank) {
+  def +(vec: Vec): Option[Square] = Square.from(file + File(vec.file), rank + Rank(vec.rank))
   def -(vec: Vec): Option[Square] = this + -vec
 
-  def +(that: Square): Vec = Vec(file + that.file, rank + that.rank)
+  def +(that: Square): Vec = Vec((file + that.file).value, (rank + that.rank).value)
   def -(that: Square): Vec = this + -that
-
-  def sum: Int = file + rank
 
   /** Returns true if this `Square` is light. */
   def isLight: Boolean = isOdd(sum)
@@ -60,8 +70,8 @@ case class Square private (file: Int, rank: Int) {
   def to(that: Square): Draw = Draw(this, that)
 
   def distToBoundary: Int = {
-    val fileDist = minDistToBoundaries(file, fileRange)
-    val rankDist = minDistToBoundaries(rank, rankRange)
+    val fileDist = minDistToBoundaries(file.value, fileSeq.map(_.value))
+    val rankDist = minDistToBoundaries(rank.value, rankSeq.map(_.value))
     math.min(fileDist, rankDist)
   }
 
@@ -71,41 +81,46 @@ case class Square private (file: Int, rank: Int) {
   def right: Option[Square] = this + Vec.right
   def left: Option[Square] = this + Vec.left
 
-  def rightmost: Square = copy(file = fileRange.end)
-  def leftmost: Square = copy(file = fileRange.start)
+  def rightmost: Square = copy(file = fileSeq.last)
+  def leftmost: Square = copy(file = fileSeq.head)
 
-  def toSeq: Seq[Int] = Seq(file, rank)
+  def toSeq: Seq[Int] = Seq(file.value, rank.value)
 
   private def isValid: Boolean =
-    fileRange.contains(file) && rankRange.contains(rank)
+    fileSeq.contains(file) && rankSeq.contains(rank)
 
   /** Returns `Some(this)` if this `Square` is valid and `None` otherwise. */
   private def asOption: Option[Square] = isValid.option(this)
 
   private def unary_- : Square = Square(-file, -rank)
+
+  private def sum: Int = file.value + rank.value
 }
 
 object Square extends SquareInstances {
-  def from(file: Int, rank: Int): Option[Square] =
+  def from(file: File, rank: Rank): Option[Square] =
     Square(file, rank).asOption
 
   /**
    * @throws IllegalArgumentException
    */
-  def unsafeFrom(file: Int, rank: Int): Square =
+  def unsafeFrom(file: File, rank: Rank): Square =
     from(file, rank).getOrElse(throw new IllegalArgumentException)
 
-  def bottomRight: Square = Square(fileRange.end, rankRange.start)
-  def bottomLeft: Square = Square(fileRange.start, rankRange.start)
+  def bottomRight: Square = Square(fileSeq.last, rankSeq.head)
+  def bottomLeft: Square = Square(fileSeq.head, rankSeq.head)
 
-  def topRight: Square = Square(fileRange.end, rankRange.end)
-  def topLeft: Square = Square(fileRange.start, rankRange.end)
+  def topRight: Square = Square(fileSeq.last, rankSeq.last)
+  def topLeft: Square = Square(fileSeq.head, rankSeq.last)
 }
 
 trait SquareInstances {
   implicit val squareEqual = Equal.equalA[Square]
   implicit val squareOrder = Order.order[Square] {
-    case (s1, s2) => (s1.rank cmp s2.rank) mappend (s1.file cmp s2.file)
+    case (s1, s2) =>
+      val rankOrd = s1.rank.value cmp s2.rank.value
+      val fileOrd = s1.file.value cmp s2.file.value
+      rankOrd mappend fileOrd
   }
   implicit val squareScalaOrdering = Order[Square].toScalaOrdering
   implicit val squareShow = Show.showFromToString[Square]

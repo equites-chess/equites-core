@@ -17,40 +17,40 @@
 package eu.timepit.equites
 
 import org.specs2.mutable._
+
 import util.PieceAbbr.Wiki._
+import util.SquareAbbr._
 
 class BoardSpec extends Specification {
   "Board" should {
-    val board = Board(Square.unsafeFrom(0, 0) -> pl, Square.unsafeFrom(1, 1) -> pd)
+    val board = Board(a1 -> pl, b2 -> pd)
 
     "return placed pieces" in {
-      board.getPlaced(Square.unsafeFrom(0, 0)) must beSome(Placed(pl, Square.unsafeFrom(0, 0)))
-      board.getPlaced(Square.unsafeFrom(1, 0)) must beNone
+      board.getPlaced(a1) must beSome(Placed(pl, a1))
+      board.getPlaced(b1) must beNone
     }
 
     "return sequences of placed pieces" in {
-      board.getPlaced(Seq(Square.unsafeFrom(0, 0), Square.unsafeFrom(1, 0), Square.unsafeFrom(1, 1))) must_==
-        Seq(Placed(pl, Square.unsafeFrom(0, 0)), Placed(pd, Square.unsafeFrom(1, 1)))
+      board.getPlaced(Seq(a1, b1, b2)) must_==
+        Seq(Placed(pl, a1), Placed(pd, b2))
     }
 
     "report occupied and vacant squares" in {
-      board.isOccupied(Square.unsafeFrom(0, 0)) must beTrue
-      board.isVacant(Square.unsafeFrom(0, 0)) must beFalse
+      board.isOccupied(a1) must beTrue
+      board.isVacant(a1) must beFalse
 
-      board.isVacant(Square.unsafeFrom(1, 0)) must beTrue
-      board.isOccupied(Square.unsafeFrom(1, 0)) must beFalse
+      board.isVacant(b1) must beTrue
+      board.isOccupied(b1) must beFalse
     }
 
     "report occupied squares by piece" in {
-      board.isOccupiedBy(Square.unsafeFrom(0, 0), pl) must beTrue
-      board.isOccupiedBy(Square.unsafeFrom(0, 0), pd) must beFalse
-
-      board.isOccupiedBy(Square.unsafeFrom(1, 0), pl) must beFalse
+      board.isOccupiedBy(a1, pl) must beTrue
+      board.isOccupiedBy(a1, pd) must beFalse
+      board.isOccupiedBy(b1, pl) must beFalse
     }
 
     "return all placed pieces" in {
-      board.placedPieces.toSet must_==
-        Set(Placed(pl, Square.unsafeFrom(0, 0)), Placed(pd, Square.unsafeFrom(1, 1)))
+      board.placedPieces.toSet must_== Set(Placed(pl, a1), Placed(pd, b2))
     }
 
     def checkAction(before: Board, after: Board, action: Action) = {
@@ -64,38 +64,40 @@ class BoardSpec extends Specification {
     }
 
     "process and reverse moves" in {
-      val before = Board(Square.unsafeFrom(0, 0) -> ql)
-      val after = Board(Square.unsafeFrom(7, 7) -> ql)
-      val action = Move(ql, Square.unsafeFrom(0, 0) to Square.unsafeFrom(7, 7))
+      val before = Board(a1 -> ql)
+      val after = Board(h8 -> ql)
+      val action = Move(ql, a1 to h8)
       checkAction(before, after, action)
     }
 
     "process and reverse promotions" in {
-      val before = Board(Square.unsafeFrom(0, 6) -> pl)
-      val after = Board(Square.unsafeFrom(0, 7) -> ql)
-      val action = Promotion(pl, Square.unsafeFrom(0, 6) to Square.unsafeFrom(0, 7), ql)
+      val before = Board(a7 -> pl)
+      val after = Board(a8 -> ql)
+      val action = Promotion(pl, a7 to a8, ql)
       checkAction(before, after, action)
     }
 
     "process and reverse captures" in {
-      val before = Board(Square.unsafeFrom(0, 0) -> ql, Square.unsafeFrom(7, 7) -> pd)
-      val after = Board(Square.unsafeFrom(7, 7) -> ql)
-      val action = Capture(ql, Square.unsafeFrom(0, 0) to Square.unsafeFrom(7, 7), pd)
+      val before = Board(a1 -> ql, h8 -> pd)
+      val after = Board(h8 -> ql)
+      val action = Capture(ql, a1 to h8, pd)
       checkAction(before, after, action)
     }
 
     "process and reverse captures and promotions" in {
-      val before = Board(Square.unsafeFrom(0, 6) -> pl, Square.unsafeFrom(1, 7) -> nd)
-      val after = Board(Square.unsafeFrom(1, 7) -> ql)
-      val action = CaptureAndPromotion(pl, Square.unsafeFrom(0, 6) to Square.unsafeFrom(1, 7), nd, ql)
+      val before = Board(a7 -> pl, b8 -> nd)
+      val after = Board(b8 -> ql)
+      val action = CaptureAndPromotion(pl, a7 to b8, nd, ql)
       checkAction(before, after, action)
     }
 
     "process and reverse castlings" in {
       val castling = CastlingLong(White)
-      val before = Board(castling.kingMove.draw.src -> castling.king,
+      val before = Board(
+        castling.kingMove.draw.src -> castling.king,
         castling.rookMove.draw.src -> castling.rook)
-      val after = Board(castling.kingMove.draw.dest -> castling.king,
+      val after = Board(
+        castling.kingMove.draw.dest -> castling.king,
         castling.rookMove.draw.dest -> castling.rook)
       checkAction(before, after, castling)
     }

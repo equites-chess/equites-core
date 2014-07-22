@@ -21,7 +21,8 @@ import org.specs2.mutable._
 import org.specs2.matcher.ParserMatchers
 
 import format.Pgn._
-import util.SquareUtil._
+import util.{ AlgebraicFile, AlgebraicRank }
+import util.SquareAbbr._
 
 class PgnParsersSpec extends Specification with ParserMatchers {
   val parsers = PgnParsers
@@ -143,31 +144,29 @@ class PgnParsersSpec extends Specification with ParserMatchers {
   "sanAction" should {
     "succeed on valid input" in {
       sanAction must succeedOn("d5")
-        .withResult(SanMove(Pawn, MaybeDraw(unsafeFromAlgebraic('d', 5))))
+        .withResult(SanMove(Pawn, MaybeDraw(d5)))
       sanAction must succeedOn("Nf3")
-        .withResult(SanMove(Knight, MaybeDraw(unsafeFromAlgebraic('f', 3))))
+        .withResult(SanMove(Knight, MaybeDraw(f3)))
       sanAction must succeedOn("Nge2")
-        .withResult(SanMove(Knight, MaybeDraw(MaybeSquare(Some(fileFromAlgebraic('g'))), unsafeFromAlgebraic('e', 2))))
+        .withResult(SanMove(Knight, MaybeDraw(MaybeSquare(Some(AlgebraicFile('g').toFile)), e2)))
       sanAction must succeedOn("N1e2")
-        .withResult(SanMove(Knight, MaybeDraw(MaybeSquare(None, Some(rankFromAlgebraic(1))),
-          unsafeFromAlgebraic('e', 2))))
+        .withResult(SanMove(Knight, MaybeDraw(MaybeSquare(None, Some(AlgebraicRank(1).toRank)), e2)))
       sanAction must succeedOn("Ng1e2")
-        .withResult(SanMove(Knight, MaybeDraw(MaybeSquare(Some(fileFromAlgebraic('g')), Some(rankFromAlgebraic(1))),
-          unsafeFromAlgebraic('e', 2))))
+        .withResult(SanMove(Knight, MaybeDraw(MaybeSquare(Some(AlgebraicFile('g').toFile),
+          Some(AlgebraicRank(1).toRank)), e2)))
       sanAction must succeedOn("dxc4")
-        .withResult(SanCapture(Pawn, MaybeDraw(MaybeSquare(Some(fileFromAlgebraic('d'))), unsafeFromAlgebraic('c', 4))))
+        .withResult(SanCapture(Pawn, MaybeDraw(MaybeSquare(Some(AlgebraicFile('d').toFile)), c4)))
       sanAction must succeedOn("Qc8+")
-        .withResult(CheckingSanAction(SanMove(Queen, MaybeDraw(unsafeFromAlgebraic('c', 8))), Check))
+        .withResult(CheckingSanAction(SanMove(Queen, MaybeDraw(c8)), Check))
       sanAction must succeedOn("e8=Q#")
-        .withResult(CheckingSanAction(SanPromotion(Pawn, MaybeDraw(unsafeFromAlgebraic('e', 8)), Queen), CheckMate))
+        .withResult(CheckingSanAction(SanPromotion(Pawn, MaybeDraw(e8), Queen), CheckMate))
       sanAction must succeedOn("exf3")
-        .withResult(SanCapture(Pawn, MaybeDraw(MaybeSquare(Some(fileFromAlgebraic('e'))), unsafeFromAlgebraic('f', 3))))
+        .withResult(SanCapture(Pawn, MaybeDraw(MaybeSquare(Some(AlgebraicFile('e').toFile)), f3)))
       sanAction must succeedOn("Qa6xb7#")
-        .withResult(CheckingSanAction(SanCapture(Queen, MaybeDraw(MaybeSquare(unsafeFromAlgebraic('a', 6)),
-          unsafeFromAlgebraic('b', 7))), CheckMate))
+        .withResult(CheckingSanAction(SanCapture(Queen, MaybeDraw(MaybeSquare(a6), b7)), CheckMate))
       sanAction must succeedOn("fxg1=Q+")
-        .withResult(CheckingSanAction(SanCaptureAndPromotion(Pawn, MaybeDraw(MaybeSquare(Some(fileFromAlgebraic('f'))),
-          unsafeFromAlgebraic('g', 1)), Queen), Check))
+        .withResult(CheckingSanAction(SanCaptureAndPromotion(Pawn, MaybeDraw(MaybeSquare(Some(
+          AlgebraicFile('f').toFile)), g1), Queen), Check))
       sanAction must succeedOn("O-O")
         .withResult(SanCastling(Kingside))
       sanAction must succeedOn("O-O-O")
@@ -175,7 +174,7 @@ class PgnParsersSpec extends Specification with ParserMatchers {
       sanAction must succeedOn("O-O+")
         .withResult(CheckingSanAction(SanCastling(Kingside), Check))
       sanAction must succeedOn("d5#")
-        .withResult(CheckingSanAction(SanMove(Pawn, MaybeDraw(unsafeFromAlgebraic('d', 5))), CheckMate))
+        .withResult(CheckingSanAction(SanMove(Pawn, MaybeDraw(d5)), CheckMate))
     }
   }
 
@@ -212,16 +211,16 @@ class PgnParsersSpec extends Specification with ParserMatchers {
         "{This opening is called the Ruy Lopez.} 3... a6"
       val result = List(
         SeqMoveElement(MoveNumber(1, White)),
-        SeqMoveElement(MoveSymbol(SanMove(Pawn, MaybeDraw(unsafeFromAlgebraic('e', 4))))),
-        SeqMoveElement(MoveSymbol(SanMove(Pawn, MaybeDraw(unsafeFromAlgebraic('e', 5))))),
+        SeqMoveElement(MoveSymbol(SanMove(Pawn, MaybeDraw(e4)))),
+        SeqMoveElement(MoveSymbol(SanMove(Pawn, MaybeDraw(e5)))),
         SeqMoveElement(MoveNumber(2, White)),
-        SeqMoveElement(MoveSymbol(SanMove(Knight, MaybeDraw(unsafeFromAlgebraic('f', 3))))),
-        SeqMoveElement(MoveSymbol(SanMove(Knight, MaybeDraw(unsafeFromAlgebraic('c', 6))))),
+        SeqMoveElement(MoveSymbol(SanMove(Knight, MaybeDraw(f3)))),
+        SeqMoveElement(MoveSymbol(SanMove(Knight, MaybeDraw(c6)))),
         SeqMoveElement(MoveNumber(3, White)),
-        SeqMoveElement(MoveSymbol(SanMove(Bishop, MaybeDraw(unsafeFromAlgebraic('b', 5))))),
+        SeqMoveElement(MoveSymbol(SanMove(Bishop, MaybeDraw(b5)))),
         SeqComment(Comment("This opening is called the Ruy Lopez.")),
         SeqMoveElement(MoveNumber(3, Black)),
-        SeqMoveElement(MoveSymbol(SanMove(Pawn, MaybeDraw(unsafeFromAlgebraic('a', 6))))))
+        SeqMoveElement(MoveSymbol(SanMove(Pawn, MaybeDraw(a6)))))
 
       moveTextSeq must succeedOn(text).withResult(equalTo(result))
     }
