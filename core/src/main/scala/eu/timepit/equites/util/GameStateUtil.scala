@@ -23,16 +23,14 @@ object GameStateUtil {
     val color = state.color.fold("w", "b")
 
     val castlings = {
-      val letters = state.availableCastlings.map {
-        ActionUtil.showFenCastlingLetter
-      }.toSeq.sorted.mkString
+      val letters = state.availableCastlings
+        .map(ActionUtil.showFenCastlingLetter).toSeq.sorted.mkString
       if (letters.isEmpty) "-" else letters
     }
 
-    val enPassantTarget = state.lastAction.flatMap {
-      case move: Move => ActionOps.enPassantTarget(move)
-      case _          => None
-    }.fold("-")(SquareUtil.showAlgebraic)
+    val enPassantTarget =
+      state.lastAction.flatMap(Rules.enPassantTargetSquare)
+        .fold("-")(SquareUtil.showAlgebraic)
 
     s"$placement $color $castlings $enPassantTarget" +
       s" ${state.halfmoveClock} ${state.moveNumber}"

@@ -19,25 +19,6 @@ package eu.timepit.equites
 import scalaz.syntax.std.boolean._
 
 object ActionOps {
-  /** Returns true if `action` allows an en passant capture. */
-  def allowsEnPassant(action: Action): Boolean = {
-    val drawLength = 2
-    action.piece.isPawn &&
-      action.draw.l1Length == drawLength &&
-      action.draw.direction.isStraight
-  }
-
-  /**
-   * Returns the square where a pawn can be captured via an en passant if
-   * `action` allows it.
-   */
-  def enPassantTarget(action: Action): Option[Square] =
-    allowsEnPassant(action).option {
-      val file = action.draw.src.file
-      val rank = Rules.enPassantTargetRankBy(action.piece.color)
-      Square.from(file, rank)
-    }.flatten
-
   /** Returns true if `action` is a capture or a pawn move. */
   def isCaptureOrPawnMove(action: Action): Boolean =
     action match {

@@ -17,6 +17,7 @@
 package eu.timepit.equites
 
 import scalaz.std.stream
+import scalaz.syntax.std.boolean._
 
 import implicits.PlacedImplicits._
 import util.PieceAbbr.Textual._
@@ -190,4 +191,29 @@ object Rules {
 
   def unvisitedSquares(placed: PlacedPiece, visited: Set[Square]): Stream[Square] =
     undirectedReachableSquares(placed).filterNot(visited)
+
+  ///
+
+  def isCapture(action: Action): Boolean =
+    action.isInstanceOf[CaptureLike]
+
+  def isPawnMove(action: Action): Boolean =
+    action.piece.isPawn
+
+  def isTwoRanksPawnMoveFromStartingSquare(action: Action): Boolean =
+    action.piece.isPawn &&
+      action.draw.l1Length == 2 &&
+      action.draw.direction.isVertical &&
+      onStartingSquare(action.placedPiece)
+
+  /**
+   * Returns the square where a pawn can be captured via an en passant if
+   * `action` allows it.
+   */
+  def enPassantTargetSquare(action: Action): Option[Square] =
+    isTwoRanksPawnMoveFromStartingSquare(action).option {
+      val file = action.draw.src.file
+      val rank = enPassantTargetRankBy(action.piece.color)
+      Square.from(file, rank)
+    }.flatten
 }
