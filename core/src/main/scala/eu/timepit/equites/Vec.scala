@@ -67,8 +67,11 @@ case class Vec(file: Int, rank: Int) extends PlayerPerspective[Vec] {
   /** Returns true if at least one of this `Vec`'s components is non-zero. */
   def notZero: Boolean = !isZero
 
+  def isHorizontal: Boolean = file != 0 && rank == 0
+  def isVertical: Boolean = file == 0 && rank != 0
+
   /** Returns true if only one of this `Vec`'s components is zero. */
-  def isStraight: Boolean = notZero && (file == 0 || rank == 0)
+  def isStraight: Boolean = isHorizontal || isVertical
 
   def isDiagonal: Boolean = notZero && (file.abs == rank.abs)
 
