@@ -26,10 +26,10 @@ case class Piece[+C <: Color, +T <: PieceType](color: C, pieceType: T) {
   def isFriendOf(other: AnyPiece): Boolean = color == other.color
   def isOpponentOf(other: AnyPiece): Boolean = color != other.color
 
-  def is(pType: PieceType): Boolean = pieceType == pType
+  def is(pieceType: PieceType): Boolean = this.pieceType == pieceType
 
-  def maybe[T1 <: PieceType](pType: T1): Option[Piece[C, T1]] =
-    (pieceType == pType).option(Piece(color, pType))
+  def maybe[T1 <: PieceType](pieceType: T1): Option[Piece[C, T1]] =
+    is(pieceType).option(copy(pieceType = pieceType))
 
   // format: OFF
   def isKing   = is(King)
