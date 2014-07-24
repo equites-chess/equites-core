@@ -81,11 +81,11 @@ case class Square private (file: File, rank: Rank) {
   def right: Option[Square] = this + Vec.right
   def left: Option[Square] = this + Vec.left
 
-  def upRight: Option[Square] = up.flatMap(_.right)
-  def upLeft: Option[Square] = up.flatMap(_.left)
+  def upRight: Option[Square] = this + Vec.frontRight
+  def upLeft: Option[Square] = this + Vec.frontLeft
 
-  def downRight: Option[Square] = down.flatMap(_.right)
-  def downLeft: Option[Square] = down.flatMap(_.left)
+  def downRight: Option[Square] = this + Vec.backRight
+  def downLeft: Option[Square] = this + Vec.backLeft
 
   def rightmost: Square = copy(file = fileSeq.last)
   def leftmost: Square = copy(file = fileSeq.head)
