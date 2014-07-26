@@ -20,13 +20,8 @@ package util
 import Rules._
 import util.Rand._
 
-case class AlgebraicFile(value: Char) extends AnyVal {
-  def toFile: File = SquareUtil.fileFromAlgebraic(this)
-}
-
-case class AlgebraicRank(value: Int) extends AnyVal {
-  def toRank: Rank = SquareUtil.rankFromAlgebraic(this)
-}
+case class AlgebraicFile(value: Char) extends AnyVal
+case class AlgebraicRank(value: Int) extends AnyVal
 
 object SquareUtil {
   val algebraicFileSeq: Seq[AlgebraicFile] = fileSeq.map(fileToAlgebraic)
@@ -35,26 +30,17 @@ object SquareUtil {
   val numericFileSeq: Seq[Int] = fileSeq.map(_.value + 1)
   val numericRankSeq: Seq[Int] = rankSeq.map(_.value + 1)
 
-  def fileFromAlgebraic(file: AlgebraicFile): File =
-    File(file.value - 'a')
+  def fileFromAlgebraic(algebraicFile: AlgebraicFile): File =
+    File(algebraicFile.value - 'a')
 
   def fileToAlgebraic(file: File): AlgebraicFile =
     AlgebraicFile((file.value + 'a').toChar)
 
-  def rankFromAlgebraic(rank: AlgebraicRank): Rank =
-    Rank(rank.value - 1)
+  def rankFromAlgebraic(algebraicRank: AlgebraicRank): Rank =
+    Rank(algebraicRank.value - 1)
 
   def rankToAlgebraic(rank: Rank): AlgebraicRank =
     AlgebraicRank(rank.value + 1)
-
-  def fromAlgebraic(file: AlgebraicFile, rank: AlgebraicRank): Option[Square] =
-    Square.from(fileFromAlgebraic(file), rankFromAlgebraic(rank))
-
-  /**
-   * @throws IllegalArgumentException
-   */
-  def unsafeFromAlgebraic(file: AlgebraicFile, rank: AlgebraicRank): Square =
-    fromAlgebraic(file, rank).getOrElse(throw new IllegalArgumentException)
 
   def randomSquare: Rand[Square] =
     randElem(allSquaresSeq).map(_.get)
