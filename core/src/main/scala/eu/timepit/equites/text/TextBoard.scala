@@ -86,10 +86,10 @@ trait TextBoard {
         .mkString(tileStart, "", tileEnd)
 
     def showRank(rank: Rank): String =
-      Rules.rankSquares(rank).map(showSquare)
+      Square.allWithRank(rank).map(showSquare)
         .mkString(rankBegin, rankSep, rankEnd + lineSep)
 
-    Rules.rankSeq.reverse.map(showRank).mkString
+    Rank.all.reverse.map(showRank).mkString
   }
 
   def mkLabeled(board: Board): String = {
@@ -105,7 +105,7 @@ trait TextBoard {
     }
 
     def bottomBorder: String = {
-      val barWidth = Rules.fileSeq.length * 2 - 1
+      val barWidth = File.range.length * 2 - 1
       val border = (horizontalBar * barWidth) + corner
       if (border.isEmpty) "" else border + lineSep
     }

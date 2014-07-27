@@ -59,7 +59,7 @@ object ArbitraryInstances {
     Arbitrary(Gen.oneOf(Piece.allPromoted))
 
   implicit val arbitrarySquare: Arbitrary[Square] =
-    Arbitrary(Gen.oneOf(Rules.allSquaresSeq))
+    Arbitrary(Gen.oneOf(Square.allAsSeq))
 
   implicit val arbitraryVec: Arbitrary[Vec] =
     Arbitrary {

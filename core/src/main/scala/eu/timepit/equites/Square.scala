@@ -19,23 +19,10 @@ package eu.timepit.equites
 import scalaz._
 import scalaz.Scalaz._
 
-import Rules._
 import util.Math._
 
-case class File(value: Int) extends AnyVal {
-  def +(that: File): File = File(value + that.value)
-  def -(that: File): File = File(value - that.value)
-  def unary_- : File = File(-value)
-}
-
-case class Rank(value: Int) extends AnyVal {
-  def +(that: Rank): Rank = Rank(value + that.value)
-  def -(that: Rank): Rank = Rank(value - that.value)
-  def unary_- : Rank = Rank(-value)
-}
-
 case class Square private (file: File, rank: Rank) {
-  def +(vec: Vec): Option[Square] = Square.from(file + File(vec.file), rank + Rank(vec.rank))
+  def +(vec: Vec): Option[Square] = Square.from(file + vec.file, rank + vec.rank)
   def -(vec: Vec): Option[Square] = this + -vec
 
   def +(that: Square): Vec = Vec((file + that.file).value, (rank + that.rank).value)
@@ -70,8 +57,8 @@ case class Square private (file: File, rank: Rank) {
   def to(that: Square): Draw = Draw(this, that)
 
   def distToBoundary: Int = {
-    val fileDist = minDistToBoundaries(file.value, fileSeq.map(_.value))
-    val rankDist = minDistToBoundaries(rank.value, rankSeq.map(_.value))
+    val fileDist = minDistToBoundaries(file.value, File.range)
+    val rankDist = minDistToBoundaries(rank.value, Rank.range)
     math.min(fileDist, rankDist)
   }
 
@@ -87,13 +74,13 @@ case class Square private (file: File, rank: Rank) {
   def downRight: Option[Square] = this + Vec.backRight
   def downLeft: Option[Square] = this + Vec.backLeft
 
-  def rightmost: Square = copy(file = fileSeq.last)
-  def leftmost: Square = copy(file = fileSeq.head)
+  def rightmost: Square = copy(file = File.max)
+  def leftmost: Square = copy(file = File.min)
 
   def toSeq: Seq[Int] = Seq(file.value, rank.value)
 
   private def isValid: Boolean =
-    fileSeq.contains(file) && rankSeq.contains(rank)
+    File.range.contains(file.value) && Rank.range.contains(rank.value)
 
   /** Returns `Some(this)` if this `Square` is valid and `None` otherwise. */
   private def asOption: Option[Square] = isValid.option(this)
@@ -113,20 +100,23 @@ object Square extends SquareInstances {
   def unsafeFrom(file: File, rank: Rank): Square =
     from(file, rank).getOrElse(throw new IllegalArgumentException)
 
-  def bottomRight: Square = Square(fileSeq.last, rankSeq.head)
-  def bottomLeft: Square = Square(fileSeq.head, rankSeq.head)
+  def allWithFile(file: File): Seq[Square] = Rank.all.flatMap(Square.from(file, _))
+  def allWithRank(rank: Rank): Seq[Square] = File.all.flatMap(Square.from(_, rank))
 
-  def topRight: Square = Square(fileSeq.last, rankSeq.last)
-  def topLeft: Square = Square(fileSeq.head, rankSeq.last)
+  val allAsSeq: Seq[Square] = File.all.flatMap(allWithFile)
+  val allAsSet: Set[Square] = allAsSeq.toSet
+
+  val bottomRight: Square = Square(File.max, Rank.min)
+  val bottomLeft: Square = Square(File.min, Rank.min)
+
+  val topRight: Square = Square(File.max, Rank.max)
+  val topLeft: Square = Square(File.min, Rank.max)
 }
 
 trait SquareInstances {
   implicit val squareEqual = Equal.equalA[Square]
   implicit val squareOrder = Order.order[Square] {
-    case (s1, s2) =>
-      val rankOrd = s1.rank.value cmp s2.rank.value
-      val fileOrd = s1.file.value cmp s2.file.value
-      rankOrd mappend fileOrd
+    case (s1, s2) => (s1.rank cmp s2.rank) mappend (s1.file cmp s2.file)
   }
   implicit val squareScalaOrdering = Order[Square].toScalaOrdering
   implicit val squareShow = Show.showFromToString[Square]

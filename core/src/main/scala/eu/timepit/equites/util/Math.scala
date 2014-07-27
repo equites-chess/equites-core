@@ -39,12 +39,9 @@ object Math {
   def isOdd[I: Integral](i: I): Boolean = remBy2(i) != 0
 
   /** Returns the remainder of `i` divided by two. */
-  private def remBy2[I](i: I)(implicit I: Integral[I]): I =
+  def remBy2[I](i: I)(implicit I: Integral[I]): I =
     I.rem(i, I.fromInt(2))
 
   def minDistToBoundaries(x: Int, range: Range): Int =
     math.min(x - range.start, range.end - x)
-
-  def minDistToBoundaries(x: Int, sortedSeq: Seq[Int]): Int =
-    math.min(x - sortedSeq.head, sortedSeq.last - x)
 }

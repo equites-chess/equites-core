@@ -25,13 +25,13 @@ import util.SquareAbbr._
 class KnightsTourSpec extends Specification {
   def alwaysVisitAllSquares(tourFn: Square => Tour) = {
     "visit all squares from all starting squares" in {
-      Rules.allSquaresSet.forall(sq => isComplete(tourFn(sq))) must beTrue
+      Square.allAsSeq.forall(tourFn.andThen(isComplete)) must beTrue
     }
   }
 
   def produceOneClosedTour(tourFn: Square => Tour) = {
     "produce at least one closed tour" in {
-      Rules.allSquaresSet.exists(sq => isClosed(tourFn(sq))) must beTrue
+      Square.allAsSeq.exists(tourFn.andThen(isClosed)) must beTrue
     }
   }
 

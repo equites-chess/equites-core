@@ -33,7 +33,7 @@ object BoardUtil {
       (rankStr, rank) <- placement.split("/").reverse.zipWithIndex
       (pieceChar, file) <- expandDigits(rankStr).zipWithIndex
       piece <- PieceUtil.readLetter(pieceChar)
-      square <- Square.from(File(file), Rank(rank))
+      square <- Square.from(file, rank)
     } yield square -> piece
     Board(mapping.toMap)
   }
@@ -43,8 +43,8 @@ object BoardUtil {
     def replaceOnes(target: String): String =
       "1{2,}".r.replaceAllIn(target, _.toString.length.toString)
 
-    Rules.rankSeq.reverse.map { rank =>
-      val wholeRank = Rules.fileSeq.map { file =>
+    Rank.all.reverse.map { rank =>
+      val wholeRank = File.all.map { file =>
         val squareOpt = Square.from(file, rank)
         val pieceOpt = squareOpt.flatMap(board.get)
         pieceOpt.fold("1")(PieceUtil.showLetter)

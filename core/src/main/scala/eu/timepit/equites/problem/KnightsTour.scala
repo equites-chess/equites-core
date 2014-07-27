@@ -79,7 +79,7 @@ object KnightsTour {
     (squares, visited) => randElem(leastDegreeSquares(squares, visited))
 
   def isComplete(tour: Tour): Boolean =
-    tour.toSet == Rules.allSquaresSet
+    tour.toSet == Square.allAsSet
 
   def isClosed(tour: Tour): Boolean =
     tour.nonEmpty && Directions.knightLike.contains(tour.last - tour.head)

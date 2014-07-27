@@ -17,18 +17,17 @@
 package eu.timepit.equites
 package util
 
-import Rules._
 import util.Rand._
 
 case class AlgebraicFile(value: Char) extends AnyVal
 case class AlgebraicRank(value: Int) extends AnyVal
 
 object SquareUtil {
-  val algebraicFileSeq: Seq[AlgebraicFile] = fileSeq.map(fileToAlgebraic)
-  val algebraicRankSeq: Seq[AlgebraicRank] = rankSeq.map(rankToAlgebraic)
+  val algebraicFileSeq: Seq[AlgebraicFile] = File.all.map(fileToAlgebraic)
+  val algebraicRankSeq: Seq[AlgebraicRank] = Rank.all.map(rankToAlgebraic)
 
-  val numericFileSeq: Seq[Int] = fileSeq.map(_.value + 1)
-  val numericRankSeq: Seq[Int] = rankSeq.map(_.value + 1)
+  val numericFileSeq: Seq[Int] = File.range.map(_ + 1)
+  val numericRankSeq: Seq[Int] = Rank.range.map(_ + 1)
 
   def fileFromAlgebraic(algebraicFile: AlgebraicFile): File =
     File(algebraicFile.value - 'a')
@@ -43,7 +42,7 @@ object SquareUtil {
     AlgebraicRank(rank.value + 1)
 
   def randomSquare: Rand[Square] =
-    randElem(allSquaresSeq).map(_.get)
+    randElem(Square.allAsSeq).map(_.get)
 
   def showAlgebraic(square: Square): String =
     fileToAlgebraic(square.file).value.toString +

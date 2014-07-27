@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2013-2014 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2014 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -15,24 +15,25 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package eu.timepit.equites
-package problem
+package util
 
-import scalaz.std.stream._
+trait IntWrapperOps[T <: IntWrapperOps[T]] {
+  self: T =>
 
-object Nqueens {
-  def allBoards: Stream[Board] = {
-    case class Candidate(board: Board, available: Set[Square])
+  def point(i: Int): T
+  def value: Int
 
-    def nextBoards(c: Candidate): Stream[Candidate] = {
-      c.available.toStream.map { sq =>
-        val placed = Placed(Piece(White, Queen), sq)
-        val reachable = Rules.undirectedReachableSquares(placed)
-        Candidate(c.board + placed, c.available -- reachable - sq)
-      }
-    }
+  def apply1(f: Int => Int): T =
+    point(f(value))
 
-    val first = Candidate(Board.empty, Square.allAsSet)
-    val n = math.sqrt(Square.allAsSeq.length).toInt
-    util.backtrack(first)(nextBoards, _.board.pieceCount >= n).map(_.board)
-  }
+  def apply2(f: (Int, Int) => Int): T => T =
+    t => point(f(value, t.value))
+
+  def +(i: Int): T = apply1(_ + i)
+  def -(i: Int): T = apply1(_ - i)
+
+  def +(that: T): T = apply2(_ + _)(that)
+  def -(that: T): T = apply2(_ - _)(that)
+
+  def unary_- : T = apply1(-_)
 }
