@@ -39,16 +39,11 @@ trait FileAndRankCompanion[A <: util.IntWrapperOps[A]] {
 }
 
 object File extends FileAndRankCompanion[File] {
-  val min: File = 0
-  val max: File = 7
+  val min: File = File(0)
+  val max: File = File(7)
 }
 
 object Rank extends FileAndRankCompanion[Rank] {
-  val min: Rank = 0
-  val max: Rank = 7
-}
-
-trait FileAndRankImplicits {
-  implicit def intToFile(i: Int): File = File(i)
-  implicit def intToRank(i: Int): Rank = Rank(i)
+  val min: Rank = Rank(0)
+  val max: Rank = Rank(7)
 }

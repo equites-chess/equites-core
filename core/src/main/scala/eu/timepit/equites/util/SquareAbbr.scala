@@ -20,23 +20,23 @@ package util
 import Square._
 
 object SquareAbbr {
-  def a_ : File = 0
-  def b_ : File = 1
-  def c_ : File = 2
-  def d_ : File = 3
-  def e_ : File = 4
-  def f_ : File = 5
-  def g_ : File = 6
-  def h_ : File = 7
+  def a_ : File = File(0)
+  def b_ : File = File(1)
+  def c_ : File = File(2)
+  def d_ : File = File(3)
+  def e_ : File = File(4)
+  def f_ : File = File(5)
+  def g_ : File = File(6)
+  def h_ : File = File(7)
 
-  def _1: Rank = 0
-  def _2: Rank = 1
-  def _3: Rank = 2
-  def _4: Rank = 3
-  def _5: Rank = 4
-  def _6: Rank = 5
-  def _7: Rank = 6
-  def _8: Rank = 7
+  def _1: Rank = Rank(0)
+  def _2: Rank = Rank(1)
+  def _3: Rank = Rank(2)
+  def _4: Rank = Rank(3)
+  def _5: Rank = Rank(4)
+  def _6: Rank = Rank(5)
+  def _7: Rank = Rank(6)
+  def _8: Rank = Rank(7)
 
   def a1: Square = unsafeFrom(a_, _1)
   def a2: Square = unsafeFrom(a_, _2)

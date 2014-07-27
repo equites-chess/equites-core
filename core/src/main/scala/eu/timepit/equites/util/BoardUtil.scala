@@ -33,7 +33,7 @@ object BoardUtil {
       (rankStr, rank) <- placement.split("/").reverse.zipWithIndex
       (pieceChar, file) <- expandDigits(rankStr).zipWithIndex
       piece <- PieceUtil.readLetter(pieceChar)
-      square <- Square.from(file, rank)
+      square <- Square.from(File(file), Rank(rank))
     } yield square -> piece
     Board(mapping.toMap)
   }

@@ -54,11 +54,11 @@ object Rules {
 
   ///
 
-  val kingFile: File = 4
-  val queenFile: File = 3
-  val rookFiles: List[File] = List(0, 7)
-  val knightFiles: List[File] = List(1, 6)
-  val bishopFiles: List[File] = List(2, 5)
+  val kingFile: File = File(4)
+  val queenFile: File = File(3)
+  val rookFiles: List[File] = List(0, 7).map(File(_))
+  val knightFiles: List[File] = List(1, 6).map(File(_))
+  val bishopFiles: List[File] = List(2, 5).map(File(_))
 
   val startingSquares: Map[AnyPiece, List[Square]] = {
     def startingSquaresBy(color: Color): Map[AnyPiece, List[Square]] = {
