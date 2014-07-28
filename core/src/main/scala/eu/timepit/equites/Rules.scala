@@ -21,12 +21,13 @@ import scalaz.syntax.std.boolean._
 
 import implicits.PlacedImplicits._
 import util.PieceAbbr.Textual._
+import util.SquareAbbr._
 
 object Rules {
   val maxBoardLength: Int = math.max(File.max.value, Rank.max.value)
 
-  val whiteBackRank: Rank = Rank.min
-  val whitePawnRank: Rank = whiteBackRank + 1
+  val whiteBackRank: Rank = _1
+  val whitePawnRank: Rank = _2
 
   val blackBackRank: Rank = backRankBy(Black)
   val blackPawnRank: Rank = pawnRankBy(Black)
@@ -54,11 +55,11 @@ object Rules {
 
   ///
 
-  val kingFile: File = File(4)
-  val queenFile: File = File(3)
-  val rookFiles: List[File] = List(0, 7).map(File(_))
-  val knightFiles: List[File] = List(1, 6).map(File(_))
-  val bishopFiles: List[File] = List(2, 5).map(File(_))
+  val kingFile: File = e_
+  val queenFile: File = d_
+  val rookFiles: List[File] = List(a_, h_)
+  val knightFiles: List[File] = List(b_, g_)
+  val bishopFiles: List[File] = List(c_, f_)
 
   val startingSquares: Map[AnyPiece, List[Square]] = {
     def startingSquaresBy(color: Color): Map[AnyPiece, List[Square]] = {
