@@ -19,7 +19,7 @@ package eu.timepit.equites
 import scalaz.syntax.std.boolean._
 
 object ActionOps {
-  def promotedPiece(action: Action): Option[PromotedPiece] =
+  def getPromotedPiece(action: Action): Option[PromotedPiece] =
     action match {
       case p: PromotionLike => Some(p.promotedTo)
       case _                => None

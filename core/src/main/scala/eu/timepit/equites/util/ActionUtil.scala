@@ -55,5 +55,5 @@ object ActionUtil {
 
   def showNumeric(action: Action): String =
     numericSquares(action.draw).mkString +
-      ActionOps.promotedPiece(action).map(_.pieceType).fold("")(PieceUtil.showNumeric)
+      ActionOps.getPromotedPiece(action).map(_.pieceType).fold("")(PieceUtil.showNumeric)
 }

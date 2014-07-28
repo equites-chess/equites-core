@@ -28,5 +28,5 @@ case class CoordinateAction(draw: Draw, promotedTo: Option[PromotedPiece] = None
 
 object CoordinateAction {
   def apply(action: Action): CoordinateAction =
-    CoordinateAction(action.draw, ActionOps.promotedPiece(action))
+    CoordinateAction(action.draw, ActionOps.getPromotedPiece(action))
 }
