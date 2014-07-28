@@ -185,7 +185,10 @@ object Rules {
   ///
 
   def isCapture(action: Action): Boolean =
-    action.isInstanceOf[CaptureLike]
+    action match {
+      case _: CaptureLike => true
+      case _              => false
+    }
 
   def isPawnMove(action: Action): Boolean =
     action.piece.isPawn
