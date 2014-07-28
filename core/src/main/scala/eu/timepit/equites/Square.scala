@@ -46,13 +46,13 @@ case class Square private (file: File, rank: Rank) {
    */
   def lInfDist(that: Square): Int = (this - that).lInfLength
 
-  def isAdjacent(that: Square): Boolean = lInfDist(that) == 1
+  def isAdjacentTo(that: Square): Boolean = lInfDist(that) == 1
 
   /** Returns true if this `Square` is on the same diagonal as `that`. */
-  def isSameDiagonal(that: Square): Boolean = (this - that).isDiagonal
+  def isOnSameDiagonalAs(that: Square): Boolean = (this - that).isDiagonal
 
   /** Returns true if this `Square` is on the same file or rank as `that`. */
-  def isSameLine(that: Square): Boolean = (this - that).isStraight
+  def isOnSameLineAs(that: Square): Boolean = (this - that).isStraight
 
   def to(that: Square): Draw = Draw(this, that)
 
