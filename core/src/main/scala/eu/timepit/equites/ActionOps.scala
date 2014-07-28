@@ -28,9 +28,10 @@ object ActionOps {
   /// OLD
 
   def reifyAsMove(board: Board, draw: Draw): Option[Move] =
-    draw.nonNull.option {
-      board.get(draw.src).map(piece => Move(piece, draw))
-    }.flatten
+    for {
+      src <- draw.nonNull.option(draw.src)
+      piece <- board.get(src)
+    } yield Move(piece, draw)
 
   def reifyAsCapture(board: Board, move: MoveLike): Option[Capture] =
     for {
