@@ -5,7 +5,7 @@ object Dependencies {
   val scalazVersion = "7.0.6"
 
   val scalacheck =
-    "org.scalacheck" %% "scalacheck" % "1.11.4"
+    "org.scalacheck" %% "scalacheck" % "1.11.5"
   val scalazConcurrent =
     "org.scalaz" %% "scalaz-concurrent" % scalazVersion
   val scalazCore =
