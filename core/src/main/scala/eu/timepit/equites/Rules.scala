@@ -184,17 +184,8 @@ object Rules {
 
   ///
 
-  def isCapture(action: Action): Boolean =
-    action match {
-      case _: CaptureLike => true
-      case _              => false
-    }
-
-  def isPawnMove(action: Action): Boolean =
-    action.piece.isPawn
-
   def isTwoRanksPawnMoveFromStartingSquare(action: Action): Boolean =
-    isPawnMove(action) &&
+    ActionOps.isPawnMove(action) &&
       action.draw.l1Length == 2 &&
       action.draw.direction.isVertical &&
       onStartingSquare(action.placedPiece)

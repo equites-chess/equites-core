@@ -32,18 +32,18 @@ trait FileAndRankCompanion[A <: util.IntWrapperOps[A]] {
   def min: A
   def max: A
 
-  lazy val range: Range = min.value to max.value
-  lazy val all: Seq[A] = range.map(apply)
+  val range: Range = min.value to max.value
+  val all: Seq[A] = range.map(apply)
 
   implicit val aOrder = Order.orderBy((a: A) => a.value)
 }
 
-object File extends FileAndRankCompanion[File] {
-  val min: File = File(0)
-  val max: File = File(7)
-}
+object File extends {
+  val min: File = new File(0)
+  val max: File = new File(7)
+} with FileAndRankCompanion[File]
 
-object Rank extends FileAndRankCompanion[Rank] {
-  val min: Rank = Rank(0)
-  val max: Rank = Rank(7)
-}
+object Rank extends {
+  val min: Rank = new Rank(0)
+  val max: Rank = new Rank(7)
+} with FileAndRankCompanion[Rank]

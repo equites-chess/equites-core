@@ -36,14 +36,14 @@ case class GameState(
     halfmoveClock = updatedHalfmoveClock(action),
     availableCastlings = updatedAvailableCastlings(action))
 
-  def updated(cm: util.CoordinateAction): Option[GameState] =
-    ActionOps.reifyAsAction(board, cm).map(updated)
+  def updated(ca: util.CoordinateAction): Option[GameState] =
+    ActionOps.reifyAction(ca, board).map(updated)
 
   private[this] def updatedMoveNumber: Int =
     moveNumber + color.fold(0, 1)
 
   private[this] def updatedHalfmoveClock(action: Action): Int = {
-    val reset = Rules.isCapture(action) || Rules.isPawnMove(action)
+    val reset = ActionOps.isCapture(action) || ActionOps.isPawnMove(action)
     if (reset) 0 else halfmoveClock + 1
   }
 

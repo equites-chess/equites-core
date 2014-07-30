@@ -16,7 +16,10 @@
 
 package eu.timepit.equites
 
-import scalaz.syntax.std.boolean._
+import scalaz._
+import scalaz.Scalaz._
+
+import util.CoordinateAction
 
 object ActionOps {
   def getPromotedPiece(action: Action): Option[PromotedPiece] =
@@ -25,21 +28,33 @@ object ActionOps {
       case _                => None
     }
 
-  /// OLD
+  def isCapture(action: Action): Boolean =
+    action match {
+      case _: CaptureLike => true
+      case _              => false
+    }
 
-  def reifyAsMove(board: Board, draw: Draw): Option[Move] =
+  def isPawnMove(action: Action): Boolean =
+    action.piece.isPawn
+
+  def mkCaptureAndPromotion(promotion: PromotionLike, captured: AnyPiece): CaptureAndPromotion =
+    CaptureAndPromotion(promotion.piece, promotion.draw, captured, promotion.promotedTo)
+
+  ///
+
+  def reifyMove(draw: Draw, board: Board): Option[Move] =
     for {
       src <- draw.nonNull.option(draw.src)
       piece <- board.get(src)
     } yield Move(piece, draw)
 
-  def reifyAsCapture(board: Board, move: MoveLike): Option[Capture] =
+  def reifyCapture(move: MoveLike, board: Board): Option[Capture] =
     for {
       captured <- board.get(move.draw.dest)
       if captured.isOpponentOf(move.piece)
     } yield Capture(move.piece, move.draw, captured)
 
-  def reifyAsEnPassant(board: Board, move: MoveLike): Option[EnPassant] =
+  def reifyEnPassant(move: MoveLike, board: Board): Option[EnPassant] =
     for {
       pawn <- move.piece.maybePawn
       if move.draw.direction.isDiagonal
@@ -49,37 +64,35 @@ object ActionOps {
       if otherPawn.isOpponentOf(pawn)
     } yield EnPassant(pawn, move.draw, otherPawn, target)
 
-  def reifyAsCastling(board: Board, move: MoveLike): Option[Castling] =
+  def reifyCastling(move: MoveLike, board: Board): Option[Castling] =
     for {
       castling <- Castling.all.find(_.kingMove == move)
-      _ <- reifyAsMove(board, castling.kingMove.draw)
-      _ <- reifyAsMove(board, castling.rookMove.draw)
+      _ <- reifyMove(castling.kingMove.draw, board)
+      _ <- reifyMove(castling.rookMove.draw, board)
     } yield castling
 
-  def reifyAsAction(board: Board, cm: util.CoordinateAction): Option[Action] = {
-    val moveOpt = reifyAsMove(board, cm.draw)
-    moveOpt.flatMap { move =>
-      lazy val captureOpt = reifyAsCapture(board, move)
+  def reifyPromotion(ca: CoordinateAction, move: MoveLike): Option[Promotion] =
+    for {
+      pawn <- move.piece.maybePawn
+      promotedTo <- ca.promotedTo
+    } yield Promotion(pawn, move.draw, promotedTo)
 
-      lazy val promotionOpt =
-        for {
-          pawn <- move.piece.maybePawn
-          promotedTo <- cm.promotedTo
-        } yield Promotion(pawn, move.draw, promotedTo)
+  def reifyAction(ca: CoordinateAction, board: Board): Option[Action] = {
+    val move = reifyMove(ca.draw, board)
+    move.flatMap { m =>
+      lazy val capture = reifyCapture(m, board)
+      lazy val promotion = reifyPromotion(ca, m)
+      lazy val captureAndPromotion =
+        ^(promotion, capture.map(_.captured))(mkCaptureAndPromotion)
+      lazy val enPassant = reifyEnPassant(m, board)
+      lazy val castling = reifyCastling(m, board)
 
-      lazy val captureAndPromotionOpt =
-        for {
-          capture <- captureOpt
-          promotion <- promotionOpt
-        } yield CaptureAndPromotion(promotion.piece, promotion.draw, capture.captured, promotion.promotedTo)
-
-      reifyAsCastling(board, move)
-        .orElse(reifyAsEnPassant(board, move))
-        .orElse(captureAndPromotionOpt)
-        .orElse(captureOpt)
-        .orElse(promotionOpt)
-        .orElse(moveOpt)
+      castling orElse
+        (enPassant orElse
+          (captureAndPromotion orElse
+            (promotion orElse
+              (capture orElse
+                move))))
     }
   }
-
 }
