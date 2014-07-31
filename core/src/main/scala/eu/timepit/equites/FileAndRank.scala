@@ -57,14 +57,15 @@ trait FileAndRankOps[T <: FileAndRankOps[T]] {
   def unary_- : T = apply1(-_)
 }
 
-trait FileAndRankCompanion[A <: FileAndRankOps[A]] {
-  def apply(i: Int): A
+trait FileAndRankCompanion[T <: FileAndRankOps[T]] {
+  def apply(i: Int): T
 
-  def min: A
-  def max: A
+  def min: T
+  def max: T
 
   val range: Range = min.value to max.value
-  val all: Seq[A] = range.map(apply)
+  val all: Seq[T] = range.map(apply)
 
-  implicit val aOrder = Order.orderBy((a: A) => a.value)
+  implicit val equalInst = Equal.equalA[T]
+  implicit val orderInst = Order.orderBy((t: T) => t.value)
 }
