@@ -18,24 +18,12 @@ package eu.timepit.equites
 
 import scalaz._
 
-case class File(value: Int) extends util.IntWrapperOps[File] {
+case class File(value: Int) extends FileAndRankOps[File] {
   def point(i: Int): File = File(i)
 }
 
-case class Rank(value: Int) extends util.IntWrapperOps[Rank] {
+case class Rank(value: Int) extends FileAndRankOps[Rank] {
   def point(i: Int): Rank = Rank(i)
-}
-
-trait FileAndRankCompanion[A <: util.IntWrapperOps[A]] {
-  def apply(i: Int): A
-
-  def min: A
-  def max: A
-
-  val range: Range = min.value to max.value
-  val all: Seq[A] = range.map(apply)
-
-  implicit val aOrder = Order.orderBy((a: A) => a.value)
 }
 
 object File extends {
@@ -47,3 +35,36 @@ object Rank extends {
   val min: Rank = new Rank(0)
   val max: Rank = new Rank(7)
 } with FileAndRankCompanion[Rank]
+
+trait FileAndRankOps[T <: FileAndRankOps[T]] {
+  self: T =>
+
+  def point(i: Int): T
+  def value: Int
+
+  def apply1(f: Int => Int): T =
+    point(f(value))
+
+  def apply2(f: (Int, Int) => Int): T => T =
+    t => point(f(value, t.value))
+
+  def +(i: Int): T = apply1(_ + i)
+  def -(i: Int): T = apply1(_ - i)
+
+  def +(that: T): T = apply2(_ + _)(that)
+  def -(that: T): T = apply2(_ - _)(that)
+
+  def unary_- : T = apply1(-_)
+}
+
+trait FileAndRankCompanion[A <: FileAndRankOps[A]] {
+  def apply(i: Int): A
+
+  def min: A
+  def max: A
+
+  val range: Range = min.value to max.value
+  val all: Seq[A] = range.map(apply)
+
+  implicit val aOrder = Order.orderBy((a: A) => a.value)
+}
