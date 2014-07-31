@@ -48,19 +48,15 @@ trait FileAndRankOps[T <: FileAndRankOps[T]] {
   def minDistToBounds: Int =
     math.min(value - companion.min.value, companion.max.value - value)
 
-  def apply1(f: Int => Int): T =
-    companion(f(value))
+  def map(f: Int => Int): T = companion(f(value))
 
-  def apply2(f: (Int, Int) => Int): T => T =
-    t => companion(f(value, t.value))
+  def +(i: Int): T = map(_ + i)
+  def -(i: Int): T = map(_ - i)
 
-  def +(i: Int): T = apply1(_ + i)
-  def -(i: Int): T = apply1(_ - i)
+  def unary_- : T = map(-_)
 
-  def +(that: T): T = apply2(_ + _)(that)
-  def -(that: T): T = apply2(_ - _)(that)
-
-  def unary_- : T = apply1(-_)
+  def +(that: T): T = this + that.value
+  def -(that: T): T = this - that.value
 }
 
 trait FileAndRankCompanion[T <: FileAndRankOps[T]] {
