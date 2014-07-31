@@ -19,11 +19,11 @@ package eu.timepit.equites
 import scalaz._
 
 case class File(value: Int) extends FileAndRankOps[File] {
-  def point(i: Int): File = File(i)
+  def companion = File
 }
 
 case class Rank(value: Int) extends FileAndRankOps[Rank] {
-  def point(i: Int): Rank = Rank(i)
+  def companion = Rank
 }
 
 object File extends {
@@ -39,14 +39,20 @@ object Rank extends {
 trait FileAndRankOps[T <: FileAndRankOps[T]] {
   self: T =>
 
-  def point(i: Int): T
   def value: Int
+  def companion: FileAndRankCompanion[T]
+
+  def isValid: Boolean =
+    companion.min.value <= value && value <= companion.max.value
+
+  def minDistToBounds: Int =
+    math.min(value - companion.min.value, companion.max.value - value)
 
   def apply1(f: Int => Int): T =
-    point(f(value))
+    companion(f(value))
 
   def apply2(f: (Int, Int) => Int): T => T =
-    t => point(f(value, t.value))
+    t => companion(f(value, t.value))
 
   def +(i: Int): T = apply1(_ + i)
   def -(i: Int): T = apply1(_ - i)

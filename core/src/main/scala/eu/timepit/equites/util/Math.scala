@@ -41,7 +41,4 @@ object Math {
   /** Returns the remainder of `i` divided by two. */
   def remBy2[I](i: I)(implicit I: Integral[I]): I =
     I.rem(i, I.fromInt(2))
-
-  def minDistToBoundaries(x: Int, range: Range): Int =
-    math.min(x - range.start, range.end - x)
 }

@@ -64,7 +64,7 @@ class SquareSpec extends Specification with ScalaCheck {
     }
 
     "correctly calculate the distance to the board boundary" in check {
-      (sq: Square) => sq.distToBoundary must beBetween(0, 3)
+      (sq: Square) => sq.minDistToBounds must beBetween(0, 3)
     }
   }
 }

@@ -56,11 +56,8 @@ case class Square private (file: File, rank: Rank) {
 
   def to(that: Square): Draw = Draw(this, that)
 
-  def distToBoundary: Int = {
-    val fileDist = minDistToBoundaries(file.value, File.range)
-    val rankDist = minDistToBoundaries(rank.value, Rank.range)
-    math.min(fileDist, rankDist)
-  }
+  def minDistToBounds: Int =
+    math.min(file.minDistToBounds, rank.minDistToBounds)
 
   def up: Option[Square] = this + Vec.front
   def down: Option[Square] = this + Vec.back
@@ -79,11 +76,10 @@ case class Square private (file: File, rank: Rank) {
 
   def toSeq: Seq[Int] = Seq(file.value, rank.value)
 
-  private def isValid: Boolean =
-    File.range.contains(file.value) && Rank.range.contains(rank.value)
+  private def isValid: Boolean = file.isValid && rank.isValid
 
   /** Returns `Some(this)` if this `Square` is valid and `None` otherwise. */
-  private def asOption: Option[Square] = isValid.option(this)
+  private def toOption: Option[Square] = isValid.option(this)
 
   private def unary_- : Square = Square(-file, -rank)
 
@@ -92,7 +88,7 @@ case class Square private (file: File, rank: Rank) {
 
 object Square extends SquareInstances {
   def from(file: File, rank: Rank): Option[Square] =
-    Square(file, rank).asOption
+    Square(file, rank).toOption
 
   /**
    * @throws IllegalArgumentException
