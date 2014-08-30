@@ -13,7 +13,7 @@ object Dependencies {
   val scalazScalacheckBinding =
     "org.scalaz" %% "scalaz-scalacheck-binding" % scalazVersion
   val scalazStream =
-    "org.scalaz.stream" %% "scalaz-stream" % "0.4.1"
+    "org.scalaz.stream" %% "scalaz-stream" % "0.5"
   val shapeless =
     "com.chuusai" %% "shapeless" % "2.0.0"
   val specs2 =

@@ -3,9 +3,10 @@ package cli
 
 import java.io.{ InputStream, OutputStream }
 import java.lang.ProcessBuilder
+
 import scala.io.{ Codec, Source }
 import scalaz.concurrent.Task
-import scalaz.stream.{ io, Process }
+import scalaz.stream._
 import Process._
 
 // naming Sysprocess, Popen, ExtProcess, childprocess
@@ -40,20 +41,20 @@ object Subprocess {
       (s: String) =>
         Task.delay {
           os.write(s.getBytes(codec.charSet))
-          os.flush
+          os.flush()
         }
     }
 
   private def source(is: InputStream)(implicit codec: Codec): Process[Task, String] = {
-    val lines = Source.fromInputStream(is)(codec).getLines
-    val nextLine = Task.delay { if (lines.hasNext) lines.next else throw End }
+    val lines = Source.fromInputStream(is)(codec).getLines()
+    val nextLine = Task.delay { if (lines.hasNext) lines.next() else throw Cause.Terminated(Cause.End) }
     Process.repeatEval(nextLine)
   }
 
   private def close(proc: java.lang.Process): Int = {
-    proc.getOutputStream.close
-    proc.getInputStream.close
-    proc.getErrorStream.close
+    proc.getOutputStream.close()
+    proc.getInputStream.close()
+    proc.getErrorStream.close()
     proc.waitFor
   }
 }

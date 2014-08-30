@@ -19,11 +19,11 @@ package eu.timepit.equites
 import scalaz._
 
 case class File(value: Int) extends FileAndRankOps[File] {
-  def companion = File
+  def companion: File.type = File
 }
 
 case class Rank(value: Int) extends FileAndRankOps[Rank] {
-  def companion = Rank
+  def companion: Rank.type = Rank
 }
 
 object File extends {

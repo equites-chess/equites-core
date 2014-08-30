@@ -20,4 +20,18 @@ package format
 import format.Pgn._
 
 object PgnOps {
+  def ff1(moveText: MoveTextSection): Seq[GameState] = ???
+
+  def ff2(initial: GameState, l: List[SeqMoveElement]): Seq[GameState] = ???
+
+  def ff4(action: SanAction, state: GameState): GameState =
+    action match {
+      case a: SanMoveLike          => ???
+      case SanCastling(side)       => ???
+      case CheckingSanAction(a, _) => ff4(a, state)
+    }
+
+  def ff5(move: SanMoveLike, state: GameState): Action = ???
+
+  /// TDD wäre jetzt sinnvoll
 }
