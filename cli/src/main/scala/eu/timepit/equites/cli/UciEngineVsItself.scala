@@ -26,19 +26,19 @@ import proto.UciProcess._
 import util.ScalazProcess._
 
 object UciEngineVsItself extends App {
-  val game = Subprocess.popen("gnuchess", "-u").flatMap { engine =>
+  val game = os.spawnCmd("gnuchess", "-u").flatMap(_.proc).flatMap { engine =>
     val readResponses =
-      engine.output.pipe(collectResponses)
+      engine.stdOut.pipe(os.linesIn).pipe(collectResponses)
     val readFirstBestmove =
-      readResponses.collectFirst { case bm: Bestmove => bm }
+      readResponses.repeat.once.collectFirst { case bm: Bestmove => bm }
     def writePositionCommand(history: Seq[GameState]) =
-      toRawCommands(Position(history)).through(engine.input)
+      toRawCommands(Position(history)).pipe(os.linesOut).through(engine.stdIn)
     val writeGoCommand =
-      toRawCommands(Go(Go.Movetime(10.millis))).through(engine.input)
+      toRawCommands(Go(Go.Movetime(10.millis))).pipe(os.linesOut).through(engine.stdIn)
     val prepareGame: Process[Task, Any] =
-      newGameCommands.through(engine.input) ++ readResponses.find(_ == ReadyOk)
+      newGameCommands.pipe(os.linesOut).through(engine.stdIn) ++ readResponses.find(_ == ReadyOk).repeat.once
     val quitEngine =
-      toRawCommands(Quit).through(engine.input)
+      toRawCommands(Quit).pipe(os.linesOut).through(engine.stdIn)
 
     def gameLoop(history: Seq[GameState]): Process[Task, Seq[GameState]] =
       writePositionCommand(history)

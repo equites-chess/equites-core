@@ -30,6 +30,11 @@ Alternative names:
 */
 
 object os {
+  val linesIn: Process1[ByteVector, String] =
+    text.utf8Decode |> text.lines()
+  val linesOut: Process1[String, ByteVector] =
+    text.utf8Encode
+
   final case class Subprocess[R, W](
       stdIn: Sink[Task, W],
       stdOut: Process[Task, R],
