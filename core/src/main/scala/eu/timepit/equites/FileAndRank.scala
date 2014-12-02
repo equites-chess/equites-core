@@ -16,7 +16,7 @@
 
 package eu.timepit.equites
 
-import scalaz._
+import scalaz._, Scalaz._
 
 case class File(value: Int) extends FileAndRankOps[File] {
   def companion: File.type = File
