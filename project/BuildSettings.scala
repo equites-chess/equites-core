@@ -47,7 +47,6 @@ object BuildSettings {
     bintray.Plugin.bintraySettings ++
     de.johoop.cpd4sbt.CopyPasteDetector.cpdSettings ++
     ScalariformSettings.ourScalariformSettings ++
-    scoverage.ScoverageSbtPlugin.instrumentSettings ++
     Seq(
       initialCommands := """
         import scalaz._

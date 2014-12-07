@@ -1,6 +1,7 @@
 package eu.timepit.equites
 package cli
 
+/*
 import scalaz.stream._
 
 import java.io.{ File, InputStream, OutputStream }
@@ -14,7 +15,7 @@ import scodec.bits.ByteVector
 import async.mutable.Signal
 import Cause._
 import Process._
-
+*/
 /*
 Alternative names:
   ChildProc
@@ -28,7 +29,7 @@ Alternative names:
   Sys(tem)Exchange
   SystemProc
 */
-
+/*
 object os {
   val linesIn: Process1[ByteVector, String] =
     text.utf8Decode |> text.lines()
@@ -166,3 +167,4 @@ object os {
   private def destroyJavaProcess(jp: JavaProcess): Task[Unit] =
     closeStreams(jp) >> Task.delay(jp.destroy())
 }
+*/ 

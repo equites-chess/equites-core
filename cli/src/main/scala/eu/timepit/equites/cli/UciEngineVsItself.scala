@@ -25,6 +25,7 @@ import proto.Uci._
 import proto.UciProcess._
 import util.ScalazProcess._
 
+/*
 object UciEngineVsItself extends App {
   val game = os.spawnCmd("gnuchess", "-u").flatMap(_.proc).flatMap { engine =>
     val readResponses =
@@ -54,3 +55,4 @@ object UciEngineVsItself extends App {
   println("running process")
   game.run.run
 }
+*/ 
