@@ -18,7 +18,7 @@ object BuildSettings {
     scmInfo := Some(ScmInfo(url("https://github.com/fthomas/equites"),
                     "git@github.com:fthomas/equites.git")),
 
-    scalaVersion := "2.11.4",
+    scalaVersion := "2.11.6",
 
     scalacOptions ++= Seq(
       "-deprecation",
