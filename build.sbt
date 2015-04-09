@@ -45,7 +45,10 @@ autoAPIMappings := true
     )
 
 
-resolvers += "Scalaz Bintray Repo" at "https://dl.bintray.com/scalaz/releases"
+resolvers ++= Seq(
+  "Scalaz Bintray Repo" at "https://dl.bintray.com/scalaz/releases",
+  "Frank's Bintray" at "https://dl.bintray.com/fthomas/maven"
+)
 
 val scalazVersion = "7.1.1"
 val specs2Version = "3.4"
