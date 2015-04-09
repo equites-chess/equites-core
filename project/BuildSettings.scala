@@ -63,10 +63,6 @@ object BuildSettings {
       publishArtifact := false
     )
 
-  lazy val cliSettings =
-    commonSettings ++
-    childSettings
-
   lazy val coreSettings =
     commonSettings ++
     childSettings ++
@@ -80,8 +76,4 @@ object BuildSettings {
         scalazScalacheckBinding % "test"
       ) ++ specs2.map(_ % "test")
     )
-
-  lazy val gfxSettings =
-    commonSettings ++
-    childSettings
 }
