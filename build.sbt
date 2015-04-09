@@ -31,7 +31,6 @@ scalacOptions in (Compile, doc) ++= Seq(
 
 autoAPIMappings := true
 
-resolvers += "Scalaz Bintray Repo" at "https://dl.bintray.com/scalaz/releases"
 
 
     bintray.Plugin.bintraySettings ++
@@ -45,15 +44,22 @@ resolvers += "Scalaz Bintray Repo" at "https://dl.bintray.com/scalaz/releases"
       """
     )
 
-import Dependencies._
 
-      libraryDependencies ++= Seq(
-        scalazConcurrent,
-        scalazCore,
-        scalazStream,
-        shapeless,
-        scalacheck % "test",
-        scalazScalacheckBinding % "test"
-      ) ++ specs2.map(_ % "test")
-    
+resolvers += "Scalaz Bintray Repo" at "https://dl.bintray.com/scalaz/releases"
 
+val scalazVersion = "7.1.1"
+val specs2Version = "3.4"
+
+libraryDependencies ++= Seq(
+  "com.chuusai" %% "shapeless" % "2.0.0",
+  "eu.timepit" %% "scalaz-stream-contrib" % "0.0.0",
+  "org.scalaz" %% "scalaz-concurrent" % scalazVersion,
+  "org.scalaz" %% "scalaz-core" % scalazVersion,
+  "org.scalaz.stream" %% "scalaz-stream" % "0.7a",
+
+  "org.scalacheck" %% "scalacheck" % "1.12.2" % "test",
+  "org.scalaz" %% "scalaz-scalacheck-binding" % scalazVersion % "test",
+  "org.specs2" %% "specs2-core"          % specs2Version % "test",
+  "org.specs2" %% "specs2-scalacheck"    % specs2Version % "test",
+  "org.specs2" %% "specs2-matcher-extra" % specs2Version % "test"
+)
