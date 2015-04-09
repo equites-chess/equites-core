@@ -32,7 +32,7 @@ class UciParsersSpec extends Specification with ParserMatchers with ScalaCheck {
   import parsers._
 
   "square" should {
-    "succeed on random algebraic squares" in check {
+    "succeed on random algebraic squares" in prop {
       (s: Square) => algebraicSquare should succeedOn(util.SquareUtil.showAlgebraic(s)).withResult(s)
     }
   }
@@ -42,14 +42,14 @@ class UciParsersSpec extends Specification with ParserMatchers with ScalaCheck {
       coordinateAction should succeedOn("e2e4")
         .withResult(CoordinateAction(e2 to e4))
     }
-    "succeed on white promotions" in check {
+    "succeed on white promotions" in prop {
       (p: PromotedPiece) =>
         (p.color == White) ==> {
           val cm = CoordinateAction(e7 to e8, Some(p))
           coordinateAction should succeedOn(cm.toAlgebraic).withResult(cm)
         }
     }
-    "succeed on black promotions" in check {
+    "succeed on black promotions" in prop {
       (p: PromotedPiece) =>
         (p.color == Black) ==> {
           val cm = CoordinateAction(e2 to e1, Some(p))

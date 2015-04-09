@@ -32,8 +32,8 @@ class ColorSpec extends Specification with ScalaCheck {
   White should be the opposite of Black $e4
   """
 
-  def e1 = check(equal.laws[Color])
-  def e2 = check(order.laws[Color])
+  def e1 = equal.laws[Color]
+  def e2 = order.laws[Color]
 
   def e3 = White.opposite must_== Black
   def e4 = Black.opposite must_== White

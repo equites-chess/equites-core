@@ -26,7 +26,7 @@ import ArbitraryInstances._
 
 class NotationSpec extends Specification with ScalaCheck {
   "pieceFromLetter" should {
-    "be the inverse of RichPiece.toLetter" in check {
+    "be the inverse of RichPiece.toLetter" in prop {
       (piece: AnyPiece) =>
         readLetter(showLetter(piece).charAt(0)) must beSome(piece)
     }
@@ -36,7 +36,7 @@ class NotationSpec extends Specification with ScalaCheck {
   }
 
   "pieceFromFigurine" should {
-    "be the inverse of RichPiece.toFigurine" in check {
+    "be the inverse of RichPiece.toFigurine" in prop {
       (piece: AnyPiece) =>
         readFigurine(showFigurine(piece).charAt(0)) must beSome(piece)
     }

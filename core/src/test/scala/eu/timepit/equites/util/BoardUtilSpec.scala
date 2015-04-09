@@ -32,7 +32,7 @@ class BoardUtilSpec extends Specification with ScalaCheck {
     showFenPlacement should return correct FEN placements      $ex2
   """
 
-  def ex1 = check { (board: Board) =>
+  def ex1 = prop { (board: Board) =>
     readFenPlacement(showFenPlacement(board)) must_== board
   }
 

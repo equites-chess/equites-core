@@ -25,46 +25,46 @@ import ArbitraryInstances._
 
 class VecSpec extends Specification with DataTables with ScalaCheck {
   "Vec" should {
-    "satisfy the Equal laws" in check(equal.laws[Vec])
-    "satisfy the Monoid laws" in check(monoid.laws[Vec])
+    "satisfy the Equal laws" in equal.laws[Vec]
+    "satisfy the Monoid laws" in monoid.laws[Vec]
 
     "correctly perform map" in {
       Vec(0, 0).map(_ + 1) must_== Vec(1, 1)
       Vec(-1, -1).map(_.abs) must_== Vec(1, 1)
     }
 
-    "correctly perform +(Vec)" in check {
+    "correctly perform +(Vec)" in prop {
       (x: Int, y: Int, a: Int, b: Int) =>
         Vec(x, y) + Vec(a, b) must_== Vec(x + a, y + b)
     }
 
-    "correctly perform -(Vec)" in check {
+    "correctly perform -(Vec)" in prop {
       (x: Int, y: Int, a: Int, b: Int) =>
         Vec(x, y) - Vec(a, b) must_== Vec(x - a, y - b)
     }
 
-    "correctly perform unary_-" in check {
+    "correctly perform unary_-" in prop {
       (x: Int, y: Int) => -Vec(x, y) must_== Vec(-x, -y)
     }
 
-    "correctly perform *(Int)" in check {
+    "correctly perform *(Int)" in prop {
       (x: Int, y: Int, z: Int) => Vec(x, y) * z must_== Vec(x * z, y * z)
     }
 
-    "correctly perform /(Int)" in check {
+    "correctly perform /(Int)" in prop {
       (x: Int, y: Int, z: Int) =>
         (z != 0) ==> (Vec(x, y) / z must_== Vec(x / z, y / z))
     }
 
-    "correctly perform max" in check {
+    "correctly perform max" in prop {
       (x: Int, y: Int) => Vec(x, y).max must_== math.max(x, y)
     }
 
-    "correctly perform min" in check {
+    "correctly perform min" in prop {
       (x: Int, y: Int) => Vec(x, y).min must_== math.min(x, y)
     }
 
-    "correctly perform sum" in check {
+    "correctly perform sum" in prop {
       (x: Int, y: Int) => Vec(x, y).sum must_== x + y
     }
 
@@ -84,7 +84,7 @@ class VecSpec extends Specification with DataTables with ScalaCheck {
         }
     }
 
-    "be decomposable into component vectors" in check {
+    "be decomposable into component vectors" in prop {
       (v: Vec) => v must_== v.fileProj + v.rankProj
     }
   }

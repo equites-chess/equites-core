@@ -26,44 +26,43 @@ import scala.reflect._
 import Math._
 
 class MathSpec extends Specification with DataTables with ScalaCheck {
-  def is = s2"""
-  gcd should
-    be symmetric in its arguments  ${
-    check {
-      (a: Int, b: Int) => (a >= 0 && b >= 0) ==> (gcd(a, b) must_== gcd(b, a))
-    }
-  }
-    isEven and isOdd should
-      yield correct results for some positive numbers ${
-    "a" | "isEven" |
-      0 ! true |
-      1 ! false |
-      2 ! true |
-      3 ! false |
-      4 ! true |> {
-        (a, r) => (isEven(a) must_== r) and (isOdd(a) must_== !r)
-      }
-  }
-      ${workWith[Byte]}
-      ${workWith[Short]}
-      ${workWith[Int]}
-      ${workWith[Long]}
-      ${workWith[BigInt]}
-"""
+  def is =
+    "gcd should" ^
+      "be symmetric in its arguments" ! prop {
+        (a: Int, b: Int) => (a >= 0 && b >= 0) ==> (gcd(a, b) must_== gcd(b, a))
+      } ^
+      p ^
+      "isEven and isOdd should" ^
+      "yield correct results for some positive numbers" ! {
+        "a" | "isEven" |
+          0 ! true |
+          1 ! false |
+          2 ! true |
+          3 ! false |
+          4 ! true |> {
+            (a, r) => (isEven(a) must_== r) and (isOdd(a) must_== !r)
+          }
+      } ^
+      br ^
+      workWith[Byte] ^
+      workWith[Short] ^
+      workWith[Int] ^
+      workWith[Long] ^
+      workWith[BigInt]
 
   def workWith[A: Arbitrary: Integral: ClassTag] =
-    s2"""work with ${classTag[A].toString}
-        ${eitherEvenOrOdd[A]}
-        ${beEvenFunctions[A]}
-    """
+    s"work with ${classTag[A]}" ^
+      eitherEvenOrOdd[A] ^
+      beEvenFunctions[A] ^
+      p
 
   def eitherEvenOrOdd[A: Arbitrary: Integral] =
-    "yield different results for the same input" ! check {
+    "yield different results for the same input" ! prop {
       (a: A) => isEven(a) must_!= isOdd(a)
     }
 
   def beEvenFunctions[A: Arbitrary: Integral] =
-    "be even functions" ! check {
+    "be even functions" ! prop {
       (a: A) =>
         beEvenFunction(isEven[A]).apply(a) and
           beEvenFunction(isOdd[A]).apply(a)

@@ -29,7 +29,8 @@ object BuildSettings {
       "-language:implicitConversions",
       "-unchecked",
       "-Xfatal-warnings",
-      "-Xlint"
+      "-Xlint",
+      "-Yrangepos"
     ),
 
     scalacOptions in (Compile, doc) ++= Seq(

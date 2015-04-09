@@ -35,6 +35,7 @@ class KnightsTourSpec extends Specification {
     }
   }
 
+  /*
   "staticTour" should {
     "not generate a complete tour" in {
       isComplete(staticTour(a1)) must beFalse
@@ -56,4 +57,5 @@ class KnightsTourSpec extends Specification {
     alwaysVisitAllSquares(randomWarnsdorffTour)
     produceOneClosedTour(randomWarnsdorffTour)
   }
+*/
 }

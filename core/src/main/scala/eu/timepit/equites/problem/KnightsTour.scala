@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2013-2014 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2013-2015 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,32 +17,23 @@
 package eu.timepit.equites
 package problem
 
-import scalaz._
-import Scalaz._
-import scalaz.std.stream
+import eu.timepit.equites.implicits.GenericImplicits._
+import eu.timepit.equites.util.Rand._
 
-import implicits.GenericImplicits._
-import util.Rand._
+import scalaz.Scalaz._
+import scalaz._
+import scalaz.stream.Process
 
 object KnightsTour {
   type Tour = Stream[Square]
-  type Selector = (Stream[Square], Set[Square]) => Option[Square]
-  type RandSelector = (Stream[Square], Set[Square]) => Rand[Option[Square]]
-
-  def genericTour(start: Square, selectNext: Selector): Tour =
-    start #:: stream.unfold((start, Set.empty[Square])) {
-      case (from, visited) => {
-        val nextOption = selectNext(unvisited(from, visited), visited)
-        nextOption.map(next => (next, (next, visited + from)))
-      }
-    }
+  type Selector[F[_]] = (Stream[Square], Set[Square]) => F[Option[Square]]
 
   def allTours(start: Square): Stream[Tour] = {
     case class Candidate(path: Tour, visited: Set[Square])
 
     def nextPaths(c: Candidate): Stream[Candidate] = {
-      val nextSquares = c.path.headOption.toStream.flatMap {
-        from => unvisited(from, c.visited)
+      val nextSquares = c.path.headOption.toStream.flatMap { from =>
+        unvisited(from, c.visited)
       }
       nextSquares.map(sq => Candidate(sq #:: c.path, c.visited + sq))
     }
@@ -51,31 +42,37 @@ object KnightsTour {
     util.backtrack(first)(nextPaths, c => isComplete(c.path)).map(_.path)
   }
 
-  def staticTour(start: Square): Tour =
-    genericTour(start, (squares, _) => squares.headOption)
+  def genericTour[F[_]](start: Square, selectNext: Selector[F])(implicit F: Functor[F]): Process[F, Square] =
+    Process.emit(start) ++ Process.unfoldEval((start, Set.empty[Square])) {
+      case (from, visited) =>
+        val nextFOption = selectNext(unvisited(from, visited), visited)
+        F.map(nextFOption)(_.map(next => (next, (next, visited + from))))
+    }
 
-  // impure
-  def randomTour(start: Square): Tour =
-    genericTour(start, (squares, _) => eval(randElem(squares)).run)
+  def staticTour(start: Square): Process[Id, Square] =
+    genericTour(start, firstSquare)
 
-  def warnsdorffTour(start: Square): Tour =
+  def warnsdorffTour(start: Square): Process[Id, Square] =
     genericTour(start, firstLeastDegreeSquare)
 
-  // impure
-  def randomWarnsdorffTour(start: Square): Tour = {
-    def tour = eval(randomLeastDegreeSquare).map(s => genericTour(start, s)).run
-    Iterator.continually(tour).find(isComplete).get
-  }
+  def randomTour(start: Square): Process[Rand, Square] =
+    genericTour(start, (squares, _) => randElem(squares))
+
+  def randomWarnsdorffTour(start: Square): Process[Rand, Square] =
+    genericTour(start, randomLeastDegreeSquare)
 
   def leastDegreeSquares(squares: Stream[Square], visited: Set[Square]): Stream[Square] = {
     def degree(sq: Square): Int = unvisited(sq, visited).length
     squares.minGroupBy(degree)
   }
 
-  def firstLeastDegreeSquare: Selector =
+  val firstSquare: Selector[Id] =
+    (squares, _) => squares.headOption
+
+  val firstLeastDegreeSquare: Selector[Id] =
     (squares, visited) => leastDegreeSquares(squares, visited).headOption
 
-  def randomLeastDegreeSquare: RandSelector =
+  val randomLeastDegreeSquare: Selector[Rand] =
     (squares, visited) => randElem(leastDegreeSquares(squares, visited))
 
   def isComplete(tour: Tour): Boolean =

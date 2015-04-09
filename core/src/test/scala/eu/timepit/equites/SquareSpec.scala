@@ -27,8 +27,8 @@ import ArbitraryInstances._
 
 class SquareSpec extends Specification with ScalaCheck {
   "Square" should {
-    "satisfy the Equal laws" in check(equal.laws[Square])
-    "satisfy the Order laws" in check(order.laws[Square])
+    "satisfy the Equal laws" in equal.laws[Square]
+    "satisfy the Order laws" in order.laws[Square]
 
     "correctly perform +(Vec) and -(Vec)" in {
       b2 + Vec(+1, +1) must_== Some(c3)
@@ -63,7 +63,7 @@ class SquareSpec extends Specification with ScalaCheck {
       d1.isLight must beTrue
     }
 
-    "correctly calculate the distance to the board boundary" in check {
+    "correctly calculate the distance to the board boundary" in prop {
       (sq: Square) => sq.minDistToBounds must beBetween(0, 3)
     }
   }

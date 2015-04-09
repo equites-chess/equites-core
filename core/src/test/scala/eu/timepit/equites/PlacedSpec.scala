@@ -29,7 +29,7 @@ class PlacedSpec extends Specification with ScalaCheck {
     satisfy the Order laws   $e3
   """
 
-  def e1 = check(equal.laws[Placed[AnyPiece]])
-  def e2 = check(functor.laws[Placed])
-  def e3 = check(order.laws[Placed[AnyPiece]])
+  def e1 = equal.laws[Placed[AnyPiece]]
+  def e2 = functor.laws[Placed]
+  def e3 = order.laws[Placed[AnyPiece]]
 }
