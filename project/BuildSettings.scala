@@ -76,9 +76,8 @@ object BuildSettings {
         scalazStream,
         shapeless,
         scalacheck % "test",
-        scalazScalacheckBinding % "test",
-        specs2 % "test"
-      )
+        scalazScalacheckBinding % "test"
+      ) ++ specs2.map(_ % "test")
     )
 
   lazy val gfxSettings =

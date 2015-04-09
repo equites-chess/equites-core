@@ -26,7 +26,7 @@ import util.CoordinateAction
 import util.PieceAbbr.Wiki._
 import util.SquareAbbr._
 
-class UciSpec extends Specification with org.specs2.time.NoTimeConversions {
+class UciSpec extends Specification {
   "Uci.Uci" >> {
     "toString should return 'uci'" in {
       Uci.Uci.toString must_== "uci"
