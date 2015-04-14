@@ -1,5 +1,6 @@
+enablePlugins(GitVersioning)
+
 name := "equites-core"
-version := "0.0.0"
 
 organization := "eu.timepit"
 homepage := Some(url("http://equites.timepit.eu"))
@@ -31,12 +32,6 @@ scalacOptions in (Compile, doc) ++= Seq(
 
 autoAPIMappings := true
 
-
-
-bintray.Plugin.bintraySettings
-ScalariformSettings.ourScalariformSettings
-
-
 resolvers ++= Seq(
   "Scalaz Bintray Repo" at "https://dl.bintray.com/scalaz/releases",
   "Frank's Bintray" at "https://dl.bintray.com/fthomas/maven"
@@ -48,7 +43,7 @@ val specs2Version = "3.4"
 libraryDependencies ++= Seq(
   "com.chuusai" %% "shapeless" % "2.1.0",
   "com.nicta" %% "rng" % "1.3.0",
-  "eu.timepit" %% "scalaz-stream-contrib" % "master-bb646960961ec6aee8f53543d573d558db2ce386",
+  "eu.timepit" %% "scalaz-stream-contrib" % "0.0.0-2-g8b3bfaa",
   "org.scalaz" %% "scalaz-concurrent" % scalazVersion,
   "org.scalaz" %% "scalaz-core" % scalazVersion,
   "org.scalaz.stream" %% "scalaz-stream" % "0.7a",
@@ -66,3 +61,9 @@ initialCommands := """
   import scalaz.stream._
   import eu.timepit.equites._
 """
+
+bintray.Plugin.bintraySettings
+
+git.useGitDescribe := true
+
+ScalariformSettings.ourScalariformSettings
