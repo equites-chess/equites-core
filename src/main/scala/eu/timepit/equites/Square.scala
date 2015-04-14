@@ -90,9 +90,6 @@ object Square extends SquareInstances {
   def from(file: File, rank: Rank): Option[Square] =
     Square(file, rank).toOption
 
-  /**
-   * @throws IllegalArgumentException
-   */
   def unsafeFrom(file: File, rank: Rank): Square =
     from(file, rank).getOrElse(throw new IllegalArgumentException)
 
