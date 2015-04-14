@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2011, 2013-2014 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2011, 2013-2015 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,7 +17,8 @@
 package eu.timepit.equites
 package util
 
-import util.Rand._
+import com.nicta.rng.Rng
+import eu.timepit.equites.util.RngUtil._
 
 case class AlgebraicFile(value: Char) extends AnyVal
 case class AlgebraicRank(value: Int) extends AnyVal
@@ -41,8 +42,8 @@ object SquareUtil {
   def rankToAlgebraic(rank: Rank): AlgebraicRank =
     AlgebraicRank(rank.value + 1)
 
-  def randomSquare: Rand[Square] =
-    randElem(Square.allAsSeq).map(_.get)
+  def randomSquare: Rng[Square] =
+    chooseElem(Square.allAsSeq).map(_.get)
 
   def showAlgebraic(square: Square): String =
     fileToAlgebraic(square.file).value.toString +

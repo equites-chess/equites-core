@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2013, 2015 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,12 +17,19 @@
 package eu.timepit.equites
 package problem
 
+import com.nicta.rng.Rng
+import eu.timepit.equites.problem.KnightsTour._
+import eu.timepit.equites.util.SquareAbbr._
+import eu.timepit.scalaz.stream.contrib.processC._
+import eu.timepit.scalaz.stream.contrib.unsafe._
 import org.specs2.mutable._
 
-import problem.KnightsTour._
-import util.SquareAbbr._
+import scalaz.stream.Process
 
 class KnightsTourSpec extends Specification {
+  private def runToStream[A](p: Process[Rng, A]): Stream[A] =
+    p.runLog.run.unsafePerformIO().toStream
+
   def alwaysVisitAllSquares(tourFn: Square => Tour) = {
     "visit all squares from all starting squares" in {
       Square.allAsSeq.forall(tourFn.andThen(isComplete)) must beTrue
@@ -35,27 +42,26 @@ class KnightsTourSpec extends Specification {
     }
   }
 
-  /*
   "staticTour" should {
     "not generate a complete tour" in {
-      isComplete(staticTour(a1)) must beFalse
+      isComplete(staticTour(a1).toStream) must beFalse
     }
   }
 
   "randomTour" should {
     "not generate a complete tour" in {
-      isComplete(randomTour(a1)) must beFalse
+      isComplete(runToStream(randomTour(a1))) must beFalse
     }
   }
 
   "warnsdorffTour" should {
-    alwaysVisitAllSquares(warnsdorffTour)
-    produceOneClosedTour(warnsdorffTour)
+    val fn = (warnsdorffTour _).andThen(_.toStream)
+    alwaysVisitAllSquares(fn)
+    produceOneClosedTour(fn)
   }
 
   "randomWarnsdorffTour" should {
-    alwaysVisitAllSquares(randomWarnsdorffTour)
-    produceOneClosedTour(randomWarnsdorffTour)
+    val fn = (randomWarnsdorffTour _).andThen(runToStream)
+    produceOneClosedTour(fn)
   }
-*/
 }

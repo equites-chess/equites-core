@@ -34,15 +34,7 @@ autoAPIMappings := true
 
 
     bintray.Plugin.bintraySettings ++
-    ScalariformSettings.ourScalariformSettings ++
-    Seq(
-      initialCommands := """
-        import scalaz._
-        import Scalaz._
-        import scalaz.stream._
-        import eu.timepit.equites._
-      """
-    )
+    ScalariformSettings.ourScalariformSettings
 
 
 resolvers ++= Seq(
@@ -55,7 +47,8 @@ val specs2Version = "3.4"
 
 libraryDependencies ++= Seq(
   "com.chuusai" %% "shapeless" % "2.0.0",
-  "eu.timepit" %% "scalaz-stream-contrib" % "0.0.0",
+  "com.nicta" %% "rng" % "1.3.0",
+  "eu.timepit" %% "scalaz-stream-contrib" % "master-bb646960961ec6aee8f53543d573d558db2ce386",
   "org.scalaz" %% "scalaz-concurrent" % scalazVersion,
   "org.scalaz" %% "scalaz-core" % scalazVersion,
   "org.scalaz.stream" %% "scalaz-stream" % "0.7a",
@@ -66,3 +59,10 @@ libraryDependencies ++= Seq(
   "org.specs2" %% "specs2-scalacheck"    % specs2Version % "test",
   "org.specs2" %% "specs2-matcher-extra" % specs2Version % "test"
 )
+
+initialCommands := """
+  import scalaz._
+  import scalaz.Scalaz._
+  import scalaz.stream._
+  import eu.timepit.equites._
+"""

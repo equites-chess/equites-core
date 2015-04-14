@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2013-2014 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2013-2015 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,30 +17,12 @@
 package eu.timepit.equites
 package util
 
-import scala.util.Random
-import scalaz._
-import scalaz.concurrent.Task
+import com.nicta.rng.Rng
 
-object Rand {
-  type Rand[A] = State[Random, A]
-
-  def init: Rand[Random] = State.init
-
-  def pure[A](a: A): Rand[A] = State.state(a)
-
-  def randInt(n: Int): Rand[Int] = init.map(_.nextInt(n))
-
-  def randElem[A](from: Seq[A]): Rand[Option[A]] =
+object RngUtil {
+  def chooseElem[A](from: Seq[A]): Rng[Option[A]] =
     from.length match {
-      case 0 => pure(None)
-      case n => randInt(n).map(n => Some(from(n)))
+      case 0 => Rng.insert(None)
+      case n => Rng.chooseint(0, n - 1).map(i => Some(from(i)))
     }
-
-  def randRangeElem(range: Range): Rand[Int] =
-    randElem(range).map(_.getOrElse(range.start))
-
-  def eval[A](rand: Rand[A]): Task[A] = Task.delay(rand.eval(Random))
-
-  def eval[T1, T2, R](f: (T1, T2) => Rand[R]): Task[(T1, T2) => R] =
-    Task.delay((v1, v2) => f(v1, v2).eval(Random))
 }

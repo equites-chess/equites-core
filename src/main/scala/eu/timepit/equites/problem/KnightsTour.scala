@@ -17,8 +17,9 @@
 package eu.timepit.equites
 package problem
 
+import com.nicta.rng.Rng
 import eu.timepit.equites.implicits.GenericImplicits._
-import eu.timepit.equites.util.Rand._
+import eu.timepit.equites.util.RngUtil.chooseElem
 
 import scalaz.Scalaz._
 import scalaz._
@@ -55,10 +56,10 @@ object KnightsTour {
   def warnsdorffTour(start: Square): Process[Id, Square] =
     genericTour(start, firstLeastDegreeSquare)
 
-  def randomTour(start: Square): Process[Rand, Square] =
-    genericTour(start, (squares, _) => randElem(squares))
+  def randomTour(start: Square): Process[Rng, Square] =
+    genericTour(start, randomSquare)
 
-  def randomWarnsdorffTour(start: Square): Process[Rand, Square] =
+  def randomWarnsdorffTour(start: Square): Process[Rng, Square] =
     genericTour(start, randomLeastDegreeSquare)
 
   def leastDegreeSquares(squares: Stream[Square], visited: Set[Square]): Stream[Square] = {
@@ -72,8 +73,11 @@ object KnightsTour {
   val firstLeastDegreeSquare: Selector[Id] =
     (squares, visited) => leastDegreeSquares(squares, visited).headOption
 
-  val randomLeastDegreeSquare: Selector[Rand] =
-    (squares, visited) => randElem(leastDegreeSquares(squares, visited))
+  val randomSquare: Selector[Rng] =
+    (squares, _) => chooseElem(squares)
+
+  val randomLeastDegreeSquare: Selector[Rng] =
+    (squares, visited) => chooseElem(leastDegreeSquares(squares, visited))
 
   def isComplete(tour: Tour): Boolean =
     tour.toSet == Square.allAsSet
