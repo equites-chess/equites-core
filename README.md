@@ -1,6 +1,7 @@
 # Equites, a Scala chess playground
 [![Build Status](https://travis-ci.org/equites-chess/equites-core.svg?branch=master)](https://travis-ci.org/equites-chess/equites-core)
 [![Coverage Status](https://img.shields.io/coveralls/equites-chess/equites-core.svg)](https://coveralls.io/r/equites-chess/equites-core?branch=master)
+[![Download](https://api.bintray.com/packages/fthomas/maven/equites-core/images/download.svg)](https://bintray.com/fthomas/maven/equites-core/_latestVersion)
 
 Equites is a bunch of chess related code mostly implemented in Scala.
 Currently there is little usable from a chess player's point of view.
