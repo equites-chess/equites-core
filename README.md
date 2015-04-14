@@ -9,7 +9,7 @@ chess engines][UciEngineVsItself] via the [Universal Chess Interface (UCI)][UCI]
 
 [Equites]: http://equites.timepit.eu/
 [UCI]: http://en.wikipedia.org/wiki/Universal_Chess_Interface
-[UciEngineVsItself]: https://github.com/fthomas/equites/blob/master/cli/src/main/scala/eu/timepit/equites/cli/UciEngineVsItself.scala
+[UciEngineVsItself]: https://github.com/equites-chess/equites-cli/blob/master/src/main/scala/eu/timepit/equites/cli/UciEngineVsItself.scala
 
 ## Web resources
 
@@ -29,16 +29,16 @@ Equites also provides some free to use web resources:
 
 You can download the Equites sources in either [tar.gz][] or [zip][] formats.
 
-[tar.gz]: https://github.com/fthomas/equites/tarball/master
-[zip]:    https://github.com/fthomas/equites/zipball/master
+[tar.gz]: https://github.com/equites-chess/equites-core/tarball/master
+[zip]:    https://github.com/equites-chess/equites-core/zipball/master
 
 The version control system used for development of Equites is Git. The [Git
 repository][] can be inspected and browsed online at [GitHub][] and it can
 be cloned by running:
 
-    git clone git://github.com/fthomas/equites.git
+    git clone git://github.com/equites-chess/equites-core.git
 
-[Git repository]: http://github.com/fthomas/equites
+[Git repository]: http://github.com/equites-chess/equites-core
 [GitHub]: http://github.com/
 
 ## License
@@ -49,4 +49,4 @@ source tree.
 
 [free software]: http://www.gnu.org/philosophy/free-sw.html
 [GPLv3]: http://www.gnu.org/licenses/gpl-3.0.html
-[COPYING]: https://github.com/fthomas/equites/blob/master/COPYING
+[COPYING]: https://github.com/equites-chess/equites-core/blob/master/COPYING
