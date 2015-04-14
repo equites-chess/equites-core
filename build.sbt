@@ -5,8 +5,8 @@ organization := "eu.timepit"
 homepage := Some(url("http://equites.timepit.eu"))
 startYear := Some(2011)
 licenses += "GPL-3.0" -> url("http://www.gnu.org/licenses/gpl-3.0.html")
-scmInfo := Some(ScmInfo(url("https://github.com/fthomas/equites"),
-                        "git@github.com:fthomas/equites.git"))
+scmInfo := Some(ScmInfo(url("https://github.com/equites-chess/equites-core"),
+                        "git@github.com:equites-chess/equites-core.git"))
 
 scalaVersion := "2.11.6"
 scalacOptions ++= Seq(
@@ -33,8 +33,8 @@ autoAPIMappings := true
 
 
 
-    bintray.Plugin.bintraySettings ++
-    ScalariformSettings.ourScalariformSettings
+bintray.Plugin.bintraySettings
+ScalariformSettings.ourScalariformSettings
 
 
 resolvers ++= Seq(
