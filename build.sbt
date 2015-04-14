@@ -46,7 +46,7 @@ val scalazVersion = "7.1.1"
 val specs2Version = "3.4"
 
 libraryDependencies ++= Seq(
-  "com.chuusai" %% "shapeless" % "2.0.0",
+  "com.chuusai" %% "shapeless" % "2.1.0",
   "com.nicta" %% "rng" % "1.3.0",
   "eu.timepit" %% "scalaz-stream-contrib" % "master-bb646960961ec6aee8f53543d573d558db2ce386",
   "org.scalaz" %% "scalaz-concurrent" % scalazVersion,
