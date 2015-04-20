@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2011-2014 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2011-2015 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -46,6 +46,10 @@ case class Square private (file: File, rank: Rank) {
    */
   def lInfDist(that: Square): Int = (this - that).lInfLength
 
+  /**
+   * Returns true if this `Square` has a common side or corner with `that`
+   * (i.e. the L<sub>∞</sub> distance between both squares is one).
+   */
   def isAdjacentTo(that: Square): Boolean = lInfDist(that) == 1
 
   /** Returns true if this `Square` is on the same diagonal as `that`. */

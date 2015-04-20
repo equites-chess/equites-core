@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2014 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2014-2015 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,21 +17,29 @@
 package eu.timepit.equites
 package format
 
-import format.Pgn._
+import eu.timepit.equites.format.Pgn._
+import scalaz.Scalaz._
+import scalaz._
+
+import scalaz.Reader
 
 object PgnOps {
-  def ff1(moveText: MoveTextSection): Seq[GameState] = ???
+  def construct(seqElems: List[SeqElem]): Reader[GameState, List[GameState]] = {
+    val ri = Reader((state: GameState) => state)
+    val xs = ri :: seqElems.map(update)
 
-  def ff2(initial: GameState, l: List[SeqMoveElement]): Seq[GameState] = ???
+    val y = xs.sequenceU
+    y
+    //y: Reader[GameState, List[GameState]]
+    //Reader(state => Vector(state))
+  }
 
-  def ff4(action: SanAction, state: GameState): GameState =
-    action match {
-      case a: SanMoveLike          => ???
-      case SanCastling(side)       => ???
-      case CheckingSanAction(a, _) => ff4(a, state)
+  def update(seqElem: SeqElem): Reader[GameState, GameState] =
+    Reader { st =>
+      seqElem match {
+        case SeqMoveElement(MoveSymbol(SanMove(pt, draw))) => st.updated(Move(Piece(White, pt), util.SquareAbbr.e2 to draw.dest))
+        case SeqMoveElement(MoveNumber(_, _)) => st // a move number should not trigger a new state
+        case _ => st
+      }
     }
-
-  def ff5(move: SanMoveLike, state: GameState): Action = ???
-
-  /// TDD wäre jetzt sinnvoll
 }

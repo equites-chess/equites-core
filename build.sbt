@@ -38,7 +38,7 @@ resolvers ++= Seq(
 )
 
 val scalazVersion = "7.1.1"
-val specs2Version = "3.4"
+val specs2Version = "3.5"
 
 libraryDependencies ++= Seq(
   "com.chuusai" %% "shapeless" % "2.1.0",
