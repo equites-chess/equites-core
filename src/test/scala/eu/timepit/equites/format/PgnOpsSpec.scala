@@ -35,7 +35,7 @@ class PgnOpsSpec extends Specification {
       c("", Seq.empty)
     }
 
-    //"2" in c("1.", Seq.empty)
+    "2" in c("1.", Seq.empty)
 
     "1" in {
       c("e4", Seq(Move(pl, e2 to e4)))

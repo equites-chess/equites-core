@@ -18,6 +18,7 @@ package eu.timepit.equites
 package format
 
 import eu.timepit.equites.format.Pgn._
+import scala.annotation.tailrec
 import scalaz.Scalaz._
 import scalaz._
 
@@ -25,21 +26,40 @@ import scalaz.Reader
 
 object PgnOps {
   def construct(seqElems: List[SeqElem]): Reader[GameState, List[GameState]] = {
+    val elems = pairWithMoveNumbers(seqElems.toVector.collect { case SeqMoveElement(elem) => elem })
+    val x2 = elems.collect { case (ms: MoveSymbol, n) => (ms, n) }
+
     val ri = Reader((state: GameState) => state)
-    val xs = ri :: seqElems.map(update)
+    val xs = ri +: x2.map(update2)
 
     val y = xs.sequenceU
-    y
+    y.map(_.toList)
     //y: Reader[GameState, List[GameState]]
     //Reader(state => Vector(state))
   }
 
-  def update(seqElem: SeqElem): Reader[GameState, GameState] =
+  def update2(numeratedMoveSymbol: (MoveSymbol, Option[MoveNumber])): Reader[GameState, GameState] =
     Reader { st =>
-      seqElem match {
-        case SeqMoveElement(MoveSymbol(SanMove(pt, draw))) => st.updated(Move(Piece(White, pt), util.SquareAbbr.e2 to draw.dest))
-        case SeqMoveElement(MoveNumber(_, _)) => st // a move number should not trigger a new state
-        case _ => st
+      numeratedMoveSymbol match {
+        case (MoveSymbol(SanMove(pt, draw)), _) => st.updated(Move(Piece(White, pt), util.SquareAbbr.e2 to draw.dest))
+        case _                                  => st
       }
+
     }
+
+  ///
+
+  private type NumeratedMoveElement = (MoveElement, Option[MoveNumber])
+
+  private def pairWithMoveNumbers(elems: Vector[MoveElement]): Vector[NumeratedMoveElement] = {
+    @tailrec
+    def go(last: Option[MoveNumber], xs: Vector[MoveElement], acc: Vector[NumeratedMoveElement]): Vector[NumeratedMoveElement] =
+      xs match {
+        case (number: MoveNumber) +: tail => go(Some(number), tail, acc)
+        case elem +: tail                 => go(last, tail, (elem, last) +: acc)
+        case Vector()                     => acc
+      }
+    go(None, elems, Vector.empty)
+  }
+
 }
