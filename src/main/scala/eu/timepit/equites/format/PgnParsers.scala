@@ -90,7 +90,7 @@ object PgnParsers extends GenericParsers {
       Seq(algebraicSquare ^^ MaybeSquare.apply, maybeSquare, success(MaybeSquare()))
 
     def drawAndCapture: Parser[(MaybeDraw, Boolean)] =
-      appendSeq(srcSquareParsers.map(_ ~ "x".? ~ algebraicSquare)) ^^ {
+      choice(srcSquareParsers.map(_ ~ "x".? ~ algebraicSquare)) ^^ {
         case src ~ x ~ dest => (MaybeDraw(src, dest), x.isDefined)
       }
 

@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2013-2014 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2013-2015 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,17 +17,17 @@
 package eu.timepit.equites
 package util
 
+import eu.timepit.equites.util.PieceUtil._
+import eu.timepit.equites.util.SquareUtil._
+
 import scala.util.parsing.combinator.RegexParsers
 
-import util.PieceUtil._
-import util.SquareUtil._
-
 trait GenericParsers extends RegexParsers {
-  def appendSeq[A](ps: Seq[Parser[A]]): Parser[A] =
-    ps.fold(failure("empty sequence"))(_ | _)
+  def choice[A](ps: Seq[Parser[A]]): Parser[A] =
+    ps.fold(failure("choice: empty sequence"))(_ | _)
 
   def oneOf[A](as: Seq[A])(toLiteral: A => String): Parser[A] =
-    appendSeq(as.map(a => toLiteral(a) ^^^ a))
+    choice(as.map(a => toLiteral(a) ^^^ a))
 
   def integer: Parser[Int] =
     """-?\d+""".r ^^ (_.toInt)
@@ -41,9 +41,10 @@ trait GenericParsers extends RegexParsers {
   def algebraicRank: Parser[Rank] =
     oneOf(algebraicRankSeq)(_.value.toString).map(rankFromAlgebraic)
 
-  def algebraicSquare: Parser[Square] = algebraicFile ~ algebraicRank ^^ {
-    case file ~ rank => Square.unsafeFrom(file, rank)
-  }
+  def algebraicSquare: Parser[Square] =
+    algebraicFile ~ algebraicRank ^^ {
+      case file ~ rank => Square.unsafeFrom(file, rank)
+    }
 
   def lowerCasePromotedPieceType: Parser[PromotedPieceType] =
     oneOf(PieceType.allPromoted)(showLowerCaseLetter)
