@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2013-2014 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2013-2015 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,10 +16,9 @@
 
 package eu.timepit.equites
 
-import scalaz._
-import scalaz.Scalaz._
+import eu.timepit.equites.util.CoordinateAction
 
-import util.CoordinateAction
+import scalaz.Scalaz._
 
 object ActionOps {
   def getPromotedPiece(action: Action): Option[PromotedPiece] =
@@ -79,20 +78,20 @@ object ActionOps {
 
   def reifyAction(ca: CoordinateAction, board: Board): Option[Action] = {
     val move = reifyMove(ca.draw, board)
-    move.flatMap { m =>
-      lazy val capture = reifyCapture(m, board)
-      lazy val promotion = reifyPromotion(ca, m)
+    move.flatMap { mv =>
+      lazy val capture = reifyCapture(mv, board)
+      lazy val promotion = reifyPromotion(ca, mv)
       lazy val captureAndPromotion =
         ^(promotion, capture.map(_.captured))(mkCaptureAndPromotion)
-      lazy val enPassant = reifyEnPassant(m, board)
-      lazy val castling = reifyCastling(m, board)
+      lazy val enPassant = reifyEnPassant(mv, board)
+      lazy val castling = reifyCastling(mv, board)
 
-      castling orElse
-        (enPassant orElse
-          (captureAndPromotion orElse
-            (promotion orElse
-              (capture orElse
-                move))))
+      (castling
+        orElse enPassant
+        orElse captureAndPromotion
+        orElse promotion
+        orElse capture
+        orElse move)
     }
   }
 }
