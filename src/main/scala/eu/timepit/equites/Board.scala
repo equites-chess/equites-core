@@ -26,7 +26,8 @@ case class Board(self: Map[Square, AnyPiece]) extends AnyVal {
   def -(square: Square): Board =
     Board(self - square)
 
-  def get(key: Square) = self.get(key)
+  def get(key: Square): Option[AnyPiece] =
+    self.get(key)
 
   def getPlaced(square: Square): Option[Placed[AnyPiece]] =
     get(square).map(Placed(_, square))
@@ -34,16 +35,20 @@ case class Board(self: Map[Square, AnyPiece]) extends AnyVal {
   def getPlaced(squares: Seq[Square]): Seq[Placed[AnyPiece]] =
     squares.map(getPlaced).flatten
 
-  def isVacant(square: Square): Boolean = !isOccupied(square)
-  def isOccupied(square: Square): Boolean = self.contains(square)
+  def isVacant(square: Square): Boolean =
+    !isOccupied(square)
+
+  def isOccupied(square: Square): Boolean =
+    self.contains(square)
 
   def isOccupiedBy(square: Square, piece: AnyPiece): Boolean =
-    get(square).exists(_ == piece)
+    get(square).contains(piece)
 
   def placedPieces: Stream[Placed[AnyPiece]] =
     self.toStream.map { case (square, piece) => Placed(piece, square) }
 
-  def pieceCount: Int = self.size
+  def pieceCount: Int =
+    self.size
 
   // TODO: CLEAN!
 

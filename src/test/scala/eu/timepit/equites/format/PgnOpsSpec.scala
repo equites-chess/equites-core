@@ -31,16 +31,9 @@ class PgnOpsSpec extends Specification {
   }
 
   "x" should {
-    "0" in {
-      c("", Seq.empty)
-    }
-
+    "0" in c("", Seq.empty)
     "2" in c("1.", Seq.empty)
     "3" in c("1. e4", Seq(Move(pl, e2 to e4)))
-    //"4" in c("1. e4 e5", Seq(Move(pl, e2 to e4), Move(pd, e7 to e5)))
-
-    "1" in {
-      c("e4", Seq(Move(pl, e2 to e4)))
-    }
+    "4" in c("1. e4 e5", Seq(Move(pl, e2 to e4), Move(pd, e7 to e5)))
   }
 }
