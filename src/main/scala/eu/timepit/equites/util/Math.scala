@@ -33,10 +33,12 @@ object Math {
     I.max(I.fromInt(1), I.abs(gcd(x, y)))
 
   /** Returns true if `i` is divisible by two.*/
-  def isEven[I: Integral](i: I): Boolean = remBy2(i) == 0
+  def isEven[I: Integral](i: I): Boolean =
+    remBy2(i) == 0
 
   /** Returns true if `i` is not divisible by two. */
-  def isOdd[I: Integral](i: I): Boolean = remBy2(i) != 0
+  def isOdd[I: Integral](i: I): Boolean =
+    remBy2(i) != 0
 
   /** Returns the remainder of `i` divided by two. */
   def remBy2[I](i: I)(implicit I: Integral[I]): I =

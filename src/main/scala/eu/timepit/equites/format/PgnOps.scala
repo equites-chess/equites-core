@@ -25,7 +25,7 @@ import scalaz._
 import scalaz.Reader
 
 object PgnOps {
-  def construct(seqElems: List[SeqElem]): Reader[GameState, List[GameState]] = {
+  def reconstruct(seqElems: List[SeqElem]): Reader[GameState, List[GameState]] = {
     val elems = pairWithMoveNumbers(seqElems.toVector.collect { case SeqMoveElement(elem) => elem })
     val x2 = elems.collect { case (ms: MoveSymbol, n) => (ms, n) }
 
@@ -95,7 +95,7 @@ object PgnOps {
           go(a2, t, a2 :: acc)
         case Nil => acc.reverse
       }
-    Reader((a: A) => go(a, xs, Nil))
+    Reader(go(_, xs, Nil))
   }
 
 }

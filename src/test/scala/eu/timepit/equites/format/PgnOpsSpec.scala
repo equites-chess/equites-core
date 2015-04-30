@@ -18,22 +18,44 @@ package eu.timepit.equites
 package format
 
 import eu.timepit.equites.format.PgnOps._
+import eu.timepit.equites.util.MonoidUtil
 import eu.timepit.equites.util.PieceAbbr.Wiki._
 import eu.timepit.equites.util.SquareAbbr._
 import org.specs2.mutable._
+import org.specs2.specification.core.Fragments
+
+import scalaz.std.string._
+import scalaz.std.vector._
 
 class PgnOpsSpec extends Specification {
-  def c(pgn: String, actions: Seq[Action]) = {
-    val mts = PgnParsers.parseAll(PgnParsers.moveTextSeq, pgn).get
-    val init = GameState.init
-    val states = GameState.unfold(actions, init).toList
-    construct(mts).run(init) must_== states
-  }
+  "reconstruct" should {
+    def checkReconstruct(pgn: String, actions: Seq[Action]) = {
+      val mts = PgnParsers.parseAll(PgnParsers.moveTextSeq, pgn).get
+      val init = GameState.init
+      val states = GameState.unfold(actions, init).toList
+      reconstruct(mts).run(init) must_== states
+    }
 
-  "x" should {
-    "0" in c("", Seq.empty)
-    "2" in c("1.", Seq.empty)
-    "3" in c("1. e4", Seq(Move(pl, e2 to e4)))
-    "4" in c("1. e4 e5", Seq(Move(pl, e2 to e4), Move(pd, e7 to e5)))
+    val none = Vector.empty[Action]
+    val data = Vector(
+      ("1. ", none),
+      ("e4 ", Vector(Move(pl, e2 to e4))),
+      ("e5 ", Vector(Move(pd, e7 to e5))),
+      ("2. ", none),
+      ("Nf3 ", Vector(Move(nl, g1 to f3))),
+      ("Nc6 ", Vector(Move(nd, b8 to c6))),
+      ("3. ", none),
+      ("Bb5 ", Vector(Move(bl, f1 to b5))),
+      ("{This opening is called the Ruy Lopez.}\n", none),
+      ("3... ", none),
+      ("a6 ", Vector(Move(pd, a7 to a6))))
+
+    val monoid = MonoidUtil.product[String, Vector[Action]]
+    val accumulated = data.scanLeft(monoid.zero)(monoid.append(_, _))
+    val fragments = accumulated.map {
+      case (pgn, actions) =>
+        s"pass on '$pgn'" in checkReconstruct(pgn, actions)
+    }
+    Fragments(fragments: _*)
   }
 }
