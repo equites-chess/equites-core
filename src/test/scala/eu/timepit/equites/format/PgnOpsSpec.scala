@@ -53,7 +53,11 @@ class PgnOpsSpec extends Specification {
       ("Ba4 ", Vector(Move(bl, b5 to a4))),
       ("Nf6 ", Vector(Move(nd, g8 to f6))),
       ("5. ", none),
-      ("O-O ", Vector(CastlingShort(White))))
+      ("O-O ", Vector(CastlingShort(White))),
+      ("Be7 ", Vector(Move(bd, f8 to e7))),
+      ("6. ", none),
+      ("Re1 ", Vector(Move(rl, f1 to e1))),
+      ("b5 ", Vector(Move(pd, b7 to b5))))
 
     val monoid = MonoidUtil.product[String, Vector[Action]]
     val accumulated = data.scanLeft(monoid.zero)(monoid.append(_, _))
