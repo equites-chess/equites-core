@@ -224,6 +224,19 @@ class PgnParsersSpec extends Specification with ParserMatchers {
     }
   }
 
+  "recursiveVariation" should {
+    "succeed on valid input" in {
+      val text = "(e4 f5 (g5))"
+      val result = RecursiveVariation(List(
+        SeqMoveElement(MoveSymbol(SanMove(Pawn, MaybeDraw(e4)))),
+        SeqMoveElement(MoveSymbol(SanMove(Pawn, MaybeDraw(f5)))),
+        RecursiveVariation(List(
+          SeqMoveElement(MoveSymbol(SanMove(Pawn, MaybeDraw(g5))))))))
+
+      recursiveVariation must succeedOn(text).withResult(equalTo(result))
+    }
+  }
+
   "moveTextSection" should {
     "succeed on valid input" in {
       val text = """
