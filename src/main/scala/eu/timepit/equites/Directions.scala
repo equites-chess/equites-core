@@ -53,7 +53,10 @@ object Directions {
   val forward  = diagonalFront ++ front
   val backward = diagonalBack ++ back
 
-  val straight = front ++ right ++ back ++ left
+  val horizontal = right ++ left
+  val vertical   = front ++ back
+
+  val straight = horizontal ++ vertical
   val diagonal = diagonalFront ++ diagonalBack
   val anywhere = straight ++ diagonal
   // format: ON

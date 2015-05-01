@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2013, 2015 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,7 +18,12 @@ package eu.timepit.equites
 package util
 
 trait TextCommand extends Product {
-  def cmdName: String = productPrefix.toLowerCase
-  def cmdArgs: Seq[String] = productIterator.toSeq.map(_.toString)
-  override def toString: String = cmdName + cmdArgs.map(" " + _).mkString
+  def cmdName: String =
+    productPrefix.toLowerCase
+
+  def cmdArgs: Seq[String] =
+    productIterator.toSeq.map(_.toString)
+
+  override def toString: String =
+    cmdName + cmdArgs.map(" " + _).mkString
 }

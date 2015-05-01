@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2011-2013 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2011-2013, 2015 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,24 +16,27 @@
 
 package eu.timepit.equites
 
+import eu.timepit.equites.ArbitraryInstances._
 import org.specs2._
-import scalaz.scalacheck.ScalazProperties._
 import shapeless.test.illTyped
 
-import ArbitraryInstances._
+import scalaz.scalacheck.ScalazProperties._
 
 class ColorSpec extends Specification with ScalaCheck {
   def is = s2"""
-  Color should
-    satisfy the Equal laws $e1
-    satisfy the Order laws $e2
+  Color
+    should satisfy the Equal laws ${equal.laws[Color]}
+    should satisfy the Order laws ${order.laws[Color]}
+
+    guessFrom should return no color for horizontal directions $e1
+    guessFrom should return all colors for vertical directions $e2
 
   Black should be the opposite of White $e3
   White should be the opposite of Black $e4
   """
 
-  def e1 = equal.laws[Color]
-  def e2 = order.laws[Color]
+  def e1 = Directions.horizontal.self.map(Color.guessFrom).flatten == Set.empty
+  def e2 = Directions.vertical.self.map(Color.guessFrom).flatten == Set(White, Black)
 
   def e3 = White.opposite must_== Black
   def e4 = Black.opposite must_== White
