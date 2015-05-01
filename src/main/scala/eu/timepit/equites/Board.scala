@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2011, 2013-2014 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2011, 2013-2015 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -50,23 +50,23 @@ case class Board(self: Map[Square, AnyPiece]) extends AnyVal {
   def pieceCount: Int =
     self.size
 
-  // TODO: CLEAN!
+  def processAction(action: Action): Board =
+    action match {
+      case a: CaptureAndPromotion => processCaptureAndPromotion(a)
+      case a: CaptureLike         => processCapture(a)
+      case a: PromotionLike       => processPromotion(a)
+      case a: MoveLike            => processMove(a)
+      case a: Castling            => processCastling(a)
+    }
 
-  def processAction(action: Action): Board = action match {
-    case a: CaptureAndPromotion => processCaptureAndPromotion(a)
-    case a: CaptureLike         => processCapture(a)
-    case a: PromotionLike       => processPromotion(a)
-    case a: MoveLike            => processMove(a)
-    case a: Castling            => processCastling(a)
-  }
-
-  def reverseAction(action: Action): Board = action match {
-    case a: CaptureAndPromotion => reverseCaptureAndPromotion(a)
-    case a: CaptureLike         => reverseCapture(a)
-    case a: PromotionLike       => reversePromotion(a)
-    case a: MoveLike            => reverseMove(a)
-    case a: Castling            => reverseCastling(a)
-  }
+  def reverseAction(action: Action): Board =
+    action match {
+      case a: CaptureAndPromotion => reverseCaptureAndPromotion(a)
+      case a: CaptureLike         => reverseCapture(a)
+      case a: PromotionLike       => reversePromotion(a)
+      case a: MoveLike            => reverseMove(a)
+      case a: Castling            => reverseCastling(a)
+    }
 
   def processMove(move: MoveLike): Board =
     this - move.draw.src + (move.draw.dest -> move.piece)
@@ -102,6 +102,9 @@ case class Board(self: Map[Square, AnyPiece]) extends AnyVal {
 }
 
 object Board {
-  def apply(kvs: (Square, AnyPiece)*): Board = Board(kvs.toMap)
-  val empty: Board = Board(Map.empty[Square, AnyPiece])
+  def apply(kvs: (Square, AnyPiece)*): Board =
+    Board(kvs.toMap)
+
+  val empty: Board =
+    Board(Map.empty[Square, AnyPiece])
 }
