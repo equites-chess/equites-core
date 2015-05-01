@@ -46,6 +46,9 @@ object PgnOps {
         case (MoveSymbol(sm @ SanMove(_, _)), Some(MoveNumber(_, c))) =>
           update3(st, sm, st.color)
 
+        case (MoveSymbol(sc @ SanCastling(side)), _) =>
+          st.updated(Castling(st.color, side))
+
         case _ => st
       }
 
