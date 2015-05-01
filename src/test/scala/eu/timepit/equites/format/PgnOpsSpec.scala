@@ -29,7 +29,7 @@ import scalaz.std.vector._
 
 class PgnOpsSpec extends Specification {
   "reconstruct" should {
-    def checkReconstruct(pgn: String, actions: Seq[Action]) = {
+    def check(pgn: String, actions: Seq[Action]) = {
       val mts = PgnParsers.parseAll(PgnParsers.moveTextSeq, pgn).get
       val init = GameState.init
       val states = GameState.unfold(actions, init).toList
@@ -48,13 +48,17 @@ class PgnOpsSpec extends Specification {
       ("Bb5 ", Vector(Move(bl, f1 to b5))),
       ("{This opening is called the Ruy Lopez.}\n", none),
       ("3... ", none),
-      ("a6 ", Vector(Move(pd, a7 to a6))))
+      ("a6 ", Vector(Move(pd, a7 to a6))),
+      ("4. ", none),
+      ("Ba4 ", Vector(Move(bl, b5 to a4))),
+      ("Nf6 ", Vector(Move(nd, g8 to f6))),
+      ("5. ", none) //("O-O ", Vector(CastlingShort(White)))
+      )
 
     val monoid = MonoidUtil.product[String, Vector[Action]]
     val accumulated = data.scanLeft(monoid.zero)(monoid.append(_, _))
     val fragments = accumulated.map {
-      case (pgn, actions) =>
-        s"pass on '$pgn'" in checkReconstruct(pgn, actions)
+      case (pgn, actions) => s"pass on '$pgn'" in check(pgn, actions)
     }
     Fragments(fragments: _*)
   }
