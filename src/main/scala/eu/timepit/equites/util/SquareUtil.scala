@@ -24,11 +24,17 @@ case class AlgebraicFile(value: Char) extends AnyVal
 case class AlgebraicRank(value: Int) extends AnyVal
 
 object SquareUtil {
-  val algebraicFileSeq: Seq[AlgebraicFile] = File.all.map(fileToAlgebraic)
-  val algebraicRankSeq: Seq[AlgebraicRank] = Rank.all.map(rankToAlgebraic)
+  val algebraicFileSeq: Seq[AlgebraicFile] =
+    File.all.map(fileToAlgebraic)
 
-  val numericFileSeq: Seq[Int] = File.range.map(_ + 1)
-  val numericRankSeq: Seq[Int] = Rank.range.map(_ + 1)
+  val algebraicRankSeq: Seq[AlgebraicRank] =
+    Rank.all.map(rankToAlgebraic)
+
+  val numericFileSeq: Seq[Int] =
+    File.range.map(_ + 1)
+
+  val numericRankSeq: Seq[Int] =
+    Rank.range.map(_ + 1)
 
   def fileFromAlgebraic(algebraicFile: AlgebraicFile): File =
     File(algebraicFile.value - 'a')

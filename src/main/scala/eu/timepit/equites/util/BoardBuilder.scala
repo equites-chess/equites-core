@@ -56,5 +56,6 @@ class BoardBuilder private (board: Board, square: Square) {
 }
 
 object BoardBuilder {
-  def >> : BoardBuilder = new BoardBuilder(Board.empty, Square.topLeft)
+  def >> : BoardBuilder =
+    new BoardBuilder(Board.empty, Square.topLeft)
 }

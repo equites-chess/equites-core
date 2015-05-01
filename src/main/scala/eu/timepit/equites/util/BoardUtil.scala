@@ -27,7 +27,7 @@ object BoardUtil {
    */
   def readFenPlacement(placement: String): Board = {
     def expandDigits(target: String): String =
-      """\d""".r.replaceAllIn(target, "1" * _.toString.toInt)
+      """\d""".r.replaceAllIn(target, "1" * _.toString().toInt)
 
     val mapping = for {
       (rankStr, rank) <- placement.split("/").reverse.zipWithIndex
@@ -41,9 +41,9 @@ object BoardUtil {
   /** Returns the piece placement of the given `Board` in $FEN. */
   def showFenPlacement(board: Board): String = {
     def replaceOnes(target: String): String =
-      "1{2,}".r.replaceAllIn(target, _.toString.length.toString)
+      "1{2,}".r.replaceAllIn(target, _.toString().length.toString)
 
-    Rank.all.reverse.map { rank =>
+    Rank.all.reverseMap { rank =>
       val wholeRank = File.all.map { file =>
         val squareOpt = Square.from(file, rank)
         val pieceOpt = squareOpt.flatMap(board.get)

@@ -38,7 +38,8 @@ package object util {
     start to end by step
   }
 
-  def toStringOnOff(bool: Boolean): String = if (bool) "on" else "off"
+  def toStringOnOff(bool: Boolean): String =
+    if (bool) "on" else "off"
 
   def toTuple2[A](a: A): (A, A) = (a, a)
 }
