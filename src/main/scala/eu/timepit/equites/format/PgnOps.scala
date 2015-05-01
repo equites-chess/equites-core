@@ -82,11 +82,9 @@ object PgnOps {
   ///
 
   def findCandidates(piece: AnyPiece, square: MaybeSquare, board: Board): List[Placed[AnyPiece]] =
-    square match {
-      case MaybeSquare(Some(file), Some(rank)) => board.getPlaced(Square.unsafeFrom(file, rank)).toList
-      case MaybeSquare(Some(file), None)       => board.placedPieces.filter(placed => placed.elem == piece && placed.square.file == file).toList
-      case MaybeSquare(None, Some(rank))       => board.placedPieces.filter(placed => placed.elem == piece && placed.square.rank == rank).toList
-      case MaybeSquare(None, None)             => board.placedPieces.filter(_.elem == piece).toList
+    square.toSquare match {
+      case Some(sq) => board.getPlaced(sq).toList
+      case None     => board.placedPieces.filter(placed => placed.elem == piece && square.matches(placed.square)).toList
     }
 
   def foo[A](xs: List[Reader[A, A]]): Reader[A, List[A]] = {

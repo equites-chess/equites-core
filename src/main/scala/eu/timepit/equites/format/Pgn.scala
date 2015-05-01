@@ -24,7 +24,16 @@ object Pgn {
 
   ///
 
-  case class MaybeSquare(file: Option[File] = None, rank: Option[Rank] = None)
+  case class MaybeSquare(file: Option[File] = None, rank: Option[Rank] = None) {
+    def matches(square: Square): Boolean = {
+      val fileMatches = file.fold(true)(_ == square.file)
+      val rankMatches = rank.fold(true)(_ == square.rank)
+      fileMatches && rankMatches
+    }
+
+    def toSquare: Option[Square] =
+      file.flatMap(f => rank.flatMap(r => Square.from(f, r)))
+  }
 
   object MaybeSquare {
     def apply(square: Square): MaybeSquare =
