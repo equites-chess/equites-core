@@ -119,9 +119,55 @@ class PgnOpsSpec extends Specification {
       ("Qxe1 ", Vector(Capture(ql, d1 to e1, rd))),
       ("Kxf7 ", Vector(Capture(kd, g8 to f7, nl))),
       ("27. ", none),
-      ("Qe3 ", Vector(Move(ql, e1 to e3))))
-
-    // 27. Qe3 Qg5 28. Qxg5 hxg5 29. b3 Ke6 30. a3 Kd6
+      ("Qe3 ", Vector(Move(ql, e1 to e3))),
+      ("Qg5 ", Vector(Move(qd, f6 to g5))),
+      ("28. ", none),
+      ("Qxg5 ", Vector(Capture(ql, e3 to g5, qd))),
+      ("hxg5 ", Vector(Capture(pd, h6 to g5, ql))),
+      ("29. ", none),
+      ("b3 ", Vector(Move(pl, b2 to b3))),
+      ("Ke6 ", Vector(Move(kd, f7 to e6))),
+      ("30. ", none),
+      ("a3 ", Vector(Move(pl, a2 to a3))),
+      ("Kd6\n", Vector(Move(kd, e6 to d6))),
+      ("31. ", none),
+      ("axb4 ", Vector(Capture(pl, a3 to b4, pd))),
+      ("cxb4 ", Vector(Capture(pd, c5 to b4, pl))),
+      ("32. ", none),
+      ("Ra5 ", Vector(Move(rl, a1 to a5))),
+      ("Nd5 ", Vector(Move(nd, b6 to d5))),
+      ("33. ", none),
+      ("f3 ", Vector(Move(pl, f2 to f3))),
+      ("Bc8 ", Vector(Move(bd, b7 to c8))),
+      ("34. ", none),
+      ("Kf2 ", Vector(Move(kl, g1 to f2))),
+      ("Bf5 ", Vector(Move(bd, c8 to f5))),
+      ("35. ", none),
+      ("Ra7 ", Vector(Move(rl, a5 to a7))),
+      ("g6\n", Vector(Move(pd, g7 to g6))),
+      ("36. ", none),
+      ("Ra6+ ", Vector(Move(rl, a7 to a6))),
+      ("Kc5 ", Vector(Move(kd, d6 to c5))),
+      ("37. ", none),
+      ("Ke1 ", Vector(Move(kl, f2 to e1))),
+      ("Nf4 ", Vector(Move(nd, d5 to f4))),
+      ("38. ", none),
+      ("g3 ", Vector(Move(pl, g2 to g3))),
+      ("Nxh3 ", Vector(Capture(nd, f4 to h3, pl))),
+      ("39. ", none),
+      ("Kd2 ", Vector(Move(kl, e1 to d2))),
+      ("Kb5 ", Vector(Move(kd, c5 to b5))),
+      ("40. ", none),
+      ("Rd6 ", Vector(Move(rl, a6 to d6))),
+      ("Kc5\n", Vector(Move(kd, b5 to c5))),
+      ("41. ", none),
+      ("Ra6 ", Vector(Move(rl, d6 to a6))),
+      ("Nf2 ", Vector(Move(nd, h3 to f2))),
+      ("42. ", none),
+      ("g4 ", Vector(Move(pl, g3 to g4))),
+      ("Bd3 ", Vector(Move(bd, f5 to d3))),
+      ("43. ", none),
+      ("Re6", Vector(Move(rl, a6 to e6))))
 
     val monoid = MonoidUtil.product[String, Vector[Action]]
     val accumulated = data.scanLeft(monoid.zero)(monoid.append(_, _))
@@ -130,4 +176,6 @@ class PgnOpsSpec extends Specification {
     }
     Fragments(fragments: _*)
   }
+
+  // need to test: Promotion, CaptureAndPromotion, EnPassant, CastlingLong
 }

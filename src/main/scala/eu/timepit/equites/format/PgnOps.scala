@@ -25,8 +25,8 @@ import scalaz._
 import scalaz.Reader
 
 object PgnOps {
-  def reconstruct(seqElems: List[SeqElem]): Reader[GameState, List[GameState]] = {
-    val elems = pairWithMoveNumbers(seqElems.toVector.collect { case SeqMoveElement(elem) => elem })
+  def reconstruct(moveText: List[SeqElem]): Reader[GameState, List[GameState]] = {
+    val elems = pairWithMoveNumbers(moveText.toVector.collect { case SeqMoveElement(elem) => elem })
     val x2 = elems.collect { case (ms: MoveSymbol, n) => (ms, n) }
 
     val ri = Reader((state: GameState) => state)
@@ -54,7 +54,6 @@ object PgnOps {
 
         case _ => st
       }
-
     }
 
   def update3(st: GameState, move: SanMove, color: Color): GameState = {
@@ -91,8 +90,6 @@ object PgnOps {
     go(None, elems, Vector.empty)
   }
 
-  ///
-
   def findCandidates(piece: AnyPiece, square: MaybeSquare, board: Board): List[Placed[AnyPiece]] =
     square.toSquare match {
       case Some(sq) => board.getPlaced(sq).toList
@@ -112,4 +109,3 @@ object PgnOps {
   }
 
 }
-
