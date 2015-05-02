@@ -24,7 +24,7 @@ import Nqueens._
 class NqueensSpec extends Specification {
   "allBoards" should {
     "place queens on a board that do not attack each other" in {
-      val board = allBoards(0)
+      val board = allBoards.head
       def nonattacking(placed: PlacedPiece): Boolean =
         board.getPlaced(Rules.undirectedReachableSquares(placed)).isEmpty
 

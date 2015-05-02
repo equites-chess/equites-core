@@ -40,14 +40,15 @@ object PgnOps {
     Reader { st =>
       numeratedMoveSymbol match {
         // TODO: (p: Piece, dest: Square) => Square
-        case (MoveSymbol(sm @ SanMove(_, _)), None) =>
-          update3(st, sm, st.color)
-
-        case (MoveSymbol(sm @ SanMove(_, _)), Some(MoveNumber(_, c))) =>
+        case (MoveSymbol(sm @ SanMove(_, _)), _) =>
           update3(st, sm, st.color)
 
         case (MoveSymbol(sc @ SanCastling(side)), _) =>
           st.updated(Castling(st.color, side))
+
+        case (MoveSymbol(sc @ SanCapture(_, _)), _) => {
+          updateCapture(st, sc, st.color)
+        }
 
         case _ => st
       }
@@ -62,6 +63,17 @@ object PgnOps {
       .filter(_._2.contains(move.draw.dest))
 
     st.updated(Move(piece, possible.head._1.square to move.draw.dest))
+  }
+
+  def updateCapture(st: GameState, capt: SanCapture, color: Color): GameState = {
+    val piece = Piece(color, capt.pieceType)
+    val cand = findCandidates(piece, capt.draw.src, st.board)
+    //println(cand)
+    // reachableOccupiedSquares does not compute diagonal capture moves of pawns
+    val possible = cand.map(pl => pl -> Rules.reachableOccupiedSquares(pl, st.board))
+      .filter(_._2.contains(capt.draw.dest))
+
+    st.updated(Capture(piece, possible.head._1.square to capt.draw.dest, st.board.get(capt.draw.dest).get))
   }
 
   ///
