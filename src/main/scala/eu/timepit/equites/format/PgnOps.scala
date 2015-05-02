@@ -59,7 +59,7 @@ object PgnOps {
     val piece = Piece(color, move.pieceType)
     val cand = findCandidates(piece, move.draw.src, st.board)
     // finde cand, die auf move.draw.dest springen können
-    val possible = cand.map(pl => pl -> Rules.reachableVacantSquares(pl, st.board))
+    val possible = cand.map(pl => pl -> Movement.reachableVacantSquares(pl, st.board))
       .filter(_._2.contains(move.draw.dest))
 
     st.updated(Move(piece, possible.head._1.square to move.draw.dest))
@@ -70,7 +70,7 @@ object PgnOps {
     val cand = findCandidates(piece, capt.draw.src, st.board)
     //println(cand)
     // reachableOccupiedSquares does not compute diagonal capture moves of pawns
-    val possible = cand.map(pl => pl -> Rules.reachableOccupiedSquares(pl, st.board))
+    val possible = cand.map(pl => pl -> Movement.reachableOccupiedSquares(pl, st.board))
       .filter(_._2.contains(capt.draw.dest))
 
     st.updated(Capture(piece, possible.head._1.square to capt.draw.dest, st.board.get(capt.draw.dest).get))

@@ -26,7 +26,7 @@ class NqueensSpec extends Specification {
     "place queens on a board that do not attack each other" in {
       val board = allBoards.head
       def nonattacking(placed: PlacedPiece): Boolean =
-        board.getPlaced(Rules.undirectedReachableSquares(placed)).isEmpty
+        board.getPlaced(Movement.undirectedReachableSquares(placed)).isEmpty
 
       board.placedPieces.forall(nonattacking) must beTrue
     }

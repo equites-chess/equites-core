@@ -16,12 +16,11 @@
 
 package eu.timepit.equites
 
-import scalaz.std.stream
-import scalaz.syntax.std.boolean._
+import eu.timepit.equites.implicits.PlacedImplicits._
+import eu.timepit.equites.util.PieceAbbr.Textual._
+import eu.timepit.equites.util.SquareAbbr._
 
-import implicits.PlacedImplicits._
-import util.PieceAbbr.Textual._
-import util.SquareAbbr._
+import scalaz.syntax.std.boolean._
 
 object Rules {
   val maxBoardLength: Int = math.max(File.max.value, Rank.max.value)
@@ -127,60 +126,6 @@ object Rules {
         case _ => Nil
       }
     }
-
-  ///
-
-  case class Movement(directions: Directions, distance: Int)
-
-  val pieceMovements: Map[AnyPiece, Movement] = {
-    def pieceMovementsBy(color: Color): Map[AnyPiece, Movement] = {
-      import Directions._
-      // format: OFF
-      Map(
-        king(color)   -> Movement(anywhere, 1),
-        queen(color)  -> Movement(anywhere, maxBoardLength),
-        rook(color)   -> Movement(straight, maxBoardLength),
-        bishop(color) -> Movement(diagonal, maxBoardLength),
-        knight(color) -> Movement(knightLike, 1),
-        pawn(color)   -> Movement(front.fromViewOf(color), 1))
-      // format: ON
-    }
-    Color.all.map(pieceMovementsBy).reduce(_ ++ _)
-  }
-
-  def movementOf(placed: PlacedPiece): Movement = {
-    val movement = pieceMovements(placed)
-    placed.pieceType match {
-      case Pawn if onStartingSquare(placed) => movement.copy(distance = 2)
-      case _                                => movement
-    }
-  }
-
-  def squaresInDirection(from: Square, direction: Vec): Stream[Square] =
-    stream.unfold(from)(sq => (sq + direction).map(util.toTuple2))
-
-  def directedReachableSquares(placed: PlacedPiece): Stream[Stream[Square]] = {
-    val movement = movementOf(placed)
-    movement.directions.toStream.map { dir =>
-      squaresInDirection(placed.square, dir).take(movement.distance)
-    }
-  }
-
-  def undirectedReachableSquares(placed: PlacedPiece): Stream[Square] =
-    directedReachableSquares(placed).flatten
-
-  def reachableVacantSquares(placed: PlacedPiece, board: Board): Stream[Square] =
-    directedReachableSquares(placed).flatMap {
-      _.takeWhile(board.isVacant)
-    }
-
-  def reachableOccupiedSquares(placed: PlacedPiece, board: Board): Stream[PlacedPiece] =
-    directedReachableSquares(placed).flatMap {
-      _.flatMap(sq => board.getPlaced(sq).toList).take(1)
-    }
-
-  def unvisitedSquares(placed: PlacedPiece, visited: Set[Square]): Stream[Square] =
-    undirectedReachableSquares(placed).filterNot(visited)
 
   ///
 

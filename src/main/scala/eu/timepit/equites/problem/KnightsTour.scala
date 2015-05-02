@@ -88,6 +88,6 @@ object KnightsTour {
 
   def unvisited(from: Square, visited: Set[Square]): Stream[Square] = {
     val placed = Placed(Piece(White, Knight), from)
-    Rules.unvisitedSquares(placed, visited)
+    Movement.unvisitedSquares(placed, visited)
   }
 }

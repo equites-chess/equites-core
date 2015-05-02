@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2011, 2013-2014 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2011, 2013-2015 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,62 +16,19 @@
 
 package eu.timepit.equites
 
+import eu.timepit.equites.Rules._
+import eu.timepit.equites.util.PieceAbbr.Wiki._
+import eu.timepit.equites.util.SquareAbbr._
 import org.specs2.mutable._
-
-import util.BoardBuilder._
-import util.PieceAbbr.Algebraic._
-import util.PieceAbbr.Wiki._
-import util.SquareAbbr._
-import Rules._
 
 class RulesSpec extends Specification {
   "Rules" should {
-    "correctly perform squaresInDirection" in {
-      squaresInDirection(d4, Vec(+1, 1)).toList must_== List(e5, f6, g7, h8)
-      squaresInDirection(d4, Vec(-1, 0)).toList must_== List(c4, b4, a4)
-      squaresInDirection(d4, Vec(+3, 1)).toList must_== List(g5)
-    }
-
-    "correctly perform undirectedReachableSquares" in {
-      undirectedReachableSquares(Placed(kl, d3)).toSet must_==
-        Set(c2, c3, c4, d2, d4, e2, e3, e4)
-
-      undirectedReachableSquares(Placed(pl, d4)).toSet must_== Set(d5)
-      undirectedReachableSquares(Placed(pl, a2)).toSet must_== Set(a3, a4)
-      undirectedReachableSquares(Placed(pd, a7)).toSet must_== Set(a6, a5)
-    }
-
-    "correctly perform undirectedReachableSquares for Bishop" in {
-      undirectedReachableSquares(Placed(bl, d4)).toSet must_==
-        Set(a1, b2, c3, e5, f6, g7, h8, a7, b6, c5, e3, f2, g1)
-    }
-
     "determine associated castlings for placed pieces" in {
       associatedCastlings(Placed(rl, a1)) must_== Seq(CastlingLong(White))
       associatedCastlings(Placed(rl, d6)) must_== Seq.empty
       associatedCastlings(Placed(rd, h8)) must_== Seq(CastlingShort(Black))
       associatedCastlings(Placed(kd, e3)) must_== Seq(CastlingShort(Black), CastlingLong(Black))
       associatedCastlings(Placed(ql, a1)) must_== Seq.empty
-    }
-
-    "find reachable vacant and occupied squares" in {
-      val board = >>.
-        |.|.q.|.|.|.|.P.
-        |.|.|.|.|.|.R.|.
-        |.|.|.|.|.|.|.|.
-        |.|.|.|.|.|.|.|.
-        B.|.|.|.|.|.|.|.
-        |.|.|.|.|.|.|.|.
-        |.|.|.|.|.|.|.|.
-        Q.|.n.|.|.k.|.|.<<
-
-      val queen = Placed(ql, a1)
-
-      reachableVacantSquares(queen, board).toSet must_==
-        Set(a2, a3, b1, b2, c3, d4, e5, f6)
-
-      reachableOccupiedSquares(queen, board).toSet must_==
-        Set(Placed(B, a4), Placed(R, g7), Placed(n, c1))
     }
   }
 }
