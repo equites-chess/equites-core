@@ -75,7 +75,31 @@ class PgnOpsSpec extends Specification {
       ("c6 ", Vector(Move(pd, c7 to c6))),
       ("12. ", none),
       ("cxb5 ", Vector(Capture(pl, c4 to b5, pd))),
-      ("axb5 ", Vector(Capture(pd, a6 to b5, pl))))
+      ("axb5 ", Vector(Capture(pd, a6 to b5, pl))),
+      ("13. ", none),
+      ("Nc3 ", Vector(Move(nl, b1 to c3))),
+      ("Bb7 ", Vector(Move(bd, c8 to b7))),
+      ("14. ", none),
+      ("Bg5 ", Vector(Move(bl, c1 to g5))),
+      ("b4 ", Vector(Move(pd, b5 to b4))),
+      ("15. ", none),
+      ("Nb1 ", Vector(Move(nl, c3 to b1))),
+      ("h6\n", Vector(Move(pd, h7 to h6))),
+      ("16. ", none),
+      ("Bh4 ", Vector(Move(bl, g5 to h4))),
+      ("c5 ", Vector(Move(pd, c6 to c5))),
+      ("17. ", none),
+      ("dxe5 ", Vector(Capture(pl, d4 to e5, pd))),
+      ("Nxe4 ", Vector(Capture(nd, f6 to e4, pl))),
+      ("18. ", none),
+      ("Bxe7 ", Vector(Capture(bl, h4 to e7, bd))),
+      ("Qxe7 ", Vector(Capture(qd, d8 to e7, bl))),
+      ("19. ", none),
+      ("exd6 ", Vector(Capture(pl, e5 to d6, pd))),
+      ("Qf6 ", Vector(Move(qd, e7 to f6))),
+      ("20. ", none),
+      ("Nbd2 ", Vector(Move(nl, b1 to d2))),
+      ("Nxd6 ", Vector(Capture(nd, e4 to d6, pl))))
 
     val monoid = MonoidUtil.product[String, Vector[Action]]
     val accumulated = data.scanLeft(monoid.zero)(monoid.append(_, _))
