@@ -48,6 +48,10 @@ object PgnOps {
         case (MoveSymbol(sc @ SanCapture(_, _)), _) =>
           updateCapture(st, sc, st.color)
 
+        // unwrap CheckingSanAction
+        case (MoveSymbol(CheckingSanAction(sa, _)), mn) =>
+          update2((MoveSymbol(sa), mn)).run(st)
+
         case _ => st
       }
 
@@ -68,7 +72,8 @@ object PgnOps {
     val possible = cand.map(pl => pl -> Movement.reachableOccupiedSquares(pl, st.board))
       .filter(_._2.map(_.square).contains(capt.draw.dest))
 
-    st.updated(Capture(piece, possible.head._1.square to capt.draw.dest, st.board.get(capt.draw.dest).get))
+    val c = Capture(piece, possible.head._1.square to capt.draw.dest, st.board.get(capt.draw.dest).get)
+    st.updated(c)
   }
 
   ///
@@ -80,8 +85,8 @@ object PgnOps {
     def go(last: Option[MoveNumber], xs: Vector[MoveElement], acc: Vector[NumeratedMoveElement]): Vector[NumeratedMoveElement] =
       xs match {
         case (number: MoveNumber) +: tail => go(Some(number), tail, acc)
-        case elem +: tail                 => go(last, tail, (elem, last) +: acc)
-        case Vector()                     => acc.reverse
+        case elem +: tail                 => go(last, tail, acc :+ ((elem, last)))
+        case Vector()                     => acc
       }
     go(None, elems, Vector.empty)
   }

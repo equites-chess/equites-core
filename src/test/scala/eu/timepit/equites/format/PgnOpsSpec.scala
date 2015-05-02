@@ -33,7 +33,7 @@ class PgnOpsSpec extends Specification {
       val mts = PgnParsers.parseAll(PgnParsers.moveTextSeq, pgn).get
       val init = GameState.init
       val states = GameState.unfold(actions, init).toList
-      reconstruct(mts).run(init) must_== states
+      reconstruct(mts).run(init) == states
     }
 
     val none = Vector.empty[Action]
@@ -99,7 +99,29 @@ class PgnOpsSpec extends Specification {
       ("Qf6 ", Vector(Move(qd, e7 to f6))),
       ("20. ", none),
       ("Nbd2 ", Vector(Move(nl, b1 to d2))),
-      ("Nxd6 ", Vector(Capture(nd, e4 to d6, pl))))
+      ("Nxd6\n", Vector(Capture(nd, e4 to d6, pl))),
+      ("21. ", none),
+      ("Nc4 ", Vector(Move(nl, d2 to c4))),
+      ("Nxc4 ", Vector(Capture(nd, d6 to c4, nl))),
+      ("22. ", none),
+      ("Bxc4 ", Vector(Capture(bl, b3 to c4, nd))),
+      ("Nb6 ", Vector(Move(nd, d7 to b6))),
+      ("23. ", none),
+      ("Ne5 ", Vector(Move(nl, f3 to e5))),
+      ("Rae8 ", Vector(Move(rd, a8 to e8))),
+      ("24. ", none),
+      ("Bxf7+ ", Vector(Capture(bl, c4 to f7, pd))),
+      ("Rxf7 ", Vector(Capture(rd, f8 to f7, bl))),
+      ("25. ", none),
+      ("Nxf7 ", Vector(Capture(nl, e5 to f7, rd))),
+      ("Rxe1+\n", Vector(Capture(rd, e8 to e1, rl))),
+      ("26. ", none),
+      ("Qxe1 ", Vector(Capture(ql, d1 to e1, rd))),
+      ("Kxf7 ", Vector(Capture(kd, g8 to f7, nl))),
+      ("27. ", none),
+      ("Qe3 ", Vector(Move(ql, e1 to e3))))
+
+    // 27. Qe3 Qg5 28. Qxg5 hxg5 29. b3 Ke6 30. a3 Kd6
 
     val monoid = MonoidUtil.product[String, Vector[Action]]
     val accumulated = data.scanLeft(monoid.zero)(monoid.append(_, _))
