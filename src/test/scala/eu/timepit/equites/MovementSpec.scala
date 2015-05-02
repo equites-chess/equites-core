@@ -64,8 +64,11 @@ class MovementSpec extends Specification {
       reachableOccupiedSquares(queen, board).toSet must_==
         Set(Placed(B, a4), Placed(R, g7), Placed(n, c1))
 
-      reachableOccupiedSquares(Placed(P, e3), board).toSet must_==
+      reachableOccupiedSquares(Placed(pl, e3), board).toSet must_==
         Set(Placed(pd, f4))
+
+      reachableOccupiedSquares(Placed(pd, f4), board).toSet must_==
+        Set(Placed(pl, e3))
     }
   }
 }
