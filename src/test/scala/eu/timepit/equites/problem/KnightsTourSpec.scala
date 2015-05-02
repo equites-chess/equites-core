@@ -42,6 +42,12 @@ class KnightsTourSpec extends Specification {
     }
   }
 
+  "allTours" should {
+    "generate a complete tour" in {
+      allTours(a1).headOption.fold(false)(isComplete)
+    }
+  }
+
   "staticTour" should {
     "not generate a complete tour" in {
       isComplete(staticTour(a1).toStream) must beFalse

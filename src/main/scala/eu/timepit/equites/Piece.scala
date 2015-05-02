@@ -23,10 +23,14 @@ case class Piece[+C <: Color, +T <: PieceType](color: C, pieceType: T) {
   type ColorT <: C
   type PieceTypeT <: T
 
-  def isFriendOf(other: AnyPiece): Boolean = color == other.color
-  def isOpponentOf(other: AnyPiece): Boolean = color != other.color
+  def isFriendOf(other: AnyPiece): Boolean =
+    color == other.color
 
-  def is(pieceType: PieceType): Boolean = this.pieceType == pieceType
+  def isOpponentOf(other: AnyPiece): Boolean =
+    color != other.color
+
+  def is(pieceType: PieceType): Boolean =
+    this.pieceType == pieceType
 
   def maybe[T1 <: PieceType](pieceType: T1): Option[Piece[C, T1]] =
     is(pieceType).option(copy(pieceType = pieceType))
@@ -49,9 +53,14 @@ case class Piece[+C <: Color, +T <: PieceType](color: C, pieceType: T) {
 }
 
 object Piece {
-  def all: List[AnyPiece] = mkAllPieces(PieceType.all)
-  def allCastling: List[CastlingPiece] = mkAllPieces(PieceType.allCastling)
-  def allPromoted: List[PromotedPiece] = mkAllPieces(PieceType.allPromoted)
+  def all: List[AnyPiece] =
+    mkAllPieces(PieceType.all)
+
+  def allCastling: List[CastlingPiece] =
+    mkAllPieces(PieceType.allCastling)
+
+  def allPromoted: List[PromotedPiece] =
+    mkAllPieces(PieceType.allPromoted)
 
   private[this] def mkAllPieces[T <: PieceType](pieceTypes: List[T]): List[Piece[Color, T]] =
     ^(Color.all, pieceTypes)(Piece.apply)

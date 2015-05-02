@@ -89,7 +89,7 @@ trait TextBoard {
       Square.allWithRank(rank).map(showSquare)
         .mkString(rankBegin, rankSep, rankEnd + lineSep)
 
-    Rank.all.reverse.map(showRank).mkString
+    Rank.all.reverseMap(showRank).mkString
   }
 
   def mkLabeled(board: Board): String = {
@@ -98,7 +98,7 @@ trait TextBoard {
 
     def boardWithRankLabels: String = {
       val lines = mkUnlabeled(board).split(lineSep).toSeq
-      val labels = rankLabels.reverse.map(addVerticalBar)
+      val labels = rankLabels.reverseMap(addVerticalBar)
       val zipped = if (rankLabelsRight) lines.zip(labels) else labels.zip(lines)
 
       zipped.map(_.productIterator.mkString + lineSep).mkString

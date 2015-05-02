@@ -34,7 +34,7 @@ object KnightsTour {
 
     def nextPaths(c: Candidate): Stream[Candidate] = {
       val nextSquares = c.path.headOption.toStream.flatMap { from =>
-        unvisited(from, c.visited)
+        unvisited(from, c.visited).sortBy(degree(_, c.visited))
       }
       nextSquares.map(sq => Candidate(sq #:: c.path, c.visited + sq))
     }
@@ -62,10 +62,8 @@ object KnightsTour {
   def randomWarnsdorffTour(start: Square): Process[Rng, Square] =
     genericTour(start, randomLeastDegreeSquare)
 
-  def leastDegreeSquares(squares: Stream[Square], visited: Set[Square]): Stream[Square] = {
-    def degree(sq: Square): Int = unvisited(sq, visited).length
-    squares.minGroupBy(degree)
-  }
+  def leastDegreeSquares(squares: Stream[Square], visited: Set[Square]): Stream[Square] =
+    squares.minGroupBy((sq: Square) => degree(sq, visited))
 
   val firstSquare: Selector[Id] =
     (squares, _) => squares.headOption
@@ -85,7 +83,10 @@ object KnightsTour {
   def isClosed(tour: Tour): Boolean =
     tour.nonEmpty && Directions.knightLike.contains(tour.last - tour.head)
 
-  private def unvisited(from: Square, visited: Set[Square]): Stream[Square] = {
+  def degree(square: Square, visited: Set[Square]): Int =
+    unvisited(square, visited).length
+
+  def unvisited(from: Square, visited: Set[Square]): Stream[Square] = {
     val placed = Placed(Piece(White, Knight), from)
     Rules.unvisitedSquares(placed, visited)
   }
