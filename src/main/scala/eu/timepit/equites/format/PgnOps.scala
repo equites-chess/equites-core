@@ -18,34 +18,24 @@ package eu.timepit.equites
 package format
 
 import eu.timepit.equites.format.Pgn._
-import scala.annotation.tailrec
-import scalaz.Scalaz._
-import scalaz._
 
+import scala.annotation.tailrec
 import scalaz.Reader
+import scalaz.Scalaz._
 
 object PgnOps {
+  // Remove Reader
+
   def reconstruct(moveText: List[SeqElem]): Reader[GameState, List[GameState]] = {
     val x2 = moveText.collect { case SeqMoveElement(ms @ MoveSymbol(_)) => ms }.toVector
 
     val ri = Reader((state: GameState) => state)
     val xs: Vector[Reader[GameState, GameState]] =
-      ri +: x2.map(ms => Reader((st: GameState) => updateAction(ms.action, st)))
+      ri +: x2.map(ms => Reader((st: GameState) =>
+        reconstructActions(ms.action, st).headOption.fold(st)(st.update)))
 
     foo(xs.toList)
   }
-
-  def updateMove(move: SanMove, st: GameState): GameState =
-    reconstructMoves(move, st).headOption.fold(st)(st.update)
-
-  def updateCapture(capt: SanCapture, st: GameState): GameState =
-    reconstructCapturesOrEnPassants(capt, st).headOption.fold(st)(st.update)
-
-  def updateCaptureAndPromotion(cp: SanCaptureAndPromotion, st: GameState): GameState =
-    reconstructCaptureAndPromotions(cp, st).headOption.fold(st)(st.update)
-
-  def updatePromotion(p: SanPromotion, st: GameState): GameState =
-    reconstructPromotions(p, st).headOption.fold(st)(st.update)
 
   def foo[A](xs: List[Reader[A, A]]): Reader[A, List[A]] = {
     @tailrec
@@ -62,14 +52,14 @@ object PgnOps {
   //////
 
   @tailrec
-  def updateAction(action: SanAction, state: GameState): GameState =
+  def reconstructActions(action: SanAction, state: GameState): Stream[Action] =
     action match {
-      case a: SanMove                => updateMove(a, state)
-      case a: SanCapture             => updateCapture(a, state)
-      case a: SanPromotion           => updatePromotion(a, state)
-      case a: SanCaptureAndPromotion => updateCaptureAndPromotion(a, state)
-      case SanCastling(side)         => state.update(Castling(state.color, side))
-      case CheckingSanAction(a, _)   => updateAction(a, state)
+      case a: SanMove                => reconstructMoves(a, state)
+      case a: SanCapture             => reconstructCapturesOrEnPassants(a, state)
+      case a: SanPromotion           => reconstructPromotions(a, state)
+      case a: SanCaptureAndPromotion => reconstructCaptureAndPromotions(a, state)
+      case SanCastling(side)         => Stream(Castling(state.color, side))
+      case CheckingSanAction(a, _)   => reconstructActions(a, state)
     }
 
   def reconstructMoves(san: SanMove, state: GameState): Stream[Move] = {
