@@ -116,8 +116,8 @@ object PgnOps {
       CaptureAndPromotion(pawn, cp.draw, cp.captured, promotedTo)
     }
 
-  def findMatchingPlacedPieces(piece: AnyPiece, at: MaybeSquare, board: Board): Stream[Placed[AnyPiece]] = {
-    def matches(placed: Placed[AnyPiece]): Boolean =
+  def findMatchingPlacedPieces(piece: AnyPiece, at: MaybeSquare, board: Board): Stream[PlacedPiece] = {
+    def matches(placed: PlacedPiece): Boolean =
       piece == placed.elem && at.matches(placed.square)
 
     at.toSquare match {

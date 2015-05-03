@@ -20,7 +20,7 @@ case class Board(self: Map[Square, AnyPiece]) extends AnyVal {
   def +(kv: (Square, AnyPiece)): Board =
     Board(self + kv)
 
-  def +(placed: Placed[AnyPiece]): Board =
+  def +(placed: PlacedPiece): Board =
     this + placed.toTuple
 
   def -(square: Square): Board =
@@ -29,10 +29,10 @@ case class Board(self: Map[Square, AnyPiece]) extends AnyVal {
   def get(key: Square): Option[AnyPiece] =
     self.get(key)
 
-  def getPlaced(square: Square): Option[Placed[AnyPiece]] =
+  def getPlaced(square: Square): Option[PlacedPiece] =
     get(square).map(Placed(_, square))
 
-  def getPlaced(squares: Seq[Square]): Seq[Placed[AnyPiece]] =
+  def getPlaced(squares: Seq[Square]): Seq[PlacedPiece] =
     squares.map(getPlaced).flatten
 
   def isVacant(square: Square): Boolean =
@@ -44,7 +44,7 @@ case class Board(self: Map[Square, AnyPiece]) extends AnyVal {
   def isOccupiedBy(square: Square, piece: AnyPiece): Boolean =
     get(square).contains(piece)
 
-  def placedPieces: Stream[Placed[AnyPiece]] =
+  def placedPieces: Stream[PlacedPiece] =
     self.toStream.map { case (square, piece) => Placed(piece, square) }
 
   def pieceCount: Int =

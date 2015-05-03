@@ -20,7 +20,7 @@ sealed trait Action {
   def piece: AnyPiece
   def draw: Draw
 
-  def placedPiece: Placed[AnyPiece] = Placed(piece, draw.src)
+  def placedPiece: PlacedPiece = Placed(piece, draw.src)
 }
 
 sealed trait MoveLike extends Action
@@ -29,7 +29,7 @@ sealed trait CaptureLike extends MoveLike {
   def captured: AnyPiece
 
   def capturedOn: Square = draw.dest
-  def placedCaptured: Placed[AnyPiece] = Placed(captured, capturedOn)
+  def placedCaptured: PlacedPiece = Placed(captured, capturedOn)
 }
 
 sealed trait PromotionLike extends MoveLike {
