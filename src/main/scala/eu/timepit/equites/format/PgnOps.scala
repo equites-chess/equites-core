@@ -27,7 +27,7 @@ import scalaz.Reader
 object PgnOps {
   def reconstruct(moveText: List[SeqElem]): Reader[GameState, List[GameState]] = {
     val elems = pairWithMoveNumbers(moveText.toVector.collect { case SeqMoveElement(elem) => elem })
-    val x2 = elems.collect { case (ms: MoveSymbol, n) => (ms, n) }
+    val x2 = elems.collect { case ms: MoveSymbol => ms }
 
     val ri = Reader((state: GameState) => state)
     val xs: Vector[Reader[GameState, GameState]] = ri +: x2.map(update2)
@@ -36,9 +36,9 @@ object PgnOps {
 
   }
 
-  def update2(numeratedMoveSymbol: (MoveSymbol, Option[MoveNumber])): Reader[GameState, GameState] =
+  def update2(moveSymbol: MoveSymbol): Reader[GameState, GameState] =
     Reader { st =>
-      numeratedMoveSymbol._1.action match {
+      moveSymbol.action match {
         case sm @ SanMove(_, _) =>
           update3(st, sm, st.color)
 
@@ -49,7 +49,7 @@ object PgnOps {
           updateCapture(st, sc, st.color)
 
         case CheckingSanAction(sa, _) =>
-          update2((MoveSymbol(sa), None)).run(st)
+          update2(MoveSymbol(sa)).run(st)
 
         case p @ SanPromotion(_, _, _) =>
           updatePromotion(st, p)
@@ -110,17 +110,15 @@ object PgnOps {
 
   ///
 
-  private type NumeratedMoveElement = (MoveElement, Option[MoveNumber])
-
-  private def pairWithMoveNumbers(elems: Vector[MoveElement]): Vector[NumeratedMoveElement] = {
+  private def pairWithMoveNumbers(elems: Vector[MoveElement]): Vector[MoveElement] = {
     @tailrec
-    def go(last: Option[MoveNumber], xs: Vector[MoveElement], acc: Vector[NumeratedMoveElement]): Vector[NumeratedMoveElement] =
+    def go(xs: Vector[MoveElement], acc: Vector[MoveElement]): Vector[MoveElement] =
       xs match {
-        case (number: MoveNumber) +: tail => go(Some(number), tail, acc)
-        case elem +: tail                 => go(last, tail, acc :+ ((elem, last)))
-        case Vector()                     => acc
+        case (_: MoveNumber) +: tail => go(tail, acc)
+        case elem +: tail            => go(tail, acc :+ elem)
+        case Vector()                => acc
       }
-    go(None, elems, Vector.empty)
+    go(elems, Vector.empty)
   }
 
   def findCandidates(piece: AnyPiece, square: MaybeSquare, board: Board): List[Placed[AnyPiece]] =
