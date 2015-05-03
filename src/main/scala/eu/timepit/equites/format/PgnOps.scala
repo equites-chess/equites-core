@@ -52,6 +52,12 @@ object PgnOps {
         case (MoveSymbol(CheckingSanAction(sa, _)), mn) =>
           update2((MoveSymbol(sa), mn)).run(st)
 
+        case (MoveSymbol(p @ SanPromotion(_, _, _)), _) =>
+          updatePromotion(st, p)
+
+        case (MoveSymbol(cp @ SanCaptureAndPromotion(_, _, _)), _) =>
+          updateCaptureAndPromotion(st, cp)
+
         case _ => ???
       }
     }
@@ -76,13 +82,33 @@ object PgnOps {
       val possible = Rules.enPassantSrcSquares(last)
         .filter(s => capt.draw.src.matches(s))
         .filter(s => st.board.isOccupiedBy(s, piece))
-      println(possible)
       val e = EnPassant(piece.maybePawn.get, possible.head to capt.draw.dest, last.piece.maybePawn.get, last.draw.dest)
       st.updated(e)
     } else {
       val c = Capture(piece, possible.head._1.square to capt.draw.dest, st.board.get(capt.draw.dest).get)
       st.updated(c)
     }
+  }
+
+  def updateCaptureAndPromotion(st: GameState, cp: SanCaptureAndPromotion): GameState = {
+    // partially the same as updateCapture
+    val piece = Piece(st.color, cp.pieceType)
+    val cand = findCandidates(piece, cp.draw.src, st.board)
+    val possible = cand.map(pl => pl -> Movement.reachableOccupiedSquares(pl, st.board))
+      .filter(_._2.map(_.square).contains(cp.draw.dest))
+
+    val c = CaptureAndPromotion(piece.maybePawn.get, possible.head._1.square to cp.draw.dest,
+      st.board.get(cp.draw.dest).get, Piece(st.color, cp.promotedTo))
+    st.updated(c)
+  }
+
+  def updatePromotion(st: GameState, p: SanPromotion): GameState = {
+    val piece = Piece(st.color, p.pieceType)
+    val cand = findCandidates(piece, p.draw.src, st.board)
+    val possible = cand.map(pl => pl -> Movement.reachableVacantSquares(pl, st.board))
+      .filter(_._2.contains(p.draw.dest))
+
+    st.updated(Promotion(piece.maybePawn.get, possible.head._1.square to p.draw.dest, Piece(st.color, p.promotedTo)))
   }
 
   ///

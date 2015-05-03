@@ -194,6 +194,22 @@ class PgnOpsSpec extends Specification {
       check(pgn, actions)
     }
 
-    // need to test: Promotion, CaptureAndPromotion
+    "pass on promotions" in {
+      val pgn = "1. a4 a6 2. b4 a5 3. xa5 b6 4. xb6 Nc6 5. b7 Nd4 6. xa8=R Nc6 " +
+        "7. Rb8 Nd4 8. a5 h6 9. a6 g6 10. a7 h5 11. a8=Q"
+      val actions = Vector(
+        Move(pl, a2 to a4), Move(pd, a7 to a6),
+        Move(pl, b2 to b4), Move(pd, a6 to a5),
+        Capture(pl, b4 to a5, pd), Move(pd, b7 to b6),
+        Capture(pl, a5 to b6, pd), Move(nd, b8 to c6),
+        Move(pl, b6 to b7), Move(nd, c6 to d4),
+        CaptureAndPromotion(pl, b7 to a8, rd, rl), Move(nd, d4 to c6),
+        Move(rl, a8 to b8), Move(nd, c6 to d4),
+        Move(pl, a4 to a5), Move(pd, h7 to h6),
+        Move(pl, a5 to a6), Move(pd, g7 to g6),
+        Move(pl, a6 to a7), Move(pd, h6 to h5),
+        Promotion(pl, a7 to a8, ql))
+      check(pgn, actions)
+    }
   }
 }
