@@ -31,7 +31,7 @@ import util.PieceUtil
 object PgnParsers extends GenericParsers {
   override val skipWhitespace = false
 
-  def ws = """\s*""".r
+  def ws: Parser[String] = """\s*""".r
 
   def string: Parser[String] =
     """"([^"\\]|\\.)*"""".r ^^ {

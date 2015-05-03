@@ -38,13 +38,13 @@ object PgnOps {
     Reader { st =>
       moveSymbol.action match {
         case sm @ SanMove(_, _) =>
-          update3(st, sm, st.color)
+          update3(st, sm)
 
         case sc @ SanCastling(side) =>
           st.updated(Castling(st.color, side))
 
         case sc @ SanCapture(_, _) =>
-          updateCapture(st, sc, st.color)
+          updateCapture(st, sc)
 
         case CheckingSanAction(sa, _) =>
           update2(MoveSymbol(sa)).run(st)
@@ -57,18 +57,18 @@ object PgnOps {
       }
     }
 
-  def update3(st: GameState, move: SanMove, color: Color): GameState = {
-    val piece = Piece(color, move.pieceType)
-    val cand = findCandidates(piece, move.draw.src, st.board)
+  def update3(st: GameState, move: SanMove): GameState = {
+    val piece = Piece(st.color, move.pieceType)
+    val cand = findMatchingPieces(piece, move.draw.src, st.board)
     val possible = cand.map(pl => pl -> Movement.reachableVacantSquares(pl, st.board))
       .filter(_._2.contains(move.draw.dest))
 
     st.updated(Move(piece, possible.head._1.square to move.draw.dest))
   }
 
-  def updateCapture(st: GameState, capt: SanCapture, color: Color): GameState = {
-    val piece = Piece(color, capt.pieceType)
-    val cand = findCandidates(piece, capt.draw.src, st.board)
+  def updateCapture(st: GameState, capt: SanCapture): GameState = {
+    val piece = Piece(st.color, capt.pieceType)
+    val cand = findMatchingPieces(piece, capt.draw.src, st.board)
     val possible = cand.map(pl => pl -> Movement.reachableOccupiedSquares(pl, st.board))
       .filter(_._2.map(_.square).contains(capt.draw.dest))
 
@@ -88,7 +88,7 @@ object PgnOps {
   def updateCaptureAndPromotion(st: GameState, cp: SanCaptureAndPromotion): GameState = {
     // partially the same as updateCapture
     val piece = Piece(st.color, cp.pieceType)
-    val cand = findCandidates(piece, cp.draw.src, st.board)
+    val cand = findMatchingPieces(piece, cp.draw.src, st.board)
     val possible = cand.map(pl => pl -> Movement.reachableOccupiedSquares(pl, st.board))
       .filter(_._2.map(_.square).contains(cp.draw.dest))
 
@@ -99,20 +99,12 @@ object PgnOps {
 
   def updatePromotion(st: GameState, p: SanPromotion): GameState = {
     val piece = Piece(st.color, p.pieceType)
-    val cand = findCandidates(piece, p.draw.src, st.board)
+    val cand = findMatchingPieces(piece, p.draw.src, st.board)
     val possible = cand.map(pl => pl -> Movement.reachableVacantSquares(pl, st.board))
       .filter(_._2.contains(p.draw.dest))
 
     st.updated(Promotion(piece.maybePawn.get, possible.head._1.square to p.draw.dest, Piece(st.color, p.promotedTo)))
   }
-
-  ///
-
-  def findCandidates(piece: AnyPiece, square: MaybeSquare, board: Board): List[Placed[AnyPiece]] =
-    square.toSquare match {
-      case Some(sq) => board.getPlaced(sq).toList
-      case None     => board.placedPieces.filter(placed => placed.elem == piece && square.matches(placed.square)).toList
-    }
 
   def foo[A](xs: List[Reader[A, A]]): Reader[A, List[A]] = {
     @tailrec
@@ -126,4 +118,15 @@ object PgnOps {
     Reader(go(_, xs, Nil))
   }
 
+  ///
+
+  def findMatchingPieces(piece: AnyPiece, at: MaybeSquare, board: Board): Stream[Placed[AnyPiece]] = {
+    def matches(placed: Placed[AnyPiece]): Boolean =
+      piece == placed.elem && at.matches(placed.square)
+
+    at.toSquare match {
+      case Some(sq) => board.getPlaced(sq).toStream
+      case None     => board.placedPieces.filter(matches)
+    }
+  }
 }
