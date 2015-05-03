@@ -172,7 +172,7 @@ class PgnOpsSpec extends Specification {
 
       val monoid = MonoidUtil.product[String, Vector[Action]]
       val accumulated = data.scanLeft(monoid.zero)(monoid.append(_, _))
-      // remove lastOption.toSeq to test each token individually
+      // remove lastOption.toSeq to test each move element individually
       val fragments = accumulated.lastOption.toSeq.map {
         case (pgn, actions) => s"with PGN '$pgn'" in check(pgn, actions)
       }
@@ -186,7 +186,14 @@ class PgnOpsSpec extends Specification {
         Move(pd, d7 to d6), Move(ql, d1 to c2), Move(pd, e7 to e6), CastlingLong(White))
       check(pgn, actions)
     }
-  }
 
-  // need to test: Promotion, CaptureAndPromotion, EnPassant
+    "pass on an en passant capture" in {
+      val pgn = "1. a4 a6 2. a5 b5 3. xb6"
+      val actions = Vector(Move(pl, a2 to a4), Move(pd, a7 to a6), Move(pl, a4 to a5),
+        Move(pd, b7 to b5), EnPassant(pl, a5 to b6, pd, b5))
+      check(pgn, actions)
+    }
+
+    // need to test: Promotion, CaptureAndPromotion
+  }
 }

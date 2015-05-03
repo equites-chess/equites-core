@@ -52,7 +52,7 @@ object PgnOps {
         case (MoveSymbol(CheckingSanAction(sa, _)), mn) =>
           update2((MoveSymbol(sa), mn)).run(st)
 
-        case _ => st
+        case _ => ???
       }
     }
 
@@ -71,8 +71,18 @@ object PgnOps {
     val possible = cand.map(pl => pl -> Movement.reachableOccupiedSquares(pl, st.board))
       .filter(_._2.map(_.square).contains(capt.draw.dest))
 
-    val c = Capture(piece, possible.head._1.square to capt.draw.dest, st.board.get(capt.draw.dest).get)
-    st.updated(c)
+    if (possible.isEmpty && st.lastAction.fold(false)(Rules.isTwoRanksPawnMoveFromStartingSquare) && piece.isPawn) {
+      val last = st.lastAction.get
+      val possible = Rules.enPassantSrcSquares(last)
+        .filter(s => capt.draw.src.matches(s))
+        .filter(s => st.board.isOccupiedBy(s, piece))
+      println(possible)
+      val e = EnPassant(piece.maybePawn.get, possible.head to capt.draw.dest, last.piece.maybePawn.get, last.draw.dest)
+      st.updated(e)
+    } else {
+      val c = Capture(piece, possible.head._1.square to capt.draw.dest, st.board.get(capt.draw.dest).get)
+      st.updated(c)
+    }
   }
 
   ///

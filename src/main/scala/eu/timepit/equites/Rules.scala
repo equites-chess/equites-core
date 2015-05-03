@@ -145,4 +145,12 @@ object Rules {
       val rank = enPassantTargetRankBy(action.piece.color)
       Square.from(file, rank)
     }.flatten
+
+  def enPassantSrcSquares(action: Action): Stream[Square] = {
+    // ugly!
+    val rank = enPassantSrcRankBy(action.piece.color.opposite)
+    val file = Directions.horizontal.toStream.map(dir => action.draw.dest + dir)
+    val x = file.flatten.map(s => Square.from(s.file, rank))
+    x.flatten
+  }
 }
