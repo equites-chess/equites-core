@@ -38,36 +38,11 @@ object PgnOps {
   def updateMove(move: SanMove, st: GameState): GameState =
     reconstructMoves(move, st).headOption.fold(st)(st.update)
 
-  def updateCapture(capt: SanCapture, st: GameState): GameState = {
-    val piece = Piece(st.color, capt.pieceType)
-    val cand = findMatchingPlacedPieces(piece, capt.draw.src, st.board)
-    val possible = cand.map(pl => pl -> Movement.reachableOccupiedSquares(pl, st.board))
-      .filter(_._2.map(_.square).contains(capt.draw.dest))
+  def updateCapture(capt: SanCapture, st: GameState): GameState =
+    reconstructCapturesOrEnPassants(capt, st).headOption.fold(st)(st.update)
 
-    if (possible.isEmpty && st.lastAction.fold(false)(Rules.isTwoRanksPawnMoveFromStartingSquare) && piece.isPawn) {
-      val last = st.lastAction.get
-      val possible = Rules.enPassantSrcSquares(last)
-        .filter(s => capt.draw.src.matches(s))
-        .filter(s => st.board.isOccupiedBy(s, piece))
-      val e = EnPassant(piece.maybePawn.get, possible.head to capt.draw.dest, last.piece.maybePawn.get, last.draw.dest)
-      st.update(e)
-    } else {
-      val c = Capture(piece, possible.head._1.square to capt.draw.dest, st.board.get(capt.draw.dest).get)
-      st.update(c)
-    }
-  }
-
-  def updateCaptureAndPromotion(cp: SanCaptureAndPromotion, st: GameState): GameState = {
-    // partially the same as updateCapture
-    val piece = Piece(st.color, cp.pieceType)
-    val cand = findMatchingPlacedPieces(piece, cp.draw.src, st.board)
-    val possible = cand.map(pl => pl -> Movement.reachableOccupiedSquares(pl, st.board))
-      .filter(_._2.map(_.square).contains(cp.draw.dest))
-
-    val c = CaptureAndPromotion(piece.maybePawn.get, possible.head._1.square to cp.draw.dest,
-      st.board.get(cp.draw.dest).get, Piece(st.color, cp.promotedTo))
-    st.update(c)
-  }
+  def updateCaptureAndPromotion(cp: SanCaptureAndPromotion, st: GameState): GameState =
+    reconstructCaptureAndPromotions(cp, st).headOption.fold(st)(st.update)
 
   def updatePromotion(p: SanPromotion, st: GameState): GameState =
     reconstructPromotions(p, st).headOption.fold(st)(st.update)
@@ -97,21 +72,58 @@ object PgnOps {
       case CheckingSanAction(a, _)   => updateAction(a, state)
     }
 
-  def reconstructMoves(sanMove: SanMove, state: GameState): Stream[Move] = {
-    val piece = Piece(state.color, sanMove.pieceType)
-    val candidates = findMatchingPlacedPieces(piece, sanMove.draw.src, state.board)
-    val dest = sanMove.draw.dest
+  def reconstructMoves(san: SanMove, state: GameState): Stream[Move] = {
+    val piece = Piece(state.color, san.pieceType)
+    val candidates = findMatchingPlacedPieces(piece, san.draw.src, state.board)
+    val dest = san.draw.dest
 
     candidates
       .filter(Movement.reachableVacantSquares(_, state.board).contains(dest))
       .map(placed => Move(placed.elem, placed.square to dest))
   }
 
-  def reconstructPromotions(sanPromotion: SanPromotion, state: GameState): Stream[Promotion] =
-    reconstructMoves(sanPromotion.toSanMove, state).map { mv =>
-      val piece = mv.piece.copy(pieceType = Pawn)
-      val promotedTo = piece.copy(pieceType = sanPromotion.promotedTo)
-      Promotion(piece, mv.draw, promotedTo)
+  def reconstructCaptures(san: SanCapture, state: GameState): Stream[Capture] = {
+    val piece = Piece(state.color, san.pieceType)
+    val candidates = findMatchingPlacedPieces(piece, san.draw.src, state.board)
+    val dest = san.draw.dest
+
+    candidates
+      .map(p => p -> Movement.reachableOpponentSquares(p, state.board))
+      .filter { case (_, os) => os.exists(_.square == dest) }
+      .flatMap { case (p, os) => os.map(o => Capture(piece, p.square to dest, o.elem)) }
+  }
+
+  def reconstructEnPassants(san: SanCapture, state: GameState): Stream[EnPassant] =
+    state.lastAction.toStream.flatMap { last =>
+      if (!Rules.isTwoRanksPawnMoveFromStartingSquare(last))
+        Stream.empty
+      else {
+        val pawn = Piece(state.color, Pawn)
+        val captured = Piece(state.color.opposite, Pawn)
+
+        Rules.enPassantSrcSquares(last)
+          .filter(sq => san.draw.src.matches(sq) && state.board.isOccupiedBy(sq, pawn))
+          .map(sq => EnPassant(pawn, sq to san.draw.dest, captured, last.draw.dest))
+      }
+    }
+
+  def reconstructCapturesOrEnPassants(san: SanCapture, state: GameState): Stream[Action] = {
+    val captures = reconstructCaptures(san, state)
+    if (captures.nonEmpty) captures else reconstructEnPassants(san, state)
+  }
+
+  def reconstructPromotions(san: SanPromotion, state: GameState): Stream[Promotion] =
+    reconstructMoves(san.toSanMove, state).map { mv =>
+      val pawn = mv.piece.copy(pieceType = Pawn)
+      val promotedTo = pawn.copy(pieceType = san.promotedTo)
+      Promotion(pawn, mv.draw, promotedTo)
+    }
+
+  def reconstructCaptureAndPromotions(san: SanCaptureAndPromotion, state: GameState): Stream[CaptureAndPromotion] =
+    reconstructCaptures(san.toSanCapture, state).map { cp =>
+      val pawn = cp.piece.copy(pieceType = Pawn)
+      val promotedTo = pawn.copy(pieceType = san.promotedTo)
+      CaptureAndPromotion(pawn, cp.draw, cp.captured, promotedTo)
     }
 
   def findMatchingPlacedPieces(piece: AnyPiece, at: MaybeSquare, board: Board): Stream[Placed[AnyPiece]] = {

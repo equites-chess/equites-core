@@ -81,4 +81,7 @@ object Movement {
     directedReachableSquares(placed, attackMovementOf(placed)).flatMap {
       _.flatMap(sq => board.getPlaced(sq).toList).take(1)
     }
+
+  def reachableOpponentSquares(placed: PlacedPiece, board: Board): Stream[PlacedPiece] =
+    reachableOccupiedSquares(placed, board).filter(_.elem.isOpponentOf(placed.elem))
 }

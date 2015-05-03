@@ -93,7 +93,11 @@ object Pgn {
     pieceType: Pawn.type,
     draw: MaybeDraw,
     promotedTo: PromotedPieceType)
-      extends SanPromotionLike
+      extends SanPromotionLike {
+
+    def toSanCapture: SanCapture =
+      SanCapture(pieceType, draw)
+  }
 
   case class SanCastling(side: Side) extends SanAction
 
