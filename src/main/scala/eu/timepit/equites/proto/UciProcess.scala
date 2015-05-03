@@ -36,7 +36,7 @@ object UciProcess {
   def appendCoordinateMove: HistoryTransformer[CoordinateAction] =
     Process.await1[(Seq[GameState], CoordinateAction)].flatMap {
       case (history, move) => {
-        val state = history.lastOption.flatMap(_.updated(move))
+        val state = history.lastOption.flatMap(_.update(move))
         state.map(s => Process(history :+ s)).getOrElse(Process.halt)
       }
     }

@@ -83,7 +83,11 @@ object Pgn {
     pieceType: Pawn.type,
     draw: MaybeDraw,
     promotedTo: PromotedPieceType)
-      extends SanPromotionLike
+      extends SanPromotionLike {
+
+    def toSanMove: SanMove =
+      SanMove(pieceType, draw)
+  }
 
   case class SanCaptureAndPromotion(
     pieceType: Pawn.type,

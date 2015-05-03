@@ -28,7 +28,7 @@ case class GameState(
     halfmoveClock: Int,
     availableCastlings: Set[Castling]) {
 
-  def updated(action: Action): GameState = copy(
+  def update(action: Action): GameState = copy(
     board = board.processAction(action),
     lastAction = Some(action),
     color = color.opposite,
@@ -36,8 +36,8 @@ case class GameState(
     halfmoveClock = updatedHalfmoveClock(action),
     availableCastlings = updatedAvailableCastlings(action))
 
-  def updated(ca: util.CoordinateAction): Option[GameState] =
-    ActionOps.reifyAction(ca, board).map(updated)
+  def update(ca: util.CoordinateAction): Option[GameState] =
+    ActionOps.reifyAction(ca, board).map(update)
 
   private[this] def updatedMoveNumber: Int =
     moveNumber + color.fold(0, 1)
@@ -73,7 +73,7 @@ object GameState {
   def unfold(actions: Seq[Action], first: GameState = init): Stream[GameState] =
     first #:: stream.unfold((first, actions)) {
       case (state, remActions) => remActions.headOption.map { action =>
-        val updated = state.updated(action)
+        val updated = state.update(action)
         (updated, (updated, remActions.tail))
       }
     }
