@@ -38,23 +38,23 @@ object PgnOps {
 
   def update2(numeratedMoveSymbol: (MoveSymbol, Option[MoveNumber])): Reader[GameState, GameState] =
     Reader { st =>
-      numeratedMoveSymbol._1 match {
-        case MoveSymbol(sm @ SanMove(_, _)) =>
+      numeratedMoveSymbol._1.action match {
+        case sm @ SanMove(_, _) =>
           update3(st, sm, st.color)
 
-        case MoveSymbol(sc @ SanCastling(side)) =>
+        case sc @ SanCastling(side) =>
           st.updated(Castling(st.color, side))
 
-        case MoveSymbol(sc @ SanCapture(_, _)) =>
+        case sc @ SanCapture(_, _) =>
           updateCapture(st, sc, st.color)
 
-        case MoveSymbol(CheckingSanAction(sa, _)) =>
+        case CheckingSanAction(sa, _) =>
           update2((MoveSymbol(sa), None)).run(st)
 
-        case MoveSymbol(p @ SanPromotion(_, _, _)) =>
+        case p @ SanPromotion(_, _, _) =>
           updatePromotion(st, p)
 
-        case MoveSymbol(cp @ SanCaptureAndPromotion(_, _, _)) =>
+        case cp @ SanCaptureAndPromotion(_, _, _) =>
           updateCaptureAndPromotion(st, cp)
       }
     }
