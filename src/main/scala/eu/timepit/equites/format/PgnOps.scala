@@ -26,14 +26,12 @@ import scalaz.Reader
 
 object PgnOps {
   def reconstruct(moveText: List[SeqElem]): Reader[GameState, List[GameState]] = {
-    val elems = pairWithMoveNumbers(moveText.toVector.collect { case SeqMoveElement(elem) => elem })
-    val x2 = elems.collect { case ms: MoveSymbol => ms }
+    val x2 = moveText.collect { case SeqMoveElement(ms @ MoveSymbol(_)) => ms }.toVector
 
     val ri = Reader((state: GameState) => state)
     val xs: Vector[Reader[GameState, GameState]] = ri +: x2.map(update2)
 
     foo(xs.toList)
-
   }
 
   def update2(moveSymbol: MoveSymbol): Reader[GameState, GameState] =
@@ -109,17 +107,6 @@ object PgnOps {
   }
 
   ///
-
-  private def pairWithMoveNumbers(elems: Vector[MoveElement]): Vector[MoveElement] = {
-    @tailrec
-    def go(xs: Vector[MoveElement], acc: Vector[MoveElement]): Vector[MoveElement] =
-      xs match {
-        case (_: MoveNumber) +: tail => go(tail, acc)
-        case elem +: tail            => go(tail, acc :+ elem)
-        case Vector()                => acc
-      }
-    go(elems, Vector.empty)
-  }
 
   def findCandidates(piece: AnyPiece, square: MaybeSquare, board: Board): List[Placed[AnyPiece]] =
     square.toSquare match {
