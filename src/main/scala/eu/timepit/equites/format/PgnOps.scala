@@ -27,12 +27,12 @@ object PgnOps {
   // Remove Reader
 
   def reconstruct(moveText: List[SeqElem]): Reader[GameState, List[GameState]] = {
-    val x2 = moveText.collect { case SeqMoveElement(ms @ MoveSymbol(_)) => ms }.toVector
+    val x2 = moveText.collect { case SeqMoveElement(MoveSymbol(ms)) => ms }.toVector
 
     val ri = Reader((state: GameState) => state)
     val xs: Vector[Reader[GameState, GameState]] =
       ri +: x2.map(ms => Reader((st: GameState) =>
-        reconstructActions(ms.action, st).headOption.fold(st)(st.update)))
+        reconstructActions(ms, st).headOption.fold(st)(st.update)))
 
     foo(xs.toList)
   }
@@ -52,8 +52,8 @@ object PgnOps {
   //////
 
   @tailrec
-  def reconstructActions(action: SanAction, state: GameState): Stream[Action] =
-    action match {
+  def reconstructActions(san: SanAction, state: GameState): Stream[Action] =
+    san match {
       case a: SanMove                => reconstructMoves(a, state)
       case a: SanCapture             => reconstructCapturesOrEnPassants(a, state)
       case a: SanPromotion           => reconstructPromotions(a, state)
@@ -84,10 +84,9 @@ object PgnOps {
   }
 
   def reconstructEnPassants(san: SanCapture, state: GameState): Stream[EnPassant] =
-    state.lastAction.toStream.flatMap { last =>
-      if (!Rules.isTwoRanksPawnMoveFromStartingSquare(last))
-        Stream.empty
-      else {
+    state.lastAction.toStream
+      .filter(Rules.isTwoRanksPawnMoveFromStartingSquare)
+      .flatMap { last =>
         val pawn = Piece(state.color, Pawn)
         val captured = Piece(state.color.opposite, Pawn)
 
@@ -95,7 +94,6 @@ object PgnOps {
           .filter(sq => san.draw.src.matches(sq) && state.board.isOccupiedBy(sq, pawn))
           .map(sq => EnPassant(pawn, sq to san.draw.dest, captured, last.draw.dest))
       }
-    }
 
   def reconstructCapturesOrEnPassants(san: SanCapture, state: GameState): Stream[Action] = {
     val captures = reconstructCaptures(san, state)
