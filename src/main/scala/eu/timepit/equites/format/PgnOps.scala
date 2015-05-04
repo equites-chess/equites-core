@@ -24,13 +24,13 @@ import scalaz.std.stream._
 import scalaz.syntax.traverse._
 
 object PgnOps {
-  def reconstruct(moveText: List[SeqElem])(state: GameState): Stream[GameState] = {
+  def reconstruct(moveText: List[SeqElem])(init: GameState): Stream[GameState] = {
     val sanActions = moveText.toStream.collect { case SeqMoveElement(MoveSymbol(a)) => a }
-    val (_, states) = sanActions.mapAccumL(state) { (s, a) =>
+    val (_, states) = sanActions.mapAccumL(init) { (s, a) =>
       val next = reconstructActions(a, s).headOption.fold(s)(s.update)
       (next, next)
     }
-    state #:: states
+    init #:: states
   }
 
   @tailrec
