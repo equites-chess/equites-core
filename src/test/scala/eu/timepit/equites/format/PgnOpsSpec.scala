@@ -32,8 +32,8 @@ class PgnOpsSpec extends Specification {
     def check(pgn: String, actions: Seq[Action]) = {
       val mts = PgnParsers.parseAll(PgnParsers.moveTextSeq, pgn).get
       val init = GameState.init
-      val states = GameState.unfold(actions, init).toList
-      reconstruct(mts).run(init) == states
+      val states = GameState.unfold(actions, init)
+      reconstruct(mts)(init) == states
     }
 
     "pass on a complete game" in {

@@ -20,36 +20,18 @@ package format
 import eu.timepit.equites.format.Pgn._
 
 import scala.annotation.tailrec
-import scalaz.Reader
-import scalaz.Scalaz._
+import scalaz.std.stream._
+import scalaz.syntax.traverse._
 
 object PgnOps {
-  // Remove Reader
-
-  def reconstruct(moveText: List[SeqElem]): Reader[GameState, List[GameState]] = {
-    val x2 = moveText.collect { case SeqMoveElement(MoveSymbol(ms)) => ms }.toVector
-
-    val ri = Reader((state: GameState) => state)
-    val xs: Vector[Reader[GameState, GameState]] =
-      ri +: x2.map(ms => Reader((st: GameState) =>
-        reconstructActions(ms, st).headOption.fold(st)(st.update)))
-
-    foo(xs.toList)
+  def reconstruct(moveText: List[SeqElem])(state: GameState): Stream[GameState] = {
+    val sanActions = moveText.toStream.collect { case SeqMoveElement(MoveSymbol(a)) => a }
+    val (_, states) = sanActions.mapAccumL(state) { (s, a) =>
+      val next = reconstructActions(a, s).headOption.fold(s)(s.update)
+      (next, next)
+    }
+    state #:: states
   }
-
-  def foo[A](xs: List[Reader[A, A]]): Reader[A, List[A]] = {
-    @tailrec
-    def go(a: A, ys: List[Reader[A, A]], acc: List[A]): List[A] =
-      ys match {
-        case h :: t =>
-          val a2 = h.run(a)
-          go(a2, t, a2 :: acc)
-        case Nil => acc.reverse
-      }
-    Reader(go(_, xs, Nil))
-  }
-
-  //////
 
   @tailrec
   def reconstructActions(san: SanAction, state: GameState): Stream[Action] =
