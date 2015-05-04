@@ -37,8 +37,8 @@ resolvers ++= Seq(
   "Frank's Bintray" at "https://dl.bintray.com/fthomas/maven"
 )
 
-val scalazVersion = "7.1.1"
-val specs2Version = "3.5"
+val scalazVersion = "7.1.2"
+val specs2Version = "3.6"
 
 libraryDependencies ++= Seq(
   "com.chuusai" %% "shapeless" % "2.1.0",
