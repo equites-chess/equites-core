@@ -29,9 +29,8 @@ import scalaz.std.vector._
 
 class PgnOpsSpec extends Specification {
   "reconstruct" should {
-    def check(pgn: String, actions: Seq[Action]) = {
+    def check(pgn: String, actions: Seq[Action], init: GameState = GameState.init) = {
       val mts = PgnParsers.parseAll(PgnParsers.moveTextSeq, pgn).get
-      val init = GameState.init
       val states = GameState.unfold(actions, init)
       reconstruct(mts)(init) == states
     }
@@ -210,6 +209,13 @@ class PgnOpsSpec extends Specification {
         Move(pl, a6 to a7), Move(pd, h6 to h5),
         Promotion(pl, a7 to a8, ql))
       check(pgn, actions)
+    }
+
+    "pass on a fully specified move" in {
+      val fen = "6QQ/7Q/8/8/8/8/8/8"
+      val board = util.BoardUtil.readFenPlacement(fen)
+      val state = GameState(board, None, White, 1, 1, Set.empty)
+      check("1. Qh8g7", Vector(Move(ql, h8 to g7)), state)
     }
   }
 }
