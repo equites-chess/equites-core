@@ -18,5 +18,5 @@ package eu.timepit.equites
 package implicits
 
 object PlacedImplicits {
-  implicit def placedToPiece[A <: AnyPiece](placed: Placed[A]): A = placed.elem
+  implicit def unwrapPlaced[A](placed: Placed[A]): A = placed.elem
 }
