@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2013-2014 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2013-2015 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,32 +17,38 @@
 package eu.timepit.equites
 package util
 
+import eu.timepit.equites.util.PieceAbbr.Algebraic
 import shapeless._
-import nat._
-
-import PieceAbbr.Algebraic
+import shapeless.nat._
 
 object SizedBoardBuilder {
-  def K = Some(Algebraic.K)
-  def Q = Some(Algebraic.Q)
-  def R = Some(Algebraic.R)
-  def B = Some(Algebraic.B)
-  def N = Some(Algebraic.N)
-  def P = Some(Algebraic.P)
+  def K: Option[AnyPiece] = Some(Algebraic.K)
+  def Q: Option[AnyPiece] = Some(Algebraic.Q)
+  def R: Option[AnyPiece] = Some(Algebraic.R)
+  def B: Option[AnyPiece] = Some(Algebraic.B)
+  def N: Option[AnyPiece] = Some(Algebraic.N)
+  def P: Option[AnyPiece] = Some(Algebraic.P)
 
-  def k = Some(Algebraic.k)
-  def q = Some(Algebraic.q)
-  def r = Some(Algebraic.r)
-  def b = Some(Algebraic.b)
-  def n = Some(Algebraic.n)
-  def p = Some(Algebraic.p)
+  def k: Option[AnyPiece] = Some(Algebraic.k)
+  def q: Option[AnyPiece] = Some(Algebraic.q)
+  def r: Option[AnyPiece] = Some(Algebraic.r)
+  def b: Option[AnyPiece] = Some(Algebraic.b)
+  def n: Option[AnyPiece] = Some(Algebraic.n)
+  def p: Option[AnyPiece] = Some(Algebraic.p)
 
-  def ♔ = K; def ♚ = k
-  def ♕ = Q; def ♛ = q
-  def ♖ = R; def ♜ = r
-  def ♗ = B; def ♝ = b
-  def ♘ = N; def ♞ = n
-  def ♙ = P; def ♟ = p
+  def ♔ : Option[AnyPiece] = K
+  def ♕ : Option[AnyPiece] = Q
+  def ♖ : Option[AnyPiece] = R
+  def ♗ : Option[AnyPiece] = B
+  def ♘ : Option[AnyPiece] = N
+  def ♙ : Option[AnyPiece] = P
+
+  def ♚ : Option[AnyPiece] = k
+  def ♛ : Option[AnyPiece] = q
+  def ♜ : Option[AnyPiece] = r
+  def ♝ : Option[AnyPiece] = b
+  def ♞ : Option[AnyPiece] = n
+  def ♟ : Option[AnyPiece] = p
 
   def | : Option[AnyPiece] = None
 

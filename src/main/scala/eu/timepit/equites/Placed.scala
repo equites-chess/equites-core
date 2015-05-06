@@ -1,5 +1,5 @@
 // Equites, a Scala chess playground
-// Copyright © 2013-2014 Frank S. Thomas <frank@timepit.eu>
+// Copyright © 2013-2015 Frank S. Thomas <frank@timepit.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -26,13 +26,23 @@ case class Placed[+A](elem: A, square: Square) {
 object Placed extends PlacedInstances
 
 trait PlacedInstances {
-  implicit def placedEqual[A] = Equal.equalA[Placed[A]]
-  implicit val placedFunctor = new Functor[Placed] {
-    def map[A, B](fa: Placed[A])(f: A => B): Placed[B] = fa.map(f)
-  }
-  implicit def placedOrder[A] = Order.orderBy((p: Placed[A]) => p.square)
-  implicit def placedScalaOrdering[A] = placedOrder[A].toScalaOrdering
-  implicit def placedShow[A] = Show.showFromToString[Placed[A]]
+  implicit def placedEqual[A]: Equal[Placed[A]] =
+    Equal.equalA[Placed[A]]
+
+  implicit val placedFunctor: Functor[Placed] =
+    new Functor[Placed] {
+      def map[A, B](fa: Placed[A])(f: A => B): Placed[B] =
+        fa.map(f)
+    }
+
+  implicit def placedOrder[A]: Order[Placed[A]] =
+    Order.orderBy(_.square)
+
+  implicit def placedScalaOrdering[A]: scala.Ordering[Placed[A]] =
+    placedOrder[A].toScalaOrdering
+
+  implicit def placedShow[A]: Show[Placed[A]] =
+    Show.showFromToString[Placed[A]]
 }
 
 trait PlacedTypeAliases {
